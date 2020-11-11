@@ -1,5 +1,6 @@
 # UserUpdateName
 
+If at least one name field is passed, all name fields will be updated.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
@@ -8,4 +9,5 @@ Name | Type | Description | Notes
 **last_name** | **str** | The last name of the user. Replaces an existing last name, if it exists. | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
 
