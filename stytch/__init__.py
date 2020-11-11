@@ -17,6 +17,8 @@ from __future__ import absolute_import
 
 __version__ = "1.0.0"
 
+from stytch.client import Client
+
 # import apis into sdk package
 from stytch.api.emails_api import EmailsApi
 from stytch.api.magic_links_api import MagicLinksApi
