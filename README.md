@@ -96,42 +96,4 @@ Class | Method | HTTP request | Description
 *UsersApi* | [**update_user**](docs/UsersApi.md#update_user) | **PUT** /users/{user_id} | Update user
 
 
-## Documentation For Models
-
- - [Attributes](docs/Attributes.md)
- - [Email](docs/Email.md)
- - [ErrorResponse](docs/ErrorResponse.md)
- - [MagicLinkAuthenticate](docs/MagicLinkAuthenticate.md)
- - [MagicLinkAuthenticateOptions](docs/MagicLinkAuthenticateOptions.md)
- - [MagicLinkAuthenticateResponse](docs/MagicLinkAuthenticateResponse.md)
- - [MagicLinkSend](docs/MagicLinkSend.md)
- - [MagicLinkSendByEmail](docs/MagicLinkSendByEmail.md)
- - [MagicLinkSendByEmailResponse](docs/MagicLinkSendByEmailResponse.md)
- - [MagicLinkSendResponse](docs/MagicLinkSendResponse.md)
- - [SendVerificationResponse](docs/SendVerificationResponse.md)
- - [UserCreate](docs/UserCreate.md)
- - [UserCreateName](docs/UserCreateName.md)
- - [UserCreateResponse](docs/UserCreateResponse.md)
- - [UserDeleteResponse](docs/UserDeleteResponse.md)
- - [UserEmailDeleteResponse](docs/UserEmailDeleteResponse.md)
- - [UserGetResponse](docs/UserGetResponse.md)
- - [UserGetResponseName](docs/UserGetResponseName.md)
- - [UserUpdate](docs/UserUpdate.md)
- - [UserUpdateName](docs/UserUpdateName.md)
- - [UserUpdateResponse](docs/UserUpdateResponse.md)
- - [VerifyEmailResponse](docs/VerifyEmailResponse.md)
-
-
-## Documentation For Authorization
-
-
-## apiKeyAuth
-
-- **Type**: HTTP basic authentication
-
-
-## Author
-
-hello@stytch.com
-
 
