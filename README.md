@@ -71,21 +71,11 @@ configuration = stytch.Configuration(
     password = 'YOUR_PASSWORD'
 )
 
+def create_stytch_user():
+    stytch_client = stytch.ApiClient(configuration)
+    api_instance = stytch.UsersApi(stytch_client)
 
-# Enter a context with an instance of the API client
-with stytch.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = stytch.EmailsApi(api_client)
-    email_id = 'email-test-c1a1d554-a93c-11ea-bb37-0242ac130002' # str | The email_id to be deleted.
-user_id = 'user-test-b8797f2c-a93c-11ea-bb37-0242ac130002' # str | The user_id to delete an email from.
-
-    try:
-        # Delete email
-        api_response = api_instance.delete_email(email_id, user_id)
-        pprint(api_response)
-    except ApiException as e:
-        print("Exception when calling EmailsApi->delete_email: %s\n" % e)
-    
+    resp = api_instance.create_user({ "email": "hello@stytch.com", "first_name": "Hello", "last_name": "World"})    
 ```
 
 ## Documentation for API Endpoints
