@@ -26,4 +26,4 @@ class Users(Base):
         if last_name:
             data.update({ "last_name": last_name })
 
-        return self._update("{0}".format(self.user_url), data)
+        return self._put("{0}".format(self.user_url), data)

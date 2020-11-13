@@ -1,3 +1,4 @@
+import json
 import requests
 
 from typing import Dict
@@ -17,10 +18,10 @@ class Base:
 
     def _post(self, url: str, data: Dict):
         print(url)
-        return self._requester_base.post(url, auth=self.auth, data=data)
+        return self._requester_base.post(url, auth=self.auth, data=json.dumps(data))
 
     def _put(self, url: str, data: Dict):
-        return self._requester_base.put(url, data=data, auth=self.auth)
+        return self._requester_base.put(url, auth=self.auth, data=json.dumps(data))
 
     def _delete(self, url: str):
         return self._requester_base.delete(url, auth=self.auth)
