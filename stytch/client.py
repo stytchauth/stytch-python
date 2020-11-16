@@ -19,11 +19,13 @@ class Client:
 
     @property
     def base_url(self):
-        if self.environment == "development":
+        if self.environment == "test":
             base_url = "https://test.stytch.com/v1/"
             if not self.suppress_warnings:
                 warnings.warn("Development version of stytch not intended for production use")
-        else:
+        elif self.environment == "live":
             base_url = "https://api.stytch.com/v1/"
+        else:
+            raise Exception("Invalid or missing env. Please specify test or live env")
 
         return base_url

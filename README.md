@@ -16,7 +16,7 @@ from stytch import Client
 stytch_client = Client(
     project_id="***YOUR PROJECT ID***",
     secret="***YOUR PROJECT SECRET***",
-    environment="development",
+    environment="test",
 )
 
 # Create a user
@@ -35,4 +35,4 @@ TBI
 
 ### More information:
 
-Visit https://stytch.com/docs for more information
+Visit https://stytch.com/ for more information
