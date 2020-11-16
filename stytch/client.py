@@ -1,6 +1,7 @@
 import warnings
 
 from .api.users import Users
+from .api.magic_links import MagicLinks
 
 
 class Client:
@@ -23,6 +24,7 @@ class Client:
         self.suppress_warnings = suppress_warnings
 
         self.Users = Users(self)
+        self.MagicLinks = MagicLinks(self)
 
     @property
     def base_url(self):
