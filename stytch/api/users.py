@@ -12,7 +12,7 @@ class Users(Base):
         if not attributes:
             return False
         FIELDS = set(["ip_address", "user_agent"])
-        if FIELDS.union(set(attributes.keys())) > len(FIELDS):
+        if len(FIELDS.union(set(attributes.keys()))) > len(FIELDS):
             raise Exception("Unknown argument in user attributes")
 
         return True
