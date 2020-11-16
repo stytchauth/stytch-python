@@ -39,8 +39,8 @@ class MagicLinks(Base):
         method_id: str,
         email: str,
         magic_link_url: str,
-        expiration_minutes: float,
-        template_id: str,
+        expiration_minutes: float = 10.0,
+        template_id: str = None,
         attributes: Dict = None,
     ):
         if not self._validate_attributes(attributes):
@@ -63,8 +63,8 @@ class MagicLinks(Base):
         self,
         email: str,
         magic_link_url: str,
-        expiration_minutes: float,
-        template_id: Optional[str],
+        expiration_minutes: float = 10.0,
+        template_id: Optional[str] = None,
         attributes: Dict = None,
     ):
         if not self._validate_attributes(attributes):
