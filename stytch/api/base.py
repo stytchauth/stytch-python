@@ -8,8 +8,10 @@ class Base:
     def __init__(self, client):
         self._requester_base = requests
         self.client = client
-        self.auth = requests.auth.HTTPBasicAuth(self.client.project_id, self.client.secret)
-    
+        self.auth = requests.auth.HTTPBasicAuth(
+            self.client.project_id, self.client.secret
+        )
+
     def get_url(self, arg: str):
         return "{0}{1}".format(self.client.base_url, arg)
 
