@@ -33,21 +33,21 @@ class MagicLinks(Base):
     def send(
         self,
         method_id: str,
-        email: str,
+        user_id: str,
         magic_link_url: str,
         expiration_minutes: float = 10.0,
         template_id: str = None,
-        attributes: Dict = None,
+        attributes: Dict = {},
     ):
         if not self._validate_attributes(attributes):
             raise Exception("invalid arguments")
         return self._post(
-            "{0}/send_by_id".format(
+            "{0}/send".format(
                 self.magic_link_url,
             ),
             data={
                 "method_id": method_id,
-                "email": email,
+                "user_id": user_id,
                 "magic_link_url": magic_link_url,
                 "expiration_minutes": expiration_minutes,
                 "template_id": template_id,
@@ -61,7 +61,7 @@ class MagicLinks(Base):
         magic_link_url: str,
         expiration_minutes: float = 10.0,
         template_id: Optional[str] = None,
-        attributes: Dict = None,
+        attributes: Dict = {},
     ):
         if not self._validate_attributes(attributes):
             raise Exception("invalid arguments")
