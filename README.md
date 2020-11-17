@@ -26,7 +26,7 @@ resp = stytch_client.Users.create(email="person@app.com")
 stytch_client.MagicLink.send(
     method_id=resp.user_id, 
     email=resp.email_id, 
-    magic_link_url="my-app.com/login"
+    magic_link_url="https://my-app.com/login"
 )
 
 # Authenticate magic link

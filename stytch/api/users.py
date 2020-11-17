@@ -20,11 +20,16 @@ class Users(Base):
         email: str,
         first_name: str,
         last_name: str,
+        middle_name: str = None,
         attributes: Dict[str, str] = {},
     ):
         data = {
             "email": email,
-            "name": {"first_name": first_name, "last_name": last_name},
+            "name": {
+                "first_name": first_name,
+                "middle_name": middle_name,
+                "last_name": last_name,
+            },
         }
         if self._validate_attributes(attributes):
             data.update(attributes)
