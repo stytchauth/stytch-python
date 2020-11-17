@@ -1,5 +1,6 @@
 import warnings
 
+from .api.emails import Emails
 from .api.users import Users
 from .api.magic_links import MagicLinks
 
@@ -25,6 +26,7 @@ class Client:
 
         self.Users = Users(self)
         self.MagicLinks = MagicLinks(self)
+        self.Emails = Emails(self)
 
     @property
     def base_url(self):

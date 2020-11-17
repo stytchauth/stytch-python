@@ -23,3 +23,17 @@ class TestStytchClient:
         assert client.Users.update
         assert client.Users.delete
         assert client.Users.create
+
+    def test_MagicLinks_controller_exists(self):
+        client = Client("project_id", "secret", "development", suppress_warnings=True)
+        assert client.MagicLinks
+        assert client.MagicLinks.send
+        assert client.MagicLinks.send_by_email
+        assert client.MagicLinks.authenticate
+
+    def test_Emails_controller_exists(self):
+        client = Client("project_id", "secret", "development", suppress_warnings=True)
+        assert client.Emails
+        assert client.Emails.verify_email
+        assert client.Emails.send_email_verification
+        assert client.Emails.delete_email
