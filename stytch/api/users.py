@@ -18,8 +18,8 @@ class Users(Base):
     def create(
         self,
         email: str,
-        first_name: str,
-        last_name: str,
+        first_name: str = None,
+        last_name: str = None,
         middle_name: str = None,
         attributes: Dict[str, str] = {},
     ):
