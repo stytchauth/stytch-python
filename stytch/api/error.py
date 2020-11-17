@@ -1,10 +1,10 @@
 class StytchError(Exception):
     def __init__(
         self,
-        request_id: str,
-        error_type: str,
-        error_message: str,
-        error_url: str,
+        request_id: str = None,
+        error_type: str = None,
+        error_message: str = None,
+        error_url: str = None,
         **kwargs
     ):
         self.request_id = request_id

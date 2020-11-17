@@ -11,6 +11,7 @@ def throw_stytch_exception(func):
             raise PermissionError("Invalid project id or secret")
 
         if resp.status_code == 400:
+            print(resp._content)
             raise StytchError(**json.loads(resp._content))
 
         else:

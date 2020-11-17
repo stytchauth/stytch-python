@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from .base import Base
 
@@ -10,21 +10,22 @@ class Users(Base):
 
     def _validate_attributes(self, attributes: Dict[str, str]) -> bool:
         if not attributes:
-            return False
-        FIELDS = set(["ip_address", "user_agent"])
-        if len(FIELDS.union(set(attributes.keys()))) > len(FIELDS):
-            raise Exception("Unknown argument in user attributes")
-
-        return True
+            return True
+        return self._validate_fields(
+            set(["ip_address", "user_agent"]), set(attributes.keys())
+        )
 
     def create(
         self,
         email: str,
         first_name: str,
         last_name: str,
-        attributes: Dict[str, str] = None,
+        attributes: Dict[str, str] = {},
     ):
-        data = {"email": email, "first_name": first_name, "last_name": last_name}
+        data = {
+            "email": email,
+            "name": {"first_name": first_name, "last_name": last_name},
+        }
         if self._validate_attributes(attributes):
             data.update(attributes)
         return self._post("{0}".format(self.user_url), data)
@@ -36,16 +37,27 @@ class Users(Base):
         return self._delete("{0}/{1}".format(self.user_url, user_id))
 
     def update(
-        self, email: str, first_name: str, last_name: str, attributes: Dict[str, str]
+        self,
+        user_id: str,
+        email: Optional[str] = None,
+        first_name: Optional[str] = None,
+        middle_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        attributes: Optional[Dict[str, str]] = {},
     ):
         data = {}
+        name = {}
         if email:
             data.update({"email": email})
         if first_name:
-            data.update({"first_name": first_name})
+            name.update({"first_name": first_name})
+        if middle_name:
+            name.update({"middle_name": middle_name})
         if last_name:
-            data.update({"last_name": last_name})
+            name.update({"last_name": last_name})
+        if name:
+            data.update({"name": name})
         if self._validate_attributes(attributes):
-            data.update({attributes: attributes})
+            data.update({"attributes": attributes})
 
-        return self._put("{0}".format(self.user_url), data)
+        return self._put("{0}/{1}".format(self.user_url, user_id), data)

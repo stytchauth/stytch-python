@@ -11,20 +11,16 @@ class MagicLinks(Base):
     def _validate_attributes(self, attributes: Dict[str, str]) -> bool:
         if not attributes:
             return True
-        FIELDS = set(["ip_address", "user_agent"])
-        if len(FIELDS.union(set(attributes.keys()))) > len(FIELDS):
-            raise Exception("Unknown argument in user attributes")
-
-        return True
+        return self._validate_fields(
+            set(["ip_address", "user_agent"]), set(attributes.keys())
+        )
 
     def _validate_match_attributes(self, attributes: Dict[str, str]) -> bool:
         if not attributes:
             return True
-        FIELDS = set(["ip_address_match", "user_agent_match"])
-        if len(FIELDS.union(set(attributes.keys()))) > len(FIELDS):
-            raise Exception("Unknown argument in user attributes")
-
-        return True
+        return self._validate_fields(
+            set(["ip_address_match", "user_agent_match"]), set(attributes.keys())
+        )
 
     def authenticate(self, token: str, options: Dict = None):
         if not self._validate_match_attributes(options):
@@ -34,7 +30,7 @@ class MagicLinks(Base):
             data={"options": options},
         )
 
-    def send_by_id(
+    def send(
         self,
         method_id: str,
         email: str,

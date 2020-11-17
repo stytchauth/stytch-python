@@ -1,7 +1,7 @@
 import json
 import requests
 
-from typing import Dict
+from typing import Dict, Set
 
 from .decorator import throw_stytch_exception
 
@@ -13,6 +13,12 @@ class Base:
         self.auth = requests.auth.HTTPBasicAuth(
             self.client.project_id, self.client.secret
         )
+
+    def _validate_fields(self, fields: Set[str], accepted_fields: Set[str]) -> bool:
+        if len(accepted_fields.union(fields)) > len(accepted_fields):
+            raise Exception("Unknown arguments applied")
+
+        return True
 
     def get_url(self, arg: str):
         return "{0}{1}".format(self.client.base_url, arg)

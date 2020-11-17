@@ -31,9 +31,7 @@ class Client:
         if self.environment == "test":
             base_url = "https://test.stytch.com/v1/"
             if not self.suppress_warnings:
-                warnings.warn(
-                    "Development version of stytch not intended for production use"
-                )
+                warnings.warn("Test version of Stytch not intended for production use")
         elif self.environment == "live":
             base_url = "https://api.stytch.com/v1/"
         else:

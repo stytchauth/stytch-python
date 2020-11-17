@@ -23,7 +23,11 @@ stytch_client = Client(
 resp = stytch_client.Users.create(email="person@app.com")
 
 # Send magic link to user
-stytch_client.MagicLink.send_by_id(method_id=resp.user_id)
+stytch_client.MagicLink.send(
+    method_id=resp.user_id, 
+    email=resp.email_id, 
+    magic_link_url="my-app.com/login"
+)
 
 # Authenticate magic link
 stytch_client.MagicLink.authenticate(token="*** EMAILED TOKEN ****")
@@ -47,7 +51,7 @@ except Exception as error:
 
 ### Documentation:
 
-TBI
+docs.stytch.com
 
 ### More information:
 
