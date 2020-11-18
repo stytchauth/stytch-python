@@ -11,7 +11,7 @@ class Emails(Base):
         email_id: str,
         user_id: str,
         magic_link_url: str,
-        expiration_minutes: float = 10.0,
+        expiration_minutes: int = 10,
     ):
         return self._post(
             "{0}/{1}/send_verification".format(self.emails_url, email_id),

@@ -31,7 +31,7 @@ class Users(Base):
                 "last_name": last_name,
             },
         }
-        if self._validate_attributes(attributes):
+        if attributes and self._validate_attributes(attributes):
             data.update(attributes)
         return self._post("{0}".format(self.user_url), data)
 
@@ -62,7 +62,7 @@ class Users(Base):
             name.update({"last_name": last_name})
         if name:
             data.update({"name": name})
-        if self._validate_attributes(attributes):
+        if attributes and self._validate_attributes(attributes):
             data.update({"attributes": attributes})
 
         return self._put("{0}/{1}".format(self.user_url, user_id), data)

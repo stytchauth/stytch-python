@@ -35,7 +35,7 @@ class MagicLinks(Base):
         method_id: str,
         user_id: str,
         magic_link_url: str,
-        expiration_minutes: float = 10.0,
+        expiration_minutes: int = 10,
         template_id: str = None,
         attributes: Dict = {},
     ):
@@ -59,7 +59,7 @@ class MagicLinks(Base):
         self,
         email: str,
         magic_link_url: str,
-        expiration_minutes: float = 10.0,
+        expiration_minutes: int = 10,
         template_id: Optional[str] = None,
         attributes: Dict = {},
     ):
