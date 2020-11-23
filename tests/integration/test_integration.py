@@ -45,12 +45,34 @@ class TestIntegration:
         user_data = resp.json()
         assert user_data["name"]["middle_name"] == "Middle"
 
+        """
+        Magic Link routes
+        """
+        user_id = user_data["user_id"]
+        email_id = user_data["emails"][0]["email_id"]
+        assert email_id
+        # TODO: Implement without sending email
+        # stytch_client.MagicLinks.send(
+        #     method_id=email_id, user_id=user_id, magic_link_url="https://test.com/login"
+        # )
+
+        """
+        Email routes
+        """
         # send user email verification
-        stytch_client.Emails.send_email_verification(
-            email_id=user_data["emails"][0]["email_id"],
-            user_id=user_data["user_id"],
-            magic_link_url="https://hello.com",
-        )
+        # stytch_client.Emails.send_email_verification(
+        #     email_id=email_id,
+        #     user_id=user_id,
+        #     magic_link_url="https://hello.com",
+        # )
+
+        # Delete email of user
+        # curl -X DELETE https://api.stytch.com/v1/emails/<email_id>/users/<user_id>
+        resp = stytch_client.Emails.delete_email(user_id=user_id, email_id=email_id)
+        assert resp.status_code == 200
+        resp = stytch_client.Users.get(created_user_id)
+        assert resp.status_code == 200
+        assert resp.json()["emails"] == []
 
         # Delete the created test user.
         # curl -X PUT https://api.stytch.com/v1/users/<user_id> -u project_id:secret
