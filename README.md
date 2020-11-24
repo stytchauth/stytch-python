@@ -48,6 +48,13 @@ except Exception as error:
     pass
 ```
 
+### Testing:
+Unit tests are run via `pytest tests/api`
+
+Integration tests accept a project_id + secret via command line
+```
+pytest tests/integration/test_integration.py --project_id="project-test-9d426430-e7a7-4f4c-86c3-819f499cd19d" --secret="secret-test-_WEsPmDcCtfh6twRLbdAtGtNlfBLAZP4g5w="
+```
 
 ### Documentation:
 

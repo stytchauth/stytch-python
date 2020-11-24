@@ -22,7 +22,7 @@ class TestIntegration:
         # curl -X POST https://api.stytch.com/v1/users -u project_id:secret
         # -d '{ email: "user@test.com", name : { first_name: "Nathan", last_name: "Chiu" } }'
         resp = stytch_client.Users.create(
-            email="nathan-chiu+15@stytch.com", first_name="Nathan", last_name="Chiu"
+            email="test+1@test.com", first_name="Nathan", last_name="Chiu"
         )
         assert resp.status_code == 200
         created_user_id = resp.json()["user_id"]
@@ -51,20 +51,54 @@ class TestIntegration:
         user_id = user_data["user_id"]
         email_id = user_data["emails"][0]["email_id"]
         assert email_id
+
         # TODO: Implement without sending email
-        # stytch_client.MagicLinks.send(
-        #     method_id=email_id, user_id=user_id, magic_link_url="https://test.com/login"
-        # )
+        # Send magic link to email id
+        # curl -X POST https://api.stytch.com/v1/magic_links/send -u projectId:secret
+        # -d { method_id: "email-id-123", user_id: "user-id-123",
+        #       magic_link_url: "https://test.com/login"}
+        resp = stytch_client.MagicLinks.send(
+            method_id=email_id,
+            user_id=user_id,
+            magic_link_url="https://test.com/login",
+            attributes={
+                "ip_address": "1.1.1.1",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+                + "(KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36",
+            },
+        )
+        assert resp.status_code == 200
+
+        # TODO: Implement without sending email
+        # Send magic link to email
+        # curl -X POST https://api.stytch.com/v1/magic_links/send_by_email -u projectId:secret
+        # -d { email: "hello@world.com", user_id: "user-id-123",
+        #       magic_link_url: "https://test.com/login"}
+        resp = stytch_client.MagicLinks.send_by_email(
+            email="test@test.com",
+            magic_link_url="https://test.com/login",
+        )
+        assert resp.status_code == 200
+
+        # TODO: Test this
+        #  Authenticate that token
+        # curl -X POST https://api.stytch.com/v1/magic_links/authenticate -u project_id:secret
+        # -d '{ email: "user@test.com", name : { first_name: "Nathan", last_name: "Chiu" } }'
+        # stytch_client.MagicLinks.authenticate()
+        # stytch_client.MagicLinks.authenticate(token=token)
 
         """
         Email routes
         """
         # send user email verification
-        # stytch_client.Emails.send_email_verification(
-        #     email_id=email_id,
-        #     user_id=user_id,
-        #     magic_link_url="https://hello.com",
-        # )
+        # curl -X POST https://api.stytch.com/v1/emails/send_verification -u project_id:secret
+        # -d { user_id: 'user-test-123', email_id: 'email-test-123' }
+        resp = stytch_client.Emails.send_email_verification(
+            email_id=email_id,
+            user_id=user_id,
+            magic_link_url="https://hello.com",
+        )
+        assert resp.status_code == 200
 
         # Delete email of user
         # curl -X DELETE https://api.stytch.com/v1/emails/<email_id>/users/<user_id>
@@ -72,10 +106,9 @@ class TestIntegration:
         assert resp.status_code == 200
         resp = stytch_client.Users.get(created_user_id)
         assert resp.status_code == 200
-        assert resp.json()["emails"] == []
+        assert not resp.json().get("emails")
 
         # Delete the created test user.
-        # curl -X PUT https://api.stytch.com/v1/users/<user_id> -u project_id:secret
-        # -d '{ name: { middle_name: "Big" } }'
+        # curl -X DELETE https://api.stytch.com/v1/users/<user_id> -u project_id:secret
         resp = stytch_client.Users.delete(user_data["user_id"])
-        assert resp
+        assert resp.status_code == 200
