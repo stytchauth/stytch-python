@@ -14,7 +14,7 @@ class Base:
             self.client.project_id, self.client.secret
         )
 
-    def _validate_fields(self, fields: Set[str], accepted_fields: Set[str]) -> bool:
+    def _validate_fields(self, accepted_fields: Set[str], fields: Set[str]) -> bool:
         if len(accepted_fields.union(fields)) > len(accepted_fields):
             raise Exception("Unknown arguments applied")
 

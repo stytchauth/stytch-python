@@ -8,23 +8,36 @@ class MagicLinks(Base):
     def magic_link_url(self):
         return self.get_url("magic_links")
 
-    def _validate_attributes(self, attributes: Dict[str, str]) -> bool:
+    def _validate_attributes(self, attributes: Dict[str, str]) -> Dict[str, str]:
         if not attributes:
-            return True
-        return self._validate_fields(
-            set(["ip_address", "user_agent"]), set(attributes.keys())
-        )
+            return attributes
+        default_attributes = {"ip_address": "", "user_agent": ""}
 
-    def _validate_match_attributes(self, attributes: Dict[str, str]) -> bool:
+        if attributes.get("ip_address"):
+            default_attributes.update({"ip_address": attributes["ip_address"]})
+        if attributes.get("user_agent"):
+            default_attributes.update({"user_agent": attributes["user_agent"]})
+
+        return default_attributes
+
+    def _validate_match_attributes(self, attributes: Dict[str, str]) -> Dict[str, str]:
         if not attributes:
-            return True
-        return self._validate_fields(
-            set(["ip_address_match", "user_agent_match"]), set(attributes.keys())
-        )
+            return attributes
+
+        default_attributes = {"ip_address_match": "", "user_agent_match": ""}
+        if attributes.get("ip_address_match"):
+            default_attributes.update(
+                {"ip_address_match": attributes["ip_address_match"]}
+            )
+        if attributes.get("user_agent_match"):
+            default_attributes.update(
+                {"user_agent_match": attributes["user_agent_match"]}
+            )
+
+        return default_attributes
 
     def authenticate(self, token: str, options: Dict = None):
-        if not self._validate_match_attributes(options):
-            raise Exception("invalid arguments")
+        options = self._validate_match_attributes(options)
         return self._post(
             "{0}/{1}/authenticate".format(self.magic_link_url, token),
             data={"options": options},
@@ -37,10 +50,9 @@ class MagicLinks(Base):
         magic_link_url: str,
         expiration_minutes: int = 10,
         template_id: str = None,
-        attributes: Dict = {},
+        attributes: Optional[Dict] = None,
     ):
-        if not self._validate_attributes(attributes):
-            raise Exception("invalid arguments")
+        attributes = self._validate_attributes(attributes)
         return self._post(
             "{0}/send".format(
                 self.magic_link_url,
@@ -61,10 +73,9 @@ class MagicLinks(Base):
         magic_link_url: str,
         expiration_minutes: int = 10,
         template_id: Optional[str] = None,
-        attributes: Dict = {},
+        attributes: Optional[Dict] = None,
     ):
-        if not self._validate_attributes(attributes):
-            raise Exception("invalid arguments")
+        attributes = self._validate_attributes(attributes)
         return self._post(
             "{0}/send_by_email".format(
                 self.magic_link_url,
