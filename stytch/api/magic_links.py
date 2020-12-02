@@ -88,3 +88,59 @@ class MagicLinks(Base):
                 "attributes": attributes,
             },
         )
+
+    def login_or_create(
+        self,
+        email: str,
+        login_magic_link_url: str,
+        signup_magic_link_url: str,
+        login_expiration_minutes: Optional[int] = None,
+        signup_expiration_minutes: Optional[int] = None,
+        login_template_id: Optional[str] = None,
+        signup_template_id: Optional[str] = None,
+        attributes: Optional[Dict] = None,
+    ):
+        attributes = self._validate_attributes(attributes)
+        return self._post(
+            "{0}/login_or_create".format(
+                self.magic_link_url,
+            ),
+            data={
+                "email": email,
+                "login_magic_link_url": login_magic_link_url,
+                "signup_magic_link_url": signup_magic_link_url,
+                "login_expiration_minutes": login_expiration_minutes,
+                "signup_expiration_minutes": signup_expiration_minutes,
+                "login_template_id": login_template_id,
+                "signup_template_id": signup_template_id,
+                "attributes": attributes,
+            },
+        )
+
+    def login_or_invite_by_email(
+        self,
+        email: str,
+        login_magic_link_url: str,
+        invite_magic_link_url: str,
+        login_expiration_minutes: Optional[int] = None,
+        invite_expiration_minutes: Optional[int] = None,
+        login_template_id: Optional[str] = None,
+        invite_template_id: Optional[str] = None,
+        attributes: Optional[Dict] = None,
+    ):
+        attributes = self._validate_attributes(attributes)
+        return self._post(
+            "{0}/login_or_invite".format(
+                self.magic_link_url,
+            ),
+            data={
+                "email": email,
+                "login_magic_link_url": login_magic_link_url,
+                "invite_magic_link_url": invite_magic_link_url,
+                "login_expiration_minutes": login_expiration_minutes,
+                "invite_expiration_minutes": invite_expiration_minutes,
+                "login_template_id": login_template_id,
+                "invite_template_id": invite_template_id,
+                "attributes": attributes,
+            },
+        )
