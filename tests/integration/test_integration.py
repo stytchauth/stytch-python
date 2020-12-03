@@ -80,6 +80,30 @@ class TestIntegration:
         )
         assert resp.status_code == 200
 
+        # Login or Create User
+        # curl -X POST https://api.stytch.com/v1/magic_links/login_or_create -u projectId:secret
+        # -d { email: "hello@world.com",
+        #     signup_magic_link_url: "https://test.com/signup",
+        #     login_magic_link_url: "https://test.com/login"}
+        resp = stytch_client.MagicLinks.login_or_create(
+            email="test@test.com",
+            login_magic_link_url="https://test.com/login",
+            signup_magic_link_url="https://test.com/signup"
+        )
+        assert resp.status_code == 200
+
+        # Login or Invite By Email
+        # curl -X POST https://api.stytch.com/v1/magic_links/login_or_invite -u projectId:secret
+        # -d { email: "hello@world.com",
+        #     invite_magic_link_url: "https://test.com/invite",
+        #     login_magic_link_url: "https://test.com/login"}
+        resp = stytch_client.MagicLinks.login_or_create(
+            email="test@test.com",
+            login_magic_link_url="https://test.com/login",
+            invite_magic_link_url="https://test.com/invite"
+        )
+        assert resp.status_code == 200
+
         # TODO: Test this
         #  Authenticate that token
         # curl -X POST https://api.stytch.com/v1/magic_links/authenticate -u project_id:secret
