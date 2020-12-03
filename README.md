@@ -33,6 +33,24 @@ stytch_client.MagicLink.send(
 stytch_client.MagicLink.authenticate(token="*** EMAILED TOKEN ****")
 ```
 
+### Login Or Create User
+```python
+stytch_client.MagicLink.login_or_create(
+    email="person@app.com", 
+    login_magic_link_url="https://my-app.com/login",
+    signup_magic_link_url="https://my-app.com/signup"
+)
+```
+
+### Login Or Invite By Email
+```python
+stytch_client.MagicLink.login_or_invite_by_email(
+    email="person@app.com", 
+    login_magic_link_url="https://my-app.com/login",
+    invite_magic_link_url="https://my-app.com/invite"
+)
+```
+
 ### Handling exceptions:
 Handle Stytch exceptions with StytchErrors
 ```python
