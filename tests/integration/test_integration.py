@@ -114,16 +114,6 @@ class TestIntegration:
         """
         Email routes
         """
-        # send user email verification
-        # curl -X POST https://api.stytch.com/v1/emails/send_verification -u project_id:secret
-        # -d { user_id: 'user-test-123', email_id: 'email-test-123' }
-        resp = stytch_client.Emails.send_email_verification(
-            email_id=email_id,
-            user_id=user_id,
-            magic_link_url="https://hello.com",
-        )
-        assert resp.status_code == 200
-
         # Delete email of user
         # curl -X DELETE https://api.stytch.com/v1/emails/<email_id>/users/<user_id>
         resp = stytch_client.Emails.delete_email(user_id=user_id, email_id=email_id)
