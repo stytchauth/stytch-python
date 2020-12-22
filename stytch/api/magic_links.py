@@ -49,7 +49,6 @@ class MagicLinks(Base):
         user_id: str,
         magic_link_url: str,
         expiration_minutes: int = 10,
-        template_id: str = None,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
@@ -62,7 +61,6 @@ class MagicLinks(Base):
                 "user_id": user_id,
                 "magic_link_url": magic_link_url,
                 "expiration_minutes": expiration_minutes,
-                "template_id": template_id,
                 "attributes": attributes,
             },
         )
@@ -72,7 +70,6 @@ class MagicLinks(Base):
         email: str,
         magic_link_url: str,
         expiration_minutes: int = 10,
-        template_id: Optional[str] = None,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
@@ -84,7 +81,6 @@ class MagicLinks(Base):
                 "email": email,
                 "magic_link_url": magic_link_url,
                 "expiration_minutes": expiration_minutes,
-                "template_id": template_id,
                 "attributes": attributes,
             },
         )
@@ -96,8 +92,6 @@ class MagicLinks(Base):
         signup_magic_link_url: str,
         login_expiration_minutes: Optional[int] = None,
         signup_expiration_minutes: Optional[int] = None,
-        login_template_id: Optional[str] = None,
-        signup_template_id: Optional[str] = None,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
@@ -111,8 +105,6 @@ class MagicLinks(Base):
                 "signup_magic_link_url": signup_magic_link_url,
                 "login_expiration_minutes": login_expiration_minutes,
                 "signup_expiration_minutes": signup_expiration_minutes,
-                "login_template_id": login_template_id,
-                "signup_template_id": signup_template_id,
                 "attributes": attributes,
             },
         )
@@ -124,8 +116,6 @@ class MagicLinks(Base):
         invite_magic_link_url: str,
         login_expiration_minutes: Optional[int] = None,
         invite_expiration_minutes: Optional[int] = None,
-        login_template_id: Optional[str] = None,
-        invite_template_id: Optional[str] = None,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
@@ -139,8 +129,40 @@ class MagicLinks(Base):
                 "invite_magic_link_url": invite_magic_link_url,
                 "login_expiration_minutes": login_expiration_minutes,
                 "invite_expiration_minutes": invite_expiration_minutes,
-                "login_template_id": login_template_id,
-                "invite_template_id": invite_template_id,
                 "attributes": attributes,
+            },
+        )
+
+    def invite_by_email(
+        self,
+        email: str,
+        magic_link_url: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict] = None,
+    ):
+        attributes = self._validate_attributes(attributes)
+        return self._post(
+            "{0}/invite_by_email".format(
+                self.magic_link_url,
+            ),
+            data={
+                "email": email,
+                "magic_link_url": magic_link_url,
+                "expiration_minutes": expiration_minutes,
+                "attributes": attributes,
+            },
+        )
+
+    def revoke_invite_by_email(
+        self,
+        email: str,
+    ):
+        attributes = self._validate_attributes(attributes)
+        return self._post(
+            "{0}/revoke_invite".format(
+                self.magic_link_url,
+            ),
+            data={
+                "email": email,
             },
         )
