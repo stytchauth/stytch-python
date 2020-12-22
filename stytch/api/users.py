@@ -66,3 +66,6 @@ class Users(Base):
             data.update({"attributes": attributes})
 
         return self._put("{0}/{1}".format(self.user_url, user_id), data)
+
+    def delete_email(self, user_id: str, email: str):
+        return self._delete("{0}/{1}/emails/{2}".format(self.user_url, user_id, email))
