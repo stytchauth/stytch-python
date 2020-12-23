@@ -132,17 +132,6 @@ class TestIntegration:
         # stytch_client.MagicLinks.authenticate()
         # stytch_client.MagicLinks.authenticate(token=token)
 
-        """
-        Email routes
-        """
-        # Delete email of user
-        # curl -X DELETE https://api.stytch.com/v1/emails/<email_id>/users/<user_id>
-        resp = stytch_client.Emails.delete_email(user_id=user_id, email_id=email_id)
-        assert resp.status_code == 200
-        resp = stytch_client.Users.get(created_user_id)
-        assert resp.status_code == 200
-        assert not resp.json().get("emails")
-
         # Delete the created test user.
         # curl -X DELETE https://api.stytch.com/v1/users/<user_id> -u project_id:secret
         resp = stytch_client.Users.delete(user_data["user_id"])
