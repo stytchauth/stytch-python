@@ -100,7 +100,7 @@ class TestIntegration:
         # -d { email: "sandbox@stytch.com",
         #     invite_magic_link_url: "https://test.com/invite",
         #     login_magic_link_url: "https://test.com/login"}
-        resp = stytch_client.MagicLinks.login_or_create(
+        resp = stytch_client.MagicLinks.login_or_invite_by_email(
             email="sandbox@stytch.com",
             login_magic_link_url="https://test.com/login",
             invite_magic_link_url="https://test.com/invite"
