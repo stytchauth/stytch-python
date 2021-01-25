@@ -24,8 +24,8 @@ class Base:
         return "{0}{1}".format(self.client.base_url, arg)
 
     @throw_stytch_exception
-    def _get(self, url: str):
-        return self._requester_base.get(url, auth=self.auth)
+    def _get(self, url: str, query_params: Dict):
+        return self._requester_base.get(url, auth=self.auth, params=query_params)
 
     @throw_stytch_exception
     def _post(self, url: str, data: Dict):
