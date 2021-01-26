@@ -47,7 +47,7 @@ class TestIntegration:
         
         # Get Invited Users
         # curl -X POST https://api.stytch.com/v1/users/invites -u projectId:secret
-        resp = stytch_client.Users.get_invited_users()
+        resp = stytch_client.Users.get_invited_users(limit=1)
         assert resp.status_code == 200
 
         """

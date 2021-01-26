@@ -38,8 +38,18 @@ class Users(Base):
     def get(self, user_id: str):
         return self._get("{0}/{1}".format(self.user_url, user_id))
 
-    def get_invited_users(self):
-        return self._get("{0}/{1}".format(self.user_url, "invites"))
+    def get_invited_users(
+        self,
+        limit: Optional[int] = None,
+        starting_after_id: Optional[str] = None
+    ):
+        query_params = {}
+        if limit:
+            query_params.update({"limit": str(limit)})
+        if starting_after_id:
+            query_params.update({"starting_after_id": starting_after_id})
+
+        return self._get("{0}/{1}".format(self.user_url, "invites"), query_params)
 
     def delete(self, user_id: str):
         return self._delete("{0}/{1}".format(self.user_url, user_id))
