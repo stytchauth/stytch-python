@@ -42,15 +42,6 @@ stytch_client.MagicLink.login_or_create(
 )
 ```
 
-### Login Or Invite By Email
-```python
-stytch_client.MagicLink.login_or_invite_by_email(
-    email="person@app.com", 
-    login_magic_link_url="https://my-app.com/login",
-    invite_magic_link_url="https://my-app.com/invite"
-)
-```
-
 ### Handling exceptions:
 Handle Stytch exceptions with StytchErrors
 ```python

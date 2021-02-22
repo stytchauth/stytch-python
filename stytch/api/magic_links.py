@@ -109,30 +109,6 @@ class MagicLinks(Base):
             },
         )
 
-    def login_or_invite_by_email(
-        self,
-        email: str,
-        login_magic_link_url: str,
-        invite_magic_link_url: str,
-        login_expiration_minutes: Optional[int] = None,
-        invite_expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-    ):
-        attributes = self._validate_attributes(attributes)
-        return self._post(
-            "{0}/login_or_invite".format(
-                self.magic_link_url,
-            ),
-            data={
-                "email": email,
-                "login_magic_link_url": login_magic_link_url,
-                "invite_magic_link_url": invite_magic_link_url,
-                "login_expiration_minutes": login_expiration_minutes,
-                "invite_expiration_minutes": invite_expiration_minutes,
-                "attributes": attributes,
-            },
-        )
-
     def invite_by_email(
         self,
         email: str,
