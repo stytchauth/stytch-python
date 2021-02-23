@@ -95,18 +95,6 @@ class TestIntegration:
         )
         assert resp.status_code == 200
 
-        # Login or Invite By Email
-        # curl -X POST https://api.stytch.com/v1/magic_links/login_or_invite -u projectId:secret
-        # -d { email: "sandbox@stytch.com",
-        #     invite_magic_link_url: "https://test.com/invite",
-        #     login_magic_link_url: "https://test.com/login"}
-        resp = stytch_client.MagicLinks.login_or_invite_by_email(
-            email="sandbox@stytch.com",
-            login_magic_link_url="https://test.com/login",
-            invite_magic_link_url="https://test.com/invite"
-        )
-        assert resp.status_code == 200
-
         # Invite By Email
         # curl -X POST https://api.stytch.com/v1/magic_links/invite_by_email -u projectId:secret
         # -d { email: "sandbox+1@stytch.com",
