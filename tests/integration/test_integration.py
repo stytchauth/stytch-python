@@ -45,9 +45,9 @@ class TestIntegration:
         user_data = resp.json()
         assert user_data["name"]["middle_name"] == "Middle"
         
-        # Get Invited Users
-        # curl -X POST https://api.stytch.com/v1/users/invites -u projectId:secret
-        resp = stytch_client.Users.get_invited_users(limit=1)
+        # Get Pending Users
+        # curl -X POST https://api.stytch.com/v1/users/pending -u projectId:secret
+        resp = stytch_client.Users.get_pending_users(limit=1)
         assert resp.status_code == 200
 
         """
