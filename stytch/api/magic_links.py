@@ -93,6 +93,7 @@ class MagicLinks(Base):
         login_expiration_minutes: Optional[int] = None,
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
+        create_user_as_pending: Optional[bool] = None,
     ):
         attributes = self._validate_attributes(attributes)
         return self._post(
@@ -106,6 +107,7 @@ class MagicLinks(Base):
                 "login_expiration_minutes": login_expiration_minutes,
                 "signup_expiration_minutes": signup_expiration_minutes,
                 "attributes": attributes,
+                "create_user_as_pending": create_user_as_pending,
             },
         )
 
