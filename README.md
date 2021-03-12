@@ -67,7 +67,7 @@ pytest tests/integration/test_integration.py --project_id="***YOUR PROJECT ID***
 
 ### Documentation:
 
-docs.stytch.com
+https://stytch.com/docs/api
 
 ### More information:
 
