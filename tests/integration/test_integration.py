@@ -10,7 +10,7 @@ class TestIntegration:
     """
 
     @pytest.mark.unit
-    def test_full_user_flow(self, project_id, secret):
+    def test_full_user_flow(self, project_id, secret, email):
         # Instantiate stytch client with command line args
         stytch_client = stytch.Client(
             project_id=project_id,
@@ -22,16 +22,16 @@ class TestIntegration:
         # curl -X POST https://api.stytch.com/v1/users -u project_id:secret
         # -d '{ email: "user@test.com", name : { first_name: "Nathan", last_name: "Chiu" } }'
         resp = stytch_client.Users.create(
-            email="sandbox@stytch.com", first_name="Nathan", last_name="Chiu"
+            email=email, first_name="Nathan", last_name="Chiu"
         )
-        assert resp.status_code == 200
-        created_user_id = resp.json()["user_id"]
+        assert resp.status_code == 201
+        created_user_id = resp.json()["userId"]
 
         # Get that recently created user.
         # curl -X GET https://api.stytch.com/v1/users/<user_id> -u project_id:secret
         resp = stytch_client.Users.get(created_user_id)
         assert resp.status_code == 200
-        user_id = resp.json()["user_id"]
+        user_id = resp.json()["userId"]
 
         # Update that user's middle name.
         # curl -X PUT https://api.stytch.com/v1/users/<user_id> -u project_id:secret
@@ -43,8 +43,8 @@ class TestIntegration:
         resp = stytch_client.Users.get(user_id)
         assert resp.status_code == 200
         user_data = resp.json()
-        assert user_data["name"]["middle_name"] == "Middle"
-        
+        assert user_data["name"]["middleName"] == "Middle"
+
         # Get Pending Users
         # curl -X POST https://api.stytch.com/v1/users/pending -u projectId:secret
         resp = stytch_client.Users.get_pending_users(limit=1)
@@ -53,8 +53,8 @@ class TestIntegration:
         """
         Magic Link routes
         """
-        user_id = user_data["user_id"]
-        email_id = user_data["emails"][0]["email_id"]
+        user_id = user_data["userId"]
+        email_id = user_data["emails"][0]["emailId"]
         assert email_id
 
         # Send magic link to email id
@@ -91,7 +91,7 @@ class TestIntegration:
         resp = stytch_client.MagicLinks.login_or_create(
             email="sandbox@stytch.com",
             login_magic_link_url="https://test.com/login",
-            signup_magic_link_url="https://test.com/signup"
+            signup_magic_link_url="https://test.com/signup",
         )
         assert resp.status_code == 200
 
@@ -100,7 +100,7 @@ class TestIntegration:
         # -d { email: "sandbox+1@stytch.com",
         #     magic_link_url: "https://test.com/invite"}
         resp = stytch_client.MagicLinks.invite_by_email(
-            email="sandbox+1@stytch.com",
+            email="sandbox@stytch.com",
             magic_link_url="https://test.com/invite",
         )
         assert resp.status_code == 200
@@ -109,7 +109,7 @@ class TestIntegration:
         # curl -X POST https://api.stytch.com/v1/magic_links/revoke_invite -u projectId:secret
         # -d { email: "sandbox+1@stytch.com"}
         resp = stytch_client.MagicLinks.revoke_invite_by_email(
-            email="sandbox+1@stytch.com",
+            email="sandbox@stytch.com",
         )
         assert resp.status_code == 200
 
@@ -122,5 +122,5 @@ class TestIntegration:
 
         # Delete the created test user.
         # curl -X DELETE https://api.stytch.com/v1/users/<user_id> -u project_id:secret
-        resp = stytch_client.Users.delete(user_data["user_id"])
+        resp = stytch_client.Users.delete(user_data["userId"])
         assert resp.status_code == 200

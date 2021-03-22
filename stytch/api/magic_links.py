@@ -135,7 +135,6 @@ class MagicLinks(Base):
         self,
         email: str,
     ):
-        attributes = self._validate_attributes(attributes)
         return self._post(
             "{0}/revoke_invite".format(
                 self.magic_link_url,
