@@ -117,6 +117,9 @@ class MagicLinks(Base):
         magic_link_url: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        middle_name: Optional[str] = None,
     ):
         attributes = self._validate_attributes(attributes)
         return self._post(
@@ -128,6 +131,11 @@ class MagicLinks(Base):
                 "magic_link_url": magic_link_url,
                 "expiration_minutes": expiration_minutes,
                 "attributes": attributes,
+                "name": {
+                    "first_name": first_name,
+                    "middle_name": middle_name,
+                    "last_name": last_name,
+                },
             },
         )
 
