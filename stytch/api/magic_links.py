@@ -2,6 +2,7 @@ from typing import Dict, Optional
 
 from .base import Base
 
+# Expiration minimum = 5min, maximum = 10080min (one week)
 DEFAULT_EXPIRATION_MINUTES = 60;
 
 class MagicLinks(Base):
