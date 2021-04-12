@@ -2,6 +2,7 @@ from typing import Dict, Optional
 
 from .base import Base
 
+DEFAULT_EXPIRATION_MINUTES = 60;
 
 class MagicLinks(Base):
     @property
@@ -48,7 +49,7 @@ class MagicLinks(Base):
         method_id: str,
         user_id: str,
         magic_link_url: str,
-        expiration_minutes: int = 10,
+        expiration_minutes: int = DEFAULT_EXPIRATION_MINUTES,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
@@ -69,7 +70,7 @@ class MagicLinks(Base):
         self,
         email: str,
         magic_link_url: str,
-        expiration_minutes: int = 10,
+        expiration_minutes: int = DEFAULT_EXPIRATION_MINUTES,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
