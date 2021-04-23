@@ -2,7 +2,6 @@ from typing import Dict, Optional
 
 from .base import Base
 
-
 class MagicLinks(Base):
     @property
     def magic_link_url(self):
@@ -48,41 +47,47 @@ class MagicLinks(Base):
         method_id: str,
         user_id: str,
         magic_link_url: str,
-        expiration_minutes: int = 10,
+        expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
+        data = {
+            "method_id": method_id,
+            "user_id": user_id,
+            "magic_link_url": magic_link_url,
+            "attributes": attributes,
+        }
+        if expiration_minutes:
+            data["expiration_minutes"] = expiration_minutes
+
         return self._post(
             "{0}/send".format(
                 self.magic_link_url,
             ),
-            data={
-                "method_id": method_id,
-                "user_id": user_id,
-                "magic_link_url": magic_link_url,
-                "expiration_minutes": expiration_minutes,
-                "attributes": attributes,
-            },
+            data=data,
         )
 
     def send_by_email(
         self,
         email: str,
         magic_link_url: str,
-        expiration_minutes: int = 10,
+        expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
     ):
         attributes = self._validate_attributes(attributes)
+        data = {
+            "email": email,
+            "magic_link_url": magic_link_url,
+            "attributes": attributes,
+        }
+        if expiration_minutes:
+            data["expiration_minutes"] = expiration_minutes
+
         return self._post(
             "{0}/send_by_email".format(
                 self.magic_link_url,
             ),
-            data={
-                "email": email,
-                "magic_link_url": magic_link_url,
-                "expiration_minutes": expiration_minutes,
-                "attributes": attributes,
-            },
+            data=data,
         )
 
     def login_or_create(
