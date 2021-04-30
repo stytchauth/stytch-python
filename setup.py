@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="stytch",
-    version="1.2.2",
+    version="1.3.0",
     description="Stytch python client",
     long_description=README,
     long_description_content_type="text/markdown",

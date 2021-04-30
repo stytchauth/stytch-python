@@ -2,7 +2,6 @@ from typing import Dict, Optional
 
 from .base import Base
 
-
 class Users(Base):
     @property
     def user_url(self):
@@ -18,6 +17,7 @@ class Users(Base):
     def create(
         self,
         email: str,
+        phone_number: str = None,
         first_name: str = None,
         last_name: str = None,
         middle_name: str = None,
@@ -25,6 +25,7 @@ class Users(Base):
     ):
         data = {
             "email": email,
+            "phone_number": phone_number,
             "name": {
                 "first_name": first_name,
                 "middle_name": middle_name,
@@ -57,7 +58,8 @@ class Users(Base):
     def update(
         self,
         user_id: str,
-        email: Optional[str] = None,
+        emails: Optional[list[str]] = None,
+        phone_numbers: Optional[list[str]] = None,
         first_name: Optional[str] = None,
         middle_name: Optional[str] = None,
         last_name: Optional[str] = None,
@@ -65,8 +67,6 @@ class Users(Base):
     ):
         data = {}
         name = {}
-        if email:
-            data.update({"email": email})
         if first_name:
             name.update({"first_name": first_name})
         if middle_name:
@@ -75,6 +75,19 @@ class Users(Base):
             name.update({"last_name": last_name})
         if name:
             data.update({"name": name})
+
+        if emails:
+            ems = []
+            for email in emails:
+                ems.append({"email": email})
+            data.update({"emails": ems})
+
+        if phone_numbers:
+            pns = []
+            for phone_number in phone_numbers:
+                pns.append({"phone_number": phone_number})
+            data.update({"phone_numbers": pns})
+
         if attributes and self._validate_attributes(attributes):
             data.update({"attributes": attributes})
 
@@ -82,3 +95,6 @@ class Users(Base):
 
     def delete_email(self, user_id: str, email: str):
         return self._delete("{0}/{1}/emails/{2}".format(self.user_url, user_id, email))
+
+    def delete_phone_number(self, phone_number_id: str):
+        return self._delete("{0}/phone_numbers/{1}".format(self.user_url, phone_number_id))
