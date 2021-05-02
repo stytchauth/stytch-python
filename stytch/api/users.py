@@ -96,5 +96,5 @@ class Users(Base):
     def delete_email(self, user_id: str, email: str):
         return self._delete("{0}/{1}/emails/{2}".format(self.user_url, user_id, email))
 
-    def delete_phone_number(self, phone_number_id: str):
-        return self._delete("{0}/phone_numbers/{1}".format(self.user_url, phone_number_id))
+    def delete_phone_number(self, phone_id: str):
+        return self._delete("{0}/phone_numbers/{1}".format(self.user_url, phone_id))
