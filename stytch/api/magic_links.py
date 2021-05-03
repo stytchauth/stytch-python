@@ -7,11 +7,23 @@ class MagicLinks(Base):
     def magic_link_url(self):
         return self.get_url("magic_links")
 
-    def authenticate(self, token: str, options: Dict = None):
+    def authenticate(
+        self,
+        token: str,
+        attributes: Optional[Dict] = None,
+        options: Optional[Dict] = None,
+    ):
+        attributes = self._validate_attributes(attributes)
         options = self._validate_options(options)
+
+        data={}
+        if attributes:
+            data["attributes"] = attributes
+        if options:
+            data["options"] = options
         return self._post(
             "{0}/{1}/authenticate".format(self.magic_link_url, token),
-            data={"options": options},
+            data=data,
         )
 
     def send(
