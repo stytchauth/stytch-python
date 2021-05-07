@@ -13,7 +13,7 @@ class Base:
         self.headers = {
             'Content-Type': 'application/json',
             'User-Agent': 'Stytch Python v{}'.format(__version__)
-            }
+        }
         self.client = client
         self.auth = requests.auth.HTTPBasicAuth(
             self.client.project_id, self.client.secret
