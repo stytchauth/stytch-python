@@ -1,4 +1,4 @@
-import pathlib
+import pathlib, re
 from setuptools import setup, find_packages
 
 # The directory containing this file
@@ -7,10 +7,17 @@ HERE = pathlib.Path(__file__).parent
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
+with open('stytch/version.py', 'r') as f:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                        f.read(), re.MULTILINE).group(1)
+
+if not version:
+    raise RuntimeError('Cannot find version information')
+
 # This call to setup() does all the work
 setup(
     name="stytch",
-    version="1.3.1",
+    version=version,
     description="Stytch python client",
     long_description=README,
     long_description_content_type="text/markdown",

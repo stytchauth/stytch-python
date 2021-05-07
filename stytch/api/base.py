@@ -1,5 +1,6 @@
 import json
 import requests
+from stytch.version import __version__
 
 from typing import Dict, Set
 
@@ -9,7 +10,10 @@ from .decorator import throw_stytch_exception
 class Base:
     def __init__(self, client):
         self._requester_base = requests
-        self.headers = {'content-type': 'application/json'}
+        self.headers = {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Stytch Python v{}'.format(__version__)
+            }
         self.client = client
         self.auth = requests.auth.HTTPBasicAuth(
             self.client.project_id, self.client.secret
