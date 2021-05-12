@@ -16,7 +16,7 @@ class Users(Base):
 
     def create(
         self,
-        email: str,
+        email: str = None,
         phone_number: str = None,
         first_name: str = None,
         last_name: str = None,
