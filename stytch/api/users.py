@@ -33,7 +33,7 @@ class Users(Base):
             },
         }
         if attributes and self._validate_attributes(attributes):
-            data.update(attributes)
+            data.update({"attributes": attributes})
         return self._post("{0}".format(self.user_url), data)
 
     def get(self, user_id: str):
