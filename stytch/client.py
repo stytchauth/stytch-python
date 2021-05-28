@@ -1,3 +1,4 @@
+from collections import defaultdict
 import warnings
 
 from .api.users import Users
@@ -23,9 +24,41 @@ class Client:
         self.environment = environment
         self.suppress_warnings = suppress_warnings
 
-        self.Users = Users(self)
-        self.MagicLinks = MagicLinks(self)
-        self.OTP = OTP(self)
+        self.users = Users(self)
+        self.magic_links = MagicLinks(self)
+        self.otp = OTP(self)
+
+        self._warned = defaultdict(bool)
+
+    @property
+    def Users(self):
+        if not self._warned['Users']:
+            warnings.warn(
+                'Users has been deprecated. Use users instead.',
+                DeprecationWarning,
+            )
+            self._warned['Users'] = True
+        return self.users
+
+    @property
+    def MagicLinks(self):
+        if not self._warned['MagicLinks']:
+            warnings.warn(
+                'MagicLinks has been deprecated. Use magic_links instead.',
+                DeprecationWarning,
+            )
+            self._warned['MagicLinks'] = True
+        return self.magic_links
+
+    @property
+    def OTP(self):
+        if not self._warned['OTP']:
+            warnings.warn(
+                'OTP has been deprecated. Use otp instead.',
+                DeprecationWarning,
+            )
+            self._warned['OTP'] = True
+        return self.otp
 
     @property
     def base_url(self):
