@@ -26,36 +26,6 @@ class MagicLinks(Base):
             data=data,
         )
 
-    def send(
-        self,
-        method_id: str,
-        user_id: str,
-        login_magic_link_url: str,
-        signup_magic_link_url: str,
-        login_expiration_minutes: Optional[int] = None,
-        signup_expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-    ):
-        attributes = self._validate_attributes(attributes)
-        data = {
-            "method_id": method_id,
-            "user_id": user_id,
-            "login_magic_link_url": login_magic_link_url,
-            "signup_magic_link_url": signup_magic_link_url,
-            "attributes": attributes,
-        }
-        if login_expiration_minutes:
-            data["login_expiration_minutes"] = login_expiration_minutes
-        if signup_expiration_minutes:
-            data["signup_expiration_minutes"] = signup_expiration_minutes
-
-        return self._post(
-            "{0}/send".format(
-                self.magic_link_url,
-            ),
-            data=data,
-        )
-
     def send_by_email(
         self,
         email: str,
