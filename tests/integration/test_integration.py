@@ -64,7 +64,8 @@ class TestIntegration:
         resp = stytch_client.MagicLinks.send(
             method_id=email_id,
             user_id=user_id,
-            magic_link_url="https://test.com/login",
+            login_magic_link_url="https://test.com/login",
+            signup_magic_link_url="https://test.com/signup",
             attributes={
                 "ip_address": "1.1.1.1",
                 "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
@@ -79,7 +80,8 @@ class TestIntegration:
         #       magic_link_url: "https://test.com/login"}
         resp = stytch_client.MagicLinks.send_by_email(
             email="sandbox@stytch.com",
-            magic_link_url="https://test.com/login",
+            login_magic_link_url="https://test.com/login",
+            signup_magic_link_url="https://test.com/signup",
         )
         assert resp.status_code == 200
 
@@ -101,7 +103,7 @@ class TestIntegration:
         #     magic_link_url: "https://test.com/invite"}
         resp = stytch_client.MagicLinks.invite_by_email(
             email="sandbox@stytch.com",
-            magic_link_url="https://test.com/invite",
+            invite_magic_link_url="https://test.com/invite",
         )
         assert resp.status_code == 200
 

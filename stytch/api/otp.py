@@ -39,13 +39,12 @@ class OTP(Base):
         attributes = self._validate_attributes(attributes)
         data = {
             "phone_number": phone_number,
+            "create_user_as_pending": create_user_as_pending,
         }
         if expiration_minutes:
             data["expiration_minutes"] = expiration_minutes
         if attributes:
             data["attributes"] = attributes
-        if create_user_as_pending:
-            data["create_user_as_pending"] = create_user_as_pending
 
         return self._post(
             "{0}/login_or_create".format(

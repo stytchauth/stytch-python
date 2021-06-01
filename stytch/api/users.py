@@ -21,6 +21,7 @@ class Users(Base):
         first_name: str = None,
         last_name: str = None,
         middle_name: str = None,
+        create_user_as_pending: Optional[bool] = False
         attributes: Dict[str, str] = {},
     ):
         data = {
@@ -31,6 +32,7 @@ class Users(Base):
                 "middle_name": middle_name,
                 "last_name": last_name,
             },
+            "create_user_as_pending": create_user_as_pending,
         }
         if attributes and self._validate_attributes(attributes):
             data.update({"attributes": attributes})
