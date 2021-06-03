@@ -21,7 +21,7 @@ class Users(Base):
         first_name: str = None,
         last_name: str = None,
         middle_name: str = None,
-        create_user_as_pending: Optional[bool] = False
+        create_user_as_pending: Optional[bool] = False,
         attributes: Dict[str, str] = {},
     ):
         data = {
