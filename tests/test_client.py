@@ -27,6 +27,5 @@ class TestStytchClient:
     def test_MagicLinks_controller_exists(self):
         client = Client("project_id", "secret", "development", suppress_warnings=True)
         assert client.MagicLinks
-        assert client.MagicLinks.send
         assert client.MagicLinks.email_send
         assert client.MagicLinks.authenticate
