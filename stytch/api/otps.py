@@ -5,7 +5,7 @@ from .base import Base
 class OTPs(Base):
     @property
     def otp_url(self):
-        return self.get_url("otp")
+        return self.get_url("otps")
 
     def sms_send(
         self,
