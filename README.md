@@ -35,7 +35,7 @@ stytch_client.MagicLink.authenticate(token="*** EMAILED TOKEN ****")
 
 ### Login Or Create User
 ```python
-stytch_client.MagicLink.login_or_create(
+stytch_client.MagicLink.email_login_or_create(
     email="person@app.com", 
     login_magic_link_url="https://my-app.com/login",
     signup_magic_link_url="https://my-app.com/signup"

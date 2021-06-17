@@ -2,12 +2,12 @@ from typing import Dict, Optional
 
 from .base import Base
 
-class OTP(Base):
+class OTPs(Base):
     @property
     def otp_url(self):
         return self.get_url("otp")
 
-    def send_by_sms(
+    def sms_send(
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
@@ -23,13 +23,13 @@ class OTP(Base):
             data["attributes"] = attributes
 
         return self._post(
-            "{0}/send_by_sms".format(
+            "{0}/sms/send".format(
                 self.otp_url,
             ),
             data=data,
         )
 
-    def login_or_create_by_sms(
+    def sms_login_or_create(
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
@@ -47,7 +47,7 @@ class OTP(Base):
             data["attributes"] = attributes
 
         return self._post(
-            "{0}/login_or_create".format(
+            "{0}/sms/login_or_create".format(
                 self.otp_url,
             ),
             data=data,

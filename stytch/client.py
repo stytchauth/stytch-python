@@ -2,7 +2,7 @@ import warnings
 
 from .api.users import Users
 from .api.magic_links import MagicLinks
-from .api.otp import OTP
+from .api.otps import OTPs
 
 class Client:
     """
@@ -25,7 +25,7 @@ class Client:
 
         self.Users = Users(self)
         self.MagicLinks = MagicLinks(self)
-        self.OTP = OTP(self)
+        self.OTPs = OTPs(self)
 
     @property
     def base_url(self):

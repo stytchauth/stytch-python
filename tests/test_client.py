@@ -28,5 +28,5 @@ class TestStytchClient:
         client = Client("project_id", "secret", "development", suppress_warnings=True)
         assert client.MagicLinks
         assert client.MagicLinks.send
-        assert client.MagicLinks.send_by_email
+        assert client.MagicLinks.email_send
         assert client.MagicLinks.authenticate
