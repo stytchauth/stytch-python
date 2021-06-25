@@ -56,7 +56,7 @@ class MagicLinks(Base):
             data=data,
         )
 
-    def login_or_create(
+    def login_or_create_by_email(
         self,
         email: str,
         login_magic_link_url: str,
