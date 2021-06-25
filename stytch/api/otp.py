@@ -5,7 +5,7 @@ from .base import Base
 class OTP(Base):
     @property
     def otp_url(self):
-        return self.get_url("otp")
+        return self.get_url("otps")
 
     def send_by_sms(
         self,
@@ -23,7 +23,7 @@ class OTP(Base):
             data["attributes"] = attributes
 
         return self._post(
-            "{0}/send_by_sms".format(
+            "{0}/sms/send".format(
                 self.otp_url,
             ),
             data=data,
@@ -47,7 +47,7 @@ class OTP(Base):
             data["attributes"] = attributes
 
         return self._post(
-            "{0}/login_or_create".format(
+            "{0}/sms/login_or_create".format(
                 self.otp_url,
             ),
             data=data,
