@@ -36,7 +36,7 @@ class TestIntegration:
         # Update that user's middle name.
         # curl -X PUT https://api.stytch.com/v1/users/<user_id> -u project_id:secret
         # -d '{ name: { middle_name: "Big" } }'
-        stytch_client.Users.update(user_id=user_id, middle_name="Middle")
+        resp = stytch_client.Users.update(user_id=user_id, middle_name="Middle")
         assert resp.status_code == 200
 
         # Check that update worked
