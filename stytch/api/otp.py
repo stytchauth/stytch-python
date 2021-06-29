@@ -4,7 +4,7 @@ from .base import _validate_attributes, Base
 
 class OTP(Base):
     def __init__(self, client):
-        super(OTP, self).__init__(client)
+        super().__init__(client)
         self.sms = SMS(client)
 
     @property

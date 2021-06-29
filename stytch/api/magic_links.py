@@ -4,7 +4,7 @@ from .base import _validate_attributes, Base
 
 class MagicLinks(Base):
     def __init__(self, client):
-        super(MagicLinks, self).__init__(client)
+        super().__init__(client)
         self.email = Email(client)
 
     @property
