@@ -1,11 +1,11 @@
 from typing import Dict, Optional
 
-from .base import Base
+from .base import _validate_attributes, Base
 
 class MagicLinks(Base):
     def __init__(self, client):
         super(MagicLinks, self).__init__(client)
-        self.email = Email(self)
+        self.email = Email(client)
 
     @property
     def magic_link_url(self):
@@ -17,7 +17,7 @@ class MagicLinks(Base):
         attributes: Optional[Dict] = None,
         options: Optional[Dict] = None,
     ):
-        attributes = self._validate_attributes(attributes)
+        attributes = _validate_attributes(attributes)
         options = self._validate_options(options)
 
         data={
@@ -32,9 +32,10 @@ class MagicLinks(Base):
             data=data,
         )
 
-class Email():
-    def __init__(self, parent):
-        self.parent = parent
+class Email(Base):
+    @property
+    def magic_link_url(self):
+        return self.get_url("magic_links")
 
     def send(
         self,
@@ -45,7 +46,7 @@ class Email():
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
     ):
-        attributes = self.parent._validate_attributes(attributes)
+        attributes = _validate_attributes(attributes)
         data = {
             "email": email,
             "login_magic_link_url": login_magic_link_url,
@@ -57,9 +58,9 @@ class Email():
         if signup_expiration_minutes:
             data["signup_expiration_minutes"] = signup_expiration_minutes
 
-        return self.parent._post(
+        return self._post(
             "{0}/email/send".format(
-                self.parent.magic_link_url,
+                self.magic_link_url,
             ),
             data=data,
         )
@@ -74,7 +75,7 @@ class Email():
         attributes: Optional[Dict] = None,
         create_user_as_pending: Optional[bool] = False,
     ):
-        attributes = self.parent._validate_attributes(attributes)
+        attributes = _validate_attributes(attributes)
         data = {
            "email": email,
            "login_magic_link_url": login_magic_link_url,
@@ -88,9 +89,9 @@ class Email():
         if signup_expiration_minutes:
             data["signup_expiration_minutes"] = signup_expiration_minutes
 
-        return self.parent._post(
+        return self._post(
             "{0}/email/login_or_create".format(
-                self.parent.magic_link_url,
+                self.magic_link_url,
             ),
             data=data,
         )
@@ -105,7 +106,7 @@ class Email():
         last_name: Optional[str] = None,
         middle_name: Optional[str] = None,
     ):
-        attributes = self.parent._validate_attributes(attributes)
+        attributes = _validate_attributes(attributes)
         data = {
             "email": email,
             "invite_magic_link_url": invite_magic_link_url,
@@ -120,9 +121,9 @@ class Email():
         if invite_expiration_minutes:
             data["invite_expiration_minutes"] = invite_expiration_minutes
 
-        return self.parent._post(
+        return self._post(
             "{0}/email/invite".format(
-                self.parent.magic_link_url,
+                self.magic_link_url,
             ),
             data=data,
         )
@@ -131,9 +132,9 @@ class Email():
         self,
         email: str,
     ):
-        return self.parent._post(
+        return self._post(
             "{0}/email/revoke_invite".format(
-                self.parent.magic_link_url,
+                self.magic_link_url,
             ),
             data={
                 "email": email,

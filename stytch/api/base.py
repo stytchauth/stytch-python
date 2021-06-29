@@ -6,6 +6,17 @@ from typing import Dict, Set
 
 from .decorator import throw_stytch_exception
 
+def _validate_attributes(attributes: Dict[str, str]) -> Dict[str, str]:
+    if not attributes:
+        return attributes
+    default_attributes = {}
+
+    if attributes.get("ip_address"):
+        default_attributes.update({"ip_address": attributes["ip_address"]})
+    if attributes.get("user_agent"):
+        default_attributes.update({"user_agent": attributes["user_agent"]})
+
+    return default_attributes
 
 class Base:
     def __init__(self, client):
@@ -18,18 +29,6 @@ class Base:
         self.auth = requests.auth.HTTPBasicAuth(
             self.client.project_id, self.client.secret
         )
-
-    def _validate_attributes(self, attributes: Dict[str, str]) -> Dict[str, str]:
-        if not attributes:
-            return attributes
-        default_attributes = {}
-
-        if attributes.get("ip_address"):
-            default_attributes.update({"ip_address": attributes["ip_address"]})
-        if attributes.get("user_agent"):
-            default_attributes.update({"user_agent": attributes["user_agent"]})
-
-        return default_attributes
 
     def _validate_options(self, options: Dict[str, bool]) -> Dict[str, bool]:
         if not options:

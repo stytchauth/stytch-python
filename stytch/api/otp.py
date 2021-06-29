@@ -1,11 +1,11 @@
 from typing import Dict, Optional
 
-from .base import Base
+from .base import _validate_attributes, Base
 
 class OTP(Base):
     def __init__(self, client):
         super(OTP, self).__init__(client)
-        self.sms = SMS(self)
+        self.sms = SMS(client)
 
     @property
     def otp_url(self):
@@ -18,7 +18,7 @@ class OTP(Base):
         attributes: Optional[Dict] = None,
         options: Optional[Dict] = None
     ):
-        attributes = self._validate_attributes(attributes)
+        attributes = _validate_attributes(attributes)
         options = self._validate_options(options)
         data = {
             "method_id": method_id,
@@ -36,9 +36,10 @@ class OTP(Base):
             data=data,
         )
 
-class SMS():
-    def __init__(self, parent):
-        self.parent = parent
+class SMS(Base):
+    @property
+    def magic_link_url(self):
+        return self.get_url("magic_links")
 
     def send(
         self,
@@ -46,7 +47,7 @@ class SMS():
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
     ):
-        attributes = self.parent._validate_attributes(attributes)
+        attributes = _validate_attributes(attributes)
         data = {
             "phone_number": phone_number,
         }
@@ -55,9 +56,9 @@ class SMS():
         if attributes:
             data["attributes"] = attributes
 
-        return self.parent._post(
+        return self._post(
             "{0}/sms/send".format(
-                self.parent.otp_url,
+                self.otp_url,
             ),
             data=data,
         )
@@ -69,7 +70,7 @@ class SMS():
         attributes: Optional[Dict] = None,
         create_user_as_pending: Optional[bool] = False
     ):
-        attributes = self.parent._validate_attributes(attributes)
+        attributes = _validate_attributes(attributes)
         data = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
@@ -79,9 +80,9 @@ class SMS():
         if attributes:
             data["attributes"] = attributes
 
-        return self.parent._post(
+        return self._post(
             "{0}/sms/login_or_create".format(
-                self.parent.otp_url,
+                self.otp_url,
             ),
             data=data,
         )
