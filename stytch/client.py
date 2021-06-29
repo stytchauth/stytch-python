@@ -25,7 +25,7 @@ class Client:
 
         self.users = Users(self)
         self.magic_links = MagicLinks(self)
-        self.otp = OTP(self)
+        self.otps = OTP(self)
 
     @property
     def base_url(self):
