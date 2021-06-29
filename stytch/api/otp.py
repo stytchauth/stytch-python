@@ -3,55 +3,13 @@ from typing import Dict, Optional
 from .base import Base
 
 class OTP(Base):
+    def __init__(self, client):
+        super(OTP, self).__init__(client)
+        self.sms = SMS(self)
+
     @property
     def otp_url(self):
         return self.get_url("otps")
-
-    def send_by_sms(
-        self,
-        phone_number: str,
-        expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-    ):
-        attributes = self._validate_attributes(attributes)
-        data = {
-            "phone_number": phone_number,
-        }
-        if expiration_minutes:
-            data["expiration_minutes"] = expiration_minutes
-        if attributes:
-            data["attributes"] = attributes
-
-        return self._post(
-            "{0}/sms/send".format(
-                self.otp_url,
-            ),
-            data=data,
-        )
-
-    def login_or_create_by_sms(
-        self,
-        phone_number: str,
-        expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-        create_user_as_pending: Optional[bool] = False
-    ):
-        attributes = self._validate_attributes(attributes)
-        data = {
-            "phone_number": phone_number,
-            "create_user_as_pending": create_user_as_pending,
-        }
-        if expiration_minutes:
-            data["expiration_minutes"] = expiration_minutes
-        if attributes:
-            data["attributes"] = attributes
-
-        return self._post(
-            "{0}/sms/login_or_create".format(
-                self.otp_url,
-            ),
-            data=data,
-        )
 
     def authenticate(
         self,
@@ -74,6 +32,56 @@ class OTP(Base):
         return self._post(
             "{0}/authenticate".format(
                 self.otp_url,
+            ),
+            data=data,
+        )
+
+class SMS():
+    def __init__(self, parent):
+        self.parent = parent
+
+    def send(
+        self,
+        phone_number: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict] = None,
+    ):
+        attributes = self.parent._validate_attributes(attributes)
+        data = {
+            "phone_number": phone_number,
+        }
+        if expiration_minutes:
+            data["expiration_minutes"] = expiration_minutes
+        if attributes:
+            data["attributes"] = attributes
+
+        return self.parent._post(
+            "{0}/sms/send".format(
+                self.parent.otp_url,
+            ),
+            data=data,
+        )
+
+    def login_or_create(
+        self,
+        phone_number: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict] = None,
+        create_user_as_pending: Optional[bool] = False
+    ):
+        attributes = self.parent._validate_attributes(attributes)
+        data = {
+            "phone_number": phone_number,
+            "create_user_as_pending": create_user_as_pending,
+        }
+        if expiration_minutes:
+            data["expiration_minutes"] = expiration_minutes
+        if attributes:
+            data["attributes"] = attributes
+
+        return self.parent._post(
+            "{0}/sms/login_or_create".format(
+                self.parent.otp_url,
             ),
             data=data,
         )

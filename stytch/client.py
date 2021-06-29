@@ -23,9 +23,9 @@ class Client:
         self.environment = environment
         self.suppress_warnings = suppress_warnings
 
-        self.Users = Users(self)
-        self.MagicLinks = MagicLinks(self)
-        self.OTP = OTP(self)
+        self.users = Users(self)
+        self.magic_links = MagicLinks(self)
+        self.otp = OTP(self)
 
     @property
     def base_url(self):
