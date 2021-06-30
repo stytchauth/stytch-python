@@ -20,25 +20,28 @@ stytch_client = Client(
 )
 
 # Create a user
-resp = stytch_client.Users.create(email="person@app.com")
+resp = stytch_client.users.create(email="person@app.com")
+
+# Set MagicLinkURLs on the dashboard
+Set them [here](https://stytch.com/dashboard/magic-link-urls)
 
 # Send magic link to user
-stytch_client.MagicLink.send(
-    method_id=resp.user_id,
+stytch_client.magic_links.email.send(
     email=resp.email_id,
-    magic_link_url="https://my-app.com/login"
+    login_magic_link_url="https://my-app.com/login",
+    signup_magic_link_url="https://my-app.com/signup",
 )
 
 # Authenticate magic link
-stytch_client.MagicLink.authenticate(token="*** EMAILED TOKEN ****")
+stytch_client.magic_links.authenticate(token="*** EMAILED TOKEN ****")
 ```
 
 ### Login Or Create User
 ```python
-stytch_client.MagicLink.login_or_create(
+stytch_client.magic_links.email.login_or_create(
     email="person@app.com",
     login_magic_link_url="https://my-app.com/login",
-    signup_magic_link_url="https://my-app.com/signup"
+    signup_magic_link_url="https://my-app.com/signup",
 )
 ```
 
@@ -48,7 +51,7 @@ Handle Stytch exceptions with StytchErrors
 from stytch.api.error import StytchError
 
 try:
-    stytch_client.MagicLink.authenticate(token="token")
+    stytch_client.magic_links.authenticate(token="token")
 except StytchError as error:
     # Handle stytch errors here
     pass
