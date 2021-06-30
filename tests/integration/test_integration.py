@@ -10,8 +10,9 @@ class TestIntegration:
     """
 
     @pytest.mark.unit
-    def test_full_user_flow(self, project_id, secret, email):
+    def test_full_user_flow(self, project_id, secret, email, phone_number):
         # Instantiate stytch client with command line args
+        # Email should be in format "user@test.com" and phone number "+1XXXXXXXXXX"
         stytch_client = stytch.Client(
             project_id=project_id,
             secret=secret,
@@ -22,7 +23,7 @@ class TestIntegration:
         # curl -X POST https://api.stytch.com/v1/users -u project_id:secret
         # -d '{ email: "user@test.com", name : { first_name: "Nathan", last_name: "Chiu" } }'
         resp = stytch_client.users.create(
-            email=email, first_name="Nathan", last_name="Chiu"
+            email=email, first_name="Nathan", last_name="Chiu", phone_number=phone_number,
         )
         assert resp.status_code == 201
         created_user_id = resp.json()["user_id"]
@@ -35,8 +36,8 @@ class TestIntegration:
 
         # Update that user's middle name.
         # curl -X PUT https://api.stytch.com/v1/users/<user_id> -u project_id:secret
-        # -d '{ name: { middle_name: "Big" } }'
-        stytch_client.users.update(user_id=user_id, middle_name="Middle")
+        # -d '{ name: { middle_name: "Middle" } }'
+        resp = stytch_client.users.update(user_id=user_id, middle_name="Middle")
         assert resp.status_code == 200
 
         # Check that update worked
@@ -80,7 +81,7 @@ class TestIntegration:
         #     signup_magic_link_url: "https://test.com/signup",
         #     login_magic_link_url: "https://test.com/login"}
         resp = stytch_client.magic_links.email.login_or_create(
-            email="sandbox@stytch.com",
+            email=email,
             login_magic_link_url="https://test.com/login",
             signup_magic_link_url="https://test.com/signup",
         )
@@ -110,6 +111,25 @@ class TestIntegration:
         # -d '{ email: "user@test.com", name : { first_name: "Nathan", last_name: "Chiu" } }'
         # stytch_client.MagicLinks.authenticate()
         # stytch_client.MagicLinks.authenticate(token=token)
+
+        """
+        OTP routes
+        """
+        # Send OTP by SMS
+        # curl -X POST https://api.stytch.com/v1/otps/sms/send -u projectId:secret
+        # -d { phone_number: phone_number}
+        resp = stytch_client.otps.sms.send(
+            phone_number=phone_number
+        )
+        assert resp.status_code == 200
+
+        # Login or Create OTP by SMS
+        # curl -X POST https://api.stytch.com/v1/otps/sms/login_or_create -u projectId:secret
+        # -d { phone_number: phone_number}
+        resp = stytch_client.otps.sms.login_or_create(
+            phone_number=phone_number
+        )
+        assert resp.status_code == 200
 
         # Delete the created test user.
         # curl -X DELETE https://api.stytch.com/v1/users/<user_id> -u project_id:secret

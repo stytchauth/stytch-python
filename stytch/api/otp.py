@@ -38,8 +38,8 @@ class OTP(Base):
 
 class SMS(Base):
     @property
-    def magic_link_url(self):
-        return self.get_url("magic_links")
+    def otp_url(self):
+        return self.get_url("otps")
 
     def send(
         self,
