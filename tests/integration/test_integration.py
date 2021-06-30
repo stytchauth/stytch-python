@@ -89,19 +89,19 @@ class TestIntegration:
 
         # Invite By Email
         # curl -X POST https://api.stytch.com/v1/magic_links/email/invite -u projectId:secret
-        # -d { email: "sandbox+1@stytch.com",
+        # -d { email: "sandbox@stytch.com",
         #     magic_link_url: "https://test.com/invite"}
         resp = stytch_client.magic_links.email.invite(
-            email="sandbox+1@stytch.com",
+            email="sandbox@stytch.com",
             invite_magic_link_url="https://test.com/invite",
         )
         assert resp.status_code == 200
 
         # Revoke Invite By Email
         # curl -X POST https://api.stytch.com/v1/magic_links/email/revoke_invite -u projectId:secret
-        # -d { email: "sandbox+1@stytch.com"}
+        # -d { email: "sandbox@stytch.com"}
         resp = stytch_client.magic_links.email.revoke_invite(
-            email="sandbox+1@stytch.com",
+            email="sandbox@stytch.com",
         )
         assert resp.status_code == 200
 
