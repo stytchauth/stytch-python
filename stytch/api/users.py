@@ -41,7 +41,7 @@ class Users(Base):
     def get(self, user_id: str):
         return self._get("{0}/{1}".format(self.user_url, user_id))
 
-    def get_pending_users(
+    def get_pending(
         self,
         limit: Optional[int] = None,
         starting_after_id: Optional[str] = None

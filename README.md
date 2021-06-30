@@ -24,8 +24,8 @@ resp = stytch_client.Users.create(email="person@app.com")
 
 # Send magic link to user
 stytch_client.MagicLink.send(
-    method_id=resp.user_id, 
-    email=resp.email_id, 
+    method_id=resp.user_id,
+    email=resp.email_id,
     magic_link_url="https://my-app.com/login"
 )
 
@@ -36,7 +36,7 @@ stytch_client.MagicLink.authenticate(token="*** EMAILED TOKEN ****")
 ### Login Or Create User
 ```python
 stytch_client.MagicLink.login_or_create(
-    email="person@app.com", 
+    email="person@app.com",
     login_magic_link_url="https://my-app.com/login",
     signup_magic_link_url="https://my-app.com/signup"
 )
@@ -45,9 +45,9 @@ stytch_client.MagicLink.login_or_create(
 ### Handling exceptions:
 Handle Stytch exceptions with StytchErrors
 ```python
-from stytch.api.error import StytchError 
+from stytch.api.error import StytchError
 
-try: 
+try:
     stytch_client.MagicLink.authenticate(token="token")
 except StytchError as error:
     # Handle stytch errors here
@@ -62,7 +62,7 @@ Unit tests are run via `pytest tests/api`
 
 Integration tests accept a project_id + secret via command line
 ```
-pytest tests/integration/test_integration.py --project_id="***YOUR PROJECT ID***" --secret="***YOUR SECRET KEY***" --email="***YOUR EMAIL***"
+pytest tests/integration/test_integration.py --project_id="***YOUR PROJECT ID***" --secret="***YOUR SECRET KEY***" --email="***YOUR EMAIL***" --phone_number="***YOUR PHONE NUMBER***"
 ```
 
 ### Documentation:

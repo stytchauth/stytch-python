@@ -41,7 +41,10 @@ class TestUsers:
 
         mock_post.assert_called_once_with(
             "https://localhost:8080/users",
-            data='{"email": "test@example.net", "phone_number": null, "name": {"first_name": null, "middle_name": null, "last_name": null}, "attributes": {"ip_address": "203.0.113.1", "user_agent": "Toaster 3.0"}}',
-            auth=mock.ANY,
-            headers=mock.ANY,
+            data='{"email": "test@example.net", "phone_number": null, "name": {"first_name": null, "middle_name": null, "last_name": null}, "create_user_as_pending": false, "attributes": {"ip_address": "203.0.113.1", "user_agent": "Toaster 3.0"}}',
+            auth=users.auth,
+            headers={
+                'Content-Type': 'application/json',
+                'User-Agent': 'Stytch Python v4.0.0'
+            },
         )
