@@ -60,8 +60,8 @@ class Users(Base):
     def update(
         self,
         user_id: str,
-        emails: Optional[list[str]] = None,
-        phone_numbers: Optional[list[str]] = None,
+        emails: 'Optional[list[str]]' = None,
+        phone_numbers: 'Optional[list[str]]' = None,
         first_name: Optional[str] = None,
         middle_name: Optional[str] = None,
         last_name: Optional[str] = None,
