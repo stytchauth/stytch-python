@@ -22,13 +22,13 @@ class Sessions(Base):
     def authenticate(
         self,
         session_token: str,
-        session_duration: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
     ):
         data = {
             "session_token": session_token,
         }
-        if session_duration:
-            data["session_duration"] = session_duration
+        if session_duration_minutes:
+            data["session_duration_minutes"] = session_duration_minutes
 
         return self._post(
             "{0}/authenticate".format(self.sessions_url),
