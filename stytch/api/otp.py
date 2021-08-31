@@ -17,7 +17,9 @@ class OTP(Base):
         method_id: str,
         code: str,
         attributes: Optional[Dict] = None,
-        options: Optional[Dict] = None
+        options: Optional[Dict] = None,
+        session_token: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
     ):
         attributes = _validate_attributes(attributes)
         options = self._validate_options(options)
@@ -29,6 +31,10 @@ class OTP(Base):
             data["attributes"] = attributes
         if options:
             data["options"] = options
+        if session_token:
+            data["session_token"] = session_token
+        if session_duration_minutes:
+            data["session_duration_minutes"] = session_duration_minutes
 
         return self._post(
             "{0}/authenticate".format(
