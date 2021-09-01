@@ -5,6 +5,7 @@ from .base import _validate_attributes, Base
 class OTP(Base):
     def __init__(self, client):
         super().__init__(client)
+        self.email = Email(client)
         self.sms = SMS(client)
         self.whatsapp = Whatsapp(client)
 
@@ -140,6 +141,57 @@ class Whatsapp(Base):
 
         return self._post(
             "{0}/whatsapp/login_or_create".format(
+                self.otp_url,
+            ),
+            data=data,
+        )
+
+class Email(Base):
+    @property
+    def otp_url(self):
+        return self.get_url("otps")
+
+    def send(
+        self,
+        email: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict] = None,
+    ):
+        attributes = _validate_attributes(attributes)
+        data = {
+            "email": email,
+        }
+        if expiration_minutes:
+            data["expiration_minutes"] = expiration_minutes
+        if attributes:
+            data["attributes"] = attributes
+
+        return self._post(
+            "{0}/email/send".format(
+                self.otp_url,
+            ),
+            data=data,
+        )
+
+    def login_or_create(
+        self,
+        email: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict] = None,
+        create_user_as_pending: Optional[bool] = False
+    ):
+        attributes = _validate_attributes(attributes)
+        data = {
+            "email": email,
+            "create_user_as_pending": create_user_as_pending,
+        }
+        if expiration_minutes:
+            data["expiration_minutes"] = expiration_minutes
+        if attributes:
+            data["attributes"] = attributes
+
+        return self._post(
+            "{0}/email/login_or_create".format(
                 self.otp_url,
             ),
             data=data,
