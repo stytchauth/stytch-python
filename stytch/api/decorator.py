@@ -7,12 +7,8 @@ from .error import StytchError
 def throw_stytch_exception(func):
     def wrapper(*args, **kwargs):
         resp: requests.models.Response = func(*args, **kwargs)
-        if resp.status_code == 401:
-            raise PermissionError("Unable to authorize request")
-
-        if resp.status_code == 400:
-            raise StytchError(**json.loads(resp._content))
-
+        if resp.status_code >= 400:
+             raise StytchError(**json.loads(resp._content))
         else:
             return resp
 
