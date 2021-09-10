@@ -11,6 +11,26 @@ class MagicLinks(Base):
     def magic_link_url(self):
         return self.get_url("magic_links")
 
+    def create(
+        self,
+        user_id: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict] = None,
+    ):
+        attributes = _validate_attributes(attributes)
+
+        data={
+            "user_id": user_id,
+        }
+        if expiration_minutes:
+            data["expiration_minutes"] = expiration_minutes
+        if attributes:
+            data["attributes"] = attributes
+        return self._post(
+            self.magic_link_url,
+            data=data,
+        )
+
     def authenticate(
         self,
         token: str,
