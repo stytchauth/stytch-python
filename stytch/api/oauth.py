@@ -19,13 +19,15 @@ class OAuth(Base):
     def authenticate(
         self,
         token: str,
-        session_management_type: SessionManagementType,
+        session_management_type: Optional[SessionManagementType] = None,
     ):
 
         data={
             "token": token,
-            "session_management_type": session_management_type,
         }
+        if session_management_type:
+            data["session_management_type"] = session_management_type
+
         return self._post(
             "{0}/authenticate".format(self.oauth_url),
             data=data,
