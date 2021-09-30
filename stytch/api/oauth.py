@@ -20,6 +20,8 @@ class OAuth(Base):
         self,
         token: str,
         session_management_type: Optional[SessionManagementType] = None,
+        session_token: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
     ):
 
         data={
@@ -27,6 +29,10 @@ class OAuth(Base):
         }
         if session_management_type:
             data["session_management_type"] = session_management_type
+        if session_token:
+            data["session_token"] = session_token
+        if session_duration_minutes:
+            data["session_duration_minutes"] = session_duration_minutes
 
         return self._post(
             "{0}/authenticate".format(self.oauth_url),

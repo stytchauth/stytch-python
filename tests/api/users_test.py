@@ -45,6 +45,6 @@ class TestUsers:
             auth=users.auth,
             headers={
                 'Content-Type': 'application/json',
-                'User-Agent': 'Stytch Python v4.5.0'
+                'User-Agent': 'Stytch Python v4.6.0'
             },
         )
