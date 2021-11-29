@@ -100,3 +100,6 @@ class Users(Base):
 
     def delete_phone_number(self, phone_id: str):
         return self._delete("{0}/phone_numbers/{1}".format(self.user_url, phone_id))
+
+    def delete_webauthn_registration(self, webauthn_registration: str):
+        return self._delete("{0}/webauthn_registrations/{1}".format(self.user_url, webauthn_registration))
