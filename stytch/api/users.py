@@ -103,3 +103,6 @@ class Users(Base):
 
     def delete_webauthn_registration(self, webauthn_registration: str):
         return self._delete("{0}/webauthn_registrations/{1}".format(self.user_url, webauthn_registration))
+
+    def delete_totp(self, totp_id: str):
+        return self._delete("{0}/totps/{1}".format(self.user_url, totp_id))

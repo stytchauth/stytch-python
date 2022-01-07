@@ -5,6 +5,7 @@ from .api.magic_links import MagicLinks
 from .api.otp import OTP
 from .api.oauth import OAuth
 from .api.sessions import Sessions
+from .api.totps import TOTPs
 from .api.webauthn import WebAuthn
 
 class Client:
@@ -32,6 +33,7 @@ class Client:
         self.otps = OTP(self)
         self.sessions = Sessions(self)
         self.webauthn = WebAuthn(self)
+        self.totps = TOTPs(self)
 
     @property
     def base_url(self):
