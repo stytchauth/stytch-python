@@ -46,7 +46,7 @@ class TOTPs(Base):
             data=data,
         )
 
-    def get_recovery_codes(
+    def recovery_codes(
         self,
         user_id: str,
     ):
