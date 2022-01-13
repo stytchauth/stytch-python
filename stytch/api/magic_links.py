@@ -66,8 +66,8 @@ class Email(Base):
     def send(
         self,
         email: str,
-        login_magic_link_url: str,
-        signup_magic_link_url: str,
+        login_magic_link_url: Optional[str] = None,
+        signup_magic_link_url: Optional[str] = None,
         login_expiration_minutes: Optional[int] = None,
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
@@ -75,10 +75,12 @@ class Email(Base):
         attributes = _validate_attributes(attributes)
         data = {
             "email": email,
-            "login_magic_link_url": login_magic_link_url,
-            "signup_magic_link_url": signup_magic_link_url,
             "attributes": attributes,
         }
+        if login_magic_link_url:
+            data["login_magic_link_url"] = login_magic_link_url
+        if signup_magic_link_url:
+            data["signup_magic_link_url"] = signup_magic_link_url
         if login_expiration_minutes:
             data["login_expiration_minutes"] = login_expiration_minutes
         if signup_expiration_minutes:
@@ -94,8 +96,8 @@ class Email(Base):
     def login_or_create(
         self,
         email: str,
-        login_magic_link_url: str,
-        signup_magic_link_url: str,
+        login_magic_link_url: Optional[str] = None,
+        signup_magic_link_url: Optional[str] = None,
         login_expiration_minutes: Optional[int] = None,
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
@@ -104,12 +106,13 @@ class Email(Base):
         attributes = _validate_attributes(attributes)
         data = {
            "email": email,
-           "login_magic_link_url": login_magic_link_url,
-           "signup_magic_link_url": signup_magic_link_url,
            "attributes": attributes,
            "create_user_as_pending": create_user_as_pending,
-       }
-
+        }
+        if login_magic_link_url:
+            data["login_magic_link_url"] = login_magic_link_url
+        if signup_magic_link_url:
+            data["signup_magic_link_url"] = signup_magic_link_url
         if login_expiration_minutes:
             data["login_expiration_minutes"] = login_expiration_minutes
         if signup_expiration_minutes:
@@ -125,7 +128,7 @@ class Email(Base):
     def invite(
         self,
         email: str,
-        invite_magic_link_url: str,
+        invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         first_name: Optional[str] = None,
@@ -135,7 +138,6 @@ class Email(Base):
         attributes = _validate_attributes(attributes)
         data = {
             "email": email,
-            "invite_magic_link_url": invite_magic_link_url,
             "attributes": attributes,
             "name": {
                 "first_name": first_name,
@@ -143,7 +145,8 @@ class Email(Base):
                 "last_name": last_name,
             },
         }
-
+        if invite_magic_link_url:
+            data["invite_magic_link_url"] = invite_magic_link_url
         if invite_expiration_minutes:
             data["invite_expiration_minutes"] = invite_expiration_minutes
 
