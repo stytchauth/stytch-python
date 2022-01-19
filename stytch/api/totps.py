@@ -62,11 +62,17 @@ class TOTPs(Base):
         self,
         user_id: str,
         recovery_code: str,
+        session_token: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
     ):
         data={
             "user_id": user_id,
             "recovery_code": recovery_code,
         }
+        if session_token:
+            data["session_token"] = session_token
+        if session_duration_minutes:
+            data["session_duration_minutes"] = session_duration_minutes
         return self._post(
             "{0}/recover".format(self.totps_url),
             data=data,
