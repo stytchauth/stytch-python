@@ -16,17 +16,16 @@ class TestStytchClient:
             _ = Client("project_id", "secret", "invalid env").base_url
             assert _
 
-    def test_Users_controller_exists(self):
+    def test_users_controller_exists(self):
         client = Client("project_id", "secret", "development", suppress_warnings=True)
-        assert client.Users
-        assert client.Users.get
-        assert client.Users.update
-        assert client.Users.delete
-        assert client.Users.create
+        assert client.users
+        assert client.users.get
+        assert client.users.update
+        assert client.users.delete
+        assert client.users.create
 
-    def test_MagicLinks_controller_exists(self):
+    def test_magic_links_controller_exists(self):
         client = Client("project_id", "secret", "development", suppress_warnings=True)
-        assert client.MagicLinks
-        assert client.MagicLinks.send
-        assert client.MagicLinks.send_by_email
-        assert client.MagicLinks.authenticate
+        assert client.magic_links
+        assert client.magic_links.email.send
+        assert client.magic_links.authenticate
