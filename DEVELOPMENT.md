@@ -10,7 +10,7 @@ Thanks for contributing to Stytch's Python library! If you run into trouble, fin
 
 ## Testing
 
-Run unit tests with `pytest tests/api`.
+Run unit tests with `pytest`.
 
 ## Issues and Pull Requests
 

@@ -20,4 +20,4 @@ jobs:
         pip install pytest
     - name: Running unit tests
       run: |
-        pytest tests/api
+        pytest
