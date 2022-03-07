@@ -7,6 +7,7 @@ from .api.oauth import OAuth
 from .api.sessions import Sessions
 from .api.totps import TOTPs
 from .api.webauthn import WebAuthn
+from .api.crypto_wallets import CryptoWallets
 
 class Client:
     """
@@ -34,6 +35,7 @@ class Client:
         self.sessions = Sessions(self)
         self.webauthn = WebAuthn(self)
         self.totps = TOTPs(self)
+        self.crypto_wallets = CryptoWallets(self)
 
     @property
     def base_url(self):
