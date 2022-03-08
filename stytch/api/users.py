@@ -62,6 +62,7 @@ class Users(Base):
         user_id: str,
         emails: Optional[List[str]] = None,
         phone_numbers: Optional[List[str]] = None,
+        crypto_wallets: Optional[List[Dict[str, str]]] = None,
         first_name: Optional[str] = None,
         middle_name: Optional[str] = None,
         last_name: Optional[str] = None,
@@ -77,6 +78,8 @@ class Users(Base):
             name.update({"last_name": last_name})
         if name:
             data.update({"name": name})
+        if crypto_wallets:
+            data.update({"crypto_wallets": crypto_wallets})
 
         if emails:
             ems = []
@@ -106,3 +109,6 @@ class Users(Base):
 
     def delete_totp(self, totp_id: str):
         return self._delete("{0}/totps/{1}".format(self.user_url, totp_id))
+
+    def delete_crypto_wallet(self, crypto_wallet_id: str):
+        return self._delete("{0}/crypto_wallets/{1}".format(self.user_url, crypto_wallet_id))
