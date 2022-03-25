@@ -54,6 +54,7 @@ class SMS(Base):
         phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
+        locale: Optional[str] = None,
     ):
         attributes = _validate_attributes(attributes)
         data = {
@@ -63,6 +64,8 @@ class SMS(Base):
             data["expiration_minutes"] = expiration_minutes
         if attributes:
             data["attributes"] = attributes
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/sms/send".format(
@@ -76,7 +79,8 @@ class SMS(Base):
         phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
-        create_user_as_pending: Optional[bool] = False
+        create_user_as_pending: Optional[bool] = False,
+        locale: Optional[str] = None,
     ):
         attributes = _validate_attributes(attributes)
         data = {
@@ -87,6 +91,8 @@ class SMS(Base):
             data["expiration_minutes"] = expiration_minutes
         if attributes:
             data["attributes"] = attributes
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/sms/login_or_create".format(
@@ -105,6 +111,7 @@ class Whatsapp(Base):
         phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
+        locale: Optional[str] = None,
     ):
         attributes = _validate_attributes(attributes)
         data = {
@@ -114,6 +121,8 @@ class Whatsapp(Base):
             data["expiration_minutes"] = expiration_minutes
         if attributes:
             data["attributes"] = attributes
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/whatsapp/send".format(
@@ -127,7 +136,8 @@ class Whatsapp(Base):
         phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
-        create_user_as_pending: Optional[bool] = False
+        create_user_as_pending: Optional[bool] = False,
+        locale: Optional[str] = None,
     ):
         attributes = _validate_attributes(attributes)
         data = {
@@ -138,6 +148,8 @@ class Whatsapp(Base):
             data["expiration_minutes"] = expiration_minutes
         if attributes:
             data["attributes"] = attributes
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/whatsapp/login_or_create".format(
