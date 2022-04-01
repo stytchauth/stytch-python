@@ -4,8 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+mypy = "==0.931"
+pytest = "*"
+twine = "*"
 
 [packages]
+stytch = {editable = true, path = "."}
 
 [requires]
 python_version = "3.9"
