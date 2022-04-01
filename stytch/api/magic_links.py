@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from .base import _validate_attributes, Base
 
@@ -17,9 +17,10 @@ class MagicLinks(Base):
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
     ):
-        attributes = _validate_attributes(attributes)
+        if attributes:
+            attributes = _validate_attributes(attributes)
 
-        data={
+        data: Dict[str, Any] = {
             "user_id": user_id,
         }
         if expiration_minutes:
@@ -39,10 +40,13 @@ class MagicLinks(Base):
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
-        attributes = _validate_attributes(attributes)
-        options = self._validate_options(options)
+        if attributes:
+            attributes = _validate_attributes(attributes)
 
-        data={
+        if options:
+            options = self._validate_options(options)
+
+        data: Dict[str, Any] = {
             "token": token,
         }
         if attributes:
@@ -72,8 +76,10 @@ class Email(Base):
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
     ):
-        attributes = _validate_attributes(attributes)
-        data = {
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
+        data: Dict[str, Any] = {
             "email": email,
             "attributes": attributes,
         }
@@ -103,8 +109,10 @@ class Email(Base):
         attributes: Optional[Dict] = None,
         create_user_as_pending: Optional[bool] = False,
     ):
-        attributes = _validate_attributes(attributes)
-        data = {
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
+        data: Dict[str, Any] = {
            "email": email,
            "attributes": attributes,
            "create_user_as_pending": create_user_as_pending,
@@ -135,8 +143,10 @@ class Email(Base):
         last_name: Optional[str] = None,
         middle_name: Optional[str] = None,
     ):
-        attributes = _validate_attributes(attributes)
-        data = {
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
+        data: Dict[str, Any] = {
             "email": email,
             "attributes": attributes,
             "name": {

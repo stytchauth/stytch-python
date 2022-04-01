@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .base import Base
 
@@ -70,7 +70,7 @@ class WebAuthn(Base):
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
-        data = {
+        data: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
         if session_token:

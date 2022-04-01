@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 from enum import Enum
 
 from .base import _validate_attributes, Base
@@ -24,7 +24,7 @@ class OAuth(Base):
         session_duration_minutes: Optional[int] = None,
     ):
 
-        data={
+        data: Dict[str, Any] = {
             "token": token,
         }
         if session_management_type:

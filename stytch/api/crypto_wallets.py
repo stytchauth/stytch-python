@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .base import Base
 
@@ -35,7 +35,7 @@ class CryptoWallets(Base):
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
-        data = {
+        data: Dict[str, Any] = {
             "crypto_wallet_address": crypto_wallet_address,
             "crypto_wallet_type": crypto_wallet_type,
             "signature": signature,

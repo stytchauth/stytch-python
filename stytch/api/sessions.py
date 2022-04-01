@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from .base import _validate_attributes, Base
 
@@ -24,7 +24,7 @@ class Sessions(Base):
         session_token: str,
         session_duration_minutes: Optional[int] = None,
     ):
-        data = {
+        data: Dict[str, Any] = {
             "session_token": session_token,
         }
         if session_duration_minutes:
