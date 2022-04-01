@@ -22,8 +22,12 @@ class OTP(Base):
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
-        attributes = _validate_attributes(attributes)
-        options = self._validate_options(options)
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
+        if options:
+            options = self._validate_options(options)
+
         data = {
             "method_id": method_id,
             "code": code,
@@ -56,7 +60,9 @@ class SMS(Base):
         attributes: Optional[Dict] = None,
         locale: Optional[str] = None,
     ):
-        attributes = _validate_attributes(attributes)
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
         data = {
             "phone_number": phone_number,
         }
@@ -82,7 +88,9 @@ class SMS(Base):
         create_user_as_pending: Optional[bool] = False,
         locale: Optional[str] = None,
     ):
-        attributes = _validate_attributes(attributes)
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
         data = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
@@ -113,7 +121,9 @@ class Whatsapp(Base):
         attributes: Optional[Dict] = None,
         locale: Optional[str] = None,
     ):
-        attributes = _validate_attributes(attributes)
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
         data = {
             "phone_number": phone_number,
         }
@@ -139,7 +149,9 @@ class Whatsapp(Base):
         create_user_as_pending: Optional[bool] = False,
         locale: Optional[str] = None,
     ):
-        attributes = _validate_attributes(attributes)
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
         data = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
@@ -169,7 +181,9 @@ class Email(Base):
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
     ):
-        attributes = _validate_attributes(attributes)
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
         data = {
             "email": email,
         }
@@ -192,7 +206,9 @@ class Email(Base):
         attributes: Optional[Dict] = None,
         create_user_as_pending: Optional[bool] = False
     ):
-        attributes = _validate_attributes(attributes)
+        if attributes:
+            attributes = _validate_attributes(attributes)
+
         data = {
             "email": email,
             "create_user_as_pending": create_user_as_pending,
