@@ -4,6 +4,7 @@ import requests
 from unittest import mock
 
 from stytch.api.users import Users
+from stytch.version import __version__ as version
 
 
 class FakeClient:
@@ -45,6 +46,6 @@ class TestUsers:
             auth=users.auth,
             headers={
                 'Content-Type': 'application/json',
-                'User-Agent': 'Stytch Python v4.12.0'
+                'User-Agent': f'Stytch Python v{version}'
             },
         )
