@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .base import Base
 
@@ -24,7 +24,7 @@ class Users(Base):
         create_user_as_pending: Optional[bool] = False,
         attributes: Dict[str, str] = {},
     ):
-        data = {
+        data: Dict[str, Any] = {
             "email": email,
             "phone_number": phone_number,
             "name": {
@@ -68,7 +68,7 @@ class Users(Base):
         last_name: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = {},
     ):
-        data = {}
+        data: Dict[str, Any] = {}
         name = {}
         if first_name:
             name.update({"first_name": first_name})

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from .base import Base
 
@@ -16,7 +16,7 @@ class TOTPs(Base):
         user_id: str,
         expiration_minutes: Optional[int] = None,
     ):
-        data={
+        data: Dict[str, Any] = {
             "user_id": user_id,
         }
         if expiration_minutes:
@@ -33,7 +33,7 @@ class TOTPs(Base):
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
-        data={
+        data: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
         }
@@ -65,7 +65,7 @@ class TOTPs(Base):
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
-        data={
+        data: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
         }

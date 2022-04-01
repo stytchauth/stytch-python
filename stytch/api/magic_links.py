@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from .base import _validate_attributes, Base
 
@@ -20,7 +20,7 @@ class MagicLinks(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data={
+        data: Dict[str, Any] = {
             "user_id": user_id,
         }
         if expiration_minutes:
@@ -46,7 +46,7 @@ class MagicLinks(Base):
         if options:
             options = self._validate_options(options)
 
-        data={
+        data: Dict[str, Any] = {
             "token": token,
         }
         if attributes:
@@ -79,7 +79,7 @@ class Email(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "email": email,
             "attributes": attributes,
         }
@@ -112,7 +112,7 @@ class Email(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
            "email": email,
            "attributes": attributes,
            "create_user_as_pending": create_user_as_pending,
@@ -146,7 +146,7 @@ class Email(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "email": email,
             "attributes": attributes,
             "name": {

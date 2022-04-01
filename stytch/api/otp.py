@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from .base import _validate_attributes, Base
 
@@ -28,7 +28,7 @@ class OTP(Base):
         if options:
             options = self._validate_options(options)
 
-        data = {
+        data: Dict[str, Any] = {
             "method_id": method_id,
             "code": code,
         }
@@ -63,7 +63,7 @@ class SMS(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "phone_number": phone_number,
         }
         if expiration_minutes:
@@ -91,7 +91,7 @@ class SMS(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
         }
@@ -124,7 +124,7 @@ class Whatsapp(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "phone_number": phone_number,
         }
         if expiration_minutes:
@@ -152,7 +152,7 @@ class Whatsapp(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
         }
@@ -184,7 +184,7 @@ class Email(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "email": email,
         }
         if expiration_minutes:
@@ -209,7 +209,7 @@ class Email(Base):
         if attributes:
             attributes = _validate_attributes(attributes)
 
-        data = {
+        data: Dict[str, Any] = {
             "email": email,
             "create_user_as_pending": create_user_as_pending,
         }
