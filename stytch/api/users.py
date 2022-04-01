@@ -22,7 +22,7 @@ class Users(Base):
         last_name: str = None,
         middle_name: str = None,
         create_user_as_pending: Optional[bool] = False,
-        attributes: Dict[str, str] = {},
+        attributes: Dict[str, str] = None,
     ):
         data: Dict[str, Any] = {
             "email": email,
