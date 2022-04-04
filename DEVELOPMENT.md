@@ -4,9 +4,9 @@ Thanks for contributing to Stytch's Python library! If you run into trouble, fin
 
 ## Setup
 
-1. Install [Python](https://www.python.org/) version 3.4 or greater.
-2. (Recommended, but optional) Create a new [virtualenv](https://docs.python.org/3/tutorial/venv.html).
-3. `pip install -r requirements.txt`
+1. Install [Python](https://www.python.org/) version 3.9 or greater.
+2. Install [Pipenv](https://pipenv.pypa.io/).
+3. `pipenv install`
 
 ## Testing
 
