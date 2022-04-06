@@ -183,3 +183,6 @@ class Sessions(Base):
             "{0}/revoke".format(self.sessions_url),
             data=data,
         )
+
+    def jwks(self, project_id: str):
+        return self._get("{0}/jwks/{1}".format(self.sessions_url, project_id))
