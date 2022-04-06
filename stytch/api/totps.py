@@ -31,6 +31,7 @@ class TOTPs(Base):
         user_id: str,
         totp_code: str,
         session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
         data: Dict[str, Any] = {
@@ -39,6 +40,8 @@ class TOTPs(Base):
         }
         if session_token:
             data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
         return self._post(
@@ -63,6 +66,7 @@ class TOTPs(Base):
         user_id: str,
         recovery_code: str,
         session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
         data: Dict[str, Any] = {
@@ -71,6 +75,8 @@ class TOTPs(Base):
         }
         if session_token:
             data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
         return self._post(

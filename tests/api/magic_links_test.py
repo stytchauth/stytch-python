@@ -26,12 +26,13 @@ class TestMagicLinks:
                     "user_agent_match_required": False,
                 },
                 session_token="mZAYn5aLEqKUlZ_Ad9U_fWr38GaAQ1oFAhT8ds245v7Q",
+                session_jwt="fake_jwt",
                 session_duration_minutes=60,
             )
 
         mock_post.assert_called_once_with(
             "https://localhost:8080/magic_links/authenticate",
-            data='{"token": "DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94=", "attributes": {"ip_address": "203.0.113.1", "user_agent": "Toaster 3.0"}, "options": {"ip_match_required": true}, "session_token": "mZAYn5aLEqKUlZ_Ad9U_fWr38GaAQ1oFAhT8ds245v7Q", "session_duration_minutes": 60}',
+            data='{"token": "DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94=", "attributes": {"ip_address": "203.0.113.1", "user_agent": "Toaster 3.0"}, "options": {"ip_match_required": true}, "session_token": "mZAYn5aLEqKUlZ_Ad9U_fWr38GaAQ1oFAhT8ds245v7Q", "session_jwt": "fake_jwt", "session_duration_minutes": 60}',
             auth=client.auth,
             headers=mock.ANY,
         )

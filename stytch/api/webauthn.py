@@ -68,6 +68,7 @@ class WebAuthn(Base):
         self,
         public_key_credential: str,
         session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
         data: Dict[str, Any] = {
@@ -75,6 +76,8 @@ class WebAuthn(Base):
         }
         if session_token:
             data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
 

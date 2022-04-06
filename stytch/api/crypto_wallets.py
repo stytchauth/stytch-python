@@ -33,6 +33,7 @@ class CryptoWallets(Base):
         crypto_wallet_type: str,
         signature: str,
         session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
         data: Dict[str, Any] = {
@@ -42,6 +43,8 @@ class CryptoWallets(Base):
         }
         if session_token:
             data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
 

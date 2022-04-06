@@ -21,12 +21,16 @@ class Sessions(Base):
 
     def authenticate(
         self,
-        session_token: str,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
-        data: Dict[str, Any] = {
-            "session_token": session_token,
-        }
+        data: Dict[str, Any] = {}
+
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
 
@@ -39,12 +43,15 @@ class Sessions(Base):
         self,
         session_id: Optional[str] = None,
         session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ):
         data = {}
         if session_id:
             data["session_id"] = session_id
         if session_token:
             data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
 
         return self._post(
             "{0}/revoke".format(self.sessions_url),
