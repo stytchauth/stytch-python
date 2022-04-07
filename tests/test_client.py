@@ -17,7 +17,7 @@ class TestStytchClient:
             assert _
 
     def test_users_controller_exists(self):
-        client = Client("project_id", "secret", "development", suppress_warnings=True)
+        client = Client("project_id", "secret", "test", suppress_warnings=True)
         assert client.users
         assert client.users.get
         assert client.users.update
@@ -25,7 +25,7 @@ class TestStytchClient:
         assert client.users.create
 
     def test_magic_links_controller_exists(self):
-        client = Client("project_id", "secret", "development", suppress_warnings=True)
+        client = Client("project_id", "secret", "test", suppress_warnings=True)
         assert client.magic_links
         assert client.magic_links.email.send
         assert client.magic_links.authenticate

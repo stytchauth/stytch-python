@@ -19,3 +19,19 @@ class StytchError(Exception):
 
     def __str__(self):
         return str(self.__dict__)
+
+class ClientError(Exception):
+    def __init__(self, code: str, message: str, cause: Exception = None):
+        super().__init__(self, message)
+        self.code = code
+        self._message = message
+        self.cause = cause
+
+    def __repr__(self):
+        return "{}({!r}, {!r}, {!r})".format(self.__class__.__name__, self.code, self._message, self.cause)
+
+    def __str__(self):
+        s = "({}) {}".format(self.code, self._message)
+        if self.cause:
+            return "{}: {}".format(s, self.cause)
+        return s

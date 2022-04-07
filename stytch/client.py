@@ -1,5 +1,7 @@
 import warnings
 
+import jwt
+
 from .api.users import Users
 from .api.magic_links import MagicLinks
 from .api.otp import OTP
@@ -26,26 +28,29 @@ class Client:
         self.project_id = project_id
         self.secret = secret
         self.environment = environment
-        self.suppress_warnings = suppress_warnings
+
+        self.base_url = _env_url(environment, suppress_warnings)
+
+        jwks_url = self.base_url + 'sessions/jwks/' + self.project_id
+        jwks_client = jwt.PyJWKClient(jwks_url)
 
         self.users = Users(self)
         self.magic_links = MagicLinks(self)
         self.oauth = OAuth(self)
         self.otps = OTP(self)
-        self.sessions = Sessions(self)
+        self.sessions = Sessions(self, jwks_client)
         self.webauthn = WebAuthn(self)
         self.totps = TOTPs(self)
         self.crypto_wallets = CryptoWallets(self)
 
-    @property
-    def base_url(self):
-        if self.environment == "test":
-            base_url = "https://test.stytch.com/v1/"
-            if not self.suppress_warnings:
-                warnings.warn("Test version of Stytch not intended for production use")
-        elif self.environment == "live":
-            base_url = "https://api.stytch.com/v1/"
-        else:
-            raise Exception("Invalid or missing env. Please specify test or live env")
+def _env_url(env: str, suppress_warnings: bool = False) -> str:
+    '''Resolve the base URL for the Stytch API environment.
+    '''
+    if env == "test":
+        if not suppress_warnings:
+            warnings.warn("Test version of Stytch not intended for production use")
+        return "https://test.stytch.com/v1/"
+    elif env == "live":
+        return "https://api.stytch.com/v1/"
 
-        return base_url
+    raise Exception("Invalid or missing env. Please specify test or live env")

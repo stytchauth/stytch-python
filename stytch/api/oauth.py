@@ -21,6 +21,7 @@ class OAuth(Base):
         token: str,
         session_management_type: Optional[SessionManagementType] = None,
         session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
 
@@ -31,6 +32,8 @@ class OAuth(Base):
             data["session_management_type"] = session_management_type
         if session_token:
             data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
 

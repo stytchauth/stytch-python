@@ -20,6 +20,7 @@ class OTP(Base):
         attributes: Optional[Dict] = None,
         options: Optional[Dict] = None,
         session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
     ):
         if attributes:
@@ -38,6 +39,8 @@ class OTP(Base):
             data["options"] = options
         if session_token:
             data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
 
