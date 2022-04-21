@@ -1,12 +1,8 @@
-from typing import Any, Dict, Optional
 from enum import Enum
+from typing import Any, Dict, Optional
 
-from .base import _validate_attributes, Base
+from .base import Base, _validate_attributes
 
-class SessionManagementType(Enum):
-    IDP = "idp"
-    STYTCH = "stytch"
-    NONE = "none"
 
 class OAuth(Base):
     def __init__(self, client):
@@ -19,7 +15,6 @@ class OAuth(Base):
     def authenticate(
         self,
         token: str,
-        session_management_type: Optional[SessionManagementType] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
@@ -28,8 +23,7 @@ class OAuth(Base):
         data: Dict[str, Any] = {
             "token": token,
         }
-        if session_management_type:
-            data["session_management_type"] = session_management_type
+
         if session_token:
             data["session_token"] = session_token
         if session_jwt:
