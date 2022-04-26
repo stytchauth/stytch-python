@@ -183,6 +183,7 @@ class Email(Base):
         email: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
+        locale: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -194,6 +195,8 @@ class Email(Base):
             data["expiration_minutes"] = expiration_minutes
         if attributes:
             data["attributes"] = attributes
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/email/send".format(
@@ -207,7 +210,8 @@ class Email(Base):
         email: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
-        create_user_as_pending: Optional[bool] = False
+        create_user_as_pending: Optional[bool] = False,
+        locale: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -220,6 +224,8 @@ class Email(Base):
             data["expiration_minutes"] = expiration_minutes
         if attributes:
             data["attributes"] = attributes
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/email/login_or_create".format(
