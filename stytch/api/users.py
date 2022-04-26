@@ -1,4 +1,3 @@
-from sre_constants import ANY
 from typing import Any, Dict, List, Optional, TypedDict
 
 from .base import Base
