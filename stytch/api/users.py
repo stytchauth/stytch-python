@@ -1,6 +1,50 @@
-from typing import Any, Dict, List, Optional
+from sre_constants import ANY
+from typing import Any, Dict, List, Optional, TypedDict
 
 from .base import Base
+
+
+class Operands(TypedDict):
+    filter_name: str
+    filter_value: Any
+
+
+class SearchQuery(TypedDict):
+    operator: str
+    operands: List[Operands]
+
+
+class UserSearchIterator:
+    MODE_IN_PROGRESS = 0
+    MODE_COMPLETE = 1
+
+    def __init__(self, client, limit, cursor, query):
+        self._mode = UserSearchIterator.MODE_IN_PROGRESS
+        self._client = client
+        self._limit = limit
+        self._cursor = cursor
+        self._query = query
+
+    def next(self):
+        if (self._mode == UserSearchIterator.MODE_COMPLETE): 
+            return None
+
+        res = self._client.search(
+            limit=self._limit, cursor=self._cursor, query=self._query
+        )
+
+        self._cursor = res.json()['results_metadata']['next_cursor']
+
+        if (self._cursor is None):
+            self._mode = UserSearchIterator.MODE_COMPLETE
+        else:
+            self._mode = UserSearchIterator.MODE_IN_PROGRESS
+
+        return res
+    
+    def has_next(self):
+        return self._mode == UserSearchIterator.MODE_IN_PROGRESS
+
 
 class Users(Base):
     @property
@@ -42,9 +86,7 @@ class Users(Base):
         return self._get("{0}/{1}".format(self.user_url, user_id))
 
     def get_pending(
-        self,
-        limit: Optional[int] = None,
-        starting_after_id: Optional[str] = None
+        self, limit: Optional[int] = None, starting_after_id: Optional[str] = None
     ):
         query_params = {}
         if limit:
@@ -53,6 +95,32 @@ class Users(Base):
             query_params.update({"starting_after_id": starting_after_id})
 
         return self._get("{0}/{1}".format(self.user_url, "pending"), query_params)
+
+    def search(
+        self,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        query: Optional[SearchQuery] = None,
+    ):
+        data: Dict[str, Any] = {}
+        
+        if (limit is not None):
+            data['limit'] = limit
+        if (cursor is not None):
+            data['cursor'] = cursor
+        if (query is not None):
+            data['query'] = query
+
+        return self._post("{0}/{1}".format(self.user_url, "search"), data)
+
+    def search_all(
+        self,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        query: Optional[SearchQuery] = None,
+    ):
+
+        return UserSearchIterator(self, limit, cursor, query)
 
     def delete(self, user_id: str):
         return self._delete("{0}/{1}".format(self.user_url, user_id))
@@ -105,10 +173,16 @@ class Users(Base):
         return self._delete("{0}/phone_numbers/{1}".format(self.user_url, phone_id))
 
     def delete_webauthn_registration(self, webauthn_registration: str):
-        return self._delete("{0}/webauthn_registrations/{1}".format(self.user_url, webauthn_registration))
+        return self._delete(
+            "{0}/webauthn_registrations/{1}".format(
+                self.user_url, webauthn_registration
+            )
+        )
 
     def delete_totp(self, totp_id: str):
         return self._delete("{0}/totps/{1}".format(self.user_url, totp_id))
 
     def delete_crypto_wallet(self, crypto_wallet_id: str):
-        return self._delete("{0}/crypto_wallets/{1}".format(self.user_url, crypto_wallet_id))
+        return self._delete(
+            "{0}/crypto_wallets/{1}".format(self.user_url, crypto_wallet_id)
+        )
