@@ -86,13 +86,12 @@ class Users(Base):
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
     ):
-        search_complete = False
-        while not search_complete:
+        while True:
             results = self.search(limit, cursor, query)
             yield results
             cursor = results.json()["results_metadata"]["next_cursor"]
             if cursor is None:
-                search_complete = True
+                break
 
     def delete(self, user_id: str):
         return self._delete("{0}/{1}".format(self.user_url, user_id))
