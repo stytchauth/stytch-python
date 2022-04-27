@@ -40,5 +40,6 @@ setup(
     install_requires=[
         "requests>=2.7.0",
         "pyjwt[crypto]>=2.3.0",
+        "typing_extensions",
     ],
 )
