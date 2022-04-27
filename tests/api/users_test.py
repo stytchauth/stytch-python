@@ -1,4 +1,5 @@
 import requests
+import unittest
 from unittest import mock
 
 from testutil import FakeClient, FakeResponse
@@ -31,13 +32,13 @@ class TestUsers:
             data='{"email": "test@example.net", "phone_number": null, "name": {"first_name": null, "middle_name": null, "last_name": null}, "create_user_as_pending": false, "attributes": {"ip_address": "203.0.113.1", "user_agent": "Toaster 3.0"}}',
             auth=client.auth,
             headers={
-                'Content-Type': 'application/json',
-                'User-Agent': f'Stytch Python v{version}'
+                "Content-Type": "application/json",
+                "User-Agent": f"Stytch Python v{version}",
             },
         )
 
-class TestSearchUsers:
-    
+
+class TestSearchUsers(unittest.TestCase):
     def test_search_no_params(self):
         client = FakeClient()
         response = FakeResponse(
@@ -52,11 +53,11 @@ class TestSearchUsers:
 
         mock_post.assert_called_once_with(
             "https://localhost:8080/users/search",
-            data='{}',
+            data="{}",
             auth=client.auth,
             headers={
-                'Content-Type': 'application/json',
-                'User-Agent': f'Stytch Python v{version}'
+                "Content-Type": "application/json",
+                "User-Agent": f"Stytch Python v{version}",
             },
         )
 
@@ -72,8 +73,11 @@ class TestSearchUsers:
             users._requester_base = requests
             _ = users.search(
                 limit=50,
-                cursor='abc123',
-                query={"operator": "AND", "operands": [{"filter_name": "test_filter", "filter_value": 1}]}
+                cursor="abc123",
+                query={
+                    "operator": "AND",
+                    "operands": [{"filter_name": "test_filter", "filter_value": 1}],
+                },
             )
 
         mock_post.assert_called_once_with(
@@ -81,12 +85,12 @@ class TestSearchUsers:
             data='{"limit": 50, "cursor": "abc123", "query": {"operator": "AND", "operands": [{"filter_name": "test_filter", "filter_value": 1}]}}',
             auth=client.auth,
             headers={
-                'Content-Type': 'application/json',
-                'User-Agent': f'Stytch Python v{version}'
+                "Content-Type": "application/json",
+                "User-Agent": f"Stytch Python v{version}",
             },
         )
-    
-    @mock.patch('requests.post')
+
+    @mock.patch("requests.post")
     def test_search_all(self, mock_post):
         client = FakeClient()
         response_1 = FakeResponse(
@@ -103,35 +107,32 @@ class TestSearchUsers:
         users._requester_base = requests
 
         mock_post.return_value = response_1
-        test_itr = users.search_all()
+        search_generator = users.search_all()
 
-        assert test_itr.has_next()
-
-        _ = test_itr.next()
+        _ = next(search_generator)
 
         mock_post.assert_called_with(
             "https://localhost:8080/users/search",
-            data='{}',
+            data="{}",
             auth=client.auth,
             headers={
-                'Content-Type': 'application/json',
-                'User-Agent': f'Stytch Python v{version}'
+                "Content-Type": "application/json",
+                "User-Agent": f"Stytch Python v{version}",
             },
         )
 
-        assert test_itr.has_next()
-
         mock_post.return_value = response_2
-        _ = test_itr.next()
+        _ = next(search_generator)
 
         mock_post.assert_called_with(
             "https://localhost:8080/users/search",
             data='{"cursor": "A"}',
             auth=client.auth,
             headers={
-                'Content-Type': 'application/json',
-                'User-Agent': f'Stytch Python v{version}'
+                "Content-Type": "application/json",
+                "User-Agent": f"Stytch Python v{version}",
             },
         )
-        assert test_itr.has_next() == False  
 
+        with self.assertRaises(StopIteration):
+            next(search_generator)

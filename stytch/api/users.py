@@ -13,38 +13,6 @@ class SearchQuery(TypedDict):
     operands: List[Operands]
 
 
-class UserSearchIterator:
-    MODE_IN_PROGRESS = 0
-    MODE_COMPLETE = 1
-
-    def __init__(self, client, limit, cursor, query):
-        self._mode = UserSearchIterator.MODE_IN_PROGRESS
-        self._client = client
-        self._limit = limit
-        self._cursor = cursor
-        self._query = query
-
-    def next(self):
-        if (self._mode == UserSearchIterator.MODE_COMPLETE): 
-            return None
-
-        res = self._client.search(
-            limit=self._limit, cursor=self._cursor, query=self._query
-        )
-
-        self._cursor = res.json()['results_metadata']['next_cursor']
-
-        if (self._cursor is None):
-            self._mode = UserSearchIterator.MODE_COMPLETE
-        else:
-            self._mode = UserSearchIterator.MODE_IN_PROGRESS
-
-        return res
-    
-    def has_next(self):
-        return self._mode == UserSearchIterator.MODE_IN_PROGRESS
-
-
 class Users(Base):
     @property
     def user_url(self):
@@ -102,13 +70,13 @@ class Users(Base):
         query: Optional[SearchQuery] = None,
     ):
         data: Dict[str, Any] = {}
-        
-        if (limit is not None):
-            data['limit'] = limit
-        if (cursor is not None):
-            data['cursor'] = cursor
-        if (query is not None):
-            data['query'] = query
+
+        if limit is not None:
+            data["limit"] = limit
+        if cursor is not None:
+            data["cursor"] = cursor
+        if query is not None:
+            data["query"] = query
 
         return self._post("{0}/{1}".format(self.user_url, "search"), data)
 
@@ -118,8 +86,13 @@ class Users(Base):
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
     ):
-
-        return UserSearchIterator(self, limit, cursor, query)
+        search_complete = False
+        while not search_complete:
+            results = self.search(limit, cursor, query)
+            yield results
+            cursor = results.json()["results_metadata"]["next_cursor"]
+            if cursor is None:
+                search_complete = True
 
     def delete(self, user_id: str):
         return self._delete("{0}/{1}".format(self.user_url, user_id))
