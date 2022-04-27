@@ -7,12 +7,13 @@ HERE = pathlib.Path(__file__).parent
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
-with open('stytch/version.py', 'r') as f:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-                        f.read(), re.MULTILINE).group(1)
+with open("stytch/version.py", "r") as f:
+    version = re.search(
+        r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE
+    ).group(1)
 
 if not version:
-    raise RuntimeError('Cannot find version information')
+    raise RuntimeError("Cannot find version information")
 
 # This call to setup() does all the work
 setup(
@@ -40,6 +41,6 @@ setup(
     install_requires=[
         "requests>=2.7.0",
         "pyjwt[crypto]>=2.3.0",
-        "typing_extensions",
+        "typing_extensions>=3.7, <4",
     ],
 )
