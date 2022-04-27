@@ -43,7 +43,7 @@ class TestSearchUsers(unittest.TestCase):
         client = FakeClient()
         response = FakeResponse(
             status_code=200,
-            body='{"user_id": "user-test-183e939c-e7e1-4d56-82da-8ba9c6036878"}',
+            body="{}",
         )
 
         with mock.patch.object(requests, "post", return_value=response) as mock_post:
@@ -106,11 +106,11 @@ class TestSearchUsers(unittest.TestCase):
         users = Users(client)
         users._requester_base = requests
 
-        mock_post.return_value = response_1
         search_generator = users.search_all()
 
-        _ = next(search_generator)
-
+        mock_post.return_value = response_1
+        page = next(search_generator)
+        assert page == response_1
         mock_post.assert_called_with(
             "https://localhost:8080/users/search",
             data="{}",
@@ -122,8 +122,8 @@ class TestSearchUsers(unittest.TestCase):
         )
 
         mock_post.return_value = response_2
-        _ = next(search_generator)
-
+        page = next(search_generator)
+        assert page == response_2
         mock_post.assert_called_with(
             "https://localhost:8080/users/search",
             data='{"cursor": "A"}',
