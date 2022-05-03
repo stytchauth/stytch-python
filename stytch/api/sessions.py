@@ -96,11 +96,9 @@ class Sessions(Base):
                 "session": session,
                 "session_jwt": session_jwt,
             }
-        except JWTTooOldError as e:
-            # JWT was too old (stale) to verify locally. Check with the Stytch API.
+        except Exception as e:
+            # JWT could not be verified locally. Check with the Stytch API.
             return self.authenticate(session_jwt=session_jwt).json()
-        except jwt.PyJWTError as e:
-            raise JWTInvalidError("could not verify JWT", e)
 
     def authenticate_jwt_local(
         self,
