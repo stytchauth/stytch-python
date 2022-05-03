@@ -20,7 +20,7 @@ def rsa_key():
     return rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
 
-def make_jwt(project_id, key_id, private_key, now):
+def make_jwt(project_id, key_id, private_key, now, expires_at):
     headers = {
         "kid": key_id,
     }
@@ -30,6 +30,7 @@ def make_jwt(project_id, key_id, private_key, now):
         "https://stytch.com/session": {
             "started_at": iso(now),
             "last_accessed_at": iso(now),
+            "expires_at": iso(expires_at) if expires_at else None,
             "attributes": {"user_agent": "", "ip_address": ""},
             "authentication_factors": [
                 {
@@ -47,7 +48,7 @@ def make_jwt(project_id, key_id, private_key, now):
         "sub": "user-live-fde03dd1-fff7-4b3c-9b31-ead3fbc224de",
         "iat": int(now),
         "nbf": int(now),
-        "exp": int(now) + 3600,  # one hour
+        "exp": int(now) + 5 * 60,  # five minutes
         "iss": "stytch.com/{}".format(project_id),
         "aud": [project_id],
     }
@@ -113,7 +114,7 @@ class TestSessions:
 
         key_id = "key0"
         private_key = rsa_key()
-        jwt = make_jwt(project_id, key_id, private_key, now)
+        jwt = make_jwt(project_id, key_id, private_key, now, now + 3600)
         jwks_client = make_jwks_client(key_id, private_key.public_key())
 
         response = FakeResponse(status_code=200)
@@ -142,7 +143,7 @@ class TestSessions:
 
         key_id = "key0"
         private_key = rsa_key()
-        jwt = make_jwt(project_id, key_id, private_key, now)
+        jwt = make_jwt(project_id, key_id, private_key, now, now + 3600)
         jwks_client = make_jwks_client(key_id, private_key.public_key())
 
         response = FakeResponse(status_code=200)
@@ -159,6 +160,46 @@ class TestSessions:
                 session["user_id"] == "user-live-fde03dd1-fff7-4b3c-9b31-ead3fbc224de"
             )
             assert session["expires_at"] == iso(int(now) + 3600)
+            assert (
+                session["session_id"]
+                == "session-live-e26a0ccb-0dc0-4edb-a4bb-e70210f43555"
+            )
+            assert session["attributes"] == {"user_agent": "", "ip_address": ""}
+            factors = session["authentication_factors"]
+            assert len(factors) == 1
+
+            _ = sessions.authenticate_jwt(
+                session_jwt=jwt,
+                max_token_age_seconds=300,
+            )
+
+        mock_post.assert_not_called()
+
+    def test_authenticate_jwt_local_old_format(self):
+        project_id = "project-test-00000000-0000-0000-0000-000000000000"
+        now = time.time()
+
+        client = FakeClient(project_id=project_id)
+
+        key_id = "key0"
+        private_key = rsa_key()
+        jwt = make_jwt(project_id, key_id, private_key, now, None)
+        jwks_client = make_jwks_client(key_id, private_key.public_key())
+
+        response = FakeResponse(status_code=200)
+        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+            sessions = Sessions(client, jwks_client)
+            sessions._requester_base = requests
+
+            session = sessions.authenticate_jwt_local(
+                session_jwt=jwt,
+                max_token_age_seconds=300,
+            )
+
+            assert (
+                session["user_id"] == "user-live-fde03dd1-fff7-4b3c-9b31-ead3fbc224de"
+            )
+            assert session["expires_at"] == iso(int(now) + 300)
             assert (
                 session["session_id"]
                 == "session-live-e26a0ccb-0dc0-4edb-a4bb-e70210f43555"
