@@ -26,6 +26,7 @@ SessionClaim = TypedDict(
         "id": str,
         "started_at": str,
         "last_accessed_at": str,
+        "expires_at": Optional[str],
         "attributes": Dict[str, str],
         "authentication_factors": List[Dict[str, Any]],
     },
@@ -151,11 +152,13 @@ class Sessions(Base):
 
         # Unpack the session claim to match the detached session format.
         claim = cast(SessionClaim, payload[_session_claim])
+
+        # For JWTs that include it, prefer the inner expires_at claim.
+        expires_at = claim["expires_at"] or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(payload["exp"]))
+
         return {
             "user_id": payload["sub"],
-            "expires_at": time.strftime(
-                "%Y-%m-%dT%H:%M:%SZ", time.gmtime(payload["exp"])
-            ),
+            "expires_at": expires_at,
             "session_id": claim["id"],
             "attributes": claim["attributes"],
             "authentication_factors": claim["authentication_factors"],
