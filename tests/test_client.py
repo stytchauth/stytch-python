@@ -3,7 +3,7 @@ from stytch.client import Client
 
 
 class TestStytchClient:
-    def test_development_env_returns_base_url(self):
+    def test_test_env_returns_base_url(self):
         client = Client("project_id", "secret", "test", suppress_warnings=True)
         assert client.base_url == "https://test.stytch.com/v1/"
 
@@ -11,10 +11,12 @@ class TestStytchClient:
         client = Client("project_id", "secret", "live", suppress_warnings=True)
         assert client.base_url == "https://api.stytch.com/v1/"
 
-    def test_no_env_raises_error(self):
-        with pytest.raises(Exception):
-            _ = Client("project_id", "secret", "invalid env").base_url
-            assert _
+    def test_custom_env_for_development(self):
+        client = Client("project_id", "secret", "https://localhost:8000/v1", suppress_warnings=True)
+        assert client.base_url == "https://localhost:8000/v1/"
+
+        client = Client("project_id", "secret", "https://localhost:8000/v1/", suppress_warnings=True)
+        assert client.base_url == "https://localhost:8000/v1/"
 
     def test_users_controller_exists(self):
         client = Client("project_id", "secret", "test", suppress_warnings=True)
