@@ -46,6 +46,8 @@ class Client:
 def _env_url(env: str, suppress_warnings: bool = False) -> str:
     '''Resolve the base URL for the Stytch API environment.
     '''
+
+    # Supported production environments
     if env == "test":
         if not suppress_warnings:
             warnings.warn("Test version of Stytch not intended for production use")
@@ -53,4 +55,8 @@ def _env_url(env: str, suppress_warnings: bool = False) -> str:
     elif env == "live":
         return "https://api.stytch.com/v1/"
 
-    raise Exception("Invalid or missing env. Please specify test or live env")
+    # Internal development override. URL builders assume the base URL has a
+    # trailing slash, so add one if it's missing.
+    if not env.endswith('/'):
+        return env + '/'
+    return env
