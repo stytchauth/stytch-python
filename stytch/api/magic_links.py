@@ -40,6 +40,7 @@ class MagicLinks(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        code_verifier: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -61,6 +62,8 @@ class MagicLinks(Base):
             data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
+        if code_verifier:
+            data["code_verifier"] = code_verifier
 
         return self._post(
             "{0}/authenticate".format(self.magic_link_url),
@@ -80,6 +83,7 @@ class Email(Base):
         login_expiration_minutes: Optional[int] = None,
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
+        code_challenge: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -96,6 +100,8 @@ class Email(Base):
             data["login_expiration_minutes"] = login_expiration_minutes
         if signup_expiration_minutes:
             data["signup_expiration_minutes"] = signup_expiration_minutes
+        if code_challenge:
+            data["code_challenge"] = code_challenge
 
         return self._post(
             "{0}/email/send".format(
@@ -113,6 +119,7 @@ class Email(Base):
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         create_user_as_pending: Optional[bool] = False,
+        code_challenge: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -130,6 +137,8 @@ class Email(Base):
             data["login_expiration_minutes"] = login_expiration_minutes
         if signup_expiration_minutes:
             data["signup_expiration_minutes"] = signup_expiration_minutes
+        if code_challenge:
+            data["code_challenge"] = code_challenge
 
         return self._post(
             "{0}/email/login_or_create".format(

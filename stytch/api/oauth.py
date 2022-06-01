@@ -18,6 +18,7 @@ class OAuth(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        code_verifier: Optional[str] = None,
     ):
 
         data: Dict[str, Any] = {
@@ -30,6 +31,8 @@ class OAuth(Base):
             data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
+        if code_verifier:
+            data["code_verifier"] = code_verifier
 
         return self._post(
             "{0}/authenticate".format(self.oauth_url),
