@@ -59,6 +59,7 @@ class Sessions(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ):
         data: Dict[str, Any] = {}
 
@@ -68,6 +69,8 @@ class Sessions(Base):
             data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims:
+            data["session_custom_claims"] = session_custom_claims
 
         return self._post(
             "{0}/authenticate".format(self.sessions_url),
@@ -79,6 +82,7 @@ class Sessions(Base):
         session_jwt: str,
         *,
         max_token_age_seconds: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ):
         """Parse a JWT and verify the signature, preferring local verification over remote.
 
@@ -99,7 +103,7 @@ class Sessions(Base):
             }
         except Exception as e:
             # JWT could not be verified locally. Check with the Stytch API.
-            return self.authenticate(session_jwt=session_jwt).json()
+            return self.authenticate(session_custom_claims=session_custom_claims, session_jwt=session_jwt).json()
 
     def authenticate_jwt_local(
         self,

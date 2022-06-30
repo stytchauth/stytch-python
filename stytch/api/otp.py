@@ -22,6 +22,7 @@ class OTP(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -43,6 +44,8 @@ class OTP(Base):
             data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims:
+            data["session_custom_claims"] = session_custom_claims
 
         return self._post(
             "{0}/authenticate".format(
