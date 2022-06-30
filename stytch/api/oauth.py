@@ -18,6 +18,7 @@ class OAuth(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
         code_verifier: Optional[str] = None,
     ):
 
@@ -31,6 +32,8 @@ class OAuth(Base):
             data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims:
+            data["session_custom_claims"] = session_custom_claims
         if code_verifier:
             data["code_verifier"] = code_verifier
 

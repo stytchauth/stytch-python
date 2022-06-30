@@ -33,6 +33,7 @@ class TOTPs(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ):
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -44,6 +45,8 @@ class TOTPs(Base):
             data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims:
+            data["session_custom_claims"] = session_custom_claims
         return self._post(
             "{0}/authenticate".format(self.totps_url),
             data=data,
@@ -68,6 +71,7 @@ class TOTPs(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ):
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -79,6 +83,8 @@ class TOTPs(Base):
             data["session_jwt"] = session_jwt
         if session_duration_minutes:
             data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims:
+            data["session_custom_claims"] = session_custom_claims
         return self._post(
             "{0}/recover".format(self.totps_url),
             data=data,
