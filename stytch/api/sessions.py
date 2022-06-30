@@ -103,10 +103,7 @@ class Sessions(Base):
             }
         except Exception as e:
             # JWT could not be verified locally. Check with the Stytch API.
-            if session_custom_claims:
-                return self.authenticate(session_custom_claims=session_custom_claims, session_jwt=session_jwt).json()
-            else:
-                return self.authenticate(session_jwt=session_jwt).json()
+            return self.authenticate(session_custom_claims=session_custom_claims, session_jwt=session_jwt).json()
 
     def authenticate_jwt_local(
         self,
