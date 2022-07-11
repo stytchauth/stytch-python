@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from .base import Base
+from .base import Base, _validate_attributes
 
 class Passwords(Base):
     def __init__(self, client):
@@ -18,7 +18,7 @@ class Passwords(Base):
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ):
-        data = {
+        data: Dict[str, Any] = {
             "email": email,
             "password": password,
         }
