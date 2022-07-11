@@ -109,7 +109,7 @@ class Email(Base):
     def reset_start(
         self,
         email: str,
-        login_magic_link_url: Optional[str] = None,
+        login_redirect_url: Optional[str] = None,
         reset_password_redirect_url: Optional[str] = None,
         login_expiration_minutes: Optional[int] = None,
         reset_password_expiration_minutes: Optional[int] = None,
@@ -122,8 +122,8 @@ class Email(Base):
         data: Dict[str, Any] = {
             "email": email,
         }
-        if login_magic_link_url:
-            data["login_magic_link_url"] = login_magic_link_url
+        if login_redirect_url:
+            data["login_redirect_url"] = login_redirect_url
         if reset_password_redirect_url:
             data["reset_password_redirect_url"] = reset_password_redirect_url
         if login_expiration_minutes:
