@@ -10,6 +10,7 @@ from .api.sessions import Sessions
 from .api.totps import TOTPs
 from .api.webauthn import WebAuthn
 from .api.crypto_wallets import CryptoWallets
+from .api.passwords import Passwords
 
 class Client:
     """
@@ -42,6 +43,7 @@ class Client:
         self.webauthn = WebAuthn(self)
         self.totps = TOTPs(self)
         self.crypto_wallets = CryptoWallets(self)
+        self.passwords = Passwords(self)
 
 def _env_url(env: str, suppress_warnings: bool = False) -> str:
     '''Resolve the base URL for the Stytch API environment.
