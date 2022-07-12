@@ -111,7 +111,6 @@ class Email(Base):
         email: str,
         login_redirect_url: Optional[str] = None,
         reset_password_redirect_url: Optional[str] = None,
-        login_expiration_minutes: Optional[int] = None,
         reset_password_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         code_challenge: Optional[str] = None,
@@ -126,8 +125,6 @@ class Email(Base):
             data["login_redirect_url"] = login_redirect_url
         if reset_password_redirect_url:
             data["reset_password_redirect_url"] = reset_password_redirect_url
-        if login_expiration_minutes:
-            data["login_expiration_minutes"] = login_expiration_minutes
         if reset_password_expiration_minutes:
             data["reset_password_expiration_minutes"] = reset_password_expiration_minutes
         if attributes:
