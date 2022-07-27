@@ -83,6 +83,11 @@ class Passwords(Base):
         hash_type: str,
         prepend_salt: Optional[str] = None,
         append_salt: Optional[str] = None,
+        argon_2_salt: Optional[str] = None,
+        argon_2_iteration_amount: Optional[str] = None,
+        argon_2_memory: Optional[str] = None,
+        argon_2_threads: Optional[str] = None,
+        argon_2_key_length: Optional[str] = None,
     ):
         data: Dict[str, Any] = {
             "email": email,
@@ -93,6 +98,16 @@ class Passwords(Base):
             data["prepend_salt"] = prepend_salt
         if append_salt:
             data["append_salt"] = append_salt
+        if argon_2_salt:
+            data["argon_2_salt"] = argon_2_salt
+        if argon_2_iteration_amount:
+            data["argon_2_iteration_amount"] = argon_2_iteration_amount
+        if argon_2_memory:
+            data["argon_2_memory"] = argon_2_memory
+        if argon_2_threads:
+            data["argon_2_threads"] = argon_2_threads
+        if argon_2_key_length:
+            data["argon_2_key_length"] = argon_2_key_length
 
         return self._post(
             "{0}/migrate".format(
