@@ -81,18 +81,18 @@ class Passwords(Base):
         email: str,
         hash: str,
         hash_type: str,
-        prepend_salt: Optional[str] = None,
-        append_salt: Optional[str] = None,
+        md_5_config: Optional[Dict[str, Any]] = None,
+        argon_2_config: Optional[Dict[str, Any]] = None,
     ):
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
             "hash_type": hash_type,
         }
-        if prepend_salt:
-            data["prepend_salt"] = prepend_salt
-        if append_salt:
-            data["append_salt"] = append_salt
+        if md_5_config:
+            data["md_5_config"] = md_5_config
+        if argon_2_config:
+            data["argon_2_config"] = argon_2_config
 
         return self._post(
             "{0}/migrate".format(
