@@ -6,6 +6,7 @@ class Passwords(Base):
     def __init__(self, client):
         super().__init__(client)
         self.email = Email(client)
+        self.existing_password = ExistingPassword(client)
 
     @property
     def password_url(self):
@@ -172,6 +173,42 @@ class Email(Base):
             data["options"] = options
         if code_verifier:
             data["code_verifier"] = code_verifier
+
+        return self._post(
+            "{0}/reset".format(
+                self.password_url,
+            ),
+            data=data,
+        )
+
+class ExistingPassword(Base):
+    @property
+    def password_url(self):
+        return self.get_url("passwords/existing_password")
+
+    def reset(
+            self,
+            email: str,
+            existing_password: str,
+            new_password: str,
+            session_token: Optional[str] = None,
+            session_jwt: Optional[str] = None,
+            session_duration_minutes: Optional[int] = None,
+            session_custom_claims: Optional[Dict[str, Any]] = None,
+    ):
+        data: Dict[str, Any] = {
+            "email": email,
+            "new_password": new_password,
+            "existing_password": existing_password,
+        }
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
+        if session_duration_minutes:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims:
+            data["session_custom_claims"] = session_custom_claims
 
         return self._post(
             "{0}/reset".format(
