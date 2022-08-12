@@ -157,3 +157,8 @@ class Users(Base):
         return self._delete(
             "{0}/crypto_wallets/{1}".format(self.user_url, crypto_wallet_id)
         )
+
+    def delete_password(self, password_id: str):
+        return self._delete(
+            "{0}/passwords/{1}".format(self.user_url, password_id)
+        )

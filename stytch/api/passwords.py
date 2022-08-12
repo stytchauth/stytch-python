@@ -7,6 +7,7 @@ class Passwords(Base):
         super().__init__(client)
         self.email = Email(client)
         self.existing_password = ExistingPassword(client)
+        self.session = Session(client)
 
     @property
     def password_url(self):
@@ -84,6 +85,8 @@ class Passwords(Base):
         hash_type: str,
         md_5_config: Optional[Dict[str, Any]] = None,
         argon_2_config: Optional[Dict[str, Any]] = None,
+        sha_1_config: Optional[Dict[str, Any]] = None,
+        scrypt_config: Optional[Dict[str, Any]] = None,
     ):
         data: Dict[str, Any] = {
             "email": email,
@@ -94,6 +97,10 @@ class Passwords(Base):
             data["md_5_config"] = md_5_config
         if argon_2_config:
             data["argon_2_config"] = argon_2_config
+        if sha_1_config:
+            data["sha_1_config"] = sha_1_config
+        if scrypt_config:
+            data["scrypt_config"] = scrypt_config
 
         return self._post(
             "{0}/migrate".format(
@@ -209,6 +216,32 @@ class ExistingPassword(Base):
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims:
             data["session_custom_claims"] = session_custom_claims
+
+        return self._post(
+            "{0}/reset".format(
+                self.password_url,
+            ),
+            data=data,
+        )
+
+class Session(Base):
+    @property
+    def password_url(self):
+        return self.get_url("passwords/session")
+
+    def reset(
+            self,
+            password: str,
+            session_token: Optional[str] = None,
+            session_jwt: Optional[str] = None,
+    ):
+        data: Dict[str, Any] = {
+            "password": password,
+        }
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
 
         return self._post(
             "{0}/reset".format(
