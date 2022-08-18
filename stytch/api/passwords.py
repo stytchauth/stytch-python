@@ -122,6 +122,7 @@ class Email(Base):
         reset_password_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         code_challenge: Optional[str] = None,
+        locale: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -139,6 +140,8 @@ class Email(Base):
             data["attributes"] = attributes
         if code_challenge:
             data["code_challenge"] = code_challenge
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/reset/start".format(
