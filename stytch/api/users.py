@@ -162,3 +162,8 @@ class Users(Base):
         return self._delete(
             "{0}/passwords/{1}".format(self.user_url, password_id)
         )
+
+    def delete_biometric_registration(self, biometric_registration_id: str):
+        return self._delete(
+            "{0}/biometric_registrations/{1}".format(self.user_url, biometric_registration_id)
+        )
