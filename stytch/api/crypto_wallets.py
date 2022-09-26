@@ -12,6 +12,8 @@ class CryptoWallets(Base):
         crypto_wallet_address: str,
         crypto_wallet_type: str,
         user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ):
         data = {
             "crypto_wallet_address": crypto_wallet_address,
@@ -19,6 +21,10 @@ class CryptoWallets(Base):
         }
         if user_id:
             data["user_id"] = user_id
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
 
         return self._post(
             "{0}/authenticate/start".format(

@@ -87,6 +87,9 @@ class Email(Base):
         signup_expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         code_challenge: Optional[str] = None,
+        user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -105,6 +108,12 @@ class Email(Base):
             data["signup_expiration_minutes"] = signup_expiration_minutes
         if code_challenge:
             data["code_challenge"] = code_challenge
+        if user_id:
+            data["user_id"] = user_id
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
 
         return self._post(
             "{0}/email/send".format(
