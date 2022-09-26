@@ -65,6 +65,9 @@ class SMS(Base):
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         locale: Optional[str] = None,
+        user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -78,6 +81,12 @@ class SMS(Base):
             data["attributes"] = attributes
         if locale:
             data["locale"] = locale
+        if user_id:
+            data["user_id"] = user_id
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
 
         return self._post(
             "{0}/sms/send".format(
@@ -126,6 +135,9 @@ class Whatsapp(Base):
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         locale: Optional[str] = None,
+        user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -139,6 +151,12 @@ class Whatsapp(Base):
             data["attributes"] = attributes
         if locale:
             data["locale"] = locale
+        if user_id:
+            data["user_id"] = user_id
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
 
         return self._post(
             "{0}/whatsapp/send".format(
@@ -187,6 +205,9 @@ class Email(Base):
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict] = None,
         locale: Optional[str] = None,
+        user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -200,6 +221,12 @@ class Email(Base):
             data["attributes"] = attributes
         if locale:
             data["locale"] = locale
+        if user_id:
+            data["user_id"] = user_id
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
 
         return self._post(
             "{0}/email/send".format(
