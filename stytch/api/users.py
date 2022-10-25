@@ -171,5 +171,5 @@ class Users(Base):
 
     def delete_oauth_user_registration(self, oauth_user_registration_id: str):
         return self._delete(
-            "{0}/biometric_registrations/{1}".format(self.user_url, oauth_user_registration_id)
+            "{0}/oauth/{1}".format(self.user_url, oauth_user_registration_id)
         )
