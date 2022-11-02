@@ -35,6 +35,8 @@ class Users(Base):
         middle_name: str = None,
         create_user_as_pending: Optional[bool] = False,
         attributes: Dict[str, str] = None,
+        trusted_metadata: Dict[str, Any] = None,
+        untrusted_metadata: Dict[str, Any] = None,
     ):
         data: Dict[str, Any] = {
             "email": email,
@@ -45,6 +47,8 @@ class Users(Base):
                 "last_name": last_name,
             },
             "create_user_as_pending": create_user_as_pending,
+            "trusted_metadata": trusted_metadata,
+            "untrusted_metadata": untrusted_metadata,
         }
         if attributes and self._validate_attributes(attributes):
             data.update({"attributes": attributes})
@@ -107,6 +111,8 @@ class Users(Base):
         middle_name: Optional[str] = None,
         last_name: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = {},
+        trusted_metadata: Dict[str, Any] = None,
+        untrusted_metadata: Dict[str, Any] = None,
     ):
         data: Dict[str, Any] = {}
         name = {}
@@ -135,6 +141,11 @@ class Users(Base):
 
         if attributes and self._validate_attributes(attributes):
             data.update({"attributes": attributes})
+
+        if trusted_metadata:
+            data.update({"trusted_metadata": trusted_metadata})
+        if untrusted_metadata:
+            data.update({"untrusted_metadata": untrusted_metadata})
 
         return self._put("{0}/{1}".format(self.user_url, user_id), data)
 
