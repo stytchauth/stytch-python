@@ -90,6 +90,7 @@ class Email(Base):
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        locale: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -114,6 +115,8 @@ class Email(Base):
             data["session_token"] = session_token
         if session_jwt:
             data["session_jwt"] = session_jwt
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/email/send".format(
@@ -132,6 +135,7 @@ class Email(Base):
         attributes: Optional[Dict] = None,
         create_user_as_pending: Optional[bool] = False,
         code_challenge: Optional[str] = None,
+        locale: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -151,6 +155,8 @@ class Email(Base):
             data["signup_expiration_minutes"] = signup_expiration_minutes
         if code_challenge:
             data["code_challenge"] = code_challenge
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/email/login_or_create".format(
@@ -168,6 +174,7 @@ class Email(Base):
         first_name: Optional[str] = None,
         last_name: Optional[str] = None,
         middle_name: Optional[str] = None,
+        locale: Optional[str] = None,
     ):
         if attributes:
             attributes = _validate_attributes(attributes)
@@ -185,6 +192,8 @@ class Email(Base):
             data["invite_magic_link_url"] = invite_magic_link_url
         if invite_expiration_minutes:
             data["invite_expiration_minutes"] = invite_expiration_minutes
+        if locale:
+            data["locale"] = locale
 
         return self._post(
             "{0}/email/invite".format(
