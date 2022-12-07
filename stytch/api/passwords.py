@@ -1,16 +1,22 @@
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from .base import Base, _validate_attributes
+import requests
+
+from stytch.api.base import Base, _validate_attributes
+
+if TYPE_CHECKING:
+    from stytch.client import Client
+
 
 class Passwords(Base):
-    def __init__(self, client):
+    def __init__(self, client: "Client") -> None:
         super().__init__(client)
         self.email = Email(client)
         self.existing_password = ExistingPassword(client)
         self.session = Session(client)
 
     @property
-    def password_url(self):
+    def password_url(self) -> str:
         return self.get_url("passwords")
 
     def create(
@@ -19,7 +25,7 @@ class Passwords(Base):
         password: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -39,7 +45,7 @@ class Passwords(Base):
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -64,7 +70,7 @@ class Passwords(Base):
         self,
         password: str,
         email: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -87,7 +93,7 @@ class Passwords(Base):
         argon_2_config: Optional[Dict[str, Any]] = None,
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
@@ -109,9 +115,10 @@ class Passwords(Base):
             data=data,
         )
 
+
 class Email(Base):
     @property
-    def password_url(self):
+    def password_url(self) -> str:
         return self.get_url("passwords/email")
 
     def reset_start(
@@ -120,10 +127,10 @@ class Email(Base):
         login_redirect_url: Optional[str] = None,
         reset_password_redirect_url: Optional[str] = None,
         reset_password_expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -135,7 +142,9 @@ class Email(Base):
         if reset_password_redirect_url:
             data["reset_password_redirect_url"] = reset_password_redirect_url
         if reset_password_expiration_minutes:
-            data["reset_password_expiration_minutes"] = reset_password_expiration_minutes
+            data[
+                "reset_password_expiration_minutes"
+            ] = reset_password_expiration_minutes
         if attributes:
             data["attributes"] = attributes
         if code_challenge:
@@ -158,10 +167,10 @@ class Email(Base):
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        attributes: Optional[Dict] = None,
-        options: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        options: Optional[Dict[str, bool]] = None,
         code_verifier: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -191,21 +200,22 @@ class Email(Base):
             data=data,
         )
 
+
 class ExistingPassword(Base):
     @property
-    def password_url(self):
+    def password_url(self) -> str:
         return self.get_url("passwords/existing_password")
 
     def reset(
-            self,
-            email: str,
-            existing_password: str,
-            new_password: str,
-            session_token: Optional[str] = None,
-            session_jwt: Optional[str] = None,
-            session_duration_minutes: Optional[int] = None,
-            session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+        self,
+        email: str,
+        existing_password: str,
+        new_password: str,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "email": email,
             "new_password": new_password,
@@ -227,17 +237,18 @@ class ExistingPassword(Base):
             data=data,
         )
 
+
 class Session(Base):
     @property
-    def password_url(self):
+    def password_url(self) -> str:
         return self.get_url("passwords/session")
 
     def reset(
-            self,
-            password: str,
-            session_token: Optional[str] = None,
-            session_jwt: Optional[str] = None,
-    ):
+        self,
+        password: str,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "password": password,
         }

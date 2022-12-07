@@ -1,20 +1,24 @@
-from typing import Any, Dict, List, Optional, cast
-from typing_extensions import TypedDict
 import time
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, cast
 
 import jwt
+import requests
+from typing_extensions import TypedDict
 
-from .base import _validate_attributes, Base
-from .error import ClientError
+from stytch.api.base import Base
+from stytch.api.error import ClientError
+
+if TYPE_CHECKING:
+    from stytch.client import Client
 
 
 class JWTInvalidError(ClientError):
-    def __init__(self, message: str, cause: Exception = None):
+    def __init__(self, message: str, cause: Optional[Exception] = None) -> None:
         super().__init__("jwt_invalid", message, cause)
 
 
 class JWTTooOldError(ClientError):
-    def __init__(self, message: str, cause: Exception = None):
+    def __init__(self, message: str, cause: Optional[Exception] = None) -> None:
         super().__init__("jwt_too_old", message, cause)
 
 
@@ -34,7 +38,7 @@ SessionClaim = TypedDict(
 
 
 class Sessions(Base):
-    def __init__(self, client, jwks_client):
+    def __init__(self, client: "Client", jwks_client: jwt.PyJWKClient) -> None:
         super().__init__(client)
 
         self._jwks_client = jwks_client
@@ -42,13 +46,13 @@ class Sessions(Base):
         self._jwt_issuer = "stytch.com/" + client.project_id
 
     @property
-    def sessions_url(self):
+    def sessions_url(self) -> str:
         return self.get_url("sessions")
 
     def get(
         self,
         user_id: str,
-    ):
+    ) -> requests.Response:
         query_params = {
             "user_id": user_id,
         }
@@ -60,7 +64,7 @@ class Sessions(Base):
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {}
 
         if session_token:
@@ -83,7 +87,7 @@ class Sessions(Base):
         *,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> Dict[str, Any]:
         """Parse a JWT and verify the signature, preferring local verification over remote.
 
         If max_token_age_seconds is set, remote verification will be forced if the JWT was issued
@@ -103,7 +107,9 @@ class Sessions(Base):
             }
         except Exception as e:
             # JWT could not be verified locally. Check with the Stytch API.
-            return self.authenticate(session_custom_claims=session_custom_claims, session_jwt=session_jwt).json()
+            return self.authenticate(
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+            ).json()
 
     def authenticate_jwt_local(
         self,
@@ -111,7 +117,7 @@ class Sessions(Base):
         *,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
-    ):
+    ) -> Dict[str, Any]:
         """Parse a JWT and verify the signature locally (without calling /authenticate in the API).
 
         If max_token_age_seconds is set, this will return an error if the JWT was issued (based on
@@ -158,7 +164,9 @@ class Sessions(Base):
         claim = cast(SessionClaim, payload[_session_claim])
 
         # For JWTs that include it, prefer the inner expires_at claim.
-        expires_at = claim["expires_at"] or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(payload["exp"]))
+        expires_at = claim["expires_at"] or time.strftime(
+            "%Y-%m-%dT%H:%M:%SZ", time.gmtime(payload["exp"])
+        )
 
         return {
             "user_id": payload["sub"],
@@ -175,7 +183,7 @@ class Sessions(Base):
         session_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         data = {}
         if session_id:
             data["session_id"] = session_id
@@ -189,5 +197,5 @@ class Sessions(Base):
             data=data,
         )
 
-    def jwks(self, project_id: str):
+    def jwks(self, project_id: str) -> requests.Response:
         return self._get("{0}/jwks/{1}".format(self.sessions_url, project_id))

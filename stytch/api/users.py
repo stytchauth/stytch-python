@@ -1,7 +1,9 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Generator, List, Optional
+
+import requests
 from typing_extensions import TypedDict
 
-from .base import Base
+from stytch.api.base import Base
 
 
 class Operands(TypedDict):
@@ -16,7 +18,7 @@ class SearchQuery(TypedDict):
 
 class Users(Base):
     @property
-    def user_url(self):
+    def user_url(self) -> str:
         return self.get_url("users")
 
     def _validate_attributes(self, attributes: Dict[str, str]) -> bool:
@@ -28,16 +30,16 @@ class Users(Base):
 
     def create(
         self,
-        email: str = None,
-        phone_number: str = None,
-        first_name: str = None,
-        last_name: str = None,
-        middle_name: str = None,
-        create_user_as_pending: Optional[bool] = False,
-        attributes: Dict[str, str] = None,
-        trusted_metadata: Dict[str, Any] = None,
-        untrusted_metadata: Dict[str, Any] = None,
-    ):
+        email: Optional[str] = None,
+        phone_number: Optional[str] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        middle_name: Optional[str] = None,
+        create_user_as_pending: bool = False,
+        attributes: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "email": email,
             "phone_number": phone_number,
@@ -54,12 +56,12 @@ class Users(Base):
             data.update({"attributes": attributes})
         return self._post("{0}".format(self.user_url), data)
 
-    def get(self, user_id: str):
+    def get(self, user_id: str) -> requests.Response:
         return self._get("{0}/{1}".format(self.user_url, user_id))
 
     def get_pending(
         self, limit: Optional[int] = None, starting_after_id: Optional[str] = None
-    ):
+    ) -> requests.Response:
         query_params = {}
         if limit:
             query_params.update({"limit": str(limit)})
@@ -73,7 +75,7 @@ class Users(Base):
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {}
 
         if limit is not None:
@@ -90,7 +92,7 @@ class Users(Base):
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
-    ):
+    ) -> Generator[requests.Response, None, None]:
         while True:
             results = self.search(limit, cursor, query)
             yield results
@@ -98,7 +100,7 @@ class Users(Base):
             if cursor is None:
                 break
 
-    def delete(self, user_id: str):
+    def delete(self, user_id: str) -> requests.Response:
         return self._delete("{0}/{1}".format(self.user_url, user_id))
 
     def update(
@@ -110,10 +112,10 @@ class Users(Base):
         first_name: Optional[str] = None,
         middle_name: Optional[str] = None,
         last_name: Optional[str] = None,
-        attributes: Optional[Dict[str, str]] = {},
-        trusted_metadata: Dict[str, Any] = None,
-        untrusted_metadata: Dict[str, Any] = None,
-    ):
+        attributes: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
+    ) -> requests.Response:
         data: Dict[str, Any] = {}
         name = {}
         if first_name:
@@ -149,38 +151,44 @@ class Users(Base):
 
         return self._put("{0}/{1}".format(self.user_url, user_id), data)
 
-    def delete_email(self, email_id: str):
+    def delete_email(self, email_id: str) -> requests.Response:
         return self._delete("{0}/emails/{1}".format(self.user_url, email_id))
 
-    def delete_phone_number(self, phone_id: str):
+    def delete_phone_number(self, phone_id: str) -> requests.Response:
         return self._delete("{0}/phone_numbers/{1}".format(self.user_url, phone_id))
 
-    def delete_webauthn_registration(self, webauthn_registration: str):
+    def delete_webauthn_registration(
+        self, webauthn_registration: str
+    ) -> requests.Response:
         return self._delete(
             "{0}/webauthn_registrations/{1}".format(
                 self.user_url, webauthn_registration
             )
         )
 
-    def delete_totp(self, totp_id: str):
+    def delete_totp(self, totp_id: str) -> requests.Response:
         return self._delete("{0}/totps/{1}".format(self.user_url, totp_id))
 
-    def delete_crypto_wallet(self, crypto_wallet_id: str):
+    def delete_crypto_wallet(self, crypto_wallet_id: str) -> requests.Response:
         return self._delete(
             "{0}/crypto_wallets/{1}".format(self.user_url, crypto_wallet_id)
         )
 
-    def delete_password(self, password_id: str):
+    def delete_password(self, password_id: str) -> requests.Response:
+        return self._delete("{0}/passwords/{1}".format(self.user_url, password_id))
+
+    def delete_biometric_registration(
+        self, biometric_registration_id: str
+    ) -> requests.Response:
         return self._delete(
-            "{0}/passwords/{1}".format(self.user_url, password_id)
+            "{0}/biometric_registrations/{1}".format(
+                self.user_url, biometric_registration_id
+            )
         )
 
-    def delete_biometric_registration(self, biometric_registration_id: str):
-        return self._delete(
-            "{0}/biometric_registrations/{1}".format(self.user_url, biometric_registration_id)
-        )
-
-    def delete_oauth_user_registration(self, oauth_user_registration_id: str):
+    def delete_oauth_user_registration(
+        self, oauth_user_registration_id: str
+    ) -> requests.Response:
         return self._delete(
             "{0}/oauth/{1}".format(self.user_url, oauth_user_registration_id)
         )

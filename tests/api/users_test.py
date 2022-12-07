@@ -1,7 +1,7 @@
-import requests
 import unittest
 from unittest import mock
 
+import requests
 from testutil import FakeClient, FakeResponse
 
 from stytch.api.users import Users
@@ -16,9 +16,10 @@ class TestUsers:
             body='{"user_id": "user-test-183e939c-e7e1-4d56-82da-8ba9c6036878"}',
         )
 
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
             users = Users(client)
-            users._requester_base = requests
             _ = users.create(
                 email="test@example.net",
                 attributes={
@@ -46,9 +47,10 @@ class TestSearchUsers(unittest.TestCase):
             body="{}",
         )
 
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
             users = Users(client)
-            users._requester_base = requests
             _ = users.search()
 
         mock_post.assert_called_once_with(
@@ -68,9 +70,10 @@ class TestSearchUsers(unittest.TestCase):
             body='{"user_id": "user-test-183e939c-e7e1-4d56-82da-8ba9c6036878"}',
         )
 
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
             users = Users(client)
-            users._requester_base = requests
             _ = users.search(
                 limit=50,
                 cursor="abc123",
@@ -104,7 +107,6 @@ class TestSearchUsers(unittest.TestCase):
         )
 
         users = Users(client)
-        users._requester_base = requests
 
         search_generator = users.search_all()
 

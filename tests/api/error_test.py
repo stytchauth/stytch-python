@@ -3,6 +3,7 @@ import pytest
 
 from stytch.api.error import StytchError
 
+
 class TestStytchError:
     def test_traceback_message(self):
         response = """

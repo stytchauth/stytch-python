@@ -1,10 +1,13 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
-from .base import Base
+import requests
+
+from stytch.api.base import Base
+
 
 class CryptoWallets(Base):
     @property
-    def crypto_wallet_url(self):
+    def crypto_wallet_url(self) -> str:
         return self.get_url("crypto_wallets")
 
     def authenticate_start(
@@ -14,7 +17,7 @@ class CryptoWallets(Base):
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         data = {
             "crypto_wallet_address": crypto_wallet_address,
             "crypto_wallet_type": crypto_wallet_type,
@@ -42,7 +45,7 @@ class CryptoWallets(Base):
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "crypto_wallet_address": crypto_wallet_address,
             "crypto_wallet_type": crypto_wallet_type,

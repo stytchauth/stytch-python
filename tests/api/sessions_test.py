@@ -1,12 +1,12 @@
-import requests
 import json
-import jwt
-from jwt.utils import to_base64url_uint
-from unittest import mock
 import time
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
+from unittest import mock
 
+import jwt
+import requests
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from jwt.utils import to_base64url_uint
 from testutil import FakeClient, FakeResponse
 
 from stytch.api.sessions import Sessions
@@ -16,11 +16,13 @@ def iso(t: float) -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t))
 
 
-def rsa_key():
+def rsa_key() -> rsa.RSAPrivateKey:
     return rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
 
-def make_jwt(project_id, key_id, private_key, now, expires_at):
+def make_jwt(
+    project_id: str, key_id: str, private_key: rsa.RSAPrivateKey, now: float, expires_at
+) -> str:
     headers = {
         "kid": key_id,
     }
@@ -58,11 +60,14 @@ def make_jwt(project_id, key_id, private_key, now, expires_at):
         format=serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=serialization.NoEncryption(),
     )
-    return jwt.encode(claims, pem, algorithm="RS256", headers=headers)
+    # jwt typing is weird: jwt.encode key is of type str, but it eventually
+    # calls api_jws.encode where key is of type bytes (without conversion).
+    # We ignore the type hinting here to appease various static type checkers.
+    return jwt.encode(claims, pem, algorithm="RS256", headers=headers)  # type: ignore
 
 
-class LocalJWKSClient:
-    def __init__(self, keyset):
+class LocalJWKSClient(jwt.PyJWKClient):
+    def __init__(self, keyset) -> None:
         self.keyset = keyset
 
     def get_signing_key_from_jwt(self, token):
@@ -71,7 +76,7 @@ class LocalJWKSClient:
         return self.keyset[kid]
 
 
-def make_jwks_client(key_id, public_key):
+def make_jwks_client(key_id: str, public_key: rsa.RSAPublicKey):
     public_numbers = public_key.public_numbers()
     jwk = jwt.PyJWK(
         {
@@ -89,9 +94,11 @@ class TestSessions:
         client = FakeClient()
         response = FakeResponse(status_code=200)
 
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
-            sessions = Sessions(client, None)
-            sessions._requester_base = requests
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
+            dummy_jwks_client = make_jwks_client("dummy", rsa_key().public_key())
+            sessions = Sessions(client, dummy_jwks_client)
 
             _ = sessions.authenticate(
                 session_token="mZAYn5aLEqKUlZ_Ad9U_fWr38GaAQ1oFAhT8ds245v7Q",
@@ -118,9 +125,10 @@ class TestSessions:
         jwks_client = make_jwks_client(key_id, private_key.public_key())
 
         response = FakeResponse(status_code=200)
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
             sessions = Sessions(client, jwks_client)
-            sessions._requester_base = requests
 
             # Force remote authentication even though the token is locally valid.
             _ = sessions.authenticate_jwt(
@@ -147,9 +155,10 @@ class TestSessions:
         jwks_client = make_jwks_client(key_id, private_key.public_key())
 
         response = FakeResponse(status_code=200)
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
             sessions = Sessions(client, jwks_client)
-            sessions._requester_base = requests
 
             session = sessions.authenticate_jwt_local(
                 session_jwt=jwt,
@@ -187,9 +196,10 @@ class TestSessions:
         jwks_client = make_jwks_client(key_id, private_key.public_key())
 
         response = FakeResponse(status_code=200)
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
             sessions = Sessions(client, jwks_client)
-            sessions._requester_base = requests
 
             session = sessions.authenticate_jwt_local(
                 session_jwt=jwt,

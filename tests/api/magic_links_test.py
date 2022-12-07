@@ -1,6 +1,6 @@
-import requests
 from unittest import mock
 
+import requests
 from testutil import FakeClient, FakeResponse
 
 from stytch.api.magic_links import MagicLinks
@@ -11,9 +11,10 @@ class TestMagicLinks:
         client = FakeClient()
         response = FakeResponse(status_code=200)
 
-        with mock.patch.object(requests, "post", return_value=response) as mock_post:
+        with mock.patch(
+            "stytch.api.base.requests.post", return_value=response
+        ) as mock_post:
             magic_links = MagicLinks(client)
-            magic_links._requester_base = requests
 
             _ = magic_links.authenticate(
                 token="DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94=",
