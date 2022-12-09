@@ -45,3 +45,27 @@ class OAuth(Base):
             "{0}/authenticate".format(self.oauth_url),
             data=data,
         )
+
+    def attach(
+        self,
+        provider: str,
+        user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> requests.Response:
+
+        data: Dict[str, Any] = {
+            "provider": provider,
+        }
+
+        if user_id:
+            data["user_id"] = user_id
+        if session_token:
+            data["session_token"] = session_token
+        if session_jwt:
+            data["session_jwt"] = session_jwt
+
+        return self._post(
+            "{0}/attach".format(self.oauth_url),
+            data=data,
+        )
