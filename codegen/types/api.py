@@ -31,7 +31,7 @@ class Api:
         api_path_in_gen: Optional[str] = None,
     ) -> None:
         if api_path_in_gen is None:
-            api_path_in_gen = api_dir.split("/")[-1]
+            api_path_in_gen = api_dir.rstrip("/").split("/")[-1]
 
         filename = self.filename + ".py"
         filepath = os.path.join(api_dir, filename)
@@ -52,7 +52,9 @@ class Api:
             logging.debug(
                 f"Generating sub-API {sub_api.classname} for {self.classname}"
             )
-            sub_api.generate_all(api_dir, overwrite)
+            sub_api.generate_all(
+                api_dir=api_dir, overwrite=overwrite, api_path_in_gen=api_path_in_gen
+            )
 
     def generate(self, snippets: SnippetSet, api_path_in_gen: str) -> str:
         template = get_template("api.tmpl")

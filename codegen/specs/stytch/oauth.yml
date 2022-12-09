@@ -1,4 +1,5 @@
 classname: OAuth
+filename: oauth
 methods:
   - name: authenticate
     method: POST
