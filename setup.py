@@ -1,5 +1,9 @@
-import pathlib, re
-from setuptools import setup, find_packages
+#!/usr/bin/env python3
+
+import pathlib
+import re
+
+from setuptools import find_packages, setup
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -8,9 +12,9 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 with open("stytch/version.py", "r") as f:
-    version = re.search(
-        r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE
-    ).group(1)
+    match = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE)
+    assert match is not None
+    version = match.group(1)
 
 if not version:
     raise RuntimeError("Cannot find version information")
@@ -36,11 +40,11 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=find_packages(),
+    packages=find_packages(exclude=["codegen*"]),
     include_package_data=True,
     install_requires=[
+        "aiohttp>=3.8.3",
         "requests>=2.7.0",
         "pyjwt[crypto]>=2.3.0",
-        "typing_extensions>=3.7, <5",
     ],
 )
