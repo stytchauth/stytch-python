@@ -1,5 +1,7 @@
-import pathlib, re
-from setuptools import setup, find_packages
+import pathlib
+import re
+
+from setuptools import find_packages, setup
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -7,10 +9,11 @@ HERE = pathlib.Path(__file__).parent
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
+version = None
 with open("stytch/version.py", "r") as f:
-    version = re.search(
-        r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE
-    ).group(1)
+    match = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE)
+    if match:
+        version = match.group(1)
 
 if not version:
     raise RuntimeError("Cannot find version information")

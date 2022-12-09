@@ -1,29 +1,35 @@
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from .base import _validate_attributes, Base
+import requests
+
+from stytch.api.base import Base, _validate_attributes
+
+if TYPE_CHECKING:
+    from stytch.client import Client
+
 
 class OTP(Base):
-    def __init__(self, client):
+    def __init__(self, client: "Client") -> None:
         super().__init__(client)
         self.email = Email(client)
         self.sms = SMS(client)
         self.whatsapp = Whatsapp(client)
 
     @property
-    def otp_url(self):
+    def otp_url(self) -> str:
         return self.get_url("otps")
 
     def authenticate(
         self,
         method_id: str,
         code: str,
-        attributes: Optional[Dict] = None,
-        options: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        options: Optional[Dict[str, bool]] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -54,21 +60,22 @@ class OTP(Base):
             data=data,
         )
 
+
 class SMS(Base):
     @property
-    def otp_url(self):
+    def otp_url(self) -> str:
         return self.get_url("otps")
 
     def send(
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
         locale: Optional[str] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -99,10 +106,10 @@ class SMS(Base):
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-        create_user_as_pending: Optional[bool] = False,
+        attributes: Optional[Dict[str, str]] = None,
+        create_user_as_pending: bool = False,
         locale: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -124,21 +131,22 @@ class SMS(Base):
             data=data,
         )
 
+
 class Whatsapp(Base):
     @property
-    def otp_url(self):
+    def otp_url(self) -> str:
         return self.get_url("otps")
 
     def send(
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
         locale: Optional[str] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -169,10 +177,10 @@ class Whatsapp(Base):
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-        create_user_as_pending: Optional[bool] = False,
+        attributes: Optional[Dict[str, str]] = None,
+        create_user_as_pending: bool = False,
         locale: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -194,21 +202,22 @@ class Whatsapp(Base):
             data=data,
         )
 
+
 class Email(Base):
     @property
-    def otp_url(self):
+    def otp_url(self) -> str:
         return self.get_url("otps")
 
     def send(
         self,
         email: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
         locale: Optional[str] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -239,10 +248,10 @@ class Email(Base):
         self,
         email: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-        create_user_as_pending: Optional[bool] = False,
+        attributes: Optional[Dict[str, str]] = None,
+        create_user_as_pending: bool = False,
         locale: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 

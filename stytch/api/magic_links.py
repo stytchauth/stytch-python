@@ -1,9 +1,15 @@
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from .base import _validate_attributes, Base
+import requests
+
+from stytch.api.base import Base, _validate_attributes
+
+if TYPE_CHECKING:
+    from stytch.client import Client
+
 
 class MagicLinks(Base):
-    def __init__(self, client):
+    def __init__(self, client: "Client") -> None:
         super().__init__(client)
         self.email = Email(client)
 
@@ -15,8 +21,8 @@ class MagicLinks(Base):
         self,
         user_id: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
-    ):
+        attributes: Optional[Dict[str, str]] = None,
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -35,14 +41,14 @@ class MagicLinks(Base):
     def authenticate(
         self,
         token: str,
-        attributes: Optional[Dict] = None,
-        options: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        options: Optional[Dict[str, bool]] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         code_verifier: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -73,9 +79,10 @@ class MagicLinks(Base):
             data=data,
         )
 
+
 class Email(Base):
     @property
-    def magic_link_url(self):
+    def magic_link_url(self) -> str:
         return self.get_url("magic_links")
 
     def send(
@@ -85,13 +92,13 @@ class Email(Base):
         signup_magic_link_url: Optional[str] = None,
         login_expiration_minutes: Optional[int] = None,
         signup_expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
         code_challenge: Optional[str] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         locale: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -132,18 +139,18 @@ class Email(Base):
         signup_magic_link_url: Optional[str] = None,
         login_expiration_minutes: Optional[int] = None,
         signup_expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
         create_user_as_pending: Optional[bool] = False,
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
         data: Dict[str, Any] = {
-           "email": email,
-           "attributes": attributes,
-           "create_user_as_pending": create_user_as_pending,
+            "email": email,
+            "attributes": attributes,
+            "create_user_as_pending": create_user_as_pending,
         }
         if login_magic_link_url:
             data["login_magic_link_url"] = login_magic_link_url
@@ -170,12 +177,12 @@ class Email(Base):
         email: str,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict] = None,
+        attributes: Optional[Dict[str, str]] = None,
         first_name: Optional[str] = None,
         last_name: Optional[str] = None,
         middle_name: Optional[str] = None,
         locale: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         if attributes:
             attributes = _validate_attributes(attributes)
 
@@ -205,7 +212,7 @@ class Email(Base):
     def revoke_invite(
         self,
         email: str,
-    ):
+    ) -> requests.Response:
         return self._post(
             "{0}/email/revoke_invite".format(
                 self.magic_link_url,

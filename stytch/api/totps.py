@@ -1,21 +1,26 @@
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from .base import Base
+import requests
+
+from stytch.api.base import Base
+
+if TYPE_CHECKING:
+    from stytch.client import Client
 
 
 class TOTPs(Base):
-    def __init__(self, client):
+    def __init__(self, client: "Client") -> None:
         super().__init__(client)
 
     @property
-    def totps_url(self):
+    def totps_url(self) -> str:
         return self.get_url("totps")
 
     def create(
         self,
         user_id: str,
         expiration_minutes: Optional[int] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -34,7 +39,7 @@ class TOTPs(Base):
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
@@ -55,8 +60,8 @@ class TOTPs(Base):
     def recovery_codes(
         self,
         user_id: str,
-    ):
-        data={
+    ) -> requests.Response:
+        data = {
             "user_id": user_id,
         }
         return self._post(
@@ -72,7 +77,7 @@ class TOTPs(Base):
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,

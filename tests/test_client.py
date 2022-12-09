@@ -12,10 +12,14 @@ class TestStytchClient:
         assert client.base_url == "https://api.stytch.com/v1/"
 
     def test_custom_env_for_development(self):
-        client = Client("project_id", "secret", "https://localhost:8000/v1", suppress_warnings=True)
+        client = Client(
+            "project_id", "secret", "https://localhost:8000/v1", suppress_warnings=True
+        )
         assert client.base_url == "https://localhost:8000/v1/"
 
-        client = Client("project_id", "secret", "https://localhost:8000/v1/", suppress_warnings=True)
+        client = Client(
+            "project_id", "secret", "https://localhost:8000/v1/", suppress_warnings=True
+        )
         assert client.base_url == "https://localhost:8000/v1/"
 
     def test_users_controller_exists(self):

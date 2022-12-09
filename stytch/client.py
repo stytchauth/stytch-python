@@ -2,15 +2,16 @@ import warnings
 
 import jwt
 
-from .api.users import Users
-from .api.magic_links import MagicLinks
-from .api.otp import OTP
-from .api.oauth import OAuth
-from .api.sessions import Sessions
-from .api.totps import TOTPs
-from .api.webauthn import WebAuthn
-from .api.crypto_wallets import CryptoWallets
-from .api.passwords import Passwords
+from stytch.api.crypto_wallets import CryptoWallets
+from stytch.api.magic_links import MagicLinks
+from stytch.api.oauth import OAuth
+from stytch.api.otp import OTP
+from stytch.api.passwords import Passwords
+from stytch.api.sessions import Sessions
+from stytch.api.totps import TOTPs
+from stytch.api.users import Users
+from stytch.api.webauthn import WebAuthn
+
 
 class Client:
     """
@@ -25,14 +26,14 @@ class Client:
         secret: str,
         environment: str,
         suppress_warnings: bool = False,
-    ):
+    ) -> None:
         self.project_id = project_id
         self.secret = secret
         self.environment = environment
 
         self.base_url = _env_url(environment, suppress_warnings)
 
-        jwks_url = self.base_url + 'sessions/jwks/' + self.project_id
+        jwks_url = self.base_url + "sessions/jwks/" + self.project_id
         jwks_client = jwt.PyJWKClient(jwks_url)
 
         self.users = Users(self)
@@ -45,9 +46,9 @@ class Client:
         self.crypto_wallets = CryptoWallets(self)
         self.passwords = Passwords(self)
 
+
 def _env_url(env: str, suppress_warnings: bool = False) -> str:
-    '''Resolve the base URL for the Stytch API environment.
-    '''
+    """Resolve the base URL for the Stytch API environment."""
 
     # Supported production environments
     if env == "test":
@@ -59,6 +60,6 @@ def _env_url(env: str, suppress_warnings: bool = False) -> str:
 
     # Internal development override. URL builders assume the base URL has a
     # trailing slash, so add one if it's missing.
-    if not env.endswith('/'):
-        return env + '/'
+    if not env.endswith("/"):
+        return env + "/"
     return env

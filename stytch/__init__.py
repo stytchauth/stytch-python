@@ -1,4 +1,4 @@
-from .client import Client
-from .version import __version__
+from stytch.client import Client
+from stytch.version import __version__
 
 __all__ = ["Client", "__version__"]

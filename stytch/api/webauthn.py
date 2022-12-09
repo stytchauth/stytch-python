@@ -1,10 +1,13 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
-from .base import Base
+import requests
+
+from stytch.api.base import Base
+
 
 class WebAuthn(Base):
     @property
-    def webauthn_url(self):
+    def webauthn_url(self) -> str:
         return self.get_url("webauthn")
 
     def register_start(
@@ -13,7 +16,7 @@ class WebAuthn(Base):
         domain: str,
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
-    ):
+    ) -> requests.Response:
         data = {
             "user_id": user_id,
             "domain": domain,
@@ -34,7 +37,7 @@ class WebAuthn(Base):
         self,
         user_id: str,
         public_key_credential: str,
-    ):
+    ) -> requests.Response:
         data = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
@@ -51,7 +54,7 @@ class WebAuthn(Base):
         self,
         user_id: str,
         domain: str,
-    ):
+    ) -> requests.Response:
         data = {
             "user_id": user_id,
             "domain": domain,
@@ -71,7 +74,7 @@ class WebAuthn(Base):
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> requests.Response:
         data: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }

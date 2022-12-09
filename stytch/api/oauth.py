@@ -1,15 +1,19 @@
-from enum import Enum
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from .base import Base, _validate_attributes
+import requests
+
+from stytch.api.base import Base
+
+if TYPE_CHECKING:
+    from stytch.client import Client
 
 
 class OAuth(Base):
-    def __init__(self, client):
+    def __init__(self, client: "Client") -> None:
         super().__init__(client)
 
     @property
-    def oauth_url(self):
+    def oauth_url(self) -> str:
         return self.get_url("oauth")
 
     def authenticate(
@@ -20,7 +24,7 @@ class OAuth(Base):
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         code_verifier: Optional[str] = None,
-    ):
+    ) -> requests.Response:
 
         data: Dict[str, Any] = {
             "token": token,
