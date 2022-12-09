@@ -1,0 +1,53 @@
+classname: Sessions
+methods:
+  - name: get
+    api_path: /
+    method: GET
+    args:
+      - name: user_id
+        arg_type: str
+  - name: authenticate
+    method: POST
+    args:
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+  - name: authenticate_jwt
+    manual_implementation: true
+    args:
+      - name: session_jwt
+        arg_type: str
+      - name: max_token_age_seconds
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+  - name: authenticate_jwt_local
+    manual_implementation: true
+    args:
+      - name: session_jwt
+        arg_type: str
+      - name: max_token_age_seconds
+        arg_type: Optional[int] = None
+      - name: leeway
+        arg_type: int = 0
+  - name: revoke
+    method: POST
+    args:
+      - name: session_id
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+  - name: jwks
+    api_path: '"jwks/{}".format(project_id)'
+    eval_api_path: true
+    method: GET
+    args:
+      - name: project_id
+        arg_type: str

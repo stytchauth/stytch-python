@@ -1,0 +1,17 @@
+classname: OAuth
+methods:
+  - name: authenticate
+    method: POST
+    args:
+      - name: token
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: code_verifier
+        arg_type: Optional[str] = None

@@ -1,0 +1,45 @@
+classname: TOTPS
+methods:
+  - name: create
+    api_path: /
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+  - name: authenticate
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+      - name: totp_code
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+  - name: recovery_codes
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+  - name: recover
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+      - name: recovery_code
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None

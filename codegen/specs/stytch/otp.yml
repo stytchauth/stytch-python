@@ -1,0 +1,131 @@
+classname: OTP
+sub_url: otps
+methods:
+  - name: authenticate
+    method: POST
+    args:
+      - name: method_id
+        arg_type: str
+      - name: code
+        arg_type: str
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: options
+        arg_type: Optional[Dict[str, str]] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+sub_apis:
+  - classname: Email
+    sub_url: otps
+    filename: otp_email
+    methods:
+      - name: send
+        api_path: email/send
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: user_id
+            arg_type: Optional[str] = None
+          - name: session_token
+            arg_type: Optional[str] = None
+          - name: session_jwt
+            arg_type: Optional[str] = None
+      - name: login_or_create
+        api_path: email/login_or_create
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: create_user_as_pending
+            arg_type: bool = False
+          - name: locale
+            arg_type: Optional[str] = None
+  - classname: SMS
+    sub_url: otps
+    filename: otp_sms
+    methods:
+      - name: send
+        api_path: sms/send
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: user_id
+            arg_type: Optional[str] = None
+          - name: session_token
+            arg_type: Optional[str] = None
+          - name: session_jwt
+            arg_type: Optional[str] = None
+      - name: login_or_create
+        api_path: sms/login_or_create
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: create_user_as_pending
+            arg_type: bool = False
+          - name: locale
+            arg_type: Optional[str] = None
+  - classname: Whatsapp
+    sub_url: otps
+    filename: otp_whatsapp
+    methods:
+      - name: send
+        api_path: whatsapp/send
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: user_id
+            arg_type: Optional[str] = None
+          - name: session_token
+            arg_type: Optional[str] = None
+          - name: session_jwt
+            arg_type: Optional[str] = None
+      - name: login_or_create
+        api_path: whatsapp/login_or_create
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: create_user_as_pending
+            arg_type: bool = False
+          - name: locale
+            arg_type: Optional[str] = None

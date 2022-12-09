@@ -1,0 +1,9 @@
+-r requirements.txt
+
+Jinja2
+autoflake
+black
+dacite
+mypy
+pyright
+pyyaml

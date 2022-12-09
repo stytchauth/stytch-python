@@ -1,0 +1,31 @@
+classname: MagicLinks
+methods:
+  - name: create
+    api_path: /
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+  - name: authenticate
+    method: POST
+    args:
+      - name: token
+        arg_type: str
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: options
+        arg_type: Optional[Dict[str, str]] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: code_verifier
+        arg_type: Optional[str] = None

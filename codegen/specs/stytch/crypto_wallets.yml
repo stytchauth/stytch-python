@@ -1,0 +1,33 @@
+classname: CryptoWallets
+methods:
+  - name: authenticate_start
+    api_path: authenticate/start
+    method: POST
+    args:
+      - name: crypto_wallet_address
+        arg_type: str
+      - name: crypto_wallet_type
+        arg_type: str
+      - name: user_id
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+  - name: authenticate
+    method: POST
+    args:
+      - name: crypto_wallet_address
+        arg_type: str
+      - name: crypto_wallet_type
+        arg_type: str
+      - name: signature
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None

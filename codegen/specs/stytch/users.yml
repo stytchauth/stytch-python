@@ -1,0 +1,140 @@
+classname: Users
+additional_imports:
+  - from typing import AsyncGenerator, Generator
+  - from stytch.models import Name, SearchQuery
+methods:
+  - name: create
+    api_path: /
+    method: POST
+    args:
+      - name: email
+        arg_type: Optional[str] = None
+      - name: phone_number
+        arg_type: Optional[str] = None
+      - name: name
+        arg_type: Optional[Name] = None
+      - name: create_user_as_pending
+        arg_type: bool = False
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+  - name: get
+    method: GET
+    api_path: user_id
+    eval_api_path: true
+    args:
+      - name: user_id
+        arg_type: str
+  - name: get_pending
+    method: GET
+    api_path: pending
+    args:
+      - name: limit
+        arg_type: Optional[int] = None
+      - name: starting_after_id
+        arg_type: Optional[str] = None
+  - name: search
+    method: POST
+    args:
+      - name: limit
+        arg_type: Optional[int] = None
+      - name: cursor
+        arg_type: Optional[str] = None
+      - name: query
+        arg_type: Optional[SearchQuery] = None
+  - name: search_all
+    manual_implementation: true
+    args:
+      - name: limit
+        arg_type: Optional[int] = None
+      - name: cursor
+        arg_type: Optional[str] = None
+      - name: query
+        arg_type: Optional[SearchQuery] = None
+  - name: delete
+    method: DELETE
+    api_path: user_id
+    eval_api_path: true
+    args:
+      - name: user_id
+        arg_type: str
+  - name: update
+    method: PUT
+    api_path: user_id
+    eval_api_path: true
+    args:
+      - name: user_id
+        arg_type: str
+      - name: emails
+        arg_type: Optional[List[str]] = None
+      - name: phone_numbers
+        arg_type: Optional[List[str]] = None
+      - name: crypto_wallets
+        arg_type: Optional[List[str]] = None
+      - name: name
+        arg_type: Optional[Name] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+  - name: delete_email
+    method: DELETE
+    api_path: '"emails/{}".format(email_id)'
+    eval_api_path: true
+    args:
+      - name: email_id
+        arg_type: str
+  - name: delete_phone_number
+    method: DELETE
+    api_path: '"phone_numbers/{}".format(phone_id)'
+    eval_api_path: true
+    args:
+      - name: phone_id
+        arg_type: str
+  - name: delete_webauthn_registration
+    method: DELETE
+    api_path: '"webauthn_registrations/{}".format(webauthn_registration)'
+    eval_api_path: true
+    args:
+      - name: webauthn_registration
+        arg_type: str
+  - name: delete_totp
+    method: DELETE
+    api_path: '"totps/{}".format(totp_id)'
+    eval_api_path: true
+    args:
+      - name: totp_id
+        arg_type: str
+  - name: delete_crypto_wallet
+    method: DELETE
+    api_path: '"crypto_wallets/{}".format(crypto_wallet_id)'
+    eval_api_path: true
+    args:
+      - name: crypto_wallet_id
+        arg_type: str
+  - name: delete_password
+    method: DELETE
+    api_path: '"passwords/{}".format(password_id)'
+    eval_api_path: true
+    args:
+      - name: password_id
+        arg_type: str
+  - name: delete_biometric_registration
+    method: DELETE
+    api_path: '"biometric_registrations/{}".format(biometric_registration_id)'
+    eval_api_path: true
+    args:
+      - name: biometric_registration_id
+        arg_type: str
+  - name: delete_oauth_user_registration
+    method: DELETE
+    api_path: '"oauth/{}".format(oauth_user_registration_id)'
+    eval_api_path: true
+    args:
+      - name: oauth_user_registration_id
+        arg_type: str

@@ -4,9 +4,9 @@ Thanks for contributing to Stytch's Python library! If you run into trouble, fin
 
 ## Setup
 
-1. Install [Python](https://www.python.org/) version 3.4 or greater.
+1. Install [Python](https://www.python.org/) version 3.6 or greater.
 2. (Recommended, but optional) Create a new [virtualenv](https://docs.python.org/3/tutorial/venv.html).
-3. `pip install -r requirements.txt`
+3. `pip install -r dev_requirements.txt`
 
 ## Testing
 
@@ -20,4 +20,4 @@ If you have non-trivial changes you'd like us to incorporate, please open an iss
 
 When you're ready for someone to look at your issue or PR, assign `@stytchauth/client-libraries` (GitHub should do this automatically). If we don't acknowledge it within one business day, please escalate it by tagging `@stytchauth/engineering` in a comment or letting us know in [Slack].
 
-[Slack]: https://join.slack.com/t/stytch/shared_invite/zt-nil4wo92-jApJ9Cl32cJbEd9esKkvyg
+[slack]: https://join.slack.com/t/stytch/shared_invite/zt-nil4wo92-jApJ9Cl32cJbEd9esKkvyg

@@ -1,0 +1,85 @@
+{% if not this.manual_implementation %}
+def {{ this.name }}(
+  self,
+  {% for arg in this.args %}
+  {{ arg.generate() }},
+  {% endfor %}
+) -> requests.Response:
+    {% if not this.is_delete_method %}
+    {{ this.params_or_data }}: Dict[str, Any] = {
+    {% for arg in this.args %}
+    {% if arg.always_include %}
+      "{{ arg.name }}": {{ arg.name }},
+    {% endif %}
+    {% endfor %}
+    }
+
+    {% for arg in this.args %}
+    {% if not arg.always_include %}
+    if {{ arg.name }} is not None:
+      {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.name }}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if this.eval_api_path %}
+    url = self.api_base.with_sub_url(self.sub_url, {{ this.api_path }})
+    {% else %}
+    url = self.api_base.with_sub_url(self.sub_url, "{{ this.api_path }}")
+    {% endif %}
+
+    {% if this.is_delete_method %}
+    return self.sync_client.{{ this.method }}(url)
+    {% else %}
+    return self.sync_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    {% endif %}
+
+async def {{ this.name }}_async(
+  self,
+  {% for arg in this.args %}
+  {{ arg.generate() }},
+  {% endfor %}
+) -> aiohttp.ClientResponse:
+    {% if not this.is_delete_method %}
+    {{ this.params_or_data }}: Dict[str, Any] = {
+    {% for arg in this.args %}
+    {% if arg.always_include %}
+      "{{ arg.name }}": {{ arg.name }},
+    {% endif %}
+    {% endfor %}
+    }
+
+    {% for arg in this.args %}
+    {% if not arg.always_include %}
+    if {{ arg.name }} is not None:
+      {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.name }}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if this.eval_api_path %}
+    url = self.api_base.with_sub_url(self.sub_url, {{ this.api_path }})
+    {% else %}
+    url = self.api_base.with_sub_url(self.sub_url, "{{ this.api_path }}")
+    {% endif %}
+
+    {% if this.is_delete_method %}
+    return await self.async_client.{{ this.method }}(url)
+    {% else %}
+    return await self.async_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    {% endif %}
+{% else %}
+# MANUAL({{ this.name }})
+def {{ this.name }}(
+  self,
+  {% for arg in this.args %}
+  {{ arg.generate() }},
+  {% endfor %}
+) -> None:
+    # 1. Check if this method should be async or not
+    # 2. Set the return type appropriately
+    # 3. Fill out the method details
+    # 4. Remember to write a test since this is manually generated
+    raise NotImplementedError("Fill me out!")
+# ENDMANUAL({{ this.name}})
+{% endif %}
