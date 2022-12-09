@@ -31,7 +31,7 @@ class Api:
         api_path_in_gen: Optional[str] = None,
     ) -> None:
         if api_path_in_gen is None:
-            api_path_in_gen = api_dir.rstrip("/").split("/")[-1]
+            api_path_in_gen = api_dir.replace("/", ".")
 
         filename = self.filename + ".py"
         filepath = os.path.join(api_dir, filename)

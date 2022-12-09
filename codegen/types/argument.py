@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Optional
 
 
 @dataclass
 class Argument:
     name: str
     arg_type: str
+    map_with: Optional[str] = None
     include_if_null: bool = False
 
     def generate(self) -> str:

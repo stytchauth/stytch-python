@@ -8,24 +8,32 @@ def {{ this.name }}(
     {% if not this.is_delete_method %}
     {{ this.params_or_data }}: Dict[str, Any] = {
     {% for arg in this.args %}
-    {% if arg.always_include %}
-      "{{ arg.name }}": {{ arg.name }},
-    {% endif %}
+      {% if arg.always_include %}
+        {% if arg.map_with %}
+          "{{ arg.name }}": {{ arg.map_with }}({{ arg.name }}),
+        {% else %}
+          "{{ arg.name }}": {{ arg.name }},
+        {% endif %}
+      {% endif %}
     {% endfor %}
     }
 
     {% for arg in this.args %}
-    {% if not arg.always_include %}
+      {% if not arg.always_include %}
     if {{ arg.name }} is not None:
+        {% if arg.map_with %}
+      {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.map_with }}({{ arg.name }})
+        {% else %}
       {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.name }}
-    {% endif %}
+        {% endif %}
+      {% endif %}
     {% endfor %}
     {% endif %}
 
     {% if this.eval_api_path %}
-    url = self.api_base.with_sub_url(self.sub_url, {{ this.api_path }})
+    url = self.api_base.route_with_sub_url(self.sub_url, {{ this.api_path }})
     {% else %}
-    url = self.api_base.with_sub_url(self.sub_url, "{{ this.api_path }}")
+    url = self.api_base.route_with_sub_url(self.sub_url, "{{ this.api_path }}")
     {% endif %}
 
     {% if this.is_delete_method %}
@@ -43,24 +51,28 @@ async def {{ this.name }}_async(
     {% if not this.is_delete_method %}
     {{ this.params_or_data }}: Dict[str, Any] = {
     {% for arg in this.args %}
-    {% if arg.always_include %}
-      "{{ arg.name }}": {{ arg.name }},
-    {% endif %}
+      {% if arg.always_include %}
+        {% if arg.map_with %}
+          "{{ arg.name }}": {{ arg.map_with }}({{ arg.name }}),
+        {% else %}
+          "{{ arg.name }}": {{ arg.name }},
+        {% endif %}
+      {% endif %}
     {% endfor %}
     }
 
     {% for arg in this.args %}
-    {% if not arg.always_include %}
+      {% if not arg.always_include %}
     if {{ arg.name }} is not None:
       {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.name }}
-    {% endif %}
+      {% endif %}
     {% endfor %}
     {% endif %}
 
     {% if this.eval_api_path %}
-    url = self.api_base.with_sub_url(self.sub_url, {{ this.api_path }})
+    url = self.api_base.route_with_sub_url(self.sub_url, {{ this.api_path }})
     {% else %}
-    url = self.api_base.with_sub_url(self.sub_url, "{{ this.api_path }}")
+    url = self.api_base.route_with_sub_url(self.sub_url, "{{ this.api_path }}")
     {% endif %}
 
     {% if this.is_delete_method %}

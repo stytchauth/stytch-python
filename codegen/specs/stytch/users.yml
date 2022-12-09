@@ -1,7 +1,8 @@
 classname: Users
 additional_imports:
+  - import dataclasses
   - from typing import AsyncGenerator, Generator
-  - from stytch.models import Name, SearchQuery
+  - from stytch.core.models import Name, SearchQuery
 methods:
   - name: create
     api_path: /
@@ -13,6 +14,7 @@ methods:
         arg_type: Optional[str] = None
       - name: name
         arg_type: Optional[Name] = None
+        map_with: dataclasses.asdict
       - name: create_user_as_pending
         arg_type: bool = False
       - name: attributes
@@ -45,6 +47,7 @@ methods:
         arg_type: Optional[str] = None
       - name: query
         arg_type: Optional[SearchQuery] = None
+        map_with: dataclasses.asdict
   - name: search_all
     manual_implementation: true
     args:
@@ -54,6 +57,7 @@ methods:
         arg_type: Optional[str] = None
       - name: query
         arg_type: Optional[SearchQuery] = None
+        map_with: dataclasses.asdict
   - name: delete
     method: DELETE
     api_path: user_id
@@ -76,6 +80,7 @@ methods:
         arg_type: Optional[List[str]] = None
       - name: name
         arg_type: Optional[Name] = None
+        map_with: dataclasses.asdict
       - name: attributes
         arg_type: Optional[Dict[str, str]] = None
       - name: trusted_metadata

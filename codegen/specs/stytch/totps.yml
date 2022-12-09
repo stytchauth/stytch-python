@@ -1,4 +1,5 @@
-classname: TOTPS
+classname: TOTPs
+filename: totps
 methods:
   - name: create
     api_path: /

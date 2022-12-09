@@ -1,4 +1,5 @@
 classname: WebAuthn
+filename: webauthn
 methods:
   - name: register_start
     api_path: register/start
