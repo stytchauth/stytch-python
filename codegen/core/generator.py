@@ -11,11 +11,15 @@ class Generator:
     def __init__(self, input_path: str) -> None:
         self.specs = self.get_yml_files(input_path)
 
-    def generate_all(self, output_dir: str, overwrite: bool = False) -> None:
+    def generate_all(
+        self, api_dir: str, models_dir: str, overwrite: bool = False
+    ) -> None:
         for spec in self.specs:
             logging.info(f"Generating API from {spec}")
             api = Api.from_yml(spec)
-            api.generate_all(output_dir, overwrite)
+            api.generate_all(
+                api_dir=api_dir, models_dir=models_dir, overwrite=overwrite
+            )
 
     @classmethod
     def get_yml_files(cls, input_path: str) -> List[str]:

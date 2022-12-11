@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+import pydantic
+
+{% for method in this.methods %}
+{{ method.response_type.generate() }}
+{% endfor %}

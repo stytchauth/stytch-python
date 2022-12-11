@@ -27,6 +27,7 @@ class Api:
     def generate_all(
         self,
         api_dir: str,
+        models_dir: str,
         overwrite: bool = False,
         api_path_in_gen: Optional[str] = None,
     ) -> None:
@@ -45,6 +46,10 @@ class Api:
         with open(filepath, "w") as f:
             f.write(self.generate(snippets, api_path_in_gen))
 
+        model_filepath = os.path.join(models_dir, filename)
+        with open(model_filepath, "w") as f:
+            f.write(self.generate_responses())
+
         # Recurse!
         sub_apis = self.sub_apis or []
         logging.debug(f"{self.classname} will generate {len(sub_apis)} sub-APIs")
@@ -53,13 +58,20 @@ class Api:
                 f"Generating sub-API {sub_api.classname} for {self.classname}"
             )
             sub_api.generate_all(
-                api_dir=api_dir, overwrite=overwrite, api_path_in_gen=api_path_in_gen
+                api_dir=api_dir,
+                models_dir=models_dir,
+                overwrite=overwrite,
+                api_path_in_gen=api_path_in_gen,
             )
 
     def generate(self, snippets: SnippetSet, api_path_in_gen: str) -> str:
         template = get_template("api.tmpl")
         res = template.render(this=self, api_path_in_gen=api_path_in_gen)
         return snippets.replace_all(res)
+
+    def generate_responses(self) -> str:
+        template = get_template("api_responses.tmpl")
+        return template.render(this=self)
 
     @property
     def filename_base(self) -> str:

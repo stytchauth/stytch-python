@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Optional
 
 from codegen.types.argument import Argument
 from codegen.types.http_method import HttpMethod
+from codegen.types.response_type import ResponseType
 from codegen.types.templates import get_template
 
 
@@ -17,6 +18,7 @@ class Method:
     name: str
     api_path: str
     args: List[Argument]
+    response_type: ResponseType
     method: Optional[HttpMethod] = None
     eval_api_path: bool = False
     manual_implementation: bool = False
@@ -31,6 +33,11 @@ class Method:
     def is_delete_method(self) -> bool:
         return self.method is HttpMethod.DELETE
 
+    @property
+    def return_type_name(self) -> str:
+        name_to_title = "".join(part.title() for part in self.name.split("_"))
+        return f"{name_to_title}Response"
+
     def generate(self) -> str:
         template = get_template("method.tmpl")
         return template.render(this=self)
@@ -39,6 +46,7 @@ class Method:
     def from_dict(cls, data: Dict[str, Any]) -> Method:
         name = data["name"]
         args = [Argument.from_dict(a) for a in data["args"]]
+        response_type = ResponseType.from_dict(data["response_type"])
         api_path = data.get("api_path", name)
         manual_implementation = data.get("manual_implementation", False)
         eval_api_path = data.get("eval_api_path", False)
@@ -56,6 +64,7 @@ class Method:
         return cls(
             name=name,
             args=args,
+            response_type=response_type,
             method=http_method,
             api_path=api_path,
             manual_implementation=manual_implementation,

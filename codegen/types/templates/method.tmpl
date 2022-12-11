@@ -4,7 +4,7 @@ def {{ this.name }}(
   {% for arg in this.args %}
   {{ arg.generate() }},
   {% endfor %}
-) -> requests.Response:
+) -> {{ this.return_type_name }}:
     {% if not this.is_delete_method %}
     {{ this.params_or_data }}: Dict[str, Any] = {
     {% for arg in this.args %}
@@ -47,7 +47,7 @@ async def {{ this.name }}_async(
   {% for arg in this.args %}
   {{ arg.generate() }},
   {% endfor %}
-) -> aiohttp.ClientResponse:
+) -> {{ this.return_type_name }}:
     {% if not this.is_delete_method %}
     {{ this.params_or_data }}: Dict[str, Any] = {
     {% for arg in this.args %}

@@ -16,7 +16,10 @@ def get_parser() -> argparse.ArgumentParser:
         help="Input .yml file with an API spec or a folder container specs",
     )
     parser.add_argument(
-        "output_dir", help="Output dir where the new files should be written"
+        "api_dir", help="Output dir where the new API files should be written"
+    )
+    parser.add_argument(
+        "models_dir", help="Output dir where the new model files should be written"
     )
     parser.add_argument(
         "--overwrite",
@@ -41,13 +44,15 @@ def main(argv: Optional[List[str]] = None) -> None:
     generator = Generator(args.input_path)
 
     logging.info(f"Generating APIs from {args.input_path}")
-    generator.generate_all(args.output_dir, args.overwrite)
+    generator.generate_all(args.api_dir, args.models_dir, args.overwrite)
 
     logging.info("Running autoflake to remove unused imports")
-    subprocess.Popen(["autoflake", "--in-place", "-r", args.output_dir]).wait()
+    subprocess.Popen(["autoflake", "--in-place", "-r", args.api_dir]).wait()
+    subprocess.Popen(["autoflake", "--in-place", "-r", args.models_dir]).wait()
 
     logging.info("Running formatter")
-    subprocess.Popen(["black", args.output_dir]).wait()
+    subprocess.Popen(["black", args.api_dir]).wait()
+    subprocess.Popen(["black", args.models_dir]).wait()
     logging.info("All done!")
 
 
