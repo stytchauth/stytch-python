@@ -18,7 +18,7 @@ class Method:
     name: str
     api_path: str
     args: List[Argument]
-    response_type: ResponseType
+    response_type: Optional[ResponseType] = None
     method: Optional[HttpMethod] = None
     eval_api_path: bool = False
     manual_implementation: bool = False
@@ -33,20 +33,24 @@ class Method:
     def is_delete_method(self) -> bool:
         return self.method is HttpMethod.DELETE
 
-    @property
-    def return_type_name(self) -> str:
-        name_to_title = "".join(part.title() for part in self.name.split("_"))
-        return f"{name_to_title}Response"
-
     def generate(self) -> str:
         template = get_template("method.tmpl")
         return template.render(this=self)
 
     @classmethod
+    def return_type_name(cls, name: str) -> str:
+        name_to_title = "".join(part.title() for part in name.split("_"))
+        return f"{name_to_title}Response"
+
+    @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> Method:
         name = data["name"]
         args = [Argument.from_dict(a) for a in data["args"]]
-        response_type = ResponseType.from_dict(data["response_type"])
+        response_type = None
+        if "response_type" in data:
+            response_type = ResponseType.from_dict(
+                cls.return_type_name(name), data["response_type"]
+            )
         api_path = data.get("api_path", name)
         manual_implementation = data.get("manual_implementation", False)
         eval_api_path = data.get("eval_api_path", False)

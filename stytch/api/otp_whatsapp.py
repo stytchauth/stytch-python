@@ -2,14 +2,15 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.otp_whatsapp import (
+    SendResponse,
+    LoginOrCreateResponse,
+)
 
 
-class Email:
+class Whatsapp:
     def __init__(
         self,
         api_base: ApiBase,
@@ -26,16 +27,16 @@ class Email:
 
     def send(
         self,
-        email: str,
+        phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict[str, str]] = None,
         locale: Optional[str] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> SendResponse:
         data: Dict[str, Any] = {
-            "email": email,
+            "phone_number": phone_number,
         }
 
         if expiration_minutes is not None:
@@ -51,22 +52,23 @@ class Email:
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "email/send")
+        url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/send")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return SendResponse(**resp.json())
 
     async def send_async(
         self,
-        email: str,
+        phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict[str, str]] = None,
         locale: Optional[str] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> SendResponse:
         data: Dict[str, Any] = {
-            "email": email,
+            "phone_number": phone_number,
         }
 
         if expiration_minutes is not None:
@@ -82,20 +84,21 @@ class Email:
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "email/send")
+        url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/send")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return SendResponse(**await resp.json())
 
     def login_or_create(
         self,
-        email: str,
+        phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict[str, str]] = None,
         create_user_as_pending: bool = False,
         locale: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> LoginOrCreateResponse:
         data: Dict[str, Any] = {
-            "email": email,
+            "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
         }
 
@@ -106,20 +109,21 @@ class Email:
         if locale is not None:
             data["locale"] = locale
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "email/login_or_create")
+        url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/login_or_create")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return LoginOrCreateResponse(**resp.json())
 
     async def login_or_create_async(
         self,
-        email: str,
+        phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict[str, str]] = None,
         create_user_as_pending: bool = False,
         locale: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> LoginOrCreateResponse:
         data: Dict[str, Any] = {
-            "email": email,
+            "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
         }
 
@@ -130,6 +134,7 @@ class Email:
         if locale is not None:
             data["locale"] = locale
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "email/login_or_create")
+        url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/login_or_create")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return LoginOrCreateResponse(**await resp.json())

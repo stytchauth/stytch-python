@@ -2,14 +2,14 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.oauth import (
+    AuthenticateResponse,
+)
 
 
-class ExistingPassword:
+class OAuth:
     def __init__(
         self,
         api_base: ApiBase,
@@ -22,22 +22,19 @@ class ExistingPassword:
 
     @property
     def sub_url(self) -> str:
-        return "passwords"
+        return "oauth"
 
-    def reset(
+    def authenticate(
         self,
-        email: str,
-        existing_password: str,
-        new_password: str,
+        token: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+        code_verifier: Optional[str] = None,
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
-            "email": email,
-            "existing_password": existing_password,
-            "new_password": new_password,
+            "token": token,
         }
 
         if session_token is not None:
@@ -48,25 +45,25 @@ class ExistingPassword:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if code_verifier is not None:
+            data["code_verifier"] = code_verifier
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "reset")
+        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateResponse(**resp.json())
 
-    async def reset_async(
+    async def authenticate_async(
         self,
-        email: str,
-        existing_password: str,
-        new_password: str,
+        token: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+        code_verifier: Optional[str] = None,
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
-            "email": email,
-            "existing_password": existing_password,
-            "new_password": new_password,
+            "token": token,
         }
 
         if session_token is not None:
@@ -77,7 +74,10 @@ class ExistingPassword:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if code_verifier is not None:
+            data["code_verifier"] = code_verifier
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "reset")
+        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateResponse(**await resp.json())

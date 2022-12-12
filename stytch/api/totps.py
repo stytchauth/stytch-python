@@ -2,11 +2,14 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.totps import (
+    CreateResponse,
+    AuthenticateResponse,
+    RecoveryCodesResponse,
+    RecoverResponse,
+)
 
 
 class TOTPs:
@@ -28,7 +31,7 @@ class TOTPs:
         self,
         user_id: str,
         expiration_minutes: Optional[int] = None,
-    ) -> requests.Response:
+    ) -> CreateResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -38,13 +41,14 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return CreateResponse(**resp.json())
 
     async def create_async(
         self,
         user_id: str,
         expiration_minutes: Optional[int] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> CreateResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -54,7 +58,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return CreateResponse(**await resp.json())
 
     def authenticate(
         self,
@@ -64,7 +69,7 @@ class TOTPs:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
@@ -81,7 +86,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
         self,
@@ -91,7 +97,7 @@ class TOTPs:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
@@ -108,31 +114,34 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateResponse(**await resp.json())
 
     def recovery_codes(
         self,
         user_id: str,
-    ) -> requests.Response:
+    ) -> RecoveryCodesResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return RecoveryCodesResponse(**resp.json())
 
     async def recovery_codes_async(
         self,
         user_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> RecoveryCodesResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return RecoveryCodesResponse(**await resp.json())
 
     def recover(
         self,
@@ -142,7 +151,7 @@ class TOTPs:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> RecoverResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
@@ -159,7 +168,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return RecoverResponse(**resp.json())
 
     async def recover_async(
         self,
@@ -169,7 +179,7 @@ class TOTPs:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> RecoverResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
@@ -186,4 +196,5 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return RecoverResponse(**await resp.json())

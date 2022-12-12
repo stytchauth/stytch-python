@@ -10,6 +10,11 @@ methods:
         arg_type: Optional[int] = None
       - name: attributes
         arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      status_code: int
+      request_id: str
+      user_id: str
+      email_id: str
   - name: authenticate
     method: POST
     args:
@@ -29,3 +34,13 @@ methods:
         arg_type: Optional[Dict[str, Any]] = None
       - name: code_verifier
         arg_type: Optional[str] = None
+    response_type:
+      status_code: int
+      request_id: str
+      user_id: str
+      user: User
+      method_id: str
+      reset_sessions: bool
+      session_jwt: str
+      session_token: str
+      session: Optional[str] # TODO: Not sure if this one is right

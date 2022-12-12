@@ -41,6 +41,6 @@ methods:
       status_code: int
       request_id: str
       user_id: str
-      user: TODO
+      user: User
       session_jwt: str
       session_token: str

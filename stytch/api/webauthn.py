@@ -2,11 +2,14 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.webauthn import (
+    RegisterStartResponse,
+    RegisterResponse,
+    AuthenticateStartResponse,
+    AuthenticateResponse,
+)
 
 
 class WebAuthn:
@@ -30,7 +33,7 @@ class WebAuthn:
         domain: str,
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> RegisterStartResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -43,7 +46,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return RegisterStartResponse(**resp.json())
 
     async def register_start_async(
         self,
@@ -51,7 +55,7 @@ class WebAuthn:
         domain: str,
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> RegisterStartResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -64,13 +68,14 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return RegisterStartResponse(**await resp.json())
 
     def register(
         self,
         user_id: str,
         public_key_credential: str,
-    ) -> requests.Response:
+    ) -> RegisterResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
@@ -78,13 +83,14 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return RegisterResponse(**resp.json())
 
     async def register_async(
         self,
         user_id: str,
         public_key_credential: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> RegisterResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
@@ -92,13 +98,14 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return RegisterResponse(**await resp.json())
 
     def authenticate_start(
         self,
         user_id: str,
         domain: str,
-    ) -> requests.Response:
+    ) -> AuthenticateStartResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -106,13 +113,14 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateStartResponse(**resp.json())
 
     async def authenticate_start_async(
         self,
         user_id: str,
         domain: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> AuthenticateStartResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -120,7 +128,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateStartResponse(**await resp.json())
 
     def authenticate(
         self,
@@ -129,7 +138,7 @@ class WebAuthn:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
@@ -145,7 +154,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
         self,
@@ -154,7 +164,7 @@ class WebAuthn:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
@@ -170,4 +180,5 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateResponse(**await resp.json())

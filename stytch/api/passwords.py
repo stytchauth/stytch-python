@@ -2,14 +2,17 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.core.api.routes.passwords_email import Email
-from stytch.core.api.routes.passwords_existing_password import ExistingPassword
-from stytch.core.api.routes.passwords_session import Session
+from stytch.models.passwords import (
+    CreateResponse,
+    AuthenticateResponse,
+    StrengthCheckResponse,
+    MigrateResponse,
+)
+from stytch.api.passwords_email import Email
+from stytch.api.passwords_existing_password import ExistingPassword
+from stytch.api.passwords_session import Session
 
 
 class Passwords:
@@ -38,7 +41,7 @@ class Passwords:
         password: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> CreateResponse:
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -51,7 +54,8 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return CreateResponse(**resp.json())
 
     async def create_async(
         self,
@@ -59,7 +63,7 @@ class Passwords:
         password: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> CreateResponse:
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -72,7 +76,8 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return CreateResponse(**await resp.json())
 
     def authenticate(
         self,
@@ -82,7 +87,7 @@ class Passwords:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -99,7 +104,8 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
         self,
@@ -109,7 +115,7 @@ class Passwords:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -126,13 +132,14 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateResponse(**await resp.json())
 
     def strength_check(
         self,
         password: str,
         email: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> StrengthCheckResponse:
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -142,13 +149,14 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return StrengthCheckResponse(**resp.json())
 
     async def strength_check_async(
         self,
         password: str,
         email: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> StrengthCheckResponse:
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -158,7 +166,8 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return StrengthCheckResponse(**await resp.json())
 
     def migrate(
         self,
@@ -169,7 +178,7 @@ class Passwords:
         argon_2_config: Optional[Dict[str, Any]] = None,
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> MigrateResponse:
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
@@ -187,7 +196,8 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return MigrateResponse(**resp.json())
 
     async def migrate_async(
         self,
@@ -198,7 +208,7 @@ class Passwords:
         argon_2_config: Optional[Dict[str, Any]] = None,
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> MigrateResponse:
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
@@ -216,4 +226,5 @@ class Passwords:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return MigrateResponse(**await resp.json())

@@ -40,11 +40,13 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
+    # TODO: Debug this
     packages=find_packages(exclude=["codegen*"]),
     include_package_data=True,
     install_requires=[
         "aiohttp>=3.8.3",
         "requests>=2.7.0",
+        "pydantic>=1.10.2",
         "pyjwt[crypto]>=2.3.0",
     ],
 )

@@ -2,11 +2,12 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.crypto_wallets import (
+    AuthenticateStartResponse,
+    AuthenticateResponse,
+)
 
 
 class CryptoWallets:
@@ -31,7 +32,7 @@ class CryptoWallets:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> AuthenticateStartResponse:
         data: Dict[str, Any] = {
             "crypto_wallet_address": crypto_wallet_address,
             "crypto_wallet_type": crypto_wallet_type,
@@ -46,7 +47,8 @@ class CryptoWallets:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateStartResponse(**resp.json())
 
     async def authenticate_start_async(
         self,
@@ -55,7 +57,7 @@ class CryptoWallets:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> AuthenticateStartResponse:
         data: Dict[str, Any] = {
             "crypto_wallet_address": crypto_wallet_address,
             "crypto_wallet_type": crypto_wallet_type,
@@ -70,7 +72,8 @@ class CryptoWallets:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateStartResponse(**await resp.json())
 
     def authenticate(
         self,
@@ -81,7 +84,7 @@ class CryptoWallets:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "crypto_wallet_address": crypto_wallet_address,
             "crypto_wallet_type": crypto_wallet_type,
@@ -99,7 +102,8 @@ class CryptoWallets:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
         self,
@@ -110,7 +114,7 @@ class CryptoWallets:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {
             "crypto_wallet_address": crypto_wallet_address,
             "crypto_wallet_type": crypto_wallet_type,
@@ -128,4 +132,5 @@ class CryptoWallets:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateResponse(**await resp.json())

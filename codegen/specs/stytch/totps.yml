@@ -9,6 +9,13 @@ methods:
         arg_type: str
       - name: expiration_minutes
         arg_type: Optional[int] = None
+    response_type:
+      secret: str
+      totp_id: str
+      qr_code: str
+      recovery_codes: List[str]
+      user_id: str
+      user: User
   - name: authenticate
     method: POST
     args:
@@ -24,11 +31,21 @@ methods:
         arg_type: Optional[int] = None
       - name: session_custom_claims
         arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      user_id: str
+      user: User
+      totp_id: str
+      session_jwt: str
+      session_token: str
+      session: Optional[StytchSession]
   - name: recovery_codes
     method: POST
     args:
       - name: user_id
         arg_type: str
+    response_type:
+      user_id: str
+      totps: List[TOTPInstanceWithRecoveryCodes]
   - name: recover
     method: POST
     args:
@@ -44,3 +61,10 @@ methods:
         arg_type: Optional[int] = None
       - name: session_custom_claims
         arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      user_id: str
+      user: User
+      totp_id: str
+      session_jwt: str
+      session_token: str
+      session: Optional[StytchSession]

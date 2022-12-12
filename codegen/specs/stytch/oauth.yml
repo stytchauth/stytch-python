@@ -16,3 +16,14 @@ methods:
         arg_type: Optional[Dict[str, Any]] = None
       - name: code_verifier
         arg_type: Optional[str] = None
+    response_type:
+      user_id: str
+      user: User
+      oauth_user_registration_id: str
+      provider_subject: str
+      provider_type: str # TODO: Could possibly enum-ify this
+      provider_values: Dict[str, Any]
+      reset_sessions: bool
+      session: Optional[StytchSession]
+      session_jwt: str
+      session_token: str

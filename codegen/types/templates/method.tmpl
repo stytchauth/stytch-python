@@ -4,7 +4,7 @@ def {{ this.name }}(
   {% for arg in this.args %}
   {{ arg.generate() }},
   {% endfor %}
-) -> {{ this.return_type_name }}:
+) -> {{ this.response_type.name }}:
     {% if not this.is_delete_method %}
     {{ this.params_or_data }}: Dict[str, Any] = {
     {% for arg in this.args %}
@@ -37,9 +37,10 @@ def {{ this.name }}(
     {% endif %}
 
     {% if this.is_delete_method %}
-    return self.sync_client.{{ this.method }}(url)
+    resp = self.sync_client.{{ this.method }}(url)
     {% else %}
-    return self.sync_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    resp = self.sync_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    return {{ this.response_type.name }}(**resp.json())
     {% endif %}
 
 async def {{ this.name }}_async(
@@ -47,7 +48,7 @@ async def {{ this.name }}_async(
   {% for arg in this.args %}
   {{ arg.generate() }},
   {% endfor %}
-) -> {{ this.return_type_name }}:
+) -> {{ this.response_type.name }}:
     {% if not this.is_delete_method %}
     {{ this.params_or_data }}: Dict[str, Any] = {
     {% for arg in this.args %}
@@ -76,9 +77,10 @@ async def {{ this.name }}_async(
     {% endif %}
 
     {% if this.is_delete_method %}
-    return await self.async_client.{{ this.method }}(url)
+    resp = await self.async_client.{{ this.method }}(url)
     {% else %}
-    return await self.async_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    resp = await self.async_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    return {{ this.response_type.name }}(**await resp.json())
     {% endif %}
 {% else %}
 # MANUAL({{ this.name }})

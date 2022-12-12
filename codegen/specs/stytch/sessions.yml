@@ -6,6 +6,8 @@ methods:
     args:
       - name: user_id
         arg_type: str
+    response_type:
+      sessions: List[StytchSession]
   - name: authenticate
     method: POST
     args:
@@ -17,6 +19,8 @@ methods:
         arg_type: Optional[int] = None
       - name: session_custom_claims
         arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      session: StytchSession
   - name: authenticate_jwt
     manual_implementation: true
     args:
@@ -44,6 +48,7 @@ methods:
         arg_type: Optional[str] = None
       - name: session_jwt
         arg_type: Optional[str] = None
+    response_type: {}
   - name: jwks
     api_path: '"jwks/{}".format(project_id)'
     eval_api_path: true
@@ -51,3 +56,6 @@ methods:
     args:
       - name: project_id
         arg_type: str
+    response_type:
+      __omit_request_id: true
+      keys: List[Dict[str, Any]]

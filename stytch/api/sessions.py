@@ -2,11 +2,14 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.sessions import (
+    AuthenticateResponse,
+    GetResponse,
+    JwksResponse,
+    RevokeResponse,
+)
 
 
 class Sessions:
@@ -27,26 +30,28 @@ class Sessions:
     def get(
         self,
         user_id: str,
-    ) -> requests.Response:
+    ) -> GetResponse:
         params: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=params)
+        return GetResponse(**resp.json())
 
     async def get_async(
         self,
         user_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> GetResponse:
         params: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=params)
+        return GetResponse(**await resp.json())
 
     def authenticate(
         self,
@@ -54,7 +59,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {}
 
         if session_token is not None:
@@ -68,7 +73,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
         self,
@@ -76,7 +82,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> AuthenticateResponse:
         data: Dict[str, Any] = {}
 
         if session_token is not None:
@@ -90,7 +96,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return AuthenticateResponse(**await resp.json())
 
     # MANUAL(authenticate_jwt)
     def authenticate_jwt(
@@ -127,7 +134,7 @@ class Sessions:
         session_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> RevokeResponse:
         data: Dict[str, Any] = {}
 
         if session_id is not None:
@@ -139,14 +146,15 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return RevokeResponse(**resp.json())
 
     async def revoke_async(
         self,
         session_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> RevokeResponse:
         data: Dict[str, Any] = {}
 
         if session_id is not None:
@@ -158,12 +166,13 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return RevokeResponse(**await resp.json())
 
     def jwks(
         self,
         project_id: str,
-    ) -> requests.Response:
+    ) -> JwksResponse:
         params: Dict[str, Any] = {
             "project_id": project_id,
         }
@@ -172,12 +181,13 @@ class Sessions:
             self.sub_url, "jwks/{}".format(project_id)
         )
 
-        return self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=params)
+        return JwksResponse(**resp.json())
 
     async def jwks_async(
         self,
         project_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> JwksResponse:
         params: Dict[str, Any] = {
             "project_id": project_id,
         }
@@ -186,4 +196,5 @@ class Sessions:
             self.sub_url, "jwks/{}".format(project_id)
         )
 
-        return await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=params)
+        return JwksResponse(**await resp.json())

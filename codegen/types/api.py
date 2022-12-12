@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 import yaml
+from requests import models
 
 from codegen.core.snippet_set import SnippetSet
 from codegen.types.method import Method
@@ -30,9 +31,12 @@ class Api:
         models_dir: str,
         overwrite: bool = False,
         api_path_in_gen: Optional[str] = None,
+        models_path_in_gen: Optional[str] = None,
     ) -> None:
         if api_path_in_gen is None:
             api_path_in_gen = api_dir.replace("/", ".")
+        if models_path_in_gen is None:
+            models_path_in_gen = models_dir.replace("/", ".")
 
         filename = self.filename + ".py"
         filepath = os.path.join(api_dir, filename)
@@ -44,7 +48,7 @@ class Api:
             logging.debug(f"Found {len(snippets)} snippets")
 
         with open(filepath, "w") as f:
-            f.write(self.generate(snippets, api_path_in_gen))
+            f.write(self.generate(snippets, api_path_in_gen, models_path_in_gen))
 
         model_filepath = os.path.join(models_dir, filename)
         with open(model_filepath, "w") as f:
@@ -62,11 +66,18 @@ class Api:
                 models_dir=models_dir,
                 overwrite=overwrite,
                 api_path_in_gen=api_path_in_gen,
+                models_path_in_gen=models_path_in_gen,
             )
 
-    def generate(self, snippets: SnippetSet, api_path_in_gen: str) -> str:
+    def generate(
+        self, snippets: SnippetSet, api_path_in_gen: str, models_path_in_gen: str
+    ) -> str:
         template = get_template("api.tmpl")
-        res = template.render(this=self, api_path_in_gen=api_path_in_gen)
+        res = template.render(
+            this=self,
+            api_path_in_gen=api_path_in_gen,
+            models_path_in_gen=models_path_in_gen,
+        )
         return snippets.replace_all(res)
 
     def generate_responses(self) -> str:

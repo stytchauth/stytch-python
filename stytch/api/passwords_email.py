@@ -2,11 +2,12 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.passwords_email import (
+    ResetStartResponse,
+    ResetResponse,
+)
 
 
 class Email:
@@ -33,7 +34,7 @@ class Email:
         attributes: Optional[Dict[str, str]] = None,
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> ResetStartResponse:
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -55,7 +56,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return ResetStartResponse(**resp.json())
 
     async def reset_start_async(
         self,
@@ -66,7 +68,7 @@ class Email:
         attributes: Optional[Dict[str, str]] = None,
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> ResetStartResponse:
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -88,7 +90,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return ResetStartResponse(**await resp.json())
 
     def reset(
         self,
@@ -101,7 +104,7 @@ class Email:
         attributes: Optional[Dict[str, str]] = None,
         options: Optional[Dict[str, str]] = None,
         code_verifier: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> ResetResponse:
         data: Dict[str, Any] = {
             "token": token,
             "password": password,
@@ -124,7 +127,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return ResetResponse(**resp.json())
 
     async def reset_async(
         self,
@@ -137,7 +141,7 @@ class Email:
         attributes: Optional[Dict[str, str]] = None,
         options: Optional[Dict[str, str]] = None,
         code_verifier: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> ResetResponse:
         data: Dict[str, Any] = {
             "token": token,
             "password": password,
@@ -160,4 +164,5 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return ResetResponse(**await resp.json())

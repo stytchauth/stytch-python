@@ -15,8 +15,6 @@ methods:
       - name: session_jwt
         arg_type: Optional[str] = None
     response_type:
-      status_code: int
-      request_id: str
       user_id: str
       challenge: str
       user_created: bool
@@ -38,9 +36,8 @@ methods:
       - name: session_custom_claims
         arg_type: Optional[Dict[str, Any]] = None
     response_type:
-      status_code: int
-      request_id: str
       user_id: str
-      user: TODO
+      user: User
       session_jwt: str
       session_token: str
+      session: Optional[StytchSession]

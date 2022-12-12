@@ -2,11 +2,11 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.passwords_session import (
+    ResetResponse,
+)
 
 
 class Session:
@@ -29,7 +29,7 @@ class Session:
         password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> ResetResponse:
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -41,14 +41,15 @@ class Session:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return ResetResponse(**resp.json())
 
     async def reset_async(
         self,
         password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> ResetResponse:
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -60,4 +61,5 @@ class Session:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return ResetResponse(**await resp.json())

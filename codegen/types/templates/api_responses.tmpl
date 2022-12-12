@@ -2,6 +2,26 @@
 
 import pydantic
 
-{% for method in this.methods %}
+from stytch.models.common import (
+  AuthenticationFactor,
+  BiometricRegistration,
+  CryptoWallet,
+  Email,
+  EmailFactor,
+  Name,
+  OAuthProvider,
+  Operand,
+  Password,
+  PhoneNumber,
+  SearchQuery,
+  SearchResultsMetadata,
+  StytchSession,
+  TOTPInstance,
+  TOTPInstanceWithRecoveryCodes,
+  User,
+  WebAuthnRegistration,
+)
+
+{% for method in this.methods if method.response_type %}
 {{ method.response_type.generate() }}
 {% endfor %}

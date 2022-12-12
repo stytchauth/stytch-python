@@ -2,13 +2,26 @@
 
 from typing import Any, Dict, List, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.users import (
+    CreateResponse,
+    GetResponse,
+    GetPendingResponse,
+    SearchResponse,
+    DeleteResponse,
+    UpdateResponse,
+    DeleteEmailResponse,
+    DeletePhoneNumberResponse,
+    DeleteWebauthnRegistrationResponse,
+    DeleteTotpResponse,
+    DeleteCryptoWalletResponse,
+    DeletePasswordResponse,
+    DeleteBiometricRegistrationResponse,
+    DeleteOauthUserRegistrationResponse,
+)
 import dataclasses
-from stytch.core.models import Name, SearchQuery
+from stytch.models.common import Name, SearchQuery
 
 
 class Users:
@@ -35,7 +48,7 @@ class Users:
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> CreateResponse:
         data: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
@@ -55,7 +68,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return CreateResponse(**resp.json())
 
     async def create_async(
         self,
@@ -66,7 +80,7 @@ class Users:
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> CreateResponse:
         data: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
@@ -86,37 +100,40 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return CreateResponse(**await resp.json())
 
     def get(
         self,
         user_id: str,
-    ) -> requests.Response:
+    ) -> GetResponse:
         params: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        return self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=params)
+        return GetResponse(**resp.json())
 
     async def get_async(
         self,
         user_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> GetResponse:
         params: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        return await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=params)
+        return GetResponse(**await resp.json())
 
     def get_pending(
         self,
         limit: Optional[int] = None,
         starting_after_id: Optional[str] = None,
-    ) -> requests.Response:
+    ) -> GetPendingResponse:
         params: Dict[str, Any] = {}
 
         if limit is not None:
@@ -126,13 +143,14 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "pending")
 
-        return self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=params)
+        return GetPendingResponse(**resp.json())
 
     async def get_pending_async(
         self,
         limit: Optional[int] = None,
         starting_after_id: Optional[str] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> GetPendingResponse:
         params: Dict[str, Any] = {}
 
         if limit is not None:
@@ -142,14 +160,15 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "pending")
 
-        return await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=params)
+        return GetPendingResponse(**await resp.json())
 
     def search(
         self,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
-    ) -> requests.Response:
+    ) -> SearchResponse:
         data: Dict[str, Any] = {}
 
         if limit is not None:
@@ -161,14 +180,15 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return SearchResponse(**resp.json())
 
     async def search_async(
         self,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> SearchResponse:
         data: Dict[str, Any] = {}
 
         if limit is not None:
@@ -180,7 +200,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return SearchResponse(**await resp.json())
 
     # MANUAL(search_all)
     def search_all(
@@ -200,20 +221,20 @@ class Users:
     def delete(
         self,
         user_id: str,
-    ) -> requests.Response:
+    ) -> DeleteResponse:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_async(
         self,
         user_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeleteResponse:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def update(
         self,
@@ -225,7 +246,7 @@ class Users:
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> UpdateResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -247,7 +268,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        return self.sync_client.put(url, data=data)
+        resp = self.sync_client.put(url, data=data)
+        return UpdateResponse(**resp.json())
 
     async def update_async(
         self,
@@ -259,7 +281,7 @@ class Users:
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> UpdateResponse:
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -281,176 +303,177 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        return await self.async_client.put(url, data=data)
+        resp = await self.async_client.put(url, data=data)
+        return UpdateResponse(**await resp.json())
 
     def delete_email(
         self,
         email_id: str,
-    ) -> requests.Response:
+    ) -> DeleteEmailResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "emails/{}".format(email_id)
         )
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_email_async(
         self,
         email_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeleteEmailResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "emails/{}".format(email_id)
         )
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def delete_phone_number(
         self,
         phone_id: str,
-    ) -> requests.Response:
+    ) -> DeletePhoneNumberResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "phone_numbers/{}".format(phone_id)
         )
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_phone_number_async(
         self,
         phone_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeletePhoneNumberResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "phone_numbers/{}".format(phone_id)
         )
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def delete_webauthn_registration(
         self,
         webauthn_registration: str,
-    ) -> requests.Response:
+    ) -> DeleteWebauthnRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "webauthn_registrations/{}".format(webauthn_registration)
         )
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_webauthn_registration_async(
         self,
         webauthn_registration: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeleteWebauthnRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "webauthn_registrations/{}".format(webauthn_registration)
         )
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def delete_totp(
         self,
         totp_id: str,
-    ) -> requests.Response:
+    ) -> DeleteTotpResponse:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "totps/{}".format(totp_id))
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_totp_async(
         self,
         totp_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeleteTotpResponse:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "totps/{}".format(totp_id))
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def delete_crypto_wallet(
         self,
         crypto_wallet_id: str,
-    ) -> requests.Response:
+    ) -> DeleteCryptoWalletResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "crypto_wallets/{}".format(crypto_wallet_id)
         )
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_crypto_wallet_async(
         self,
         crypto_wallet_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeleteCryptoWalletResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "crypto_wallets/{}".format(crypto_wallet_id)
         )
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def delete_password(
         self,
         password_id: str,
-    ) -> requests.Response:
+    ) -> DeletePasswordResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "passwords/{}".format(password_id)
         )
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_password_async(
         self,
         password_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeletePasswordResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "passwords/{}".format(password_id)
         )
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def delete_biometric_registration(
         self,
         biometric_registration_id: str,
-    ) -> requests.Response:
+    ) -> DeleteBiometricRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "biometric_registrations/{}".format(biometric_registration_id)
         )
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_biometric_registration_async(
         self,
         biometric_registration_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeleteBiometricRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "biometric_registrations/{}".format(biometric_registration_id)
         )
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)
 
     def delete_oauth_user_registration(
         self,
         oauth_user_registration_id: str,
-    ) -> requests.Response:
+    ) -> DeleteOauthUserRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "oauth/{}".format(oauth_user_registration_id)
         )
 
-        return self.sync_client.delete(url)
+        resp = self.sync_client.delete(url)
 
     async def delete_oauth_user_registration_async(
         self,
         oauth_user_registration_id: str,
-    ) -> aiohttp.ClientResponse:
+    ) -> DeleteOauthUserRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "oauth/{}".format(oauth_user_registration_id)
         )
 
-        return await self.async_client.delete(url)
+        resp = await self.async_client.delete(url)

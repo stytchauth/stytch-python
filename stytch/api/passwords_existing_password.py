@@ -2,17 +2,14 @@
 
 from typing import Any, Dict, Optional
 
-import requests
-import aiohttp
-
-from stytch.core.api.base import ApiBase
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.core.api.routes.otp_email import Email
-from stytch.core.api.routes.otp_sms import SMS
-from stytch.core.api.routes.otp_whatsapp import Whatsapp
+from stytch.models.passwords_existing_password import (
+    ResetResponse,
+)
 
 
-class OTP:
+class ExistingPassword:
     def __init__(
         self,
         api_base: ApiBase,
@@ -22,34 +19,27 @@ class OTP:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.otp_email = Email(api_base, sync_client, async_client)
-        self.otp_sms = SMS(api_base, sync_client, async_client)
-        self.otp_whatsapp = Whatsapp(api_base, sync_client, async_client)
 
     @property
     def sub_url(self) -> str:
-        return "otps"
+        return "passwords"
 
-    def authenticate(
+    def reset(
         self,
-        method_id: str,
-        code: str,
-        attributes: Optional[Dict[str, str]] = None,
-        options: Optional[Dict[str, str]] = None,
+        email: str,
+        existing_password: str,
+        new_password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> requests.Response:
+    ) -> ResetResponse:
         data: Dict[str, Any] = {
-            "method_id": method_id,
-            "code": code,
+            "email": email,
+            "existing_password": existing_password,
+            "new_password": new_password,
         }
 
-        if attributes is not None:
-            data["attributes"] = attributes
-        if options is not None:
-            data["options"] = options
         if session_token is not None:
             data["session_token"] = session_token
         if session_jwt is not None:
@@ -59,30 +49,27 @@ class OTP:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+        url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        return self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, data=data)
+        return ResetResponse(**resp.json())
 
-    async def authenticate_async(
+    async def reset_async(
         self,
-        method_id: str,
-        code: str,
-        attributes: Optional[Dict[str, str]] = None,
-        options: Optional[Dict[str, str]] = None,
+        email: str,
+        existing_password: str,
+        new_password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> aiohttp.ClientResponse:
+    ) -> ResetResponse:
         data: Dict[str, Any] = {
-            "method_id": method_id,
-            "code": code,
+            "email": email,
+            "existing_password": existing_password,
+            "new_password": new_password,
         }
 
-        if attributes is not None:
-            data["attributes"] = attributes
-        if options is not None:
-            data["options"] = options
         if session_token is not None:
             data["session_token"] = session_token
         if session_jwt is not None:
@@ -92,6 +79,7 @@ class OTP:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+        url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        return await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, data=data)
+        return ResetResponse(**await resp.json())
