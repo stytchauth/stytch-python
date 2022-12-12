@@ -53,6 +53,10 @@ class OAuth(Base):
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> requests.Response:
+        """Send a /v1/oauth/attach request.
+
+        Exactly one of user_id, session_token, or session_jwt is required.
+        """
 
         data: Dict[str, Any] = {
             "provider": provider,
