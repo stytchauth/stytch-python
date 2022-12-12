@@ -41,27 +41,27 @@ class OTP:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "method_id": method_id,
             "code": code,
         }
 
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if options is not None:
-            data["options"] = options
+            payload["options"] = options
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
@@ -75,25 +75,25 @@ class OTP:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "method_id": method_id,
             "code": code,
         }
 
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if options is not None:
-            data["options"] = options
+            payload["options"] = options
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return AuthenticateResponse(**await resp.json())

@@ -32,16 +32,16 @@ class TOTPs:
         user_id: str,
         expiration_minutes: Optional[int] = None,
     ) -> CreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         if expiration_minutes is not None:
-            data["expiration_minutes"] = expiration_minutes
+            payload["expiration_minutes"] = expiration_minutes
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return CreateResponse(**resp.json())
 
     async def create_async(
@@ -49,16 +49,16 @@ class TOTPs:
         user_id: str,
         expiration_minutes: Optional[int] = None,
     ) -> CreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         if expiration_minutes is not None:
-            data["expiration_minutes"] = expiration_minutes
+            payload["expiration_minutes"] = expiration_minutes
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return CreateResponse(**await resp.json())
 
     def authenticate(
@@ -70,23 +70,23 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
@@ -98,49 +98,49 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return AuthenticateResponse(**await resp.json())
 
     def recovery_codes(
         self,
         user_id: str,
     ) -> RecoveryCodesResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return RecoveryCodesResponse(**resp.json())
 
     async def recovery_codes_async(
         self,
         user_id: str,
     ) -> RecoveryCodesResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return RecoveryCodesResponse(**await resp.json())
 
     def recover(
@@ -152,23 +152,23 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return RecoverResponse(**resp.json())
 
     async def recover_async(
@@ -180,21 +180,21 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return RecoverResponse(**await resp.json())

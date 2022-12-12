@@ -24,11 +24,11 @@ class SyncClient(ClientBase):
     def get(self, url: str, params: Optional[Dict[str, Any]]) -> requests.Response:
         return requests.get(url, params=params, headers=self.headers, auth=self.auth)
 
-    def post(self, url: str, data: Optional[Dict[str, Any]]) -> requests.Response:
-        return requests.post(url, data=data, headers=self.headers, auth=self.auth)
+    def post(self, url: str, json: Optional[Dict[str, Any]]) -> requests.Response:
+        return requests.post(url, json=json, headers=self.headers, auth=self.auth)
 
-    def put(self, url: str, data: Optional[Dict[str, Any]]) -> requests.Response:
-        return requests.put(url, data=data, headers=self.headers, auth=self.auth)
+    def put(self, url: str, payload: Optional[Dict[str, Any]]) -> requests.Response:
+        return requests.put(url, json=payload, headers=self.headers, auth=self.auth)
 
     def delete(self, url: str) -> requests.Response:
         return requests.delete(url, headers=self.headers, auth=self.auth)
@@ -48,19 +48,19 @@ class AsyncClient(ClientBase):
             )
 
     async def post(
-        self, url: str, data: Optional[Dict[str, Any]]
+        self, url: str, json: Optional[Dict[str, Any]]
     ) -> aiohttp.ClientResponse:
         async with aiohttp.ClientSession() as session:
             return await session.post(
-                url, data=data, headers=self.headers, auth=self.auth
+                url, json=json, headers=self.headers, auth=self.auth
             )
 
     async def put(
-        self, url: str, data: Optional[Dict[str, Any]]
+        self, url: str, payload: Optional[Dict[str, Any]]
     ) -> aiohttp.ClientResponse:
         async with aiohttp.ClientSession() as session:
             return await session.put(
-                url, data=data, headers=self.headers, auth=self.auth
+                url, json=payload, headers=self.headers, auth=self.auth
             )
 
     async def delete(self, url: str) -> aiohttp.ClientResponse:

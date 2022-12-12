@@ -2,7 +2,6 @@
 
 import warnings
 
-from stytch.api.base import ApiBase
 from stytch.api.crypto_wallets import CryptoWallets
 from stytch.api.magic_links import MagicLinks
 from stytch.api.oauth import OAuth
@@ -12,6 +11,7 @@ from stytch.api.sessions import Sessions
 from stytch.api.totps import TOTPs
 from stytch.api.users import Users
 from stytch.api.webauthn import WebAuthn
+from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
 

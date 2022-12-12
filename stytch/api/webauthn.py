@@ -34,19 +34,19 @@ class WebAuthn:
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
     ) -> RegisterStartResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
         }
 
         if user_agent is not None:
-            data["user_agent"] = user_agent
+            payload["user_agent"] = user_agent
         if authenticator_type is not None:
-            data["authenticator_type"] = authenticator_type
+            payload["authenticator_type"] = authenticator_type
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return RegisterStartResponse(**resp.json())
 
     async def register_start_async(
@@ -56,19 +56,19 @@ class WebAuthn:
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
     ) -> RegisterStartResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
         }
 
         if user_agent is not None:
-            data["user_agent"] = user_agent
+            payload["user_agent"] = user_agent
         if authenticator_type is not None:
-            data["authenticator_type"] = authenticator_type
+            payload["authenticator_type"] = authenticator_type
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return RegisterStartResponse(**await resp.json())
 
     def register(
@@ -76,14 +76,14 @@ class WebAuthn:
         user_id: str,
         public_key_credential: str,
     ) -> RegisterResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return RegisterResponse(**resp.json())
 
     async def register_async(
@@ -91,14 +91,14 @@ class WebAuthn:
         user_id: str,
         public_key_credential: str,
     ) -> RegisterResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return RegisterResponse(**await resp.json())
 
     def authenticate_start(
@@ -106,14 +106,14 @@ class WebAuthn:
         user_id: str,
         domain: str,
     ) -> AuthenticateStartResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return AuthenticateStartResponse(**resp.json())
 
     async def authenticate_start_async(
@@ -121,14 +121,14 @@ class WebAuthn:
         user_id: str,
         domain: str,
     ) -> AuthenticateStartResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return AuthenticateStartResponse(**await resp.json())
 
     def authenticate(
@@ -139,22 +139,22 @@ class WebAuthn:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
@@ -165,20 +165,20 @@ class WebAuthn:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return AuthenticateResponse(**await resp.json())

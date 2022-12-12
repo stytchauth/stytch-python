@@ -101,9 +101,9 @@ class Password(pydantic.BaseModel):
 
 
 class User(pydantic.BaseModel):
-    name: Name
-    trusted_metadata: Dict[str, Any]
-    untrusted_metadata: Dict[str, Any]
+    name: Optional[Name]
+    trusted_metadata: Optional[Dict[str, Any]]
+    untrusted_metadata: Optional[Dict[str, Any]]
     emails: List[Email]
     phone_numbers: List[PhoneNumber]
     providers: List[OAuthProvider]
@@ -112,7 +112,7 @@ class User(pydantic.BaseModel):
     totps: List[TOTPInstance]
     crypto_wallets: List[CryptoWallet]
     password: Optional[Password]
-    created_at: datetime.datetime
+    created_at: Optional[datetime.datetime]
     status: str
 
 

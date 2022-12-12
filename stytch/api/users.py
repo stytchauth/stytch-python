@@ -49,26 +49,26 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
 
         if email is not None:
-            data["email"] = email
+            payload["email"] = email
         if phone_number is not None:
-            data["phone_number"] = phone_number
+            payload["phone_number"] = phone_number
         if name is not None:
-            data["name"] = dataclasses.asdict(name)
+            payload["name"] = dataclasses.asdict(name)
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if trusted_metadata is not None:
-            data["trusted_metadata"] = trusted_metadata
+            payload["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
-            data["untrusted_metadata"] = untrusted_metadata
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return CreateResponse(**resp.json())
 
     async def create_async(
@@ -81,52 +81,52 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
 
         if email is not None:
-            data["email"] = email
+            payload["email"] = email
         if phone_number is not None:
-            data["phone_number"] = phone_number
+            payload["phone_number"] = phone_number
         if name is not None:
-            data["name"] = name
+            payload["name"] = name
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if trusted_metadata is not None:
-            data["trusted_metadata"] = trusted_metadata
+            payload["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
-            data["untrusted_metadata"] = untrusted_metadata
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return CreateResponse(**await resp.json())
 
     def get(
         self,
         user_id: str,
     ) -> GetResponse:
-        params: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=payload)
         return GetResponse(**resp.json())
 
     async def get_async(
         self,
         user_id: str,
     ) -> GetResponse:
-        params: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=payload)
         return GetResponse(**await resp.json())
 
     def get_pending(
@@ -134,16 +134,16 @@ class Users:
         limit: Optional[int] = None,
         starting_after_id: Optional[str] = None,
     ) -> GetPendingResponse:
-        params: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if limit is not None:
-            params["limit"] = limit
+            payload["limit"] = limit
         if starting_after_id is not None:
-            params["starting_after_id"] = starting_after_id
+            payload["starting_after_id"] = starting_after_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "pending")
 
-        resp = self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=payload)
         return GetPendingResponse(**resp.json())
 
     async def get_pending_async(
@@ -151,16 +151,16 @@ class Users:
         limit: Optional[int] = None,
         starting_after_id: Optional[str] = None,
     ) -> GetPendingResponse:
-        params: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if limit is not None:
-            params["limit"] = limit
+            payload["limit"] = limit
         if starting_after_id is not None:
-            params["starting_after_id"] = starting_after_id
+            payload["starting_after_id"] = starting_after_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "pending")
 
-        resp = await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=payload)
         return GetPendingResponse(**await resp.json())
 
     def search(
@@ -169,18 +169,18 @@ class Users:
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
-        data: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if limit is not None:
-            data["limit"] = limit
+            payload["limit"] = limit
         if cursor is not None:
-            data["cursor"] = cursor
+            payload["cursor"] = cursor
         if query is not None:
-            data["query"] = dataclasses.asdict(query)
+            payload["query"] = dataclasses.asdict(query)
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return SearchResponse(**resp.json())
 
     async def search_async(
@@ -189,18 +189,18 @@ class Users:
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
-        data: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if limit is not None:
-            data["limit"] = limit
+            payload["limit"] = limit
         if cursor is not None:
-            data["cursor"] = cursor
+            payload["cursor"] = cursor
         if query is not None:
-            data["query"] = query
+            payload["query"] = query
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return SearchResponse(**await resp.json())
 
     # MANUAL(search_all)
@@ -247,28 +247,28 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         if emails is not None:
-            data["emails"] = emails
+            payload["emails"] = emails
         if phone_numbers is not None:
-            data["phone_numbers"] = phone_numbers
+            payload["phone_numbers"] = phone_numbers
         if crypto_wallets is not None:
-            data["crypto_wallets"] = crypto_wallets
+            payload["crypto_wallets"] = crypto_wallets
         if name is not None:
-            data["name"] = dataclasses.asdict(name)
+            payload["name"] = dataclasses.asdict(name)
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if trusted_metadata is not None:
-            data["trusted_metadata"] = trusted_metadata
+            payload["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
-            data["untrusted_metadata"] = untrusted_metadata
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = self.sync_client.put(url, data=data)
+        resp = self.sync_client.put(url, json=payload)
         return UpdateResponse(**resp.json())
 
     async def update_async(
@@ -282,28 +282,28 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         if emails is not None:
-            data["emails"] = emails
+            payload["emails"] = emails
         if phone_numbers is not None:
-            data["phone_numbers"] = phone_numbers
+            payload["phone_numbers"] = phone_numbers
         if crypto_wallets is not None:
-            data["crypto_wallets"] = crypto_wallets
+            payload["crypto_wallets"] = crypto_wallets
         if name is not None:
-            data["name"] = name
+            payload["name"] = name
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if trusted_metadata is not None:
-            data["trusted_metadata"] = trusted_metadata
+            payload["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
-            data["untrusted_metadata"] = untrusted_metadata
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = await self.async_client.put(url, data=data)
+        resp = await self.async_client.put(url, json=payload)
         return UpdateResponse(**await resp.json())
 
     def delete_email(

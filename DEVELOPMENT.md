@@ -10,7 +10,17 @@ Thanks for contributing to Stytch's Python library! If you run into trouble, fin
 
 ## Testing
 
-Run unit tests with `python -m unittest`.
+Run the core unit tests with `python -m unittest discover -s stytch/`.
+
+Run the codegen unit tests with `python -m unittest discover -s codegen/`
+
+Run the integration tests with `python -m unittest discover -s integration_test/`
+
+The integration tests call the test API of Stytch to ensure you can call all methods. It requires setting up the following environment variables:
+
+- `STYTCH_PYTHON_RUN_INTEGRATION_TESTS=1`
+- `STYTCH_PROJECT_ID=your-stytch-project-id`
+- `STYTCH_SECRET=your-stytch-secret`
 
 ## Issues and Pull Requests
 

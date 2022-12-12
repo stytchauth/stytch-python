@@ -24,10 +24,10 @@ class Method:
     manual_implementation: bool = False
 
     @property
-    def params_or_data(self) -> str:
+    def params_or_json(self) -> str:
         if self.method is HttpMethod.GET:
             return "params"
-        return "data"
+        return "json"
 
     @property
     def is_delete_method(self) -> bool:

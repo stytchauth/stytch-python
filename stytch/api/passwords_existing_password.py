@@ -34,24 +34,24 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "existing_password": existing_password,
             "new_password": new_password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return ResetResponse(**resp.json())
 
     async def reset_async(
@@ -64,22 +64,22 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "existing_password": existing_password,
             "new_password": new_password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return ResetResponse(**await resp.json())

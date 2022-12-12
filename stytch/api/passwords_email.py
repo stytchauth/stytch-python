@@ -35,28 +35,28 @@ class Email:
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetStartResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
         }
 
         if login_redirect_url is not None:
-            data["login_redirect_url"] = login_redirect_url
+            payload["login_redirect_url"] = login_redirect_url
         if reset_password_redirect_url is not None:
-            data["reset_password_redirect_url"] = reset_password_redirect_url
+            payload["reset_password_redirect_url"] = reset_password_redirect_url
         if reset_password_expiration_minutes is not None:
-            data[
+            payload[
                 "reset_password_expiration_minutes"
             ] = reset_password_expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if code_challenge is not None:
-            data["code_challenge"] = code_challenge
+            payload["code_challenge"] = code_challenge
         if locale is not None:
-            data["locale"] = locale
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return ResetStartResponse(**resp.json())
 
     async def reset_start_async(
@@ -69,28 +69,28 @@ class Email:
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetStartResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
         }
 
         if login_redirect_url is not None:
-            data["login_redirect_url"] = login_redirect_url
+            payload["login_redirect_url"] = login_redirect_url
         if reset_password_redirect_url is not None:
-            data["reset_password_redirect_url"] = reset_password_redirect_url
+            payload["reset_password_redirect_url"] = reset_password_redirect_url
         if reset_password_expiration_minutes is not None:
-            data[
+            payload[
                 "reset_password_expiration_minutes"
             ] = reset_password_expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if code_challenge is not None:
-            data["code_challenge"] = code_challenge
+            payload["code_challenge"] = code_challenge
         if locale is not None:
-            data["locale"] = locale
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return ResetStartResponse(**await resp.json())
 
     def reset(
@@ -105,29 +105,29 @@ class Email:
         options: Optional[Dict[str, str]] = None,
         code_verifier: Optional[str] = None,
     ) -> ResetResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "token": token,
             "password": password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if options is not None:
-            data["options"] = options
+            payload["options"] = options
         if code_verifier is not None:
-            data["code_verifier"] = code_verifier
+            payload["code_verifier"] = code_verifier
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return ResetResponse(**resp.json())
 
     async def reset_async(
@@ -142,27 +142,27 @@ class Email:
         options: Optional[Dict[str, str]] = None,
         code_verifier: Optional[str] = None,
     ) -> ResetResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "token": token,
             "password": password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if options is not None:
-            data["options"] = options
+            payload["options"] = options
         if code_verifier is not None:
-            data["code_verifier"] = code_verifier
+            payload["code_verifier"] = code_verifier
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return ResetResponse(**await resp.json())

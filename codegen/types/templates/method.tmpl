@@ -6,7 +6,7 @@ def {{ this.name }}(
   {% endfor %}
 ) -> {{ this.response_type.name }}:
     {% if not this.is_delete_method %}
-    {{ this.params_or_data }}: Dict[str, Any] = {
+    payload: Dict[str, Any] = {
     {% for arg in this.args %}
       {% if arg.always_include %}
         {% if arg.map_with %}
@@ -22,9 +22,9 @@ def {{ this.name }}(
       {% if not arg.always_include %}
     if {{ arg.name }} is not None:
         {% if arg.map_with %}
-      {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.map_with }}({{ arg.name }})
+      payload["{{ arg.name }}"] = {{ arg.map_with }}({{ arg.name }})
         {% else %}
-      {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.name }}
+      payload["{{ arg.name }}"] = {{ arg.name }}
         {% endif %}
       {% endif %}
     {% endfor %}
@@ -39,7 +39,7 @@ def {{ this.name }}(
     {% if this.is_delete_method %}
     resp = self.sync_client.{{ this.method }}(url)
     {% else %}
-    resp = self.sync_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    resp = self.sync_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
     return {{ this.response_type.name }}(**resp.json())
     {% endif %}
 
@@ -50,23 +50,19 @@ async def {{ this.name }}_async(
   {% endfor %}
 ) -> {{ this.response_type.name }}:
     {% if not this.is_delete_method %}
-    {{ this.params_or_data }}: Dict[str, Any] = {
-    {% for arg in this.args %}
-      {% if arg.always_include %}
+    payload: Dict[str, Any] = {
+    {% for arg in this.args if arg.always_include %}
         {% if arg.map_with %}
           "{{ arg.name }}": {{ arg.map_with }}({{ arg.name }}),
         {% else %}
           "{{ arg.name }}": {{ arg.name }},
         {% endif %}
-      {% endif %}
     {% endfor %}
     }
 
-    {% for arg in this.args %}
-      {% if not arg.always_include %}
+    {% for arg in this.args if not arg.always_include %}
     if {{ arg.name }} is not None:
-      {{ this.params_or_data }}["{{ arg.name }}"] = {{ arg.name }}
-      {% endif %}
+      payload["{{ arg.name }}"] = {{ arg.name }}
     {% endfor %}
     {% endif %}
 
@@ -79,7 +75,7 @@ async def {{ this.name }}_async(
     {% if this.is_delete_method %}
     resp = await self.async_client.{{ this.method }}(url)
     {% else %}
-    resp = await self.async_client.{{ this.method }}(url, {{ this.params_or_data }}={{ this.params_or_data }})
+    resp = await self.async_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
     return {{ this.response_type.name }}(**await resp.json())
     {% endif %}
 {% else %}

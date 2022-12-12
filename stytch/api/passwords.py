@@ -42,19 +42,19 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "password": password,
         }
 
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return CreateResponse(**resp.json())
 
     async def create_async(
@@ -64,19 +64,19 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "password": password,
         }
 
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return CreateResponse(**await resp.json())
 
     def authenticate(
@@ -88,23 +88,23 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "password": password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
@@ -116,23 +116,23 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "password": password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return AuthenticateResponse(**await resp.json())
 
     def strength_check(
@@ -140,16 +140,16 @@ class Passwords:
         password: str,
         email: Optional[str] = None,
     ) -> StrengthCheckResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "password": password,
         }
 
         if email is not None:
-            data["email"] = email
+            payload["email"] = email
 
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return StrengthCheckResponse(**resp.json())
 
     async def strength_check_async(
@@ -157,16 +157,16 @@ class Passwords:
         password: str,
         email: Optional[str] = None,
     ) -> StrengthCheckResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "password": password,
         }
 
         if email is not None:
-            data["email"] = email
+            payload["email"] = email
 
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return StrengthCheckResponse(**await resp.json())
 
     def migrate(
@@ -179,24 +179,24 @@ class Passwords:
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "hash": hash,
             "hash_type": hash_type,
         }
 
         if md_5_config is not None:
-            data["md_5_config"] = md_5_config
+            payload["md_5_config"] = md_5_config
         if argon_2_config is not None:
-            data["argon_2_config"] = argon_2_config
+            payload["argon_2_config"] = argon_2_config
         if sha_1_config is not None:
-            data["sha_1_config"] = sha_1_config
+            payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
-            data["scrypt_config"] = scrypt_config
+            payload["scrypt_config"] = scrypt_config
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return MigrateResponse(**resp.json())
 
     async def migrate_async(
@@ -209,22 +209,22 @@ class Passwords:
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "email": email,
             "hash": hash,
             "hash_type": hash_type,
         }
 
         if md_5_config is not None:
-            data["md_5_config"] = md_5_config
+            payload["md_5_config"] = md_5_config
         if argon_2_config is not None:
-            data["argon_2_config"] = argon_2_config
+            payload["argon_2_config"] = argon_2_config
         if sha_1_config is not None:
-            data["sha_1_config"] = sha_1_config
+            payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
-            data["scrypt_config"] = scrypt_config
+            payload["scrypt_config"] = scrypt_config
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return MigrateResponse(**await resp.json())

@@ -5,10 +5,10 @@ from typing import Any, Dict, Optional
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.sessions import (
-    AuthenticateResponse,
     GetResponse,
-    JwksResponse,
+    AuthenticateResponse,
     RevokeResponse,
+    JwksResponse,
 )
 
 
@@ -31,26 +31,26 @@ class Sessions:
         self,
         user_id: str,
     ) -> GetResponse:
-        params: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=payload)
         return GetResponse(**resp.json())
 
     async def get_async(
         self,
         user_id: str,
     ) -> GetResponse:
-        params: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/")
 
-        resp = await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=payload)
         return GetResponse(**await resp.json())
 
     def authenticate(
@@ -60,20 +60,20 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return AuthenticateResponse(**resp.json())
 
     async def authenticate_async(
@@ -83,20 +83,20 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        data: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
+            payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
+            payload["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return AuthenticateResponse(**await resp.json())
 
     # MANUAL(authenticate_jwt)
@@ -135,18 +135,18 @@ class Sessions:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> RevokeResponse:
-        data: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if session_id is not None:
-            data["session_id"] = session_id
+            payload["session_id"] = session_id
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return RevokeResponse(**resp.json())
 
     async def revoke_async(
@@ -155,25 +155,25 @@ class Sessions:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> RevokeResponse:
-        data: Dict[str, Any] = {}
+        payload: Dict[str, Any] = {}
 
         if session_id is not None:
-            data["session_id"] = session_id
+            payload["session_id"] = session_id
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return RevokeResponse(**await resp.json())
 
     def jwks(
         self,
         project_id: str,
     ) -> JwksResponse:
-        params: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "project_id": project_id,
         }
 
@@ -181,14 +181,14 @@ class Sessions:
             self.sub_url, "jwks/{}".format(project_id)
         )
 
-        resp = self.sync_client.get(url, params=params)
+        resp = self.sync_client.get(url, params=payload)
         return JwksResponse(**resp.json())
 
     async def jwks_async(
         self,
         project_id: str,
     ) -> JwksResponse:
-        params: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "project_id": project_id,
         }
 
@@ -196,5 +196,5 @@ class Sessions:
             self.sub_url, "jwks/{}".format(project_id)
         )
 
-        resp = await self.async_client.get(url, params=params)
+        resp = await self.async_client.get(url, params=payload)
         return JwksResponse(**await resp.json())

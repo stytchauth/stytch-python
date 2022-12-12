@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 import pydantic
 
 from stytch.models.common import (

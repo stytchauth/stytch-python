@@ -28,7 +28,7 @@ methods:
       user: User
       email_id: str
       phone_id: str
-      status: status # TODO: Could be coerced to enum
+      status: str # TODO: Could be coerced to enum
   - name: get
     method: GET
     api_path: user_id

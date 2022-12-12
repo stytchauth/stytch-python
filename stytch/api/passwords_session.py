@@ -30,18 +30,18 @@ class Session:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> ResetResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "password": password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return ResetResponse(**resp.json())
 
     async def reset_async(
@@ -50,16 +50,16 @@ class Session:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> ResetResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "password": password,
         }
 
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return ResetResponse(**await resp.json())

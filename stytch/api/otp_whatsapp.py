@@ -35,26 +35,26 @@ class Whatsapp:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "phone_number": phone_number,
         }
 
         if expiration_minutes is not None:
-            data["expiration_minutes"] = expiration_minutes
+            payload["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if locale is not None:
-            data["locale"] = locale
+            payload["locale"] = locale
         if user_id is not None:
-            data["user_id"] = user_id
+            payload["user_id"] = user_id
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
 
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/send")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return SendResponse(**resp.json())
 
     async def send_async(
@@ -67,26 +67,26 @@ class Whatsapp:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "phone_number": phone_number,
         }
 
         if expiration_minutes is not None:
-            data["expiration_minutes"] = expiration_minutes
+            payload["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if locale is not None:
-            data["locale"] = locale
+            payload["locale"] = locale
         if user_id is not None:
-            data["user_id"] = user_id
+            payload["user_id"] = user_id
         if session_token is not None:
-            data["session_token"] = session_token
+            payload["session_token"] = session_token
         if session_jwt is not None:
-            data["session_jwt"] = session_jwt
+            payload["session_jwt"] = session_jwt
 
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/send")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return SendResponse(**await resp.json())
 
     def login_or_create(
@@ -97,21 +97,21 @@ class Whatsapp:
         create_user_as_pending: bool = False,
         locale: Optional[str] = None,
     ) -> LoginOrCreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
         }
 
         if expiration_minutes is not None:
-            data["expiration_minutes"] = expiration_minutes
+            payload["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if locale is not None:
-            data["locale"] = locale
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/login_or_create")
 
-        resp = self.sync_client.post(url, data=data)
+        resp = self.sync_client.post(url, json=payload)
         return LoginOrCreateResponse(**resp.json())
 
     async def login_or_create_async(
@@ -122,19 +122,19 @@ class Whatsapp:
         create_user_as_pending: bool = False,
         locale: Optional[str] = None,
     ) -> LoginOrCreateResponse:
-        data: Dict[str, Any] = {
+        payload: Dict[str, Any] = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
         }
 
         if expiration_minutes is not None:
-            data["expiration_minutes"] = expiration_minutes
+            payload["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes
+            payload["attributes"] = attributes
         if locale is not None:
-            data["locale"] = locale
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/login_or_create")
 
-        resp = await self.async_client.post(url, data=data)
+        resp = await self.async_client.post(url, json=payload)
         return LoginOrCreateResponse(**await resp.json())
