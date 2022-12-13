@@ -27,6 +27,8 @@ class ClientBase:
 
     def __init__(self, project_id: str, secret: str) -> None:
         self.headers = HEADERS
+        self.project_id = project_id
+        self.secret = secret
         self.auth = requests.auth.HTTPBasicAuth(project_id, secret)
 
 

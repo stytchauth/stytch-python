@@ -1,4 +1,9 @@
 classname: Sessions
+additional_imports:
+  - import jwt
+  - import datetime
+  - import time
+  - from stytch.models.common import StytchSession
 methods:
   - name: get
     use_base_path_as_api_path: True

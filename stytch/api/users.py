@@ -6,7 +6,7 @@
 # or your changes may be overwritten later!
 # !!!
 
-from typing import Any, Dict, List, Optional
+from typing import Any, AsyncGenerator, Dict, Generator, List, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -214,12 +214,34 @@ class Users:
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
-    ) -> None:
+    ) -> Generator[SearchResponse, None, None]:
         # 1. Check if this method should be async or not
         # 2. Set the return type appropriately
         # 3. Fill out the method details
         # 4. Remember to write a test since this is manually generated
-        raise NotImplementedError("Fill me out!")
+        while True:
+            results = self.search(limit, cursor, query)
+            yield results
+            cursor = results.results_metadata.next_cursor
+            if cursor is None:
+                break
+
+    async def search_all_async(
+        self,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        query: Optional[SearchQuery] = None,
+    ) -> AsyncGenerator[SearchResponse, None]:
+        # 1. Check if this method should be async or not
+        # 2. Set the return type appropriately
+        # 3. Fill out the method details
+        # 4. Remember to write a test since this is manually generated
+        while True:
+            results = await self.search_async(limit, cursor, query)
+            yield results
+            cursor = results.results_metadata.next_cursor
+            if cursor is None:
+                break
 
     # ENDMANUAL(search_all)
 

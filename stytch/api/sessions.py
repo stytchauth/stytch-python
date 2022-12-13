@@ -6,10 +6,15 @@
 # or your changes may be overwritten later!
 # !!!
 
+import datetime
+import time
 from typing import Any, Dict, Optional
+
+import jwt
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.common import StytchSession
 from stytch.models.sessions import (
     AuthenticateResponse,
     GetResponse,
@@ -111,12 +116,38 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> None:
-        # 1. Check if this method should be async or not
-        # 2. Set the return type appropriately
-        # 3. Fill out the method details
-        # 4. Remember to write a test since this is manually generated
-        raise NotImplementedError("Fill me out!")
+    ) -> AuthenticateResponse:
+        # TODO: Remember to write a test since this is manually generated
+        """Parse a JWT and verify the signature, preferring local verification over remote.
+
+        If max_token_age_seconds is set, remote verification will be forced if the JWT was issued
+        at (based on the "iat" claim) more than that many seconds ago.
+
+        To force remote validation for all tokens, set max_token_age_seconds to zero or use the
+        authenticate method instead.
+        """
+        # Return the local_result if available, otherwise call the Stytch API
+        return self.authenticate_jwt_local(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
+        ) or self.authenticate(
+            session_custom_claims=session_custom_claims, session_jwt=session_jwt
+        )
+
+    async def authenticate_jwt_async(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> AuthenticateResponse:
+        # TODO: Remember to write a test since this is manually generated
+        # Return the local_result if available, otherwise call the Stytch API
+        return self.authenticate_jwt_local(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
+        ) or await self.authenticate_async(
+            session_custom_claims=session_custom_claims, session_jwt=session_jwt
+        )
 
     # ENDMANUAL(authenticate_jwt)
 
@@ -126,12 +157,81 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
-    ) -> None:
-        # 1. Check if this method should be async or not
-        # 2. Set the return type appropriately
-        # 3. Fill out the method details
-        # 4. Remember to write a test since this is manually generated
-        raise NotImplementedError("Fill me out!")
+    ) -> Optional[AuthenticateResponse]:
+        """Parse a JWT and verify the signature locally (without calling /authenticate in the API).
+
+        If max_token_age_seconds is set, this will return an error if the JWT was issued (based on
+        the "iat" claim) more than maxTokenAge seconds ago.
+
+        If max_token_age_seconds is explicitly set to zero, all tokens will be considered too old,
+        even if they are otherwise valid.
+
+        The value for leeway is the maximum allowable difference in seconds when comparing
+        timestamps. It defaults to zero.
+        """
+        # TODO: If this is slow to initialize, we could cache it
+        # TODO: Could make the project_id a field of each API instead
+        project_id = self.sync_client.project_id
+        jwks_url = self.api_base.route_with_sub_url("sessions/jwks", project_id)
+        jwt_audience = project_id
+        jwt_issuer = "stytch.com/{}".format(project_id)
+        _session_claim = "https://stytch.com/session"
+
+        jwks_client = jwt.PyJWKClient(jwks_url)
+        now = time.time()
+
+        signing_key = jwks_client.get_signing_key_from_jwt(session_jwt)
+
+        # NOTE: The max_token_age_seconds value is applied after decoding.
+        payload = jwt.decode(
+            session_jwt,
+            signing_key.key,
+            algorithms=["RS256"],
+            options={
+                "require": ["aud", "iss", "exp", "iat", "nbf"],
+                "verify_signature": True,
+                "verify_aud": True,
+                "verify_iss": True,
+                "verify_exp": True,
+                "verify_iat": True,
+                "verify_nbf": True,
+            },
+            audience=jwt_audience,
+            issuer=jwt_issuer,
+            leeway=leeway,
+        )
+
+        if max_token_age_seconds is not None:
+            iat = payload["iat"]
+            if now - iat >= max_token_age_seconds:
+                # JWT was issued too long ago, don't verify
+                return None
+
+        # Unpack the session claim to match the detached session format.
+        claim = payload[_session_claim]
+
+        # For JWTs that include it, prefer the inner expires_at claim.
+        expires_at_str = claim["expires_at"] or time.strftime(
+            "%Y-%m-%dT%H:%M:%SZ", time.gmtime(payload["exp"])
+        )
+        expires_at = datetime.datetime.strptime(expires_at_str, "%Y-%m-%dT%H:%M:%SZ")
+
+        session = StytchSession(
+            attributes=claim["attributes"],
+            authentication_factors=claim["authentication_factors"],
+            expires_at=expires_at,
+            last_accessed_at=claim["last_accessed_at"],
+            session_id=claim["id"],
+            started_at=claim["started_at"],
+            user_id=payload["sub"],
+            custom_claims=None,
+        )
+
+        return AuthenticateResponse(
+            status_code=200,
+            request_id="local-jwt-verification",
+            session=session,
+        )
 
     # ENDMANUAL(authenticate_jwt_local)
 
