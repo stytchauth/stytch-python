@@ -47,8 +47,18 @@ def main(argv: Optional[List[str]] = None) -> None:
     generator.generate_all(args.api_dir, args.models_dir, args.overwrite)
 
     logging.info("Running autoflake to remove unused imports")
-    subprocess.Popen(["autoflake", "--in-place", "-r", args.api_dir]).wait()
-    subprocess.Popen(["autoflake", "--in-place", "-r", args.models_dir]).wait()
+    subprocess.Popen(
+        ["autoflake", "--in-place", "--remove-all-unused-imports", "-r", args.api_dir]
+    ).wait()
+    subprocess.Popen(
+        [
+            "autoflake",
+            "--in-place",
+            "--remove-all-unused-imports",
+            "-r",
+            args.models_dir,
+        ]
+    ).wait()
 
     logging.info("Running formatter")
     subprocess.Popen(["black", args.api_dir]).wait()

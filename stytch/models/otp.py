@@ -4,24 +4,9 @@ from typing import Optional
 
 
 from stytch.models.common import (
-    AuthenticationFactor,
-    BiometricRegistration,
-    CryptoWallet,
-    Email,
-    EmailFactor,
-    Name,
-    OAuthProvider,
-    Operand,
-    Password,
-    PhoneNumber,
     ResponseBase,
-    SearchQuery,
-    SearchResultsMetadata,
     StytchSession,
-    TOTPInstance,
-    TOTPInstanceWithRecoveryCodes,
     User,
-    WebAuthnRegistration,
 )
 
 
