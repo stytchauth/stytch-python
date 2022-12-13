@@ -2,7 +2,6 @@
 
 import argparse
 import logging
-import subprocess
 from typing import List, Optional
 
 from codegen.core.generator import Generator
@@ -41,28 +40,19 @@ def main(argv: Optional[List[str]] = None) -> None:
     root_logger = logging.getLogger()
     root_logger.handlers[0].setFormatter(ColoredLogFormatter())
 
-    generator = Generator(args.input_path)
+    generator = Generator(
+        input_path=args.input_path,
+        api_dir=args.api_dir,
+        models_dir=args.models_dir,
+        overwrite=args.overwrite,
+    )
 
     logging.info(f"Generating APIs from {args.input_path}")
-    generator.generate_all(args.api_dir, args.models_dir, args.overwrite)
+    generator.generate_all()
 
-    logging.info("Running autoflake to remove unused imports")
-    subprocess.Popen(
-        ["autoflake", "--in-place", "--remove-all-unused-imports", "-r", args.api_dir]
-    ).wait()
-    subprocess.Popen(
-        [
-            "autoflake",
-            "--in-place",
-            "--remove-all-unused-imports",
-            "-r",
-            args.models_dir,
-        ]
-    ).wait()
+    logging.info("Running formatters")
+    generator.run_formatters()
 
-    logging.info("Running formatter")
-    subprocess.Popen(["black", args.api_dir]).wait()
-    subprocess.Popen(["black", args.models_dir]).wait()
     logging.info("All done!")
 
 

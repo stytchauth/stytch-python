@@ -2,12 +2,7 @@
 
 from typing import Optional
 
-
-from stytch.models.common import (
-    ResponseBase,
-    StytchSession,
-    User,
-)
+from stytch.models.common import ResponseBase, StytchSession, User
 
 
 class AuthenticateResponse(ResponseBase):

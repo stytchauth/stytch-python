@@ -4,10 +4,7 @@ from typing import Any, Dict, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.otp_email import (
-    SendResponse,
-    LoginOrCreateResponse,
-)
+from stytch.models.otp_email import LoginOrCreateResponse, SendResponse
 
 
 class Email:

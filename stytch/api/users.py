@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 
+import dataclasses
 from typing import Any, Dict, List, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.common import Name, SearchQuery
 from stytch.models.users import (
     CreateResponse,
-    GetResponse,
-    GetPendingResponse,
-    SearchResponse,
-    DeleteResponse,
-    UpdateResponse,
-    DeleteEmailResponse,
-    DeletePhoneNumberResponse,
-    DeleteWebauthnRegistrationResponse,
-    DeleteTotpResponse,
-    DeleteCryptoWalletResponse,
-    DeletePasswordResponse,
     DeleteBiometricRegistrationResponse,
+    DeleteCryptoWalletResponse,
+    DeleteEmailResponse,
     DeleteOauthUserRegistrationResponse,
+    DeletePasswordResponse,
+    DeletePhoneNumberResponse,
+    DeleteResponse,
+    DeleteTotpResponse,
+    DeleteWebauthnRegistrationResponse,
+    GetPendingResponse,
+    GetResponse,
+    SearchResponse,
+    UpdateResponse,
 )
-import dataclasses
-from stytch.models.common import Name, SearchQuery
 
 
 class Users:

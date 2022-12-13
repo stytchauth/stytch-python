@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
 
-from stytch.models.common import (
-    ResponseBase,
-)
+from stytch.models.common import ResponseBase
 
 
 class SendResponse(ResponseBase):

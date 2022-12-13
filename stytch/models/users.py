@@ -2,7 +2,6 @@
 
 from typing import List
 
-
 from stytch.models.common import (
     CryptoWallet,
     Email,

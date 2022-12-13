@@ -2,17 +2,17 @@
 
 from typing import Any, Dict, Optional
 
-from stytch.core.api_base import ApiBase
-from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.passwords import (
-    CreateResponse,
-    AuthenticateResponse,
-    StrengthCheckResponse,
-    MigrateResponse,
-)
 from stytch.api.passwords_email import Email
 from stytch.api.passwords_existing_password import ExistingPassword
 from stytch.api.passwords_session import Session
+from stytch.core.api_base import ApiBase
+from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.models.passwords import (
+    AuthenticateResponse,
+    CreateResponse,
+    MigrateResponse,
+    StrengthCheckResponse,
+)
 
 
 class Passwords:
@@ -25,11 +25,9 @@ class Passwords:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.passwords_email = Email(api_base, sync_client, async_client)
-        self.passwords_existing_password = ExistingPassword(
-            api_base, sync_client, async_client
-        )
-        self.passwords_session = Session(api_base, sync_client, async_client)
+        self.email = Email(api_base, sync_client, async_client)
+        self.existing_password = ExistingPassword(api_base, sync_client, async_client)
+        self.session = Session(api_base, sync_client, async_client)
 
     @property
     def sub_url(self) -> str:

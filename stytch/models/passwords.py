@@ -2,12 +2,7 @@
 
 from typing import Any, Dict, Optional
 
-
-from stytch.models.common import (
-    ResponseBase,
-    StytchSession,
-    User,
-)
+from stytch.models.common import ResponseBase, StytchSession, User
 
 
 class CreateResponse(ResponseBase):

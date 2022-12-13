@@ -2,7 +2,6 @@
 
 from typing import List, Optional
 
-
 from stytch.models.common import (
     ResponseBase,
     StytchSession,

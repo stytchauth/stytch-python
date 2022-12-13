@@ -2,11 +2,7 @@
 
 from typing import Optional
 
-
-from stytch.models.common import (
-    ResponseBase,
-    StytchSession,
-)
+from stytch.models.common import ResponseBase, StytchSession
 
 
 class ResetResponse(ResponseBase):

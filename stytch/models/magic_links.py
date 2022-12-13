@@ -2,11 +2,7 @@
 
 from typing import Optional
 
-
-from stytch.models.common import (
-    ResponseBase,
-    User,
-)
+from stytch.models.common import ResponseBase, User
 
 
 class CreateResponse(ResponseBase):

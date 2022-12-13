@@ -4,9 +4,7 @@ from typing import Any, Dict, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.passwords_existing_password import (
-    ResetResponse,
-)
+from stytch.models.passwords_existing_password import ResetResponse
 
 
 class ExistingPassword:

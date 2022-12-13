@@ -4,10 +4,7 @@ from typing import Any, Dict, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.otp_whatsapp import (
-    SendResponse,
-    LoginOrCreateResponse,
-)
+from stytch.models.otp_whatsapp import LoginOrCreateResponse, SendResponse
 
 
 class Whatsapp:

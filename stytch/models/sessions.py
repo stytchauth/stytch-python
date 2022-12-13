@@ -2,11 +2,7 @@
 
 from typing import Any, Dict, List
 
-
-from stytch.models.common import (
-    ResponseBase,
-    StytchSession,
-)
+from stytch.models.common import ResponseBase, StytchSession
 
 
 class GetResponse(ResponseBase):
