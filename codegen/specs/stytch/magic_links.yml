@@ -43,4 +43,84 @@ methods:
       reset_sessions: bool
       session_jwt: str
       session_token: str
-      session: Optional[str] # TODO: Not sure if this one is right
+      session: Optional[StytchSession]
+sub_apis:
+  - classname: Email
+    additional_imports:
+      - from stytch.models.common import Name
+    sub_url: magic_links/email
+    filename: magic_links_email
+    methods:
+      - name: send
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+          - name: login_magic_link_url
+            arg_type: Optional[str] = None
+          - name: signup_magic_link_url
+            arg_type: Optional[str] = None
+          - name: login_expiration_minutes
+            arg_type: Optional[int] = None
+          - name: signup_expiration_minutes
+            arg_type: Optional[int] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: code_challenge
+            arg_type: Optional[str] = None
+          - name: user_id
+            arg_type: Optional[str] = None
+          - name: session_token
+            arg_type: Optional[str] = None
+          - name: session_jwt
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          email_id: str
+      - name: login_or_create
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+          - name: login_magic_link_url
+            arg_type: Optional[str] = None
+          - name: signup_magic_link_url
+            arg_type: Optional[str] = None
+          - name: login_expiration_minutes
+            arg_type: Optional[int] = None
+          - name: signup_expiration_minutes
+            arg_type: Optional[int] = None
+          - name: create_user_as_pending
+            arg_type: Optional[bool] = None
+          - name: locale
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          email_id: str
+          user_created: bool
+      - name: invite
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+          - name: invite_magic_link_url
+            arg_type: Optional[str] = None
+          - name: invite_expiration_minutes
+            arg_type: Optional[int] = None
+          - name: name
+            arg_type: Optional[Name] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+        response_type:
+          user_id: str
+          email_id: str
+      - name: revoke_invite
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+        response_type: {}

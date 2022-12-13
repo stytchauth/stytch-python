@@ -6,14 +6,12 @@ from stytch.models.common import ResponseBase, StytchSession, User
 
 
 class AuthenticateResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
-    user: User
+    user: Optional[User]
     oauth_user_registration_id: str
     provider_subject: str
     provider_type: str
-    provider_values: Dict[str, Any]
+    provider_values: Optional[Dict[str, Any]]
     reset_sessions: bool
     session: Optional[StytchSession]
     session_jwt: str

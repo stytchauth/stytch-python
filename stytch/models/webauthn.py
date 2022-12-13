@@ -6,29 +6,21 @@ from stytch.models.common import ResponseBase, StytchSession, User
 
 
 class RegisterStartResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     public_key_credential_creation_options: str
 
 
 class RegisterResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     webauthn_registration_id: str
 
 
 class AuthenticateStartResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     public_key_credential_request_options: str
 
 
 class AuthenticateResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     user: User
     webauthn_registration_id: str

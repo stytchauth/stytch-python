@@ -57,5 +57,4 @@ methods:
       - name: project_id
         arg_type: str
     response_type:
-      __omit_request_id: true
       keys: List[Dict[str, Any]]

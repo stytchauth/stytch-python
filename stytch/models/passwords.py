@@ -6,15 +6,11 @@ from stytch.models.common import ResponseBase, StytchSession, User
 
 
 class CreateResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     email_id: str
 
 
 class AuthenticateResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     user: User
     session_jwt: str
@@ -23,8 +19,6 @@ class AuthenticateResponse(ResponseBase):
 
 
 class StrengthCheckResponse(ResponseBase):
-    status_code: int
-    request_id: str
     valid_password: bool
     score: int
     breached_password: bool
@@ -32,8 +26,6 @@ class StrengthCheckResponse(ResponseBase):
 
 
 class MigrateResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     email_id: str
     user_created: bool

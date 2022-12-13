@@ -1,6 +1,5 @@
 classname: Users
 additional_imports:
-  - import dataclasses
   - from typing import AsyncGenerator, Generator # Used for search_all
   - from stytch.models.common import Name, SearchQuery
 methods:
@@ -14,7 +13,7 @@ methods:
         arg_type: Optional[str] = None
       - name: name
         arg_type: Optional[Name] = None
-        map_with: dataclasses.asdict
+        map_with_method: dict()
       - name: create_user_as_pending
         arg_type: bool = False
       - name: attributes
@@ -61,7 +60,7 @@ methods:
         arg_type: Optional[str] = None
       - name: query
         arg_type: Optional[SearchQuery] = None
-        map_with: dataclasses.asdict
+        map_with_method: dict()
     response_type:
       results: List[User]
       results_metadata: SearchResultsMetadata
@@ -74,7 +73,7 @@ methods:
         arg_type: Optional[str] = None
       - name: query
         arg_type: Optional[SearchQuery] = None
-        map_with: dataclasses.asdict
+        map_with_method: dict()
   - name: delete
     method: DELETE
     api_path: user_id
@@ -99,7 +98,7 @@ methods:
         arg_type: Optional[List[str]] = None
       - name: name
         arg_type: Optional[Name] = None
-        map_with: dataclasses.asdict
+        map_with_method: dict()
       - name: attributes
         arg_type: Optional[Dict[str, str]] = None
       - name: trusted_metadata
@@ -134,10 +133,10 @@ methods:
       user: User
   - name: delete_webauthn_registration
     method: DELETE
-    api_path: '"webauthn_registrations/{}".format(webauthn_registration)'
+    api_path: '"webauthn_registrations/{}".format(webauthn_registration_id)'
     eval_api_path: true
     args:
-      - name: webauthn_registration
+      - name: webauthn_registration_id
         arg_type: str
     response_type:
       user_id: str

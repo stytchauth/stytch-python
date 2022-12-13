@@ -6,8 +6,6 @@ from stytch.models.common import ResponseBase, StytchSession, User
 
 
 class AuthenticateResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     user: User
     method_id: str

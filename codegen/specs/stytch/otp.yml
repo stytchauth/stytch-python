@@ -30,11 +30,10 @@ methods:
       session: Optional[StytchSession]
 sub_apis:
   - classname: Email
-    sub_url: otps
+    sub_url: otps/email
     filename: otp_email
     methods:
       - name: send
-        api_path: email/send
         method: POST
         args:
           - name: email
@@ -55,7 +54,6 @@ sub_apis:
           user_id: str
           email_id: str
       - name: login_or_create
-        api_path: email/login_or_create
         method: POST
         args:
           - name: email
@@ -73,11 +71,10 @@ sub_apis:
           email_id: str
           user_created: bool
   - classname: SMS
-    sub_url: otps
+    sub_url: otps/sms
     filename: otp_sms
     methods:
       - name: send
-        api_path: sms/send
         method: POST
         args:
           - name: phone_number
@@ -98,7 +95,6 @@ sub_apis:
           user_id: str
           phone_id: str
       - name: login_or_create
-        api_path: sms/login_or_create
         method: POST
         args:
           - name: phone_number
@@ -116,11 +112,10 @@ sub_apis:
           phone_id: str
           user_created: bool
   - classname: Whatsapp
-    sub_url: otps
+    sub_url: otps/whatsapp
     filename: otp_whatsapp
     methods:
       - name: send
-        api_path: whatsapp/send
         method: POST
         args:
           - name: phone_number
@@ -141,7 +136,6 @@ sub_apis:
           user_id: str
           phone_id: str
       - name: login_or_create
-        api_path: whatsapp/login_or_create
         method: POST
         args:
           - name: phone_number

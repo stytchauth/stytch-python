@@ -6,7 +6,5 @@ from stytch.models.common import ResponseBase, StytchSession
 
 
 class ResetResponse(ResponseBase):
-    status_code: int
-    request_id: str
     user_id: str
     session: Optional[StytchSession]

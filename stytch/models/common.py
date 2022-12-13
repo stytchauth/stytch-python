@@ -6,9 +6,42 @@ from typing import Any, Dict, List, Optional
 import pydantic
 
 
-class StytchErrorDetails(pydantic.BaseModel):
+class ResponseBase(pydantic.BaseModel):
     status_code: int
-    request_id: str
+    # Optional because sessions/jwks doesn't have it currently
+    request_id: Optional[str] = None
+
+    @classmethod
+    def from_json(cls, json: Dict[str, Any]):
+        try:
+            return cls(**json)
+        except pydantic.ValidationError:
+            # TODO: What if this one *also* fails?
+            details = StytchErrorDetails(**json)
+            raise StytchError(details) from None
+
+    @property
+    def is_informational(self) -> bool:
+        return 100 <= self.status_code < 200
+
+    @property
+    def is_success(self) -> bool:
+        return 200 <= self.status_code < 300
+
+    @property
+    def is_redirection(self) -> bool:
+        return 300 <= self.status_code < 400
+
+    @property
+    def is_client_error(self) -> bool:
+        return 400 <= self.status_code < 500
+
+    @property
+    def is_server_error(self) -> bool:
+        return 500 <= self.status_code < 600
+
+
+class StytchErrorDetails(ResponseBase):
     error_type: str
     error_message: str
     error_url: str
@@ -25,21 +58,10 @@ class StytchError(Exception):
         return str(self.details)
 
 
-class ResponseBase(pydantic.BaseModel):
-    @classmethod
-    def from_json(cls, json: Dict[str, Any]):
-        try:
-            return cls(**json)
-        except pydantic.ValidationError:
-            # TODO: What if this one *also* fails?
-            details = StytchErrorDetails(**json)
-            raise StytchError(details) from None
-
-
 class Name(pydantic.BaseModel):
-    first_name: Optional[str]
-    middle_name: Optional[str]
-    last_name: Optional[str]
+    first_name: Optional[str] = None
+    middle_name: Optional[str] = None
+    last_name: Optional[str] = None
 
 
 class Operand(pydantic.BaseModel):
@@ -65,9 +87,9 @@ class AuthenticationFactor(pydantic.BaseModel):
 
 
 class StytchSession(pydantic.BaseModel):
-    attributes: Dict[str, str]
+    attributes: Optional[Dict[str, str]]
     authentication_factors: List[AuthenticationFactor]
-    custom_claims: Dict[str, Any]
+    custom_claims: Optional[Dict[str, Any]]
     expires_at: datetime.datetime
     last_accessed_at: datetime.datetime
     session_id: str
@@ -146,5 +168,5 @@ class User(pydantic.BaseModel):
 
 
 class SearchResultsMetadata(pydantic.BaseModel):
-    next_cursor: str
+    next_cursor: Optional[str]
     total: int

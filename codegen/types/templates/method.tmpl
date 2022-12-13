@@ -2,31 +2,19 @@
 def {{ this.name }}(
   self,
   {% for arg in this.args %}
-  {{ arg.generate() }},
+  {{ arg.generate_in_params() }},
   {% endfor %}
 ) -> {{ this.response_type.name }}:
     {% if not this.is_delete_method %}
     payload: Dict[str, Any] = {
-    {% for arg in this.args %}
-      {% if arg.always_include %}
-        {% if arg.map_with %}
-          "{{ arg.name }}": {{ arg.map_with }}({{ arg.name }}),
-        {% else %}
-          "{{ arg.name }}": {{ arg.name }},
-        {% endif %}
-      {% endif %}
+    {% for arg in this.args if arg.always_include %}
+        {{ arg.generate_in_dict_inline() }}
     {% endfor %}
     }
 
-    {% for arg in this.args %}
-      {% if not arg.always_include %}
+    {% for arg in this.args if not arg.always_include %}
     if {{ arg.name }} is not None:
-        {% if arg.map_with %}
-      payload["{{ arg.name }}"] = {{ arg.map_with }}({{ arg.name }})
-        {% else %}
-      payload["{{ arg.name }}"] = {{ arg.name }}
-        {% endif %}
-      {% endif %}
+        {{ arg.generate_in_dict_assignment("payload") }}
     {% endfor %}
     {% endif %}
 
@@ -46,23 +34,19 @@ def {{ this.name }}(
 async def {{ this.name }}_async(
   self,
   {% for arg in this.args %}
-  {{ arg.generate() }},
+  {{ arg.generate_in_params() }},
   {% endfor %}
 ) -> {{ this.response_type.name }}:
     {% if not this.is_delete_method %}
     payload: Dict[str, Any] = {
     {% for arg in this.args if arg.always_include %}
-        {% if arg.map_with %}
-          "{{ arg.name }}": {{ arg.map_with }}({{ arg.name }}),
-        {% else %}
-          "{{ arg.name }}": {{ arg.name }},
-        {% endif %}
+        {{ arg.generate_in_dict_inline() }}
     {% endfor %}
     }
 
     {% for arg in this.args if not arg.always_include %}
     if {{ arg.name }} is not None:
-      payload["{{ arg.name }}"] = {{ arg.name }}
+        {{ arg.generate_in_dict_assignment("payload") }}
     {% endfor %}
     {% endif %}
 
@@ -83,7 +67,7 @@ async def {{ this.name }}_async(
 def {{ this.name }}(
   self,
   {% for arg in this.args %}
-  {{ arg.generate() }},
+  {{ arg.generate_in_params() }},
   {% endfor %}
 ) -> None:
     # 1. Check if this method should be async or not

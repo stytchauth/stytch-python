@@ -11,10 +11,27 @@ class Argument:
     name: str
     arg_type: str
     map_with: Optional[str] = None
+    map_with_method: Optional[str] = None
     include_if_null: bool = False
 
-    def generate(self) -> str:
+    def generate_in_params(self) -> str:
         return f"{self.name}: {self.arg_type}"
+
+    def generate_in_dict_inline(self) -> str:
+        value = self.name
+        if self.map_with:
+            value = f"{self.map_with}({self.name})"
+        elif self.map_with_method:
+            value = f"{self.name}.{self.map_with_method}"
+        return f'"{self.name}": {value},'
+
+    def generate_in_dict_assignment(self, dict_name: str) -> str:
+        value = self.name
+        if self.map_with:
+            value = f"{self.map_with}({self.name})"
+        elif self.map_with_method:
+            value = f"{self.name}.{self.map_with_method}"
+        return f'{dict_name}["{self.name}"] = {value}'
 
     @property
     def nullable(self) -> bool:

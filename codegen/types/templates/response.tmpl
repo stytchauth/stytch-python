@@ -3,10 +3,6 @@ class {{ this.name }}({{ self.extends }}):
 {% else %}
 class {{ this.name }}(ResponseBase):
 {% endif %}
-  status_code: int
-  {% if not self.omit_request_id %}
-  request_id: str
-  {% endif %}
   {% for k, v in this.d.items() %}
   {{ k }}: {{ v }}
   {% else %}

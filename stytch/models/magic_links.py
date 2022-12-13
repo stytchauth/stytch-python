@@ -2,12 +2,10 @@
 
 from typing import Optional
 
-from stytch.models.common import ResponseBase, User
+from stytch.models.common import ResponseBase, StytchSession, User
 
 
 class CreateResponse(ResponseBase):
-    status_code: int
-    request_id: str
     status_code: int
     request_id: str
     user_id: str
@@ -17,12 +15,10 @@ class CreateResponse(ResponseBase):
 class AuthenticateResponse(ResponseBase):
     status_code: int
     request_id: str
-    status_code: int
-    request_id: str
     user_id: str
     user: User
     method_id: str
     reset_sessions: bool
     session_jwt: str
     session_token: str
-    session: Optional[str]
+    session: Optional[StytchSession]

@@ -15,7 +15,7 @@ methods:
       qr_code: str
       recovery_codes: List[str]
       user_id: str
-      user: User
+      user: Optional[User]
   - name: authenticate
     method: POST
     args:
