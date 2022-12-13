@@ -55,7 +55,7 @@ class Whatsapp:
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/send")
 
         resp = self.sync_client.post(url, json=payload)
-        return SendResponse(**resp.json())
+        return SendResponse.from_json(resp.json())
 
     async def send_async(
         self,
@@ -87,7 +87,7 @@ class Whatsapp:
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/send")
 
         resp = await self.async_client.post(url, json=payload)
-        return SendResponse(**await resp.json())
+        return SendResponse.from_json(await resp.json())
 
     def login_or_create(
         self,
@@ -112,7 +112,7 @@ class Whatsapp:
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/login_or_create")
 
         resp = self.sync_client.post(url, json=payload)
-        return LoginOrCreateResponse(**resp.json())
+        return LoginOrCreateResponse.from_json(resp.json())
 
     async def login_or_create_async(
         self,
@@ -137,4 +137,4 @@ class Whatsapp:
         url = self.api_base.route_with_sub_url(self.sub_url, "whatsapp/login_or_create")
 
         resp = await self.async_client.post(url, json=payload)
-        return LoginOrCreateResponse(**await resp.json())
+        return LoginOrCreateResponse.from_json(await resp.json())

@@ -2,7 +2,6 @@
 
 from typing import Optional
 
-import pydantic
 
 from stytch.models.common import (
     AuthenticationFactor,
@@ -15,6 +14,7 @@ from stytch.models.common import (
     Operand,
     Password,
     PhoneNumber,
+    ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
     StytchSession,
@@ -25,7 +25,7 @@ from stytch.models.common import (
 )
 
 
-class AuthenticateStartResponse(pydantic.BaseModel):
+class AuthenticateStartResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
@@ -33,7 +33,7 @@ class AuthenticateStartResponse(pydantic.BaseModel):
     user_created: bool
 
 
-class AuthenticateResponse(pydantic.BaseModel):
+class AuthenticateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str

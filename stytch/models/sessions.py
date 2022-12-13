@@ -2,7 +2,6 @@
 
 from typing import Any, Dict, List
 
-import pydantic
 
 from stytch.models.common import (
     AuthenticationFactor,
@@ -15,6 +14,7 @@ from stytch.models.common import (
     Operand,
     Password,
     PhoneNumber,
+    ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
     StytchSession,
@@ -25,24 +25,24 @@ from stytch.models.common import (
 )
 
 
-class GetResponse(pydantic.BaseModel):
+class GetResponse(ResponseBase):
     status_code: int
     request_id: str
     sessions: List[StytchSession]
 
 
-class AuthenticateResponse(pydantic.BaseModel):
+class AuthenticateResponse(ResponseBase):
     status_code: int
     request_id: str
     session: StytchSession
 
 
-class RevokeResponse(pydantic.BaseModel):
+class RevokeResponse(ResponseBase):
     status_code: int
     request_id: str
 
 
-class JwksResponse(pydantic.BaseModel):
+class JwksResponse(ResponseBase):
     status_code: int
     request_id: str
     keys: List[Dict[str, Any]]

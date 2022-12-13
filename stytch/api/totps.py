@@ -39,10 +39,10 @@ class TOTPs:
         if expiration_minutes is not None:
             payload["expiration_minutes"] = expiration_minutes
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/")
+        url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = self.sync_client.post(url, json=payload)
-        return CreateResponse(**resp.json())
+        return CreateResponse.from_json(resp.json())
 
     async def create_async(
         self,
@@ -56,10 +56,10 @@ class TOTPs:
         if expiration_minutes is not None:
             payload["expiration_minutes"] = expiration_minutes
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/")
+        url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = await self.async_client.post(url, json=payload)
-        return CreateResponse(**await resp.json())
+        return CreateResponse.from_json(await resp.json())
 
     def authenticate(
         self,
@@ -87,7 +87,7 @@ class TOTPs:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse(**resp.json())
+        return AuthenticateResponse.from_json(resp.json())
 
     async def authenticate_async(
         self,
@@ -115,7 +115,7 @@ class TOTPs:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse(**await resp.json())
+        return AuthenticateResponse.from_json(await resp.json())
 
     def recovery_codes(
         self,
@@ -128,7 +128,7 @@ class TOTPs:
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
         resp = self.sync_client.post(url, json=payload)
-        return RecoveryCodesResponse(**resp.json())
+        return RecoveryCodesResponse.from_json(resp.json())
 
     async def recovery_codes_async(
         self,
@@ -141,7 +141,7 @@ class TOTPs:
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
         resp = await self.async_client.post(url, json=payload)
-        return RecoveryCodesResponse(**await resp.json())
+        return RecoveryCodesResponse.from_json(await resp.json())
 
     def recover(
         self,
@@ -169,7 +169,7 @@ class TOTPs:
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
         resp = self.sync_client.post(url, json=payload)
-        return RecoverResponse(**resp.json())
+        return RecoverResponse.from_json(resp.json())
 
     async def recover_async(
         self,
@@ -197,4 +197,4 @@ class TOTPs:
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
         resp = await self.async_client.post(url, json=payload)
-        return RecoverResponse(**await resp.json())
+        return RecoverResponse.from_json(await resp.json())

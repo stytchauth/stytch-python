@@ -2,7 +2,6 @@
 
 from typing import Any, Dict, Optional
 
-import pydantic
 
 from stytch.models.common import (
     AuthenticationFactor,
@@ -15,6 +14,7 @@ from stytch.models.common import (
     Operand,
     Password,
     PhoneNumber,
+    ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
     StytchSession,
@@ -25,14 +25,14 @@ from stytch.models.common import (
 )
 
 
-class CreateResponse(pydantic.BaseModel):
+class CreateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     email_id: str
 
 
-class AuthenticateResponse(pydantic.BaseModel):
+class AuthenticateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
@@ -42,7 +42,7 @@ class AuthenticateResponse(pydantic.BaseModel):
     session: Optional[StytchSession]
 
 
-class StrengthCheckResponse(pydantic.BaseModel):
+class StrengthCheckResponse(ResponseBase):
     status_code: int
     request_id: str
     valid_password: bool
@@ -51,7 +51,7 @@ class StrengthCheckResponse(pydantic.BaseModel):
     feedback: Dict[str, Any]
 
 
-class MigrateResponse(pydantic.BaseModel):
+class MigrateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str

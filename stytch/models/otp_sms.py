@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 
-import pydantic
-
 from stytch.models.common import (
     AuthenticationFactor,
     BiometricRegistration,
@@ -14,6 +12,7 @@ from stytch.models.common import (
     Operand,
     Password,
     PhoneNumber,
+    ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
     StytchSession,
@@ -24,14 +23,14 @@ from stytch.models.common import (
 )
 
 
-class SendResponse(pydantic.BaseModel):
+class SendResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     phone_id: str
 
 
-class LoginOrCreateResponse(pydantic.BaseModel):
+class LoginOrCreateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str

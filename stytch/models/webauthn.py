@@ -2,7 +2,6 @@
 
 from typing import Optional
 
-import pydantic
 
 from stytch.models.common import (
     AuthenticationFactor,
@@ -15,6 +14,7 @@ from stytch.models.common import (
     Operand,
     Password,
     PhoneNumber,
+    ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
     StytchSession,
@@ -25,28 +25,28 @@ from stytch.models.common import (
 )
 
 
-class RegisterStartResponse(pydantic.BaseModel):
+class RegisterStartResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     public_key_credential_creation_options: str
 
 
-class RegisterResponse(pydantic.BaseModel):
+class RegisterResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     webauthn_registration_id: str
 
 
-class AuthenticateStartResponse(pydantic.BaseModel):
+class AuthenticateStartResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     public_key_credential_request_options: str
 
 
-class AuthenticateResponse(pydantic.BaseModel):
+class AuthenticateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str

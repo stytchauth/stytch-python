@@ -15,14 +15,14 @@ methods:
         arg_type: Optional[str] = None
     response_type:
       user_id: str
-      public_key_credential_creation_options: str # TODO: Can't *we* do the unmarshaling for them?
+      public_key_credential_creation_options: str
   - name: register
     method: POST
     args:
       - name: user_id
         arg_type: str
       - name: public_key_credential
-        arg_type: str # TODO: Similarly, there could be a convenience function to do the marshaling
+        arg_type: str
     response_type:
       user_id: str
       webauthn_registration_id: str

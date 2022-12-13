@@ -52,10 +52,10 @@ class Passwords:
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/")
+        url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = self.sync_client.post(url, json=payload)
-        return CreateResponse(**resp.json())
+        return CreateResponse.from_json(resp.json())
 
     async def create_async(
         self,
@@ -74,10 +74,10 @@ class Passwords:
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/")
+        url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = await self.async_client.post(url, json=payload)
-        return CreateResponse(**await resp.json())
+        return CreateResponse.from_json(await resp.json())
 
     def authenticate(
         self,
@@ -105,7 +105,7 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse(**resp.json())
+        return AuthenticateResponse.from_json(resp.json())
 
     async def authenticate_async(
         self,
@@ -133,7 +133,7 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse(**await resp.json())
+        return AuthenticateResponse.from_json(await resp.json())
 
     def strength_check(
         self,
@@ -150,7 +150,7 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
         resp = self.sync_client.post(url, json=payload)
-        return StrengthCheckResponse(**resp.json())
+        return StrengthCheckResponse.from_json(resp.json())
 
     async def strength_check_async(
         self,
@@ -167,7 +167,7 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
         resp = await self.async_client.post(url, json=payload)
-        return StrengthCheckResponse(**await resp.json())
+        return StrengthCheckResponse.from_json(await resp.json())
 
     def migrate(
         self,
@@ -197,7 +197,7 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
         resp = self.sync_client.post(url, json=payload)
-        return MigrateResponse(**resp.json())
+        return MigrateResponse.from_json(resp.json())
 
     async def migrate_async(
         self,
@@ -227,4 +227,4 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
         resp = await self.async_client.post(url, json=payload)
-        return MigrateResponse(**await resp.json())
+        return MigrateResponse.from_json(await resp.json())

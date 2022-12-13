@@ -2,7 +2,6 @@
 
 from typing import List, Optional
 
-import pydantic
 
 from stytch.models.common import (
     AuthenticationFactor,
@@ -15,6 +14,7 @@ from stytch.models.common import (
     Operand,
     Password,
     PhoneNumber,
+    ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
     StytchSession,
@@ -25,7 +25,7 @@ from stytch.models.common import (
 )
 
 
-class CreateResponse(pydantic.BaseModel):
+class CreateResponse(ResponseBase):
     status_code: int
     request_id: str
     secret: str
@@ -36,7 +36,7 @@ class CreateResponse(pydantic.BaseModel):
     user: User
 
 
-class AuthenticateResponse(pydantic.BaseModel):
+class AuthenticateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
@@ -47,14 +47,14 @@ class AuthenticateResponse(pydantic.BaseModel):
     session: Optional[StytchSession]
 
 
-class RecoveryCodesResponse(pydantic.BaseModel):
+class RecoveryCodesResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     totps: List[TOTPInstanceWithRecoveryCodes]
 
 
-class RecoverResponse(pydantic.BaseModel):
+class RecoverResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str

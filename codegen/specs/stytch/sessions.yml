@@ -1,7 +1,7 @@
 classname: Sessions
 methods:
   - name: get
-    api_path: /
+    use_base_path_as_api_path: True
     method: GET
     args:
       - name: user_id

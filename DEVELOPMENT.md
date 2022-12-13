@@ -14,7 +14,7 @@ Run the core unit tests with `python -m unittest discover -s stytch/`.
 
 Run the codegen unit tests with `python -m unittest discover -s codegen/`
 
-Run the integration tests with `python -m unittest discover -s integration_test/`
+Run the integration tests with `python -m unittest discover -s test/`
 
 The integration tests call the test API of Stytch to ensure you can call all methods. It requires setting up the following environment variables:
 

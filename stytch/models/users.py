@@ -2,7 +2,6 @@
 
 from typing import List
 
-import pydantic
 
 from stytch.models.common import (
     AuthenticationFactor,
@@ -15,6 +14,7 @@ from stytch.models.common import (
     Operand,
     Password,
     PhoneNumber,
+    ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
     StytchSession,
@@ -25,7 +25,7 @@ from stytch.models.common import (
 )
 
 
-class CreateResponse(pydantic.BaseModel):
+class CreateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
@@ -35,13 +35,13 @@ class CreateResponse(pydantic.BaseModel):
     status: str
 
 
-class GetResponse(pydantic.BaseModel):
+class GetResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
 
 
-class GetPendingResponse(pydantic.BaseModel):
+class GetPendingResponse(ResponseBase):
     status_code: int
     request_id: str
     users: List[User]
@@ -50,20 +50,20 @@ class GetPendingResponse(pydantic.BaseModel):
     total: int
 
 
-class SearchResponse(pydantic.BaseModel):
+class SearchResponse(ResponseBase):
     status_code: int
     request_id: str
     results: List[User]
     results_metadata: SearchResultsMetadata
 
 
-class DeleteResponse(pydantic.BaseModel):
+class DeleteResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
 
 
-class UpdateResponse(pydantic.BaseModel):
+class UpdateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
@@ -73,56 +73,56 @@ class UpdateResponse(pydantic.BaseModel):
     crypto_wallets: List[CryptoWallet]
 
 
-class DeleteEmailResponse(pydantic.BaseModel):
+class DeleteEmailResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     user: User
 
 
-class DeletePhoneNumberResponse(pydantic.BaseModel):
+class DeletePhoneNumberResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     user: User
 
 
-class DeleteWebauthnRegistrationResponse(pydantic.BaseModel):
+class DeleteWebauthnRegistrationResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     user: User
 
 
-class DeleteTotpResponse(pydantic.BaseModel):
+class DeleteTotpResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     user: User
 
 
-class DeleteCryptoWalletResponse(pydantic.BaseModel):
+class DeleteCryptoWalletResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     user: User
 
 
-class DeletePasswordResponse(pydantic.BaseModel):
+class DeletePasswordResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     user: User
 
 
-class DeleteBiometricRegistrationResponse(pydantic.BaseModel):
+class DeleteBiometricRegistrationResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
     user: User
 
 
-class DeleteOauthUserRegistrationResponse(pydantic.BaseModel):
+class DeleteOauthUserRegistrationResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str

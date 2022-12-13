@@ -42,7 +42,7 @@ class Session:
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
         resp = self.sync_client.post(url, json=payload)
-        return ResetResponse(**resp.json())
+        return ResetResponse.from_json(resp.json())
 
     async def reset_async(
         self,
@@ -62,4 +62,4 @@ class Session:
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
         resp = await self.async_client.post(url, json=payload)
-        return ResetResponse(**await resp.json())
+        return ResetResponse.from_json(await resp.json())

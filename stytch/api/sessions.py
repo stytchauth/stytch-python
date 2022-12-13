@@ -35,10 +35,10 @@ class Sessions:
             "user_id": user_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/")
+        url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = self.sync_client.get(url, params=payload)
-        return GetResponse(**resp.json())
+        return GetResponse.from_json(resp.json())
 
     async def get_async(
         self,
@@ -48,10 +48,10 @@ class Sessions:
             "user_id": user_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/")
+        url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = await self.async_client.get(url, params=payload)
-        return GetResponse(**await resp.json())
+        return GetResponse.from_json(await resp.json())
 
     def authenticate(
         self,
@@ -74,7 +74,7 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse(**resp.json())
+        return AuthenticateResponse.from_json(resp.json())
 
     async def authenticate_async(
         self,
@@ -97,7 +97,7 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse(**await resp.json())
+        return AuthenticateResponse.from_json(await resp.json())
 
     # MANUAL(authenticate_jwt)
     def authenticate_jwt(
@@ -147,7 +147,7 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
         resp = self.sync_client.post(url, json=payload)
-        return RevokeResponse(**resp.json())
+        return RevokeResponse.from_json(resp.json())
 
     async def revoke_async(
         self,
@@ -167,7 +167,7 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
         resp = await self.async_client.post(url, json=payload)
-        return RevokeResponse(**await resp.json())
+        return RevokeResponse.from_json(await resp.json())
 
     def jwks(
         self,
@@ -182,7 +182,7 @@ class Sessions:
         )
 
         resp = self.sync_client.get(url, params=payload)
-        return JwksResponse(**resp.json())
+        return JwksResponse.from_json(resp.json())
 
     async def jwks_async(
         self,
@@ -197,4 +197,4 @@ class Sessions:
         )
 
         resp = await self.async_client.get(url, params=payload)
-        return JwksResponse(**await resp.json())
+        return JwksResponse.from_json(await resp.json())

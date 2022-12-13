@@ -62,7 +62,7 @@ class OTP:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse(**resp.json())
+        return AuthenticateResponse.from_json(resp.json())
 
     async def authenticate_async(
         self,
@@ -96,4 +96,4 @@ class OTP:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse(**await resp.json())
+        return AuthenticateResponse.from_json(await resp.json())

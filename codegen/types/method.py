@@ -16,7 +16,7 @@ from codegen.types.templates import get_template
 @dataclass
 class Method:
     name: str
-    api_path: str
+    api_path: Optional[str]
     args: List[Argument]
     response_type: Optional[ResponseType] = None
     method: Optional[HttpMethod] = None
@@ -51,9 +51,16 @@ class Method:
             response_type = ResponseType.from_dict(
                 cls.return_type_name(name), data["response_type"]
             )
-        api_path = data.get("api_path", name)
-        manual_implementation = data.get("manual_implementation", False)
+
+        api_path = name
         eval_api_path = data.get("eval_api_path", False)
+        if "api_path" in data:
+            api_path = data["api_path"]
+        elif data.get("use_base_path_as_api_path", False):
+            api_path = None
+            eval_api_path = True
+
+        manual_implementation = data.get("manual_implementation", False)
         http_method = data.get("method")
 
         if http_method is None and not manual_implementation:

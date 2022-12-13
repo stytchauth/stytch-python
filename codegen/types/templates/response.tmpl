@@ -1,7 +1,7 @@
 {% if self.extends %}
 class {{ this.name }}({{ self.extends }}):
 {% else %}
-class {{ this.name }}(pydantic.BaseModel):
+class {{ this.name }}(ResponseBase):
 {% endif %}
   status_code: int
   {% if not self.omit_request_id %}

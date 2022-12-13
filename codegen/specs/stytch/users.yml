@@ -5,7 +5,7 @@ additional_imports:
   - from stytch.models.common import Name, SearchQuery
 methods:
   - name: create
-    api_path: /
+    use_base_path_as_api_path: True
     method: POST
     args:
       - name: email

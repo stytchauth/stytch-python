@@ -6,6 +6,36 @@ from typing import Any, Dict, List, Optional
 import pydantic
 
 
+class StytchErrorDetails(pydantic.BaseModel):
+    status_code: int
+    request_id: str
+    error_type: str
+    error_message: str
+    error_url: str
+
+
+class StytchError(Exception):
+    def __init__(self, details: StytchErrorDetails) -> None:
+        self.details = details
+
+    def __repr__(self) -> str:
+        return "StytchError {{{}}}".format(self.details)
+
+    def __str__(self) -> str:
+        return str(self.details)
+
+
+class ResponseBase(pydantic.BaseModel):
+    @classmethod
+    def from_json(cls, json: Dict[str, Any]):
+        try:
+            return cls(**json)
+        except pydantic.ValidationError:
+            # TODO: What if this one *also* fails?
+            details = StytchErrorDetails(**json)
+            raise StytchError(details) from None
+
+
 class Name(pydantic.BaseModel):
     first_name: Optional[str]
     middle_name: Optional[str]
@@ -34,7 +64,6 @@ class AuthenticationFactor(pydantic.BaseModel):
     type: str
 
 
-# TODO: Ensure that pydantic can handle extra keys
 class StytchSession(pydantic.BaseModel):
     attributes: Dict[str, str]
     authentication_factors: List[AuthenticationFactor]
@@ -79,7 +108,7 @@ class WebAuthnRegistration(pydantic.BaseModel):
     webauthn_registration_id: str
     domain: str
     user_agent: str
-    authenticator_type: str
+    authenticator_type: Optional[str]
     verified: bool
 
 
