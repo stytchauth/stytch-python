@@ -1,7 +1,7 @@
 classname: Users
 additional_imports:
   - from typing import AsyncGenerator, Generator # Used for search_all
-  - from stytch.models.common import Name, SearchQuery
+  - from stytch.core.models import Name, SearchQuery
 methods:
   - name: create
     use_base_path_as_api_path: True

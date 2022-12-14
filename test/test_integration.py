@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import Generator, Union
 
 from stytch.client import Client
-from stytch.models.common import Name
+from stytch.core.models import Name
 
 RUN_INTEGRATION_TESTS_ENV_KEY = "STYTCH_PYTHON_RUN_INTEGRATION_TESTS"
 PROJECT_ID_ENV_KEY = "STYTCH_PROJECT_ID"

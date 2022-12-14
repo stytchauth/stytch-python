@@ -10,7 +10,7 @@ from typing import Any, Dict, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.common import Name
+from stytch.core.models import Name
 from stytch.models.magic_links_email import (
     InviteResponse,
     LoginOrCreateResponse,

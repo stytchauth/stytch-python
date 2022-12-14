@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 
-from stytch.models.common import (
+from stytch.core.models import (
     ResponseBase,
     StytchSession,
     TOTPInstanceWithRecoveryCodes,

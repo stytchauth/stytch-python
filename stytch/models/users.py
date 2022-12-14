@@ -2,7 +2,7 @@
 
 from typing import List
 
-from stytch.models.common import (
+from stytch.core.models import (
     CryptoWallet,
     Email,
     PhoneNumber,

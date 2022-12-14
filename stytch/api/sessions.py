@@ -14,7 +14,7 @@ import jwt
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.common import StytchSession
+from stytch.core.models import StytchSession
 from stytch.models.sessions import (
     AuthenticateResponse,
     GetResponse,

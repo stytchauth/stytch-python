@@ -10,7 +10,7 @@ from typing import Any, AsyncGenerator, Dict, Generator, List, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.common import Name, SearchQuery
+from stytch.core.models import Name, SearchQuery
 from stytch.models.users import (
     CreateResponse,
     DeleteBiometricRegistrationResponse,

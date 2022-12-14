@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from stytch.models.common import ResponseBase, StytchSession, User
+from stytch.core.models import ResponseBase, StytchSession, User
 
 
 class RegisterStartResponse(ResponseBase):

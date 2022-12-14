@@ -47,7 +47,7 @@ methods:
 sub_apis:
   - classname: Email
     additional_imports:
-      - from stytch.models.common import Name
+      - from stytch.core.models import Name
     sub_url: magic_links/email
     filename: magic_links_email
     methods:
