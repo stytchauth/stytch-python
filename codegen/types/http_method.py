@@ -16,13 +16,14 @@ class HttpMethod(Enum):
 
     @classmethod
     def from_str(cls, s: str) -> HttpMethod:
-        if s == "GET":
+        s_upper = s.upper()
+        if s_upper == "GET":
             return cls.GET
-        elif s == "POST":
+        elif s_upper == "POST":
             return cls.POST
-        elif s == "PUT":
+        elif s_upper == "PUT":
             return cls.PUT
-        elif s == "DELETE":
+        elif s_upper == "DELETE":
             return cls.DELETE
         else:
             raise ValueError(f"Unknown HttpMethod: {s}")

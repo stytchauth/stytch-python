@@ -2,23 +2,19 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
 from codegen.types.templates import get_template
 
 
+@dataclass
 class ResponseType:
     EXTENDS_KEY = "__extends"
 
-    def __init__(
-        self,
-        name: str,
-        d: Dict[str, str],
-        extends: Optional[str] = None,
-    ) -> None:
-        self.name = name
-        self.d = d
-        self.extends = extends
+    name: str
+    d: Dict[str, str]
+    extends: Optional[str] = None
 
     def generate(self) -> str:
         template = get_template("response.tmpl")

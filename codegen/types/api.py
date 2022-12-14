@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 import yaml
-from requests import models
 
 from codegen.core.snippet_set import SnippetSet
 from codegen.types.method import Method

@@ -4,6 +4,7 @@
 Jinja2
 autoflake
 black
+isort
 mypy
 pyright
 pyyaml

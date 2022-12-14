@@ -60,11 +60,12 @@ class IntegrationTest(unittest.TestCase):
 
         if create:
             if via_magic_link:
-                resp = self.client.users.create(email=email)
+                user_id = self.client.users.create(email=email).user_id
             else:
-                resp = self.client.passwords.create(email=email, password=old_password)
+                user_id = self.client.passwords.create(
+                    email=email, password=old_password
+                ).user_id
 
-            user_id = resp.user_id
             yield CreatedTestUser(
                 username=username,
                 email=email,
@@ -137,33 +138,33 @@ class IntegrationTest(unittest.TestCase):
 
         with self.subTest("email"):
             self.assertTrue(api.email.login_or_create(email=TEST_EMAIL).is_success)
-            send_response = api.email.send(email=TEST_EMAIL)
-            self.assertTrue(send_response.is_success)
+            email_send_response = api.email.send(email=TEST_EMAIL)
+            self.assertTrue(email_send_response.is_success)
             self.assertTrue(
                 api.authenticate(
-                    method_id=send_response.email_id, code=TEST_CODE
+                    method_id=email_send_response.email_id, code=TEST_CODE
                 ).is_success
             )
         with self.subTest("sms"):
             self.assertTrue(
                 api.sms.login_or_create(phone_number=TEST_PHONE_NUMBER).is_success
             )
-            send_response = api.sms.send(phone_number=TEST_PHONE_NUMBER)
-            self.assertTrue(send_response.is_success)
+            sms_send_response = api.sms.send(phone_number=TEST_PHONE_NUMBER)
+            self.assertTrue(sms_send_response.is_success)
             self.assertTrue(
                 api.authenticate(
-                    method_id=send_response.phone_id, code=TEST_CODE
+                    method_id=sms_send_response.phone_id, code=TEST_CODE
                 ).is_success
             )
         with self.subTest("whatsapp"):
             self.assertTrue(
                 api.sms.login_or_create(phone_number=TEST_PHONE_NUMBER).is_success
             )
-            send_response = api.whatsapp.send(phone_number=TEST_PHONE_NUMBER)
-            self.assertTrue(send_response.is_success)
+            whatsapp_send_response = api.whatsapp.send(phone_number=TEST_PHONE_NUMBER)
+            self.assertTrue(whatsapp_send_response.is_success)
             self.assertTrue(
                 api.authenticate(
-                    method_id=send_response.phone_id, code=TEST_CODE
+                    method_id=whatsapp_send_response.phone_id, code=TEST_CODE
                 ).is_success
             )
 

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import logging
-import sys
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -11,6 +9,10 @@ from codegen.types.argument import Argument
 from codegen.types.http_method import HttpMethod
 from codegen.types.response_type import ResponseType
 from codegen.types.templates import get_template
+
+
+class InvalidMethodSpecError(ValueError):
+    pass
 
 
 @dataclass
@@ -27,6 +29,8 @@ class Method:
     def params_or_json(self) -> str:
         if self.method is HttpMethod.GET:
             return "params"
+        elif self.method is HttpMethod.DELETE:
+            return "SHOULD_NEVER_BE_CALLED"
         return "json"
 
     @property
@@ -57,6 +61,10 @@ class Method:
         if "api_path" in data:
             api_path = data["api_path"]
         elif data.get("use_base_path_as_api_path", False):
+            # We use None and set eval_api_path to True because
+            # we'll call self.api_base.with_sub_url(self.sub_url, None)
+            # which will omit the last part of the sub-route. This is
+            # useful for methods like passwords/create.
             api_path = None
             eval_api_path = True
 
@@ -64,13 +72,19 @@ class Method:
         http_method = data.get("method")
 
         if http_method is None and not manual_implementation:
-            logging.critical(
+            raise InvalidMethodSpecError(
                 f"No http method for {name}, but manual_implementation=False"
             )
-            sys.exit(1)
 
         if http_method is not None:
             http_method = HttpMethod.from_str(http_method)
+
+        if response_type is None:
+            if http_method is not HttpMethod.DELETE and not manual_implementation:
+                raise InvalidMethodSpecError(
+                    f"Can only omit response_type for {name} "
+                    "if HttpMethod is DELETE or manual_implementation=True"
+                )
 
         return cls(
             name=name,

@@ -118,13 +118,14 @@ class Sessions:
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
         # TODO: Remember to write a test since this is manually generated
-        """Parse a JWT and verify the signature, preferring local verification over remote.
+        """Parse a JWT and verify the signature, preferring local verification
+        over remote.
 
-        If max_token_age_seconds is set, remote verification will be forced if the JWT was issued
-        at (based on the "iat" claim) more than that many seconds ago.
+        If max_token_age_seconds is set, remote verification will be forced if the
+        JWT was issued at (based on the "iat" claim) more than that many seconds ago.
 
-        To force remote validation for all tokens, set max_token_age_seconds to zero or use the
-        authenticate method instead.
+        To force remote validation for all tokens, set max_token_age_seconds to
+        zero or use the authenticate method instead.
         """
         # Return the local_result if available, otherwise call the Stytch API
         return self.authenticate_jwt_local(
@@ -158,16 +159,17 @@ class Sessions:
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
     ) -> Optional[AuthenticateResponse]:
-        """Parse a JWT and verify the signature locally (without calling /authenticate in the API).
+        """Parse a JWT and verify the signature locally
+        (without calling /authenticate in the API).
 
-        If max_token_age_seconds is set, this will return an error if the JWT was issued (based on
-        the "iat" claim) more than maxTokenAge seconds ago.
+        If max_token_age_seconds is set, this will return an error if the JWT was issued
+        (based on the "iat" claim) more than maxTokenAge seconds ago.
 
-        If max_token_age_seconds is explicitly set to zero, all tokens will be considered too old,
-        even if they are otherwise valid.
+        If max_token_age_seconds is explicitly set to zero, all tokens will be
+        considered too old, even if they are otherwise valid.
 
-        The value for leeway is the maximum allowable difference in seconds when comparing
-        timestamps. It defaults to zero.
+        The value for leeway is the maximum allowable difference in seconds when
+        comparing timestamps. It defaults to zero.
         """
         # TODO: If this is slow to initialize, we could cache it
         # TODO: Could make the project_id a field of each API instead

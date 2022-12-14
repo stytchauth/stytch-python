@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 
 @dataclass
@@ -44,5 +44,5 @@ class Argument:
         return not self.nullable or self.include_if_null
 
     @classmethod
-    def from_dict(cls, data: Dict[str, str]) -> Argument:
+    def from_dict(cls, data: Dict[str, Any]) -> Argument:
         return cls(**data)
