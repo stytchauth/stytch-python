@@ -4,17 +4,19 @@ Thanks for contributing to Stytch's Python library! If you run into trouble, fin
 
 ## Setup
 
-1. Install [Python](https://www.python.org/) version 3.6 or greater.
+1. Install [Python](https://www.python.org/) version 3.7 or greater.
 2. (Recommended, but optional) Create a new [virtualenv](https://docs.python.org/3/tutorial/venv.html).
 3. `pip install -r requirements.txt`
 
 ## Testing
 
-Run the core unit tests with `python -m unittest discover -s stytch/`.
+Run the tests with the `unittest` module. To test everything, run `python -m unittest` from the root directory.
 
-Run the codegen unit tests with `python -m unittest discover -s codegen/`
+Run the **core** unit tests with `python -m unittest discover -s stytch/ -t .`.
 
-Run the integration tests with `python -m unittest discover -s test/`
+Run the **codegen** unit tests with `python -m unittest discover -s codegen/ -t .`
+
+Run the **integration** tests with `python -m unittest discover -s test/ -t .`
 
 The integration tests call the test API of Stytch to ensure you can call all methods. It requires setting up the following environment variables:
 

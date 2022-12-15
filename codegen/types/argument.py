@@ -35,8 +35,7 @@ class Argument:
 
     @property
     def nullable(self) -> bool:
-        # This could definitely be better
-        return "Optional" in self.arg_type
+        return self.arg_type.startswith("Optional[")
 
     @property
     def always_include(self) -> bool:

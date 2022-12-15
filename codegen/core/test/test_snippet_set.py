@@ -19,6 +19,7 @@ INPUT_EXTENSION = ".snippets_test"
 OLD_SNIPPETS_EXTENSION = ".snippets"
 SNIPPETS_EXTENSION = ".snippets"
 EXPECTED_EXTENSION = ".expected"
+ERROR_EXTENSION = ".error"
 
 
 @dataclass
@@ -39,15 +40,21 @@ class SnippetTest:
 
         with open(input_path) as f:
             input_lines = f.read()
-        with open(expected_path) as f:
-            contents = f.read()
-            expected: Union[str, Type[Exception]]
-            if contents.strip() == "SnippetKeyMismatchError":
-                expected = SnippetKeyMismatchError
-            elif contents.strip() == "UnterminatedSnippetError":
-                expected = UnterminatedSnippetError
-            else:
-                expected = contents
+
+        expected: Union[str, Type[Exception]]
+        if os.path.exists(expected_path):
+            with open(expected_path) as f:
+                expected = f.read()
+        else:
+            error_path = expected_path.with_suffix(ERROR_EXTENSION)
+            with open(error_path) as f:
+                contents = f.read().strip()
+                if contents.strip() == "SnippetKeyMismatchError":
+                    expected = SnippetKeyMismatchError
+                elif contents.strip() == "UnterminatedSnippetError":
+                    expected = UnterminatedSnippetError
+                else:
+                    raise ValueError(f"Unsupported error type `{contents}`")
         with open(snippets_path) as f:
             snippets = dict(line.split("=") for line in f)
             # A bit hacky, but if we have more than snippet1,

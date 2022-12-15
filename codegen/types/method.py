@@ -64,7 +64,8 @@ class Method:
             # We use None and set eval_api_path to True because
             # we'll call self.api_base.with_sub_url(self.sub_url, None)
             # which will omit the last part of the sub-route. This is
-            # useful for methods like passwords/create.
+            # useful for create methods that route to their parent path
+            # (passwords.create is POST /passwords, not /passwords/create).
             api_path = None
             eval_api_path = True
 

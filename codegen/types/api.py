@@ -14,6 +14,16 @@ from codegen.core.snippet_set import SnippetSet
 from codegen.types.method import Method
 from codegen.types.templates import get_template
 
+# The two regexes below convert TitleCase to snake_case
+# They were taken from https://stackoverflow.com/a/1176023
+# Two regexes are needed to handle patterns like turning
+# getHTTPResponseCode to get_http_response_code by intelligently
+# seeing that `HTTP` should stick together. The first regex
+# transforms getHTTPResponseCode to getHTTP_ResponseCode
+# and the second will then convert it to its final form.
+CAPNAMES_REGEX = re.compile("(.)([A-Z][a-z]+)")
+TITLE_TO_SNAKE_REGEX = re.compile("([a-z0-9])([A-Z])")
+
 
 @dataclass
 class Api:
@@ -89,9 +99,10 @@ class Api:
 
     @classmethod
     def _gen_filename_from_classname(cls, classname: str) -> str:
-        # https://stackoverflow.com/a/1176023
-        filename = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", classname)
-        return re.sub("([a-z0-9])([A-Z])", r"\1_\2", filename).lower()
+        """Converts a ClassName to class_name for use in generating filenames
+        for an API. More details available where the regexes are defined."""
+        partial = CAPNAMES_REGEX.sub(r"\1_\2", classname)
+        return TITLE_TO_SNAKE_REGEX.sub(r"\1_\2", partial).lower()
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> Api:
