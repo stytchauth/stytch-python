@@ -153,6 +153,12 @@ class Sessions:
     # ENDMANUAL(authenticate_jwt)
 
     # MANUAL(authenticate_jwt_local)
+    def get_jwks_client(self) -> jwt.PyJWKClient:
+        # TODO: If this is slow to initialize, we could functools.cache it
+        project_id = self.sync_client.project_id
+        jwks_url = self.api_base.route_with_sub_url("sessions/jwks", project_id)
+        return jwt.PyJWKClient(jwks_url)
+
     def authenticate_jwt_local(
         self,
         session_jwt: str,
@@ -171,15 +177,12 @@ class Sessions:
         The value for leeway is the maximum allowable difference in seconds when
         comparing timestamps. It defaults to zero.
         """
-        # TODO: If this is slow to initialize, we could cache it
-        # TODO: Could make the project_id a field of each API instead
         project_id = self.sync_client.project_id
-        jwks_url = self.api_base.route_with_sub_url("sessions/jwks", project_id)
         jwt_audience = project_id
         jwt_issuer = "stytch.com/{}".format(project_id)
         _session_claim = "https://stytch.com/session"
 
-        jwks_client = jwt.PyJWKClient(jwks_url)
+        jwks_client = self.get_jwks_client()
         now = time.time()
 
         signing_key = jwks_client.get_signing_key_from_jwt(session_jwt)
@@ -213,10 +216,7 @@ class Sessions:
         claim = payload[_session_claim]
 
         # For JWTs that include it, prefer the inner expires_at claim.
-        expires_at_str = claim["expires_at"] or time.strftime(
-            "%Y-%m-%dT%H:%M:%SZ", time.gmtime(payload["exp"])
-        )
-        expires_at = datetime.datetime.strptime(expires_at_str, "%Y-%m-%dT%H:%M:%SZ")
+        expires_at = claim.get("expires_at", payload["exp"])
 
         session = StytchSession(
             attributes=claim["attributes"],
