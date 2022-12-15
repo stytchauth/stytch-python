@@ -1,9 +1,10 @@
--e .
+-e .[async]
 
-# For type checking and codegen
+# For type checking, codegen, and testing
 Jinja2
 autoflake
 black
+coverage
 isort
 mypy
 pyright

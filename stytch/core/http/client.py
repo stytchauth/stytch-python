@@ -49,7 +49,7 @@ class SyncClient(ClientBase):
 class AsyncClient(ClientBase):
     def __init__(self, project_id: str, secret: str) -> None:
         self.headers = HEADERS
-        self.auth = requests.auth.HTTPBasicAuth(project_id, secret)
+        self.auth = aiohttp.BasicAuth(project_id, secret)
 
     async def get(
         self, url: str, params: Optional[Dict[str, Any]]

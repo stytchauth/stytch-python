@@ -53,9 +53,9 @@ setup(
     ),
     include_package_data=True,
     install_requires=[
-        "aiohttp>=3.8.3",
         "requests>=2.7.0",
         "pydantic>=1.10.2",
         "pyjwt[crypto]>=2.3.0",
     ],
+    extras_require={"async": ["aiohttp>=3.8.3"]},
 )

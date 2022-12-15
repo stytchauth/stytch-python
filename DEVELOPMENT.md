@@ -24,6 +24,14 @@ The integration tests call the test API of Stytch to ensure you can call all met
 - `STYTCH_PROJECT_ID=your-stytch-project-id`
 - `STYTCH_SECRET=your-stytch-secret`
 
+You can check test coverage with the following command:
+
+```
+coverage run -m unittest  && coverage report --omit="*test/*" --sort=cover
+```
+
+Note that if you _didn't_ enable the integration tests that coverage will be much lower.
+
 ## Issues and Pull Requests
 
 Please file issues in this repo. We don't have an issue template yet, but for now, say whatever you think is important!

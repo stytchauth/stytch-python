@@ -1,177 +1,106 @@
 #!/usr/bin/env python3
 
-import os
-import random
-import string
 import unittest
-from contextlib import contextmanager
-from dataclasses import dataclass
-from typing import Generator, Union
-
-from stytch.client import Client
-from stytch.core.models import Name
-
-RUN_INTEGRATION_TESTS_ENV_KEY = "STYTCH_PYTHON_RUN_INTEGRATION_TESTS"
-PROJECT_ID_ENV_KEY = "STYTCH_PROJECT_ID"
-SECRET_ENV_KEY = "STYTCH_SECRET"
-
-
-@dataclass
-class TestUser:
-    username: str
-    email: str
-    old_password: str
-    new_password: str
-
-
-@dataclass
-class CreatedTestUser(TestUser):
-    user_id: str
+from test.constants import (
+    TEST_CRYPTO_SIGNATURE,
+    TEST_CRYPTO_WALLET_ADDRESS,
+    TEST_CRYPTO_WALLET_TYPE,
+    TEST_MAGIC_EMAIL,
+    TEST_MAGIC_TOKEN,
+    TEST_OAUTH_TOKEN,
+    TEST_OTP_CODE,
+    TEST_OTP_EMAIL,
+    TEST_OTP_PHONE_NUMBER,
+    TEST_PW_HASH,
+    TEST_PW_HASH_TYPE,
+    TEST_SESSION_TOKEN,
+    TEST_TOTP_CODE,
+    TEST_TOTP_RECOVERY_CODE,
+    TEST_TOTP_USER_ID,
+    TEST_USERS_NAME,
+)
+from test.integration_base import CreatedTestUser, IntegrationTestBase
 
 
-class IntegrationTest(unittest.TestCase):
-    def setUp(self) -> None:
-        run_integration_tests = int(os.getenv(RUN_INTEGRATION_TESTS_ENV_KEY, "0"))
-        project_id = os.getenv(PROJECT_ID_ENV_KEY)
-        secret = os.getenv(SECRET_ENV_KEY)
-
-        if run_integration_tests != 1:
-            self._skip_for_env_var(RUN_INTEGRATION_TESTS_ENV_KEY)
-            return
-        if project_id is None:
-            self._skip_for_env_var(PROJECT_ID_ENV_KEY)
-            return
-        if secret is None:
-            self._skip_for_env_var(SECRET_ENV_KEY)
-            return
-
-        self.project_id: str = project_id
-        self.secret: str = secret
-        self.client = Client(self.project_id, self.secret, environment="test")
-
-    @contextmanager
-    def _get_temporary_user(
-        self, create: bool = True, via_magic_link: bool = False
-    ) -> Generator[Union[TestUser, CreatedTestUser], None, None]:
-        username = "".join(random.choice(string.ascii_letters) for _ in range(20))
-        email = f"{username}@example.com"
-        old_password = "".join(random.choice(string.printable) for _ in range(24))
-        new_password = "".join(random.choice(string.printable) for _ in range(24))
-
-        if create:
-            if via_magic_link:
-                user_id = self.client.users.create(email=email).user_id
-            else:
-                user_id = self.client.passwords.create(
-                    email=email, password=old_password
-                ).user_id
-
-            yield CreatedTestUser(
-                username=username,
-                email=email,
-                old_password=old_password,
-                new_password=new_password,
-                user_id=user_id,
-            )
-            self.client.users.delete(user_id=user_id)
-        else:
-            yield TestUser(
-                username=username,
-                email=email,
-                old_password=old_password,
-                new_password=new_password,
-            )
-
-    def _skip_for_env_var(self, var: str) -> None:
-        self.skipTest(f"{var} env variable not set, skipping integration tests")
-
+class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
     def test_crypto_wallets(self) -> None:
         api = self.client.crypto_wallets
-        TEST_WALLET_TYPE = "ethereum"
-        TEST_WALLET_ADDRESS = "0x6df2dB4Fb3DA35d241901Bd53367770BF03123f1"
-        TEST_SIGNATURE = "0x0c4f82edc3c818b6beff4b89e0682994e5878074609903cecdfb"
 
         self.assertTrue(
             api.authenticate_start(
-                crypto_wallet_type=TEST_WALLET_TYPE,
-                crypto_wallet_address=TEST_WALLET_ADDRESS,
+                crypto_wallet_type=TEST_CRYPTO_WALLET_TYPE,
+                crypto_wallet_address=TEST_CRYPTO_WALLET_ADDRESS,
             ).is_success
         )
         self.assertTrue(
             api.authenticate(
-                crypto_wallet_type=TEST_WALLET_TYPE,
-                crypto_wallet_address=TEST_WALLET_ADDRESS,
-                signature=TEST_SIGNATURE,
+                crypto_wallet_type=TEST_CRYPTO_WALLET_TYPE,
+                crypto_wallet_address=TEST_CRYPTO_WALLET_ADDRESS,
+                signature=TEST_CRYPTO_SIGNATURE,
             ).is_success
         )
 
     def test_magic_links(self) -> None:
         api = self.client.magic_links
 
-        TEST_EMAIL = "sandbox@stytch.com"
-        TEST_TOKEN = "DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94="
-
         # Can't test create endpoint -- requires approval
         # self.assertTrue(api.create(user_id=user.user_id).is_success)
-        self.assertTrue(api.authenticate(token=TEST_TOKEN).is_success)
+        self.assertTrue(api.authenticate(token=TEST_MAGIC_TOKEN).is_success)
         with self.subTest("email"):
             # Can't test: there's no way to call the test API without
             # first setting up an invite_redirect_url in the dashboard
             self.skipTest("No invite_redirect_url set up")
-            self.assertTrue(api.email.invite(email=TEST_EMAIL).is_success)
-            self.assertTrue(api.email.revoke_invite(email=TEST_EMAIL).is_success)
-            self.assertTrue(api.email.login_or_create(email=TEST_EMAIL).is_success)
-            self.assertTrue(api.email.send(TEST_EMAIL))
+            self.assertTrue(api.email.invite(email=TEST_MAGIC_EMAIL).is_success)
+            self.assertTrue(api.email.revoke_invite(email=TEST_MAGIC_EMAIL).is_success)
+            self.assertTrue(
+                api.email.login_or_create(email=TEST_MAGIC_EMAIL).is_success
+            )
+            self.assertTrue(api.email.send(TEST_MAGIC_EMAIL).is_success)
 
     def test_oauth(self) -> None:
         api = self.client.oauth
 
-        TEST_TOKEN = "hdPVZHHX0UoRa7hJTuuPHi1vlddffSnoweRbVFf5-H8g"
-
-        self.assertTrue(api.authenticate(token=TEST_TOKEN).is_success)
+        self.assertTrue(api.authenticate(token=TEST_OAUTH_TOKEN).is_success)
 
     def test_otp(self) -> None:
         api = self.client.otps
-        TEST_EMAIL = "sandbox@stytch.com"
-        TEST_PHONE_NUMBER = "+10000000000"
-        TEST_CODE = "000000"
 
         with self.subTest("email"):
-            self.assertTrue(api.email.login_or_create(email=TEST_EMAIL).is_success)
-            email_send_response = api.email.send(email=TEST_EMAIL)
+            self.assertTrue(api.email.login_or_create(email=TEST_OTP_EMAIL).is_success)
+            email_send_response = api.email.send(email=TEST_OTP_EMAIL)
             self.assertTrue(email_send_response.is_success)
             self.assertTrue(
                 api.authenticate(
-                    method_id=email_send_response.email_id, code=TEST_CODE
+                    method_id=email_send_response.email_id, code=TEST_OTP_CODE
                 ).is_success
             )
         with self.subTest("sms"):
             self.assertTrue(
-                api.sms.login_or_create(phone_number=TEST_PHONE_NUMBER).is_success
+                api.sms.login_or_create(phone_number=TEST_OTP_PHONE_NUMBER).is_success
             )
-            sms_send_response = api.sms.send(phone_number=TEST_PHONE_NUMBER)
+            sms_send_response = api.sms.send(phone_number=TEST_OTP_PHONE_NUMBER)
             self.assertTrue(sms_send_response.is_success)
             self.assertTrue(
                 api.authenticate(
-                    method_id=sms_send_response.phone_id, code=TEST_CODE
+                    method_id=sms_send_response.phone_id, code=TEST_OTP_CODE
                 ).is_success
             )
         with self.subTest("whatsapp"):
             self.assertTrue(
-                api.sms.login_or_create(phone_number=TEST_PHONE_NUMBER).is_success
+                api.sms.login_or_create(phone_number=TEST_OTP_PHONE_NUMBER).is_success
             )
-            whatsapp_send_response = api.whatsapp.send(phone_number=TEST_PHONE_NUMBER)
+            whatsapp_send_response = api.whatsapp.send(
+                phone_number=TEST_OTP_PHONE_NUMBER
+            )
             self.assertTrue(whatsapp_send_response.is_success)
             self.assertTrue(
                 api.authenticate(
-                    method_id=whatsapp_send_response.phone_id, code=TEST_CODE
+                    method_id=whatsapp_send_response.phone_id, code=TEST_OTP_CODE
                 ).is_success
             )
 
     def test_passwords(self) -> None:
         api = self.client.passwords
-        TEST_HASH = "$2a$12$vefoDBbzuMb/NczV/fc9QemTizkNAZr9EO02pIUHPAAJibcYp0.ne"
-        TEST_HASH_TYPE = "bcrypt"
 
         with self._get_temporary_user(create=False) as user:
             self.assertTrue(api.strength_check(password=user.old_password).is_success)
@@ -189,8 +118,8 @@ class IntegrationTest(unittest.TestCase):
             self.assertTrue(
                 api.migrate(
                     email=user.email,
-                    hash=TEST_HASH,
-                    hash_type=TEST_HASH_TYPE,
+                    hash=TEST_PW_HASH,
+                    hash_type=TEST_PW_HASH_TYPE,
                 ).is_success
             )
 
@@ -216,7 +145,7 @@ class IntegrationTest(unittest.TestCase):
                         email=user.email,
                         existing_password=user.old_password,
                         new_password=user.new_password,
-                    )
+                    ).is_success
                 )
         with self.subTest("session"):
             # Can't test: there's no sesison token that can be used for testing the API
@@ -227,12 +156,11 @@ class IntegrationTest(unittest.TestCase):
                     api.session.reset(
                         session_token="",
                         password=user.new_password,
-                    )
+                    ).is_success
                 )
 
     def test_sessions(self) -> None:
         api = self.client.sessions
-        TEST_SESSION_TOKEN = "WJtR5BCy38Szd5AfoDpf0iqFKEt4EE5JhjlWUY7l3FtY"
 
         with self._get_temporary_user() as user:
             # TODO: With @overload, it should be possible to let
@@ -250,18 +178,17 @@ class IntegrationTest(unittest.TestCase):
 
     def test_totps(self) -> None:
         api = self.client.totps
-        TEST_USER_ID = "user-test-e3795c81-f849-4167-bfda-e4a6e9c280fd"
-        TEST_CODE = "000000"
-        TEST_RECOVERY_CODE = "a1b2-c3d4-e5f6"
 
-        self.assertTrue(api.create(user_id=TEST_USER_ID).is_success)
+        self.assertTrue(api.create(user_id=TEST_TOTP_USER_ID).is_success)
         self.assertTrue(
-            api.authenticate(user_id=TEST_USER_ID, totp_code=TEST_CODE).is_success
+            api.authenticate(
+                user_id=TEST_TOTP_USER_ID, totp_code=TEST_TOTP_CODE
+            ).is_success
         )
-        self.assertTrue(api.recovery_codes(user_id=TEST_USER_ID).is_success)
+        self.assertTrue(api.recovery_codes(user_id=TEST_TOTP_USER_ID).is_success)
         self.assertTrue(
             api.recover(
-                user_id=TEST_USER_ID, recovery_code=TEST_RECOVERY_CODE
+                user_id=TEST_TOTP_USER_ID, recovery_code=TEST_TOTP_RECOVERY_CODE
             ).is_success
         )
 
@@ -270,7 +197,6 @@ class IntegrationTest(unittest.TestCase):
         # since it would require we first create the user with each of those
         # methods/auth factors present (and possibly authenticated?).
         api = self.client.users
-        TEST_NAME = Name(first_name="Jane", last_name="Doe")
 
         with self._get_temporary_user(create=False) as user:
             create_resp = api.create(email=user.email)
@@ -280,7 +206,7 @@ class IntegrationTest(unittest.TestCase):
             self.assertTrue(
                 api.update(
                     user_id=create_resp.user_id,
-                    name=TEST_NAME,
+                    name=TEST_USERS_NAME,
                 ).is_success
             )
             self.assertTrue(api.get(user_id=create_resp.user_id).is_success)
