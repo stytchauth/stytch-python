@@ -17,6 +17,7 @@ class ResponseBase(pydantic.BaseModel):
             return cls(**json)
         except pydantic.ValidationError:
             # TODO: What if this one *also* fails?
+            # In that case, we should create a 500 error
             details = StytchErrorDetails(**json)
             raise StytchError(details) from None
 
