@@ -127,3 +127,4 @@ class TestModels(unittest.TestCase):
         self.assertEqual(ex.details.status_code, 418)
         self.assertEqual(ex.details.error_url, "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418")
         self.assertEqual(ex.details.error_message, "I'm a teapot!")
+        self.assertEqual(ex.details.request_id, "request-id-test-fea11c44-5514-4aac-a76b-3ca685e3443a")
