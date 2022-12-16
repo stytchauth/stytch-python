@@ -1,3 +1,6 @@
 *.pyc
 .vscode/
-.venv
+.venv*
+stytch.egg-info/
+.env*
+.coverage

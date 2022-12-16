@@ -1,0 +1,70 @@
+classname: TOTPs
+filename: totps
+methods:
+  - name: create
+    use_base_path_as_api_path: True
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+    response_type:
+      secret: str
+      totp_id: str
+      qr_code: str
+      recovery_codes: List[str]
+      user_id: str
+      user: Optional[User]
+  - name: authenticate
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+      - name: totp_code
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      user_id: str
+      user: User
+      totp_id: str
+      session_jwt: str
+      session_token: str
+      session: Optional[StytchSession]
+  - name: recovery_codes
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+    response_type:
+      user_id: str
+      totps: List[TOTPInstanceWithRecoveryCodes]
+  - name: recover
+    method: POST
+    args:
+      - name: user_id
+        arg_type: str
+      - name: recovery_code
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      user_id: str
+      user: User
+      totp_id: str
+      session_jwt: str
+      session_token: str
+      session: Optional[StytchSession]

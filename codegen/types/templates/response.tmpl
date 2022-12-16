@@ -1,0 +1,10 @@
+{% if self.extends %}
+class {{ this.name }}({{ self.extends }}):
+{% else %}
+class {{ this.name }}(ResponseBase):
+{% endif %}
+  {% for k, v in this.d.items() %}
+  {{ k }}: {{ v }}
+  {% else %}
+  pass
+  {% endfor %}

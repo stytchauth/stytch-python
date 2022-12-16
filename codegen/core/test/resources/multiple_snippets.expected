@@ -1,0 +1,9 @@
+value = 123
+# MANUAL(snippet1)
+hello world
+# ENDMANUAL(snippet1)
+value2 = 456
+# MANUAL(snippet2)
+goodbye
+# ENDMANUAL(snippet2)
+value3 = 3.14

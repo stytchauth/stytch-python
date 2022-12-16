@@ -1,0 +1,154 @@
+classname: OTP
+sub_url: otps
+methods:
+  - name: authenticate
+    method: POST
+    args:
+      - name: method_id
+        arg_type: str
+      - name: code
+        arg_type: str
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: options
+        arg_type: Optional[Dict[str, str]] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      user_id: str
+      user: User
+      method_id: str
+      reset_sessions: bool
+      session_jwt: str
+      session_token: str
+      session: Optional[StytchSession]
+sub_apis:
+  - classname: Email
+    sub_url: otps/email
+    filename: otp_email
+    methods:
+      - name: send
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: user_id
+            arg_type: Optional[str] = None
+          - name: session_token
+            arg_type: Optional[str] = None
+          - name: session_jwt
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          email_id: str
+      - name: login_or_create
+        method: POST
+        args:
+          - name: email
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: create_user_as_pending
+            arg_type: bool = False
+          - name: locale
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          email_id: str
+          user_created: bool
+  - classname: SMS
+    sub_url: otps/sms
+    filename: otp_sms
+    methods:
+      - name: send
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: user_id
+            arg_type: Optional[str] = None
+          - name: session_token
+            arg_type: Optional[str] = None
+          - name: session_jwt
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          phone_id: str
+      - name: login_or_create
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: create_user_as_pending
+            arg_type: bool = False
+          - name: locale
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          phone_id: str
+          user_created: bool
+  - classname: Whatsapp
+    sub_url: otps/whatsapp
+    filename: otp_whatsapp
+    methods:
+      - name: send
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: locale
+            arg_type: Optional[str] = None
+          - name: user_id
+            arg_type: Optional[str] = None
+          - name: session_token
+            arg_type: Optional[str] = None
+          - name: session_jwt
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          phone_id: str
+      - name: login_or_create
+        method: POST
+        args:
+          - name: phone_number
+            arg_type: str
+          - name: expiration_minutes
+            arg_type: Optional[int] = None
+          - name: attributes
+            arg_type: Optional[Dict[str, str]] = None
+          - name: create_user_as_pending
+            arg_type: bool = False
+          - name: locale
+            arg_type: Optional[str] = None
+        response_type:
+          user_id: str
+          phone_id: str
+          user_created: bool

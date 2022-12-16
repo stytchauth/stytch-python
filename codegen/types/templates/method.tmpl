@@ -1,0 +1,89 @@
+{% if not this.manual_implementation %}
+def {{ this.name }}(
+  self,
+  {% for arg in this.args %}
+  {{ arg.generate_in_params() }},
+  {% endfor %}
+) -> {{ this.response_type.name }}:
+    {% if not this.is_delete_method %}
+    payload: Dict[str, Any] = {
+    {% for arg in this.args if arg.always_include %}
+        {{ arg.generate_in_dict_inline() }}
+    {% endfor %}
+    }
+
+    {% for arg in this.args if not arg.always_include %}
+    if {{ arg.name }} is not None:
+        {{ arg.generate_in_dict_assignment("payload") }}
+    {% endfor %}
+    {% endif %}
+
+    {% if this.eval_api_path %}
+    url = self.api_base.route_with_sub_url(self.sub_url, {{ this.api_path }})
+    {% else %}
+    url = self.api_base.route_with_sub_url(self.sub_url, "{{ this.api_path }}")
+    {% endif %}
+
+    {% if this.is_delete_method %}
+    resp = self.sync_client.{{ this.method }}(url)
+    {% else %}
+    resp = self.sync_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
+    {% endif %}
+    json = {}
+    try:
+      json = resp.json()
+    except Exception:
+      pass
+    return {{ this.response_type.name }}.from_json(resp.status_code, json)
+
+async def {{ this.name }}_async(
+  self,
+  {% for arg in this.args %}
+  {{ arg.generate_in_params() }},
+  {% endfor %}
+) -> {{ this.response_type.name }}:
+    {% if not this.is_delete_method %}
+    payload: Dict[str, Any] = {
+    {% for arg in this.args if arg.always_include %}
+        {{ arg.generate_in_dict_inline() }}
+    {% endfor %}
+    }
+
+    {% for arg in this.args if not arg.always_include %}
+    if {{ arg.name }} is not None:
+        {{ arg.generate_in_dict_assignment("payload") }}
+    {% endfor %}
+    {% endif %}
+
+    {% if this.eval_api_path %}
+    url = self.api_base.route_with_sub_url(self.sub_url, {{ this.api_path }})
+    {% else %}
+    url = self.api_base.route_with_sub_url(self.sub_url, "{{ this.api_path }}")
+    {% endif %}
+
+    {% if this.is_delete_method %}
+    resp = await self.async_client.{{ this.method }}(url)
+    {% else %}
+    resp = await self.async_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
+    {% endif %}
+    json = {}
+    try:
+      json = await resp.json()
+    except Exception:
+      pass
+    return {{ this.response_type.name }}.from_json(resp.status, json)
+{% else %}
+# MANUAL({{ this.name }})
+def {{ this.name }}(
+  self,
+  {% for arg in this.args %}
+  {{ arg.generate_in_params() }},
+  {% endfor %}
+) -> None:
+    # 1. Check if this method should be async or not
+    # 2. Set the return type appropriately
+    # 3. Fill out the method details
+    # 4. Remember to write a test since this is manually generated
+    raise NotImplementedError("Fill me out!")
+# ENDMANUAL({{ this.name}})
+{% endif %}

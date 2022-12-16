@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+from typing import Any, Dict, List, Optional
+
+
+from stytch.core.models import (
+  AuthenticationFactor,
+  BiometricRegistration,
+  CryptoWallet,
+  Email,
+  EmailFactor,
+  Name,
+  OAuthProvider,
+  Operand,
+  Password,
+  PhoneNumber,
+  ResponseBase,
+  SearchQuery,
+  SearchResultsMetadata,
+  StytchSession,
+  TOTPInstance,
+  TOTPInstanceWithRecoveryCodes,
+  User,
+  WebAuthnRegistration,
+)
+
+{% for method in this.methods if method.response_type %}
+{{ method.response_type.generate() }}
+{% endfor %}
