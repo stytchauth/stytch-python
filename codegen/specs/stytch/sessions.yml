@@ -1,7 +1,6 @@
 classname: Sessions
 additional_imports:
   - import jwt
-  - import functools
   - import time
   - from stytch.core.models import StytchSession
 methods:
@@ -55,7 +54,7 @@ methods:
         arg_type: Optional[str] = None
     response_type: {}
   - name: jwks
-    api_path: '"jwks/{}".format(project_id)'
+    api_path: 'f"jwks/{project_id}"'
     eval_api_path: true
     method: GET
     args:

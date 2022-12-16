@@ -33,25 +33,27 @@ class SnippetSet:
         did_replacement = False
 
         for line in s.splitlines(keepends=True):
-            if match := BEGIN_SNIPPET_REGEX.search(line):
+            begin_match = BEGIN_SNIPPET_REGEX.search(line)
+            end_match = END_SNIPPET_REGEX.search(line)
+            if begin_match:
                 # Keep the begin/end markers
                 res += line
 
                 in_snippet = True
-                cur_key = match.group(1)
+                cur_key = begin_match.group(1)
                 logging.debug(f"Found snippet in replace_all: {cur_key}")
                 if cur_key in self.snippets:
                     logging.debug(f"Replacing '{cur_key}' with saved snippet")
                     res += self.snippets[cur_key]
                     did_replacement = True
-            elif match := END_SNIPPET_REGEX.search(line):
+            elif end_match:
                 # Keep the begin/end markers
                 res += line
 
                 in_snippet = False
-                if match.group(1) != cur_key:
+                if end_match.group(1) != cur_key:
                     raise SnippetKeyMismatchError(
-                        begin_key=cur_key, end_key=match.group(1)
+                        begin_key=cur_key, end_key=end_match.group(1)
                     )
             elif not in_snippet or not did_replacement:
                 # If we're not in a snippet or didn't have a replacement,
@@ -74,17 +76,19 @@ class SnippetSet:
             in_snippet = False
 
             for line in f:
-                if match := BEGIN_SNIPPET_REGEX.search(line):
+                begin_match = BEGIN_SNIPPET_REGEX.search(line)
+                end_match = END_SNIPPET_REGEX.search(line)
+                if begin_match:
                     in_snippet = True
-                    cur_key = match.group(1)
+                    cur_key = begin_match.group(1)
                     cur_value = ""
                     logging.debug(f"Found snippet in from_file: {cur_key}")
-                elif match := END_SNIPPET_REGEX.search(line):
+                elif end_match:
                     in_snippet = False
                     res[cur_key] = cur_value
-                    if match.group(1) != cur_key:
+                    if end_match.group(1) != cur_key:
                         raise SnippetKeyMismatchError(
-                            begin_key=cur_key, end_key=match.group(1)
+                            begin_key=cur_key, end_key=end_match.group(1)
                         )
                 elif in_snippet:
                     cur_value += line

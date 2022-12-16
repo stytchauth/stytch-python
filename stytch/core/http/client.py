@@ -10,7 +10,7 @@ from stytch.version import __version__
 
 HEADERS = {
     "Content-Type": "application/json",
-    "User-Agent": "Stytch Python v{}".format(__version__),
+    "User-Agent": f"Stytch Python v{__version__}",
 }
 
 

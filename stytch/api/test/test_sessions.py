@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime
 import time
 import unittest
-from unittest.mock import AsyncMock, MagicMock, create_autospec, patch
+from unittest.mock import MagicMock, create_autospec, patch
 
 from stytch.api.sessions import Sessions
 from stytch.core.api_base import ApiBase
@@ -130,45 +130,3 @@ class TestSessions(unittest.TestCase):
             )
             # Assert
             self.assertIsNone(res)
-
-
-class TestSessionsAsync(unittest.IsolatedAsyncioTestCase):
-    async def test_authenticate_jwt_async(self) -> None:
-        # Arrange
-        sessions = Sessions(
-            api_base=create_autospec(ApiBase),
-            sync_client=create_autospec(SyncClient),
-            async_client=create_autospec(AsyncClient),
-        )
-        sessions.authenticate_async = AsyncMock(  # type: ignore [assignment]
-            return_value=AuthenticateResponse(
-                status_code=200,
-                request_id="request-api",
-                session=create_autospec(StytchSession),
-            )
-        )
-
-        with self.subTest("local"):
-            # Arrange more
-            sessions.authenticate_jwt_local = MagicMock(  # type: ignore [assignment]
-                return_value=AuthenticateResponse(
-                    status_code=200,
-                    request_id="request-local",
-                    session=create_autospec(StytchSession),
-                )
-            )
-            # Act
-            resp = await sessions.authenticate_jwt_async(session_jwt="fake-jwt")
-            # Assert
-            sessions.authenticate_jwt_local.assert_called_once()
-            self.assertEqual("request-local", resp.request_id)
-        with self.subTest("from_api"):
-            # Arrange more
-            sessions.authenticate_jwt_local = MagicMock(  # type: ignore [assignment]
-                return_value=None
-            )
-            # Act
-            resp = await sessions.authenticate_jwt_async(session_jwt="fake-jwt")
-            # Assert
-            sessions.authenticate_jwt_local.assert_called_once()
-            self.assertEqual("request-api", resp.request_id)

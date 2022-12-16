@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import contextlib
 import pathlib
 import shutil
 import tempfile
@@ -62,10 +63,11 @@ class TestTemplating(unittest.TestCase):
             models_expected_content = f.read()
 
         # Act
-        with (
-            tempfile.TemporaryDirectory() as api_dir,
-            tempfile.TemporaryDirectory() as models_dir,
-        ):
+        api_actual = ""
+        models_actual = ""
+        with contextlib.ExitStack() as stack:
+            api_dir = stack.enter_context(tempfile.TemporaryDirectory())
+            models_dir = stack.enter_context(tempfile.TemporaryDirectory())
             self.api.generate_all(
                 api_dir=api_dir,
                 models_dir=models_dir,

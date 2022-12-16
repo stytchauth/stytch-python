@@ -3,7 +3,7 @@
 
 import unittest
 from typing import List
-from unittest.mock import AsyncMock, MagicMock, create_autospec
+from unittest.mock import MagicMock, create_autospec
 
 from stytch.api.users import Users
 from stytch.core.api_base import ApiBase
@@ -50,21 +50,3 @@ class TestUsers(unittest.TestCase):
             pass
         # Assert
         self.assertEqual(EXPECTED_RESPONSES, len(users.search.mock_calls))
-
-
-class TestUsersAsync(unittest.IsolatedAsyncioTestCase):
-    async def test_search_all_async(self) -> None:
-        # Arrange
-        users = Users(
-            api_base=create_autospec(ApiBase),
-            sync_client=create_autospec(SyncClient),
-            async_client=create_autospec(AsyncClient),
-        )
-        users.search_async = AsyncMock(  # type: ignore [assignment]
-            side_effect=get_fake_search_responses(EXPECTED_RESPONSES)
-        )
-        # Act
-        async for _ in users.search_all_async():
-            pass
-        # Assert
-        self.assertEqual(EXPECTED_RESPONSES, len(users.search_async.mock_calls))

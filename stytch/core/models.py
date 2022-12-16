@@ -53,7 +53,7 @@ class StytchError(Exception):
         self.details = details
 
     def __repr__(self) -> str:
-        return "StytchError {{{}}}".format(self.details)
+        return f"StytchError {{{self.details}}}"
 
     def __str__(self) -> str:
         return str(self.details)

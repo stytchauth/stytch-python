@@ -4,7 +4,6 @@
 # or your changes may be overwritten later!
 # !!!
 
-import functools
 import time
 from typing import Any, Dict, Optional
 
@@ -151,7 +150,6 @@ class Sessions:
     # ENDMANUAL(authenticate_jwt)
 
     # MANUAL(authenticate_jwt_local)
-    @functools.cache
     def get_jwks_client(self) -> jwt.PyJWKClient:
         project_id = self.sync_client.project_id
         jwks_url = self.api_base.route_with_sub_url("sessions/jwks", project_id)
@@ -283,9 +281,7 @@ class Sessions:
             "project_id": project_id,
         }
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "jwks/{}".format(project_id)
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
 
         resp = self.sync_client.get(url, params=payload)
         return JwksResponse.from_json(resp.json())
@@ -298,9 +294,7 @@ class Sessions:
             "project_id": project_id,
         }
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "jwks/{}".format(project_id)
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
 
         resp = await self.async_client.get(url, params=payload)
         return JwksResponse.from_json(await resp.json())

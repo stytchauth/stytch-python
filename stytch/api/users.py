@@ -338,9 +338,7 @@ class Users:
         email_id: str,
     ) -> DeleteEmailResponse:
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "emails/{}".format(email_id)
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
         resp = self.sync_client.delete(url)
         return DeleteEmailResponse.from_json(resp.json())
@@ -350,9 +348,7 @@ class Users:
         email_id: str,
     ) -> DeleteEmailResponse:
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "emails/{}".format(email_id)
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
         resp = await self.async_client.delete(url)
         return DeleteEmailResponse.from_json(await resp.json())
@@ -363,7 +359,7 @@ class Users:
     ) -> DeletePhoneNumberResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "phone_numbers/{}".format(phone_id)
+            self.sub_url, f"phone_numbers/{phone_id}"
         )
 
         resp = self.sync_client.delete(url)
@@ -375,7 +371,7 @@ class Users:
     ) -> DeletePhoneNumberResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "phone_numbers/{}".format(phone_id)
+            self.sub_url, f"phone_numbers/{phone_id}"
         )
 
         resp = await self.async_client.delete(url)
@@ -387,7 +383,7 @@ class Users:
     ) -> DeleteWebauthnRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "webauthn_registrations/{}".format(webauthn_registration_id)
+            self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
         )
 
         resp = self.sync_client.delete(url)
@@ -399,7 +395,7 @@ class Users:
     ) -> DeleteWebauthnRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "webauthn_registrations/{}".format(webauthn_registration_id)
+            self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
         )
 
         resp = await self.async_client.delete(url)
@@ -410,7 +406,7 @@ class Users:
         totp_id: str,
     ) -> DeleteTotpResponse:
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "totps/{}".format(totp_id))
+        url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
         resp = self.sync_client.delete(url)
         return DeleteTotpResponse.from_json(resp.json())
@@ -420,7 +416,7 @@ class Users:
         totp_id: str,
     ) -> DeleteTotpResponse:
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "totps/{}".format(totp_id))
+        url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
         resp = await self.async_client.delete(url)
         return DeleteTotpResponse.from_json(await resp.json())
@@ -431,7 +427,7 @@ class Users:
     ) -> DeleteCryptoWalletResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "crypto_wallets/{}".format(crypto_wallet_id)
+            self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
         )
 
         resp = self.sync_client.delete(url)
@@ -443,7 +439,7 @@ class Users:
     ) -> DeleteCryptoWalletResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "crypto_wallets/{}".format(crypto_wallet_id)
+            self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
         )
 
         resp = await self.async_client.delete(url)
@@ -454,9 +450,7 @@ class Users:
         password_id: str,
     ) -> DeletePasswordResponse:
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "passwords/{}".format(password_id)
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
         resp = self.sync_client.delete(url)
         return DeletePasswordResponse.from_json(resp.json())
@@ -466,9 +460,7 @@ class Users:
         password_id: str,
     ) -> DeletePasswordResponse:
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "passwords/{}".format(password_id)
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
         resp = await self.async_client.delete(url)
         return DeletePasswordResponse.from_json(await resp.json())
@@ -479,7 +471,7 @@ class Users:
     ) -> DeleteBiometricRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "biometric_registrations/{}".format(biometric_registration_id)
+            self.sub_url, f"biometric_registrations/{biometric_registration_id}"
         )
 
         resp = self.sync_client.delete(url)
@@ -491,7 +483,7 @@ class Users:
     ) -> DeleteBiometricRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "biometric_registrations/{}".format(biometric_registration_id)
+            self.sub_url, f"biometric_registrations/{biometric_registration_id}"
         )
 
         resp = await self.async_client.delete(url)
@@ -503,7 +495,7 @@ class Users:
     ) -> DeleteOauthUserRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "oauth/{}".format(oauth_user_registration_id)
+            self.sub_url, f"oauth/{oauth_user_registration_id}"
         )
 
         resp = self.sync_client.delete(url)
@@ -515,7 +507,7 @@ class Users:
     ) -> DeleteOauthUserRegistrationResponse:
 
         url = self.api_base.route_with_sub_url(
-            self.sub_url, "oauth/{}".format(oauth_user_registration_id)
+            self.sub_url, f"oauth/{oauth_user_registration_id}"
         )
 
         resp = await self.async_client.delete(url)

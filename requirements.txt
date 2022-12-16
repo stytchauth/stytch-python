@@ -9,3 +9,5 @@ isort
 mypy
 pyright
 pyyaml
+types-PyYAML
+types-requests

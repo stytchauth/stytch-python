@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import unittest
 from test.constants import (
     TEST_CRYPTO_SIGNATURE,
@@ -21,8 +22,14 @@ from test.constants import (
 )
 from test.integration_base import CreatedTestUser, IntegrationTestBase
 
+if sys.version_info < (3, 8):
+    # When running 3.7, we unfortunately can't test async properly
+    IsolatedAsyncioTestCase = unittest.TestCase
+else:
+    from unittest import IsolatedAsyncioTestCase
 
-class AsyncIntegrationTest(IntegrationTestBase, unittest.IsolatedAsyncioTestCase):
+
+class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
     async def test_crypto_wallets_async(self) -> None:
         api = self.client.crypto_wallets
 
@@ -147,7 +154,7 @@ class AsyncIntegrationTest(IntegrationTestBase, unittest.IsolatedAsyncioTestCase
             )
             self.assertTrue(authenticate_response.is_success)
             # Remember to manually delete since we manually created!
-            self.client.users.delete(create_response.user_id)
+            await self.client.users.delete_async(create_response.user_id)
 
         # Migrate an existing user created via magic link
         async with self._get_temporary_user_async(via_magic_link=True) as user:
