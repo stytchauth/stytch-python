@@ -4,6 +4,7 @@
 # or your changes may be overwritten later!
 # !!!
 
+import functools
 import time
 from typing import Any, Dict, Optional
 
@@ -150,8 +151,8 @@ class Sessions:
     # ENDMANUAL(authenticate_jwt)
 
     # MANUAL(authenticate_jwt_local)
+    @functools.cache
     def get_jwks_client(self) -> jwt.PyJWKClient:
-        # TODO: If this is slow to initialize, we could functools.cache it
         project_id = self.sync_client.project_id
         jwks_url = self.api_base.route_with_sub_url("sessions/jwks", project_id)
         return jwt.PyJWKClient(jwks_url)

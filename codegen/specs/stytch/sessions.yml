@@ -1,7 +1,7 @@
 classname: Sessions
 additional_imports:
   - import jwt
-  - import datetime
+  - import functools
   - import time
   - from stytch.core.models import StytchSession
 methods:
