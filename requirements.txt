@@ -1,5 +1,8 @@
 -e .
 
+# For distributing the package
+setuptools>=65.5.1
+
 # For type checking, codegen, and testing
 Jinja2
 autoflake
