@@ -16,3 +16,7 @@ class AuthenticateResponse(ResponseBase):
     session: Optional[StytchSession]
     session_jwt: str
     session_token: str
+
+
+class AttachResponse(ResponseBase):
+    oauth_attach_token: str
