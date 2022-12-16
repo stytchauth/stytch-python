@@ -8,7 +8,7 @@ from typing import Any, Dict, Optional
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.oauth import AuthenticateResponse
+from stytch.models.oauth import AttachResponse, AuthenticateResponse
 
 
 class OAuth:
@@ -93,3 +93,59 @@ class OAuth:
         except Exception:
             pass
         return AuthenticateResponse.from_json(resp.status, json)
+
+    def attach(
+        self,
+        provider: str,
+        user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttachResponse:
+        payload: Dict[str, Any] = {
+            "provider": provider,
+        }
+
+        if user_id is not None:
+            payload["user_id"] = user_id
+        if session_token is not None:
+            payload["session_token"] = session_token
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "attach")
+
+        resp = self.sync_client.post(url, json=payload)
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return AttachResponse.from_json(resp.status_code, json)
+
+    async def attach_async(
+        self,
+        provider: str,
+        user_id: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttachResponse:
+        payload: Dict[str, Any] = {
+            "provider": provider,
+        }
+
+        if user_id is not None:
+            payload["user_id"] = user_id
+        if session_token is not None:
+            payload["session_token"] = session_token
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "attach")
+
+        resp = await self.async_client.post(url, json=payload)
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return AttachResponse.from_json(resp.status, json)

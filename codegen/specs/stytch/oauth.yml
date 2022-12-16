@@ -27,3 +27,16 @@ methods:
       session: Optional[StytchSession]
       session_jwt: str
       session_token: str
+  - name: attach
+    method: POST
+    args:
+      - name: provider
+        arg_type: str
+      - name: user_id
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+    response_type:
+      oauth_attach_token: str
