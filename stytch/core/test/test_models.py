@@ -38,13 +38,7 @@ class DummyResponse(models.ResponseBase):
     def fatal(cls) -> DummyResponse:
         return DummyResponse.from_json(
             status_code=502,
-            json={
-                "status_code": 400,
-                "request_id": "dummy-request",
-                "error_type": "dummy_error_type",
-                "error_message": "something went wrong",
-                "error_url": "localhost",
-            },
+            json={},
         )
 
 
