@@ -30,7 +30,14 @@ You can check test coverage with the following command:
 coverage run -m unittest  && coverage report --omit="*test/*" --sort=cover
 ```
 
-Note that if you _didn't_ enable the integration tests that coverage will be much lower.
+Note that if you _didn't_ enable the integration tests that coverage will be much lower. If you have your
+`STYTCH_PROJECT_ID` and `STYTCH_SECRET` in your env, this command may be useful:
+
+```
+env STYTCH_PYTHON_RUN_INTEGRATION_TESTS=1 coverage run -m unittest && coverage html --omit="*test/*"
+```
+
+You can run that and then see the exact coverage in a useful HTML page with line-by-line coverage.
 
 ## Issues and Pull Requests
 

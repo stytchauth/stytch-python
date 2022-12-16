@@ -10,10 +10,10 @@ from codegen.types.api import Api
 
 RESOURCES_DIR = pathlib.Path(__file__).parent / "resources"
 INPUT_FILEPATH = RESOURCES_DIR / "users.yml"
-API_EXPECTED = RESOURCES_DIR / "api_expected.py"
-MODELS_EXPECTED = RESOURCES_DIR / "models_expected.py"
-METHOD_EXPECTED = RESOURCES_DIR / "method_expected.py"
-RESPONSE_TYPE_EXPECTED = RESOURCES_DIR / "response_type_expected.py"
+API_EXPECTED = RESOURCES_DIR / "api.expected"
+MODELS_EXPECTED = RESOURCES_DIR / "models.expected"
+METHOD_EXPECTED = RESOURCES_DIR / "method.expected"
+RESPONSE_TYPE_EXPECTED = RESOURCES_DIR / "response_type.expected"
 
 
 # This class tests the actual templating logic of the codegen library.
