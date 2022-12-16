@@ -293,9 +293,11 @@ class AsyncIntegrationTest(IntegrationTestBase, unittest.IsolatedAsyncioTestCase
             )
             # TODO: No test public key credential (see skipTest above)
             self.assertTrue(
-                await api.register_async(
-                    user_id=user.user_id,
-                    public_key_credential="",
+                (
+                    await api.register_async(
+                        user_id=user.user_id,
+                        public_key_credential="",
+                    )
                 ).is_success
             )
             # TODO: No test domain (see skipTest above)

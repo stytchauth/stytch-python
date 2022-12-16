@@ -41,7 +41,8 @@ class TestUsers(unittest.TestCase):
             sync_client=create_autospec(SyncClient),
             async_client=create_autospec(AsyncClient),
         )
-        users.search = MagicMock(
+        # mypy doesn't approve of monkey-patching methods
+        users.search = MagicMock(  # type: ignore [assignment]
             side_effect=get_fake_search_responses(EXPECTED_RESPONSES)
         )
         # Act
@@ -59,7 +60,7 @@ class TestUsersAsync(unittest.IsolatedAsyncioTestCase):
             sync_client=create_autospec(SyncClient),
             async_client=create_autospec(AsyncClient),
         )
-        users.search_async = AsyncMock(
+        users.search_async = AsyncMock(  # type: ignore [assignment]
             side_effect=get_fake_search_responses(EXPECTED_RESPONSES)
         )
         # Act

@@ -14,6 +14,7 @@ from test.constants import (
 from typing import AsyncGenerator, Generator, Union
 
 from stytch.client import Client
+from stytch.core.models import ResponseBase
 
 
 @dataclass
@@ -82,14 +83,16 @@ class IntegrationTestBase(unittest.TestCase):
         test_user = self.__get_temporary_test_user()
         if create:
             if via_magic_link:
-                resp = self.client.users.create(email=test_user.email)
+                users_resp = self.client.users.create(email=test_user.email)
+                user_id = users_resp.user_id
             else:
-                resp = self.client.passwords.create(
+                pw_resp = self.client.passwords.create(
                     email=test_user.email, password=test_user.old_password
                 )
+                user_id = pw_resp.user_id
 
-            yield self.__get_temporary_created_test_user(test_user, resp.user_id)
-            self.client.users.delete(user_id=resp.user_id)
+            yield self.__get_temporary_created_test_user(test_user, user_id)
+            self.client.users.delete(user_id=user_id)
         else:
             yield test_user
 
@@ -100,13 +103,15 @@ class IntegrationTestBase(unittest.TestCase):
         test_user = self.__get_temporary_test_user()
         if create:
             if via_magic_link:
-                resp = await self.client.users.create_async(email=test_user.email)
+                users_resp = await self.client.users.create_async(email=test_user.email)
+                user_id = users_resp.user_id
             else:
-                resp = await self.client.passwords.create_async(
+                pw_resp = await self.client.passwords.create_async(
                     email=test_user.email, password=test_user.old_password
                 )
+                user_id = pw_resp.user_id
 
-            yield self.__get_temporary_created_test_user(test_user, resp.user_id)
-            self.client.users.delete(user_id=resp.user_id)
+            yield self.__get_temporary_created_test_user(test_user, user_id)
+            await self.client.users.delete_async(user_id=user_id)
         else:
             yield test_user

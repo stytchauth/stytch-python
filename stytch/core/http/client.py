@@ -19,10 +19,13 @@ class ClientBase:
         self.headers = HEADERS
         self.project_id = project_id
         self.secret = secret
-        self.auth = requests.auth.HTTPBasicAuth(project_id, secret)
 
 
 class SyncClient(ClientBase):
+    def __init__(self, project_id: str, secret: str) -> None:
+        super().__init__(project_id, secret)
+        self.auth = requests.auth.HTTPBasicAuth(project_id, secret)
+
     def get(self, url: str, params: Optional[Dict[str, Any]]) -> requests.Response:
         return requests.get(url, params=params, headers=self.headers, auth=self.auth)
 
@@ -38,7 +41,7 @@ class SyncClient(ClientBase):
 
 class AsyncClient(ClientBase):
     def __init__(self, project_id: str, secret: str) -> None:
-        self.headers = HEADERS
+        super().__init__(project_id, secret)
         self.auth = aiohttp.BasicAuth(project_id, secret)
 
     async def get(

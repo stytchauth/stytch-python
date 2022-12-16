@@ -22,7 +22,8 @@ class TestSessions(unittest.TestCase):
             sync_client=create_autospec(SyncClient),
             async_client=create_autospec(AsyncClient),
         )
-        sessions.authenticate = MagicMock(
+        # mypy doesn't approve of monkey-patching methods
+        sessions.authenticate = MagicMock(  # type: ignore [assignment]
             return_value=AuthenticateResponse(
                 status_code=200,
                 request_id="request-api",
@@ -32,7 +33,8 @@ class TestSessions(unittest.TestCase):
 
         with self.subTest("local"):
             # Arrange more
-            sessions.authenticate_jwt_local = MagicMock(
+            # mypy doesn't approve of monkey-patching methods
+            sessions.authenticate_jwt_local = MagicMock(  # type: ignore [assignment]
                 return_value=AuthenticateResponse(
                     status_code=200,
                     request_id="request-local",
@@ -46,7 +48,9 @@ class TestSessions(unittest.TestCase):
             self.assertEqual("request-local", resp.request_id)
         with self.subTest("from_api"):
             # Arrange more
-            sessions.authenticate_jwt_local = MagicMock(return_value=None)
+            sessions.authenticate_jwt_local = MagicMock(  # type: ignore [assignment]
+                return_value=None
+            )
             # Act
             resp = sessions.authenticate_jwt(session_jwt="fake-jwt")
             # Assert
@@ -136,7 +140,7 @@ class TestSessionsAsync(unittest.IsolatedAsyncioTestCase):
             sync_client=create_autospec(SyncClient),
             async_client=create_autospec(AsyncClient),
         )
-        sessions.authenticate_async = AsyncMock(
+        sessions.authenticate_async = AsyncMock(  # type: ignore [assignment]
             return_value=AuthenticateResponse(
                 status_code=200,
                 request_id="request-api",
@@ -146,7 +150,7 @@ class TestSessionsAsync(unittest.IsolatedAsyncioTestCase):
 
         with self.subTest("local"):
             # Arrange more
-            sessions.authenticate_jwt_local = MagicMock(
+            sessions.authenticate_jwt_local = MagicMock(  # type: ignore [assignment]
                 return_value=AuthenticateResponse(
                     status_code=200,
                     request_id="request-local",
@@ -160,7 +164,9 @@ class TestSessionsAsync(unittest.IsolatedAsyncioTestCase):
             self.assertEqual("request-local", resp.request_id)
         with self.subTest("from_api"):
             # Arrange more
-            sessions.authenticate_jwt_local = MagicMock(return_value=None)
+            sessions.authenticate_jwt_local = MagicMock(  # type: ignore [assignment]
+                return_value=None
+            )
             # Act
             resp = await sessions.authenticate_jwt_async(session_jwt="fake-jwt")
             # Assert
