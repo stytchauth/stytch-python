@@ -3,7 +3,7 @@
 # For type checking, codegen, and testing
 Jinja2
 autoflake
-black
+# black
 coverage
 isort
 mypy
