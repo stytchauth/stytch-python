@@ -6,7 +6,7 @@ It pairs well with the Stytch [Web SDK](https://www.npmjs.com/package/@stytch/st
 
 ## Requirements
 
-The Stytch Python library supports Python 3.4+
+The Stytch Python library supports Python 3.7+
 
 ## Installation
 
@@ -19,24 +19,27 @@ pip install stytch
 You can find your API credentials in the [Stytch Dashboard](https://stytch.com/dashboard/api-keys).
 
 This client library supports all of Stytch's live products:
-  - [x] [Email Magic Links](https://stytch.com/docs/api/send-by-email)
-  - [x] [Embeddable Magic Links](https://stytch.com/docs/api/create-magic-link-overview)
-  - [x] [OAuth logins](https://stytch.com/docs/api/oauth-overview)
-  - [x] [SMS passcodes](https://stytch.com/docs/api/send-otp-by-sms)
-  - [x] [WhatsApp passcodes](https://stytch.com/docs/api/whatsapp-send)
-  - [x] [Email passcodes](https://stytch.com/docs/api/send-otp-by-email)
-  - [x] [Session Management](https://stytch.com/docs/api/sessions-overview)
-  - [x] [WebAuthn](https://stytch.com/docs/api/webauthn-overview)
-  - [x] [Time-based one-time passcodes (TOTPs)](https://stytch.com/docs/api/totps-overview)
-  - [x] [Crypto wallets](https://stytch.com/docs/api/crypto-wallet-overview)
-  - [x] [Passwords (Beta)](https://stytch.com/docs/api/password-overview)
+
+- [x] [Email Magic Links](https://stytch.com/docs/api/send-by-email)
+- [x] [Embeddable Magic Links](https://stytch.com/docs/api/create-magic-link-overview)
+- [x] [OAuth logins](https://stytch.com/docs/api/oauth-overview)
+- [x] [SMS passcodes](https://stytch.com/docs/api/send-otp-by-sms)
+- [x] [WhatsApp passcodes](https://stytch.com/docs/api/whatsapp-send)
+- [x] [Email passcodes](https://stytch.com/docs/api/send-otp-by-email)
+- [x] [Session Management](https://stytch.com/docs/api/sessions-overview)
+- [x] [WebAuthn](https://stytch.com/docs/api/webauthn-overview)
+- [x] [Time-based one-time passcodes (TOTPs)](https://stytch.com/docs/api/totps-overview)
+- [x] [Crypto wallets](https://stytch.com/docs/api/crypto-wallet-overview)
+- [x] [Passwords (Beta)](https://stytch.com/docs/api/password-overview)
 
 ### Example usage
-Create an API client:
-```python
-from stytch import Client
 
-client = Client(
+Create an API client:
+
+```python
+import stytch
+
+client = stytch.Client(
     project_id="project-live-c60c0abe-c25a-4472-a9ed-320c6667d317",
     secret="secret-live-80JASucyk7z_G8Z-7dVwZVGXL5NT_qGAQ2I=",
     environment="test",
@@ -44,39 +47,65 @@ client = Client(
 ```
 
 Send a magic link by email:
+
 ```python
-resp = client.magic_links.email.login_or_create(
+login_or_create_resp = client.magic_links.email.login_or_create(
     email="sandbox@stytch.com",
     login_magic_link_url="https://example.com/authenticate",
     signup_magic_link_url="https://example.com/authenticate",
 )
-print(resp.json())
+# Responses are fully-typed `pydantic` objects
+print(login_or_create_resp)
 ```
 
 Authenticate the token from the magic link:
+
 ```python
-resp = client.magic_links.authenticate(
+auth_resp = client.magic_links.authenticate(
     token="DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94=",
 )
-print(resp.json())
+print(auth_resp)
+```
+
+## Async support
+
+Every endpoint supports an `async` version which you can use by appending `_async` to the method name. You can use the
+same `Client` object for `sync` and `async` methods. The above example of sending and authenticating an magic link can
+be rewritten as:
+
+```python
+login_or_create_resp = await client.magic_links.email.login_or_create_async(
+    email="sandbox@stytch.com",
+    login_magic_link_url="https://example.com/authenticate",
+    signup_magic_link_url="https://example.com/authenticate",
+)
+print(login_or_create_resp)
+
+auth_resp = await client.magic_links.authenticate(
+    token="DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94=",
+)
+print(resp)
 ```
 
 ## Handling Errors
 
-Structured errors from the Stytch API will be raised as `StytchError` exceptions.
+Structured errors from the Stytch API will raise `StytchError` exceptions. You can view the details of the error through
+the `.details` property of the `StytchError` exception.
+
 ```python
 from stytch.api.error import StytchError
 
 try:
-    resp = client.magic_links.authenticate(token="token")
+    auth_resp = await client.magic_links.authenticate_async(token="token")
 except StytchError as error:
     # Handle Stytch errors here
-    if error.error_type == "invalid_token":
+    if error.details.error_type == "invalid_token":
         print("Whoops! Try again?")
 except Exception as error:
     # Handle other errors here
     pass
 ```
+
 Learn more about errors in the [docs](https://stytch.com/docs/api/errors).
 
 ## Documentation
