@@ -21,10 +21,12 @@ class ResponseBase(pydantic.BaseModel):
             # We need to be careful in case this one *also* fails
             try:
                 details = StytchErrorDetails(**json)
-                raise StytchError(details) from None
+                # Don't raise from here because then we trigger our
+                # own fallback exception handling!
             except Exception as e:
                 details = StytchErrorDetails.from_unknown(status_code)
                 raise StytchError(details) from e
+            raise StytchError(details) from None
 
     @property
     def is_informational(self) -> bool:
