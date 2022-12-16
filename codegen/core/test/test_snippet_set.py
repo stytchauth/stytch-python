@@ -80,6 +80,10 @@ class TestSnippetSet(unittest.TestCase):
             if p.endswith(INPUT_EXTENSION)
         }
 
+    def test_len(self) -> None:
+        s = SnippetSet({"a": "b", "c": "d"})
+        self.assertEqual(2, len(s))
+
     def test_replace_all(self) -> None:
         for name, test in self.tests.items():
             with self.subTest(name):

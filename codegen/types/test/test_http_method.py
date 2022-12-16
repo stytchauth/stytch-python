@@ -26,3 +26,18 @@ class TestHttpMethod(unittest.TestCase):
             # Act and Assert
             with self.assertRaises(ValueError):
                 HttpMethod.from_str(s)
+
+    def test_str(self) -> None:
+        # Arrange
+        tests_with_expected = [
+            (HttpMethod.GET, "get"),
+            (HttpMethod.POST, "post"),
+            (HttpMethod.PUT, "put"),
+            (HttpMethod.DELETE, "delete"),
+        ]
+
+        for method, expected in tests_with_expected:
+            # Act
+            actual = str(method)
+            # Assert
+            self.assertEqual(expected, actual)

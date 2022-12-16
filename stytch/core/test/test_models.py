@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import create_autospec, patch
 
 from stytch.core import models
 
@@ -80,3 +81,16 @@ class TestModels(unittest.TestCase):
         with self.assertRaises(models.StytchError) as e:
             DummyResponse.error()
         self.assertTrue(e.exception.details.is_client_error)
+
+    def test_stytcherror(self) -> None:
+
+        # Just check that calling repr/str calls str on
+        # the underlying details object
+        with self.subTest("repr"):
+            mock_details = create_autospec(models.StytchErrorDetails)
+            repr(models.StytchError(mock_details))
+            mock_details.__str__.assert_called_once()
+        with self.subTest("str"):
+            mock_details = create_autospec(models.StytchErrorDetails)
+            str(models.StytchError(mock_details))
+            mock_details.__str__.assert_called_once()

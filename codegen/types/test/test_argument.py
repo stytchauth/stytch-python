@@ -86,3 +86,15 @@ class TestArgument(unittest.TestCase):
         self.assertTrue(self.testcases["basic_required"].arg.always_include)
         self.assertFalse(self.testcases["basic_optional"].arg.always_include)
         self.assertTrue(self.testcases["include_if_null"].arg.always_include)
+
+    def test_from_dict(self) -> None:
+        # Arrange
+        expected = Argument(
+            name="arg",
+            arg_type="Optional[str] = None",
+            include_if_null=False,
+        )
+        # Act
+        actual = Argument.from_dict({"name": "arg", "arg_type": "Optional[str] = None"})
+        # Assert
+        self.assertEqual(expected, actual)
