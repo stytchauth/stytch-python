@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import datetime
 from typing import Any, Dict, List, Optional
 
@@ -12,14 +14,17 @@ class ResponseBase(pydantic.BaseModel):
     request_id: Optional[str] = None
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]):
+    def from_json(cls, status_code: int, json: Dict[str, Any]):
         try:
             return cls(**json)
         except pydantic.ValidationError:
-            # TODO: What if this one *also* fails?
-            # In that case, we should create a 500 error
-            details = StytchErrorDetails(**json)
-            raise StytchError(details) from None
+            # We need to be careful in case this one *also* fails
+            try:
+                details = StytchErrorDetails(**json)
+                raise StytchError(details) from None
+            except Exception as e:
+                details = StytchErrorDetails.from_unknown(status_code)
+                raise StytchError(details) from e
 
     @property
     def is_informational(self) -> bool:
@@ -43,9 +48,19 @@ class ResponseBase(pydantic.BaseModel):
 
 
 class StytchErrorDetails(ResponseBase):
-    error_type: str
+    error_type: Optional[str]
     error_message: str
-    error_url: str
+    error_url: Optional[str]
+
+    @classmethod
+    def from_unknown(cls, status_code: int) -> StytchErrorDetails:
+        return StytchErrorDetails(
+            status_code=status_code,
+            request_id=None,
+            error_type=None,
+            error_message="An unknown error occurred",
+            error_url=None,
+        )
 
 
 class StytchError(Exception):

@@ -46,7 +46,12 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = self.sync_client.get(url, params=payload)
-        return GetResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return GetResponse.from_json(resp.status_code, json)
 
     async def get_async(
         self,
@@ -59,7 +64,12 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = await self.async_client.get(url, params=payload)
-        return GetResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return GetResponse.from_json(resp.status, json)
 
     def authenticate(
         self,
@@ -82,7 +92,12 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return AuthenticateResponse.from_json(resp.status_code, json)
 
     async def authenticate_async(
         self,
@@ -105,7 +120,12 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return AuthenticateResponse.from_json(resp.status, json)
 
     # MANUAL(authenticate_jwt)
     def authenticate_jwt(
@@ -114,7 +134,6 @@ class Sessions:
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        # TODO: Remember to write a test since this is manually generated
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
 
@@ -138,7 +157,6 @@ class Sessions:
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        # TODO: Remember to write a test since this is manually generated
         # Return the local_result if available, otherwise call the Stytch API
         return self.authenticate_jwt_local(
             session_jwt=session_jwt,
@@ -251,7 +269,12 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
         resp = self.sync_client.post(url, json=payload)
-        return RevokeResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return RevokeResponse.from_json(resp.status_code, json)
 
     async def revoke_async(
         self,
@@ -271,7 +294,12 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
         resp = await self.async_client.post(url, json=payload)
-        return RevokeResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return RevokeResponse.from_json(resp.status, json)
 
     def jwks(
         self,
@@ -284,7 +312,12 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
 
         resp = self.sync_client.get(url, params=payload)
-        return JwksResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return JwksResponse.from_json(resp.status_code, json)
 
     async def jwks_async(
         self,
@@ -297,4 +330,9 @@ class Sessions:
         url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
 
         resp = await self.async_client.get(url, params=payload)
-        return JwksResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return JwksResponse.from_json(resp.status, json)

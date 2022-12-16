@@ -29,7 +29,12 @@ def {{ this.name }}(
     {% else %}
     resp = self.sync_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
     {% endif %}
-    return {{ this.response_type.name }}.from_json(resp.json())
+    json = {}
+    try:
+      json = resp.json()
+    except Exception:
+      pass
+    return {{ this.response_type.name }}.from_json(resp.status_code, json)
 
 async def {{ this.name }}_async(
   self,
@@ -61,7 +66,12 @@ async def {{ this.name }}_async(
     {% else %}
     resp = await self.async_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
     {% endif %}
-    return {{ this.response_type.name }}.from_json(await resp.json())
+    json = {}
+    try:
+      json = await resp.json()
+    except Exception:
+      pass
+    return {{ this.response_type.name }}.from_json(resp.status, json)
 {% else %}
 # MANUAL({{ this.name }})
 def {{ this.name }}(

@@ -49,7 +49,12 @@ class CryptoWallets:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateStartResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return AuthenticateStartResponse.from_json(resp.status_code, json)
 
     async def authenticate_start_async(
         self,
@@ -74,7 +79,12 @@ class CryptoWallets:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateStartResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return AuthenticateStartResponse.from_json(resp.status, json)
 
     def authenticate(
         self,
@@ -104,7 +114,12 @@ class CryptoWallets:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return AuthenticateResponse.from_json(resp.status_code, json)
 
     async def authenticate_async(
         self,
@@ -134,4 +149,9 @@ class CryptoWallets:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return AuthenticateResponse.from_json(resp.status, json)

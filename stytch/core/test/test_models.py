@@ -24,13 +24,27 @@ class DummyResponse(models.ResponseBase):
     @classmethod
     def error(cls) -> DummyResponse:
         return DummyResponse.from_json(
-            {
+            status_code=400,
+            json={
                 "status_code": 400,
                 "request_id": "dummy-request",
                 "error_type": "dummy_error_type",
                 "error_message": "something went wrong",
                 "error_url": "localhost",
-            }
+            },
+        )
+
+    @classmethod
+    def fatal(cls) -> DummyResponse:
+        return DummyResponse.from_json(
+            status_code=502,
+            json={
+                "status_code": 400,
+                "request_id": "dummy-request",
+                "error_type": "dummy_error_type",
+                "error_message": "something went wrong",
+                "error_url": "localhost",
+            },
         )
 
 
@@ -81,6 +95,12 @@ class TestModels(unittest.TestCase):
         with self.assertRaises(models.StytchError) as e:
             DummyResponse.error()
         self.assertTrue(e.exception.details.is_client_error)
+
+    def test_stytcherror_from_unknown(self) -> None:
+        # Test for when we can't even load a StytchErrorDetails object
+        with self.assertRaises(models.StytchError) as e:
+            DummyResponse.fatal()
+        self.assertTrue(e.exception.details.is_server_error)
 
     def test_stytcherror(self) -> None:
 

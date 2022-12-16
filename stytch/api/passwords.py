@@ -57,7 +57,12 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = self.sync_client.post(url, json=payload)
-        return CreateResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return CreateResponse.from_json(resp.status_code, json)
 
     async def create_async(
         self,
@@ -79,7 +84,12 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
         resp = await self.async_client.post(url, json=payload)
-        return CreateResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return CreateResponse.from_json(resp.status, json)
 
     def authenticate(
         self,
@@ -107,7 +117,12 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return AuthenticateResponse.from_json(resp.status_code, json)
 
     async def authenticate_async(
         self,
@@ -135,7 +150,12 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
         resp = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return AuthenticateResponse.from_json(resp.status, json)
 
     def strength_check(
         self,
@@ -152,7 +172,12 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
         resp = self.sync_client.post(url, json=payload)
-        return StrengthCheckResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return StrengthCheckResponse.from_json(resp.status_code, json)
 
     async def strength_check_async(
         self,
@@ -169,7 +194,12 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "strength_check")
 
         resp = await self.async_client.post(url, json=payload)
-        return StrengthCheckResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return StrengthCheckResponse.from_json(resp.status, json)
 
     def migrate(
         self,
@@ -199,7 +229,12 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
         resp = self.sync_client.post(url, json=payload)
-        return MigrateResponse.from_json(resp.json())
+        json = {}
+        try:
+            json = resp.json()
+        except Exception:
+            pass
+        return MigrateResponse.from_json(resp.status_code, json)
 
     async def migrate_async(
         self,
@@ -229,4 +264,9 @@ class Passwords:
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
         resp = await self.async_client.post(url, json=payload)
-        return MigrateResponse.from_json(await resp.json())
+        json = {}
+        try:
+            json = await resp.json()
+        except Exception:
+            pass
+        return MigrateResponse.from_json(resp.status, json)
