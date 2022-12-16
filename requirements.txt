@@ -1,4 +1,4 @@
--e .[async]
+-e .
 
 # For type checking, codegen, and testing
 Jinja2
