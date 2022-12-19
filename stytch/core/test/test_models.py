@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import unittest
 from unittest.mock import create_autospec, patch
 
@@ -111,16 +110,16 @@ class TestModels(unittest.TestCase):
             mock_details.__str__.assert_called_once()
 
     def test_stytcherror_fields(self) -> None:
-        resp = '''{
+        resp = {
           "status_code": 418,
           "request_id": "request-id-test-fea11c44-5514-4aac-a76b-3ca685e3443a",
           "error_type": "is_a_teapot",
           "error_message": "I'm a teapot!",
-          "error_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418"
-        }'''
+          "error_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418",
+        }
 
         with self.assertRaises(models.StytchError) as e:
-            DummyResponse.from_json(418, json.loads(resp))
+            DummyResponse.from_json(418, resp)
 
         ex = e.exception
         self.assertEqual(ex.details.error_type, "is_a_teapot")
