@@ -54,15 +54,26 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
     async def test_magic_links_async(self) -> None:
         api = self.client.magic_links
 
-        # Can't test create endpoint -- requires approval
-        # self.assertTrue(api.create(user_id=user.user_id).is_success)
         self.assertTrue(
             (await api.authenticate_async(token=TEST_MAGIC_TOKEN)).is_success
         )
-        with self.subTest("email"):
-            # Can't test: there's no way to call the test API without
-            # first setting up an invite_redirect_url in the dashboard
-            self.skipTest("No invite_redirect_url set up")
+
+        with self.skip_if_stytcherror(
+            subtest_name="create_endpoint",
+            skip_reason="Not approved for embedded magic links",
+            error_message_pattern="requires approval before using",
+        ):
+            async with self._get_temporary_user_async() as user:
+                assert isinstance(user, CreatedTestUser)
+                self.assertTrue(
+                    (await api.create_async(user_id=user.user_id)).is_success
+                )
+
+        with self.skip_if_stytcherror(
+            subtest_name="email",
+            skip_reason="No invite_redirect_url set up",
+            error_message_pattern="There are no .* URLs registered",
+        ):
             self.assertTrue(
                 (await api.email.invite_async(email=TEST_MAGIC_EMAIL)).is_success
             )
@@ -168,13 +179,12 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
                 ).is_success
             )
 
-        with self.subTest("email"):
-            # Can't test: there's no way to call the test API without
-            # first setting up a login_redirect_url in the dashboard
-            self.skipTest("No login_redirect_url setup")
+        with self.skip_if_stytcherror(
+            subtest_name="email",
+            skip_reason="No login_redirect_url set up",
+            error_message_pattern="There are no .* URLs",
+        ):
             # Can't test: there's no reset token that can be used for testing the API
-            # NOTE: Yes, there's two skipTests in a row, but this is a reminder
-            # that it's due to two separate issues with testing this endpoint
             self.skipTest("No reset token to use for testing")
             async with self._get_temporary_user_async() as user:
                 reset_start_response = await api.email.reset_start_async(
@@ -267,7 +277,7 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
             create_resp = await api.create_async(email=user.email)
             self.assertTrue(create_resp.is_success)
             self.assertTrue((await api.get_pending_async()).is_success)
-            self.assertTrue((await api.search_async()).is_success)
+            self.assertTrue((await api.search_async(limit=10)).is_success)
             self.assertTrue(
                 (
                     await api.update_async(

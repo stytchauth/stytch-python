@@ -2,6 +2,7 @@
 
 import os
 import random
+import re
 import string
 import unittest
 from contextlib import asynccontextmanager, contextmanager
@@ -11,10 +12,10 @@ from test.constants import (
     RUN_INTEGRATION_TESTS_ENV_KEY,
     SECRET_ENV_KEY,
 )
-from typing import AsyncGenerator, Generator, Union
+from typing import AsyncGenerator, Generator, Optional, Union
 
 from stytch.client import Client
-from stytch.core.models import ResponseBase
+from stytch.core.models import StytchError
 
 
 @dataclass
@@ -49,6 +50,25 @@ class IntegrationTestBase(unittest.TestCase):
         self.project_id: str = project_id
         self.secret: str = secret
         self.client = Client(self.project_id, self.secret, environment="test")
+
+    @contextmanager
+    def skip_if_stytcherror(
+        self,
+        subtest_name: str,
+        skip_reason: str,
+        error_message_pattern: Optional[str] = None,
+    ) -> Generator[None, None, None]:
+        with self.subTest(subtest_name):
+            try:
+                yield
+            except StytchError as e:
+                should_skip = True
+                if error_message_pattern is not None:
+                    match = re.search(error_message_pattern, e.details.error_message)
+                    should_skip = match is not None
+                if should_skip:
+                    self.skipTest(skip_reason)
+                raise
 
     def _skip_for_env_var(self, var: str) -> None:
         self.skipTest(f"{var} env variable not set, skipping integration tests")

@@ -45,7 +45,6 @@ class TestMethod(unittest.TestCase):
                 manual_implementation=True,
             ),
         }
-        pass
 
     def test_params_or_json(self) -> None:
         # Act and assert
