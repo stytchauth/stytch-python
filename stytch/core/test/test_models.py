@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import unittest
-from unittest.mock import create_autospec, patch
+from unittest.mock import create_autospec
 
 from stytch.core import models
 
@@ -72,7 +72,6 @@ class TestModels(unittest.TestCase):
         # Assert
         self.assertTrue(resp.is_redirection)
         self.assertFalse(resp2.is_redirection)
-        pass
 
     def test_is_client_error(self) -> None:
         # Act
@@ -81,7 +80,6 @@ class TestModels(unittest.TestCase):
         # Assert
         self.assertTrue(resp.is_client_error)
         self.assertFalse(resp2.is_client_error)
-        pass
 
     def test_is_server_error(self) -> None:
         # Act

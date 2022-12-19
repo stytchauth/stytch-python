@@ -43,13 +43,22 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
     def test_magic_links(self) -> None:
         api = self.client.magic_links
 
-        # Can't test create endpoint -- requires approval
-        # self.assertTrue(api.create(user_id=user.user_id).is_success)
         self.assertTrue(api.authenticate(token=TEST_MAGIC_TOKEN).is_success)
-        with self.subTest("email"):
-            # Can't test: there's no way to call the test API without
-            # first setting up an invite_redirect_url in the dashboard
-            self.skipTest("No invite_redirect_url set up")
+
+        with self.skip_if_stytcherror(
+            subtest_name="create_endpoint",
+            skip_reason="Not approved for embedded magic links",
+            error_message_pattern="requires approval before using",
+        ):
+            with self._get_temporary_user() as user:
+                assert isinstance(user, CreatedTestUser)
+                self.assertTrue(api.create(user_id=user.user_id).is_success)
+
+        with self.skip_if_stytcherror(
+            subtest_name="email",
+            skip_reason="No invite_redirect_url set up",
+            error_message_pattern="There are no .* URLs",
+        ):
             self.assertTrue(api.email.invite(email=TEST_MAGIC_EMAIL).is_success)
             self.assertTrue(api.email.revoke_invite(email=TEST_MAGIC_EMAIL).is_success)
             self.assertTrue(
@@ -123,13 +132,12 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
                 ).is_success
             )
 
-        with self.subTest("email"):
-            # Can't test: there's no way to call the test API without
-            # first setting up a login_redirect_url in the dashboard
-            self.skipTest("No login_redirect_url setup")
+        with self.skip_if_stytcherror(
+            subtest_name="email",
+            skip_reason="No login_redirect_url set up",
+            error_message_pattern="There are no .* URLs",
+        ):
             # Can't test: there's no reset token that can be used for testing the API
-            # NOTE: Yes, there's two skipTests in a row, but this is a reminder
-            # that it's due to two separate issues with testing this endpoint
             self.skipTest("No reset token to use for testing")
             with self._get_temporary_user() as user:
                 reset_start_response = api.email.reset_start(email=user.email)
@@ -202,7 +210,7 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             create_resp = api.create(email=user.email)
             self.assertTrue(create_resp.is_success)
             self.assertTrue(api.get_pending().is_success)
-            self.assertTrue(api.search().is_success)
+            self.assertTrue(api.search(limit=10).is_success)
             self.assertTrue(
                 api.update(
                     user_id=create_resp.user_id,

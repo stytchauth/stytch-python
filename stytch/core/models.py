@@ -169,6 +169,7 @@ class Password(pydantic.BaseModel):
 
 class User(pydantic.BaseModel):
     name: Optional[Name]
+    user_id: str
     trusted_metadata: Optional[Dict[str, Any]]
     untrusted_metadata: Optional[Dict[str, Any]]
     emails: List[Email]
