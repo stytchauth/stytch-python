@@ -117,13 +117,9 @@ class TestModels(unittest.TestCase):
           "error_message": "I'm a teapot!",
           "error_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418",
         }
+        expected = models.StytchErrorDetails(**resp)
 
         with self.assertRaises(models.StytchError) as e:
             DummyResponse.from_json(418, resp)
 
-        ex = e.exception
-        self.assertEqual(ex.details.error_type, "is_a_teapot")
-        self.assertEqual(ex.details.status_code, 418)
-        self.assertEqual(ex.details.error_url, "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418")
-        self.assertEqual(ex.details.error_message, "I'm a teapot!")
-        self.assertEqual(ex.details.request_id, "request-id-test-fea11c44-5514-4aac-a76b-3ca685e3443a")
+        self.assertEqual(e.exception.details, expected)
