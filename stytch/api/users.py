@@ -71,13 +71,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return CreateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
         self,
@@ -108,13 +103,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return CreateResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return CreateResponse.from_json(res.response.status, res.json)
 
     def get(
         self,
@@ -126,13 +116,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = self.sync_client.get(url, params=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return GetResponse.from_json(resp.status_code, json)
+        res = self.sync_client.get(url, params=payload)
+        return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
         self,
@@ -144,13 +129,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = await self.async_client.get(url, params=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return GetResponse.from_json(resp.status, json)
+        res = await self.async_client.get(url, params=payload)
+        return GetResponse.from_json(res.response.status, res.json)
 
     def get_pending(
         self,
@@ -166,13 +146,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "pending")
 
-        resp = self.sync_client.get(url, params=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return GetPendingResponse.from_json(resp.status_code, json)
+        res = self.sync_client.get(url, params=payload)
+        return GetPendingResponse.from_json(res.response.status_code, res.json)
 
     async def get_pending_async(
         self,
@@ -188,13 +163,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "pending")
 
-        resp = await self.async_client.get(url, params=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return GetPendingResponse.from_json(resp.status, json)
+        res = await self.async_client.get(url, params=payload)
+        return GetPendingResponse.from_json(res.response.status, res.json)
 
     def search(
         self,
@@ -213,13 +183,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return SearchResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return SearchResponse.from_json(res.response.status_code, res.json)
 
     async def search_async(
         self,
@@ -238,13 +203,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return SearchResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return SearchResponse.from_json(res.response.status, res.json)
 
     # MANUAL(search_all)
     def search_all(
@@ -290,13 +250,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeleteResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeleteResponse.from_json(res.response.status_code, res.json)
 
     async def delete_async(
         self,
@@ -305,13 +260,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeleteResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeleteResponse.from_json(res.response.status, res.json)
 
     def update(
         self,
@@ -345,13 +295,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = self.sync_client.put(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return UpdateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.put(url, json=payload)
+        return UpdateResponse.from_json(res.response.status_code, res.json)
 
     async def update_async(
         self,
@@ -385,13 +330,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
-        resp = await self.async_client.put(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return UpdateResponse.from_json(resp.status, json)
+        res = await self.async_client.put(url, json=payload)
+        return UpdateResponse.from_json(res.response.status, res.json)
 
     def delete_email(
         self,
@@ -400,13 +340,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeleteEmailResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeleteEmailResponse.from_json(res.response.status_code, res.json)
 
     async def delete_email_async(
         self,
@@ -415,13 +350,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeleteEmailResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeleteEmailResponse.from_json(res.response.status, res.json)
 
     def delete_phone_number(
         self,
@@ -432,13 +362,8 @@ class Users:
             self.sub_url, f"phone_numbers/{phone_id}"
         )
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeletePhoneNumberResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeletePhoneNumberResponse.from_json(res.response.status_code, res.json)
 
     async def delete_phone_number_async(
         self,
@@ -449,13 +374,8 @@ class Users:
             self.sub_url, f"phone_numbers/{phone_id}"
         )
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeletePhoneNumberResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeletePhoneNumberResponse.from_json(res.response.status, res.json)
 
     def delete_webauthn_registration(
         self,
@@ -466,13 +386,10 @@ class Users:
             self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
         )
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeleteWebauthnRegistrationResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeleteWebauthnRegistrationResponse.from_json(
+            res.response.status_code, res.json
+        )
 
     async def delete_webauthn_registration_async(
         self,
@@ -483,13 +400,10 @@ class Users:
             self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
         )
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeleteWebauthnRegistrationResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeleteWebauthnRegistrationResponse.from_json(
+            res.response.status, res.json
+        )
 
     def delete_totp(
         self,
@@ -498,13 +412,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeleteTotpResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeleteTotpResponse.from_json(res.response.status_code, res.json)
 
     async def delete_totp_async(
         self,
@@ -513,13 +422,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeleteTotpResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeleteTotpResponse.from_json(res.response.status, res.json)
 
     def delete_crypto_wallet(
         self,
@@ -530,13 +434,8 @@ class Users:
             self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
         )
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeleteCryptoWalletResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeleteCryptoWalletResponse.from_json(res.response.status_code, res.json)
 
     async def delete_crypto_wallet_async(
         self,
@@ -547,13 +446,8 @@ class Users:
             self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
         )
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeleteCryptoWalletResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeleteCryptoWalletResponse.from_json(res.response.status, res.json)
 
     def delete_password(
         self,
@@ -562,13 +456,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeletePasswordResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeletePasswordResponse.from_json(res.response.status_code, res.json)
 
     async def delete_password_async(
         self,
@@ -577,13 +466,8 @@ class Users:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeletePasswordResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeletePasswordResponse.from_json(res.response.status, res.json)
 
     def delete_biometric_registration(
         self,
@@ -594,13 +478,10 @@ class Users:
             self.sub_url, f"biometric_registrations/{biometric_registration_id}"
         )
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeleteBiometricRegistrationResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeleteBiometricRegistrationResponse.from_json(
+            res.response.status_code, res.json
+        )
 
     async def delete_biometric_registration_async(
         self,
@@ -611,13 +492,10 @@ class Users:
             self.sub_url, f"biometric_registrations/{biometric_registration_id}"
         )
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeleteBiometricRegistrationResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeleteBiometricRegistrationResponse.from_json(
+            res.response.status, res.json
+        )
 
     def delete_oauth_user_registration(
         self,
@@ -628,13 +506,10 @@ class Users:
             self.sub_url, f"oauth/{oauth_user_registration_id}"
         )
 
-        resp = self.sync_client.delete(url)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return DeleteOauthUserRegistrationResponse.from_json(resp.status_code, json)
+        res = self.sync_client.delete(url)
+        return DeleteOauthUserRegistrationResponse.from_json(
+            res.response.status_code, res.json
+        )
 
     async def delete_oauth_user_registration_async(
         self,
@@ -645,10 +520,7 @@ class Users:
             self.sub_url, f"oauth/{oauth_user_registration_id}"
         )
 
-        resp = await self.async_client.delete(url)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return DeleteOauthUserRegistrationResponse.from_json(resp.status, json)
+        res = await self.async_client.delete(url)
+        return DeleteOauthUserRegistrationResponse.from_json(
+            res.response.status, res.json
+        )

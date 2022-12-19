@@ -73,13 +73,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "send")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return SendResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return SendResponse.from_json(res.response.status_code, res.json)
 
     async def send_async(
         self,
@@ -122,13 +117,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "send")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return SendResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return SendResponse.from_json(res.response.status, res.json)
 
     def login_or_create(
         self,
@@ -159,13 +149,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "login_or_create")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return LoginOrCreateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return LoginOrCreateResponse.from_json(res.response.status_code, res.json)
 
     async def login_or_create_async(
         self,
@@ -196,13 +181,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "login_or_create")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return LoginOrCreateResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return LoginOrCreateResponse.from_json(res.response.status, res.json)
 
     def invite(
         self,
@@ -230,13 +210,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return InviteResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return InviteResponse.from_json(res.response.status_code, res.json)
 
     async def invite_async(
         self,
@@ -264,13 +239,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return InviteResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return InviteResponse.from_json(res.response.status, res.json)
 
     def revoke_invite(
         self,
@@ -282,13 +252,8 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke_invite")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return RevokeInviteResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return RevokeInviteResponse.from_json(res.response.status_code, res.json)
 
     async def revoke_invite_async(
         self,
@@ -300,10 +265,5 @@ class Email:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke_invite")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return RevokeInviteResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return RevokeInviteResponse.from_json(res.response.status, res.json)

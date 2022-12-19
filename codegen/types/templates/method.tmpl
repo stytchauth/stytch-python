@@ -25,16 +25,11 @@ def {{ this.name }}(
     {% endif %}
 
     {% if this.is_delete_method %}
-    resp = self.sync_client.{{ this.method }}(url)
+    res = self.sync_client.{{ this.method }}(url)
     {% else %}
-    resp = self.sync_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
+    res = self.sync_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
     {% endif %}
-    json = {}
-    try:
-      json = resp.json()
-    except Exception:
-      pass
-    return {{ this.response_type.name }}.from_json(resp.status_code, json)
+    return {{ this.response_type.name }}.from_json(res.response.status_code, res.json)
 
 async def {{ this.name }}_async(
   self,
@@ -62,16 +57,11 @@ async def {{ this.name }}_async(
     {% endif %}
 
     {% if this.is_delete_method %}
-    resp = await self.async_client.{{ this.method }}(url)
+    res = await self.async_client.{{ this.method }}(url)
     {% else %}
-    resp = await self.async_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
+    res = await self.async_client.{{ this.method }}(url, {{ this.params_or_json }}=payload)
     {% endif %}
-    json = {}
-    try:
-      json = await resp.json()
-    except Exception:
-      pass
-    return {{ this.response_type.name }}.from_json(resp.status, json)
+    return {{ this.response_type.name }}.from_json(res.response.status, res.json)
 {% else %}
 # MANUAL({{ this.name }})
 def {{ this.name }}(

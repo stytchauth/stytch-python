@@ -52,13 +52,8 @@ class OAuth:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
         self,
@@ -86,13 +81,8 @@ class OAuth:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def attach(
         self,
@@ -114,13 +104,8 @@ class OAuth:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "attach")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return AttachResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return AttachResponse.from_json(res.response.status_code, res.json)
 
     async def attach_async(
         self,
@@ -142,10 +127,5 @@ class OAuth:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "attach")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return AttachResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return AttachResponse.from_json(res.response.status, res.json)

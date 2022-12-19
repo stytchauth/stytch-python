@@ -45,13 +45,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
-        resp = self.sync_client.get(url, params=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return GetResponse.from_json(resp.status_code, json)
+        res = self.sync_client.get(url, params=payload)
+        return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
         self,
@@ -63,13 +58,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
-        resp = await self.async_client.get(url, params=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return GetResponse.from_json(resp.status, json)
+        res = await self.async_client.get(url, params=payload)
+        return GetResponse.from_json(res.response.status, res.json)
 
     def authenticate(
         self,
@@ -91,13 +81,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
         self,
@@ -119,13 +104,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status, res.json)
 
     # MANUAL(authenticate_jwt)
     def authenticate_jwt(
@@ -268,13 +248,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return RevokeResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return RevokeResponse.from_json(res.response.status_code, res.json)
 
     async def revoke_async(
         self,
@@ -293,13 +268,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return RevokeResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return RevokeResponse.from_json(res.response.status, res.json)
 
     def jwks(
         self,
@@ -311,13 +281,8 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
 
-        resp = self.sync_client.get(url, params=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return JwksResponse.from_json(resp.status_code, json)
+        res = self.sync_client.get(url, params=payload)
+        return JwksResponse.from_json(res.response.status_code, res.json)
 
     async def jwks_async(
         self,
@@ -329,10 +294,5 @@ class Sessions:
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
 
-        resp = await self.async_client.get(url, params=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return JwksResponse.from_json(resp.status, json)
+        res = await self.async_client.get(url, params=payload)
+        return JwksResponse.from_json(res.response.status, res.json)
