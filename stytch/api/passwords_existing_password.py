@@ -53,13 +53,8 @@ class ExistingPassword:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return ResetResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return ResetResponse.from_json(res.response.status_code, res.json)
 
     async def reset_async(
         self,
@@ -88,10 +83,5 @@ class ExistingPassword:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return ResetResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return ResetResponse.from_json(res.response.status, res.json)

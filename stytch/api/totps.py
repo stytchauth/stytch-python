@@ -45,13 +45,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return CreateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
         self,
@@ -67,13 +62,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return CreateResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return CreateResponse.from_json(res.response.status, res.json)
 
     def authenticate(
         self,
@@ -100,13 +90,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
         self,
@@ -133,13 +118,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def recovery_codes(
         self,
@@ -151,13 +131,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return RecoveryCodesResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return RecoveryCodesResponse.from_json(res.response.status_code, res.json)
 
     async def recovery_codes_async(
         self,
@@ -169,13 +144,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return RecoveryCodesResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return RecoveryCodesResponse.from_json(res.response.status, res.json)
 
     def recover(
         self,
@@ -202,13 +172,8 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return RecoverResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return RecoverResponse.from_json(res.response.status_code, res.json)
 
     async def recover_async(
         self,
@@ -235,10 +200,5 @@ class TOTPs:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "recover")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return RecoverResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return RecoverResponse.from_json(res.response.status, res.json)

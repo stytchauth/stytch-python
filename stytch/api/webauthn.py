@@ -50,13 +50,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return RegisterStartResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return RegisterStartResponse.from_json(res.response.status_code, res.json)
 
     async def register_start_async(
         self,
@@ -77,13 +72,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return RegisterStartResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return RegisterStartResponse.from_json(res.response.status, res.json)
 
     def register(
         self,
@@ -97,13 +87,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return RegisterResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return RegisterResponse.from_json(res.response.status_code, res.json)
 
     async def register_async(
         self,
@@ -117,13 +102,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "register")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return RegisterResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return RegisterResponse.from_json(res.response.status, res.json)
 
     def authenticate_start(
         self,
@@ -137,13 +117,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return AuthenticateStartResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return AuthenticateStartResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_start_async(
         self,
@@ -157,13 +132,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return AuthenticateStartResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return AuthenticateStartResponse.from_json(res.response.status, res.json)
 
     def authenticate(
         self,
@@ -188,13 +158,8 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = self.sync_client.post(url, json=payload)
-        json = {}
-        try:
-            json = resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status_code, json)
+        res = self.sync_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
         self,
@@ -219,10 +184,5 @@ class WebAuthn:
 
         url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
 
-        resp = await self.async_client.post(url, json=payload)
-        json = {}
-        try:
-            json = await resp.json()
-        except Exception:
-            pass
-        return AuthenticateResponse.from_json(resp.status, json)
+        res = await self.async_client.post(url, json=payload)
+        return AuthenticateResponse.from_json(res.response.status, res.json)
