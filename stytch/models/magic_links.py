@@ -9,7 +9,6 @@ class CreateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
-    email_id: str
 
 
 class AuthenticateResponse(ResponseBase):
