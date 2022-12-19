@@ -38,13 +38,7 @@ class DummyResponse(models.ResponseBase):
     def fatal(cls) -> DummyResponse:
         return DummyResponse.from_json(
             status_code=502,
-            json={
-                "status_code": 400,
-                "request_id": "dummy-request",
-                "error_type": "dummy_error_type",
-                "error_message": "something went wrong",
-                "error_url": "localhost",
-            },
+            json={},
         )
 
 
@@ -112,3 +106,18 @@ class TestModels(unittest.TestCase):
             mock_details = create_autospec(models.StytchErrorDetails)
             str(models.StytchError(mock_details))
             mock_details.__str__.assert_called_once()
+
+    def test_stytcherror_fields(self) -> None:
+        resp = {
+          "status_code": 418,
+          "request_id": "request-id-test-fea11c44-5514-4aac-a76b-3ca685e3443a",
+          "error_type": "is_a_teapot",
+          "error_message": "I'm a teapot!",
+          "error_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418",
+        }
+        expected = models.StytchErrorDetails(**resp)
+
+        with self.assertRaises(models.StytchError) as e:
+            DummyResponse.from_json(418, resp)
+
+        self.assertEqual(e.exception.details, expected)
