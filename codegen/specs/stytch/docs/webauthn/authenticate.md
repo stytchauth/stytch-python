@@ -1,1 +1,3 @@
 [Stytch docs](https://stytch.com/docs/api/webauthn-authenticate)
+
+Complete the authentication of a WebAuthn registration by passing the response from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint. If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
