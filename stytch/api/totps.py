@@ -36,6 +36,11 @@ class TOTPs:
         user_id: str,
         expiration_minutes: Optional[int] = None,
     ) -> CreateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-create)
+
+        Create a new TOTP instance for a user. The user can use the authenticator application of their choice to scan the QR code or enter the secret.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -53,6 +58,11 @@ class TOTPs:
         user_id: str,
         expiration_minutes: Optional[int] = None,
     ) -> CreateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-create)
+
+        Create a new TOTP instance for a user. The user can use the authenticator application of their choice to scan the QR code or enter the secret.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -74,6 +84,11 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-authenticate)
+
+        Authenticate a TOTP code entered by a user.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
@@ -102,6 +117,11 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-authenticate)
+
+        Authenticate a TOTP code entered by a user.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
@@ -125,6 +145,11 @@ class TOTPs:
         self,
         user_id: str,
     ) -> RecoveryCodesResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-get-recovery-codes)
+
+        Retrieve the recovery codes for a TOTP instance tied to a user.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -138,6 +163,11 @@ class TOTPs:
         self,
         user_id: str,
     ) -> RecoveryCodesResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-get-recovery-codes)
+
+        Retrieve the recovery codes for a TOTP instance tied to a user.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -156,6 +186,11 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-recover)
+
+        Authenticate a recovery code for a TOTP instance.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
@@ -184,6 +219,11 @@ class TOTPs:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
+        """[Stytch docs](https://stytch.com/docs/api/totp-recover)
+
+        Authenticate a recovery code for a TOTP instance.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,

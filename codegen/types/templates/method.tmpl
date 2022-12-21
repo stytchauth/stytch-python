@@ -1,10 +1,15 @@
 {% if not this.manual_implementation %}
 def {{ this.name }}(
-  self,
-  {% for arg in this.args %}
-  {{ arg.generate_in_params() }},
-  {% endfor %}
+    self,
+    {% for arg in this.args %}
+    {{ arg.generate_in_params() }},
+    {% endfor %}
 ) -> {{ this.response_type.name }}:
+    {% if this.docstring %}
+    """{{ this.docstring }}
+    """  # noqa
+    {% endif %}
+
     {% if not this.is_delete_method %}
     payload: Dict[str, Any] = {
     {% for arg in this.args if arg.always_include %}
@@ -37,6 +42,11 @@ async def {{ this.name }}_async(
   {{ arg.generate_in_params() }},
   {% endfor %}
 ) -> {{ this.response_type.name }}:
+    {% if this.docstring %}
+    """{{ this.docstring }}
+    """  # noqa
+    {% endif %}
+
     {% if not this.is_delete_method %}
     payload: Dict[str, Any] = {
     {% for arg in this.args if arg.always_include %}
@@ -65,10 +75,10 @@ async def {{ this.name }}_async(
 {% else %}
 # MANUAL({{ this.name }})
 def {{ this.name }}(
-  self,
-  {% for arg in this.args %}
-  {{ arg.generate_in_params() }},
-  {% endfor %}
+    self,
+    {% for arg in this.args %}
+    {{ arg.generate_in_params() }},
+    {% endfor %}
 ) -> None:
     # 1. Check if this method should be async or not
     # 2. Set the return type appropriately

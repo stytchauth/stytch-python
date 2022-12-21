@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
+import contextlib
+import pathlib
 import unittest
+from os import read
+from unittest import mock
 
 from codegen.types.http_method import HttpMethod
 from codegen.types.method import InvalidMethodSpecError, Method
@@ -138,3 +142,43 @@ class TestMethod(unittest.TestCase):
             # Act and assert
             with self.assertRaises(InvalidMethodSpecError):
                 Method.from_dict(this_data)
+
+    def test_get_docs_if_available(self) -> None:
+        # Arrange
+        test_method = self.methods["get"]
+        test_docs_dir = pathlib.Path("docs")
+        expected_api_path = test_docs_dir / "get.request.md"
+        expected_response_path = test_docs_dir / "get.response.md"
+
+        with self.subTest("no_docs_dir"):
+            with contextlib.ExitStack() as stack:
+                # Arrange more
+                mock_os = stack.enter_context(mock.patch("codegen.types.method.os"))
+                mock_file = stack.enter_context(
+                    mock.patch("builtins.open", mock.mock_open(read_data="docstring"))
+                )
+                # Act
+                test_method.get_docs_if_available(None)
+                # Assert
+                mock_os.assert_not_called()
+                mock_file.assert_not_called()
+        with self.subTest("with_docs_dir"):
+            with contextlib.ExitStack() as stack:
+                # Arrange more
+                mock_os = stack.enter_context(mock.patch("codegen.types.method.os"))
+                mock_file = stack.enter_context(
+                    mock.patch("builtins.open", mock.mock_open(read_data="docstring"))
+                )
+                # Act
+                test_method.get_docs_if_available(docs_dir=test_docs_dir)
+                # Assert
+                self.assertTrue(mock_os.assert_any_call)
+                mock_os.path.exists.assert_any_call(expected_api_path)
+                mock_os.path.exists.assert_any_call(expected_response_path)
+                mock_file.assert_any_call(expected_api_path)
+                mock_file.assert_any_call(expected_response_path)
+                self.assertEqual("docstring", test_method.docstring)
+                # This line is necessary because pyright isn't smart enough to
+                # know that `test_method.response_type` has already been set
+                assert test_method.response_type is not None
+                self.assertEqual("docstring", test_method.response_type.docstring)

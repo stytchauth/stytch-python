@@ -3,24 +3,30 @@
 import logging
 import os
 import subprocess
-from typing import List
+from typing import List, Optional
 
 from codegen.types.api import Api
 
 
 class Generator:
     def __init__(
-        self, input_path: str, api_dir: str, models_dir: str, overwrite: bool = False
+        self,
+        input_path: str,
+        api_dir: str,
+        models_dir: str,
+        docs_dir: Optional[str] = None,
+        overwrite: bool = False,
     ) -> None:
         self.specs = self.get_yml_files(input_path)
         self.api_dir = api_dir
         self.models_dir = models_dir
+        self.docs_dir = docs_dir
         self.overwrite = overwrite
 
     def generate_all(self) -> None:
         for spec in self.specs:
             logging.info(f"Generating API from {spec}")
-            api = Api.from_yml(spec)
+            api = Api.from_yml(spec, self.docs_dir)
             api.generate_all(
                 api_dir=self.api_dir,
                 models_dir=self.models_dir,

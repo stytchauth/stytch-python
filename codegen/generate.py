@@ -21,6 +21,10 @@ def get_parser() -> argparse.ArgumentParser:
         "models_dir", help="Output dir where the new model files should be written"
     )
     parser.add_argument(
+        "--docs_dir",
+        help="Input dir where documentation files are stored to annotate each method",
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         help="Overwrite all files instead of merging them",
@@ -44,6 +48,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         input_path=args.input_path,
         api_dir=args.api_dir,
         models_dir=args.models_dir,
+        docs_dir=args.docs_dir,
         overwrite=args.overwrite,
     )
 

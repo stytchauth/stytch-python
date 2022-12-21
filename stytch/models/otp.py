@@ -6,6 +6,8 @@ from stytch.core.models import ResponseBase, StytchSession, User
 
 
 class AuthenticateResponse(ResponseBase):
+    """[Stytch docs](https://stytch.com/docs/api/authenticate-otp)"""  # noqa
+
     user_id: str
     user: User
     method_id: str

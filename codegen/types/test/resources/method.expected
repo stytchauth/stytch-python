@@ -1,13 +1,14 @@
 def create(
-  self,
-  email: Optional[str] = None,
-  phone_number: Optional[str] = None,
-  name: Optional[Name] = None,
-  create_user_as_pending: bool = False,
-  attributes: Optional[Dict[str, str]] = None,
-  trusted_metadata: Optional[Dict[str, Any]] = None,
-  untrusted_metadata: Optional[Dict[str, Any]] = None,
+    self,
+    email: Optional[str] = None,
+    phone_number: Optional[str] = None,
+    name: Optional[Name] = None,
+    create_user_as_pending: bool = False,
+    attributes: Optional[Dict[str, str]] = None,
+    trusted_metadata: Optional[Dict[str, Any]] = None,
+    untrusted_metadata: Optional[Dict[str, Any]] = None,
 ) -> CreateResponse:
+
     payload: Dict[str, Any] = {
         "create_user_as_pending": create_user_as_pending,
     }
@@ -40,6 +41,7 @@ async def create_async(
   trusted_metadata: Optional[Dict[str, Any]] = None,
   untrusted_metadata: Optional[Dict[str, Any]] = None,
 ) -> CreateResponse:
+
     payload: Dict[str, Any] = {
         "create_user_as_pending": create_user_as_pending,
     }
