@@ -44,7 +44,7 @@ async def {{ this.name }}_async(
 ) -> {{ this.response_type.name }}:
     {% if this.docstring %}
     """{{ this.docstring }}
-    """
+    """  # noqa
     {% endif %}
 
     {% if not this.is_delete_method %}

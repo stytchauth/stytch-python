@@ -108,7 +108,9 @@ class Api:
     @classmethod
     def from_dict(cls, data: Dict[str, Any], docs_dir: Optional[str] = None) -> Api:
         classname = data["classname"]
-        sub_apis = [cls.from_dict(d) for d in data.get("sub_apis", [])]
+        sub_apis = [
+            cls.from_dict(d, docs_dir=docs_dir) for d in data.get("sub_apis", [])
+        ]
         additional_imports = data.get("additional_imports", [])
 
         # Default to the class name converted to snake_case if none was given
