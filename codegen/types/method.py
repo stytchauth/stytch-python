@@ -12,7 +12,7 @@ from codegen.types.http_method import HttpMethod
 from codegen.types.response_type import ResponseType
 from codegen.types.templates import get_template
 
-API_DOC_SUFFIX = ".md"
+API_DOC_SUFFIX = ".request.md"
 RESPONSE_DOC_SUFFIX = ".response.md"
 
 
@@ -47,8 +47,9 @@ class Method:
         if docs_dir is None:
             return
 
-        api_docpath = (docs_dir / self.name).with_suffix(API_DOC_SUFFIX)
-        response_docpath = api_docpath.with_suffix(RESPONSE_DOC_SUFFIX)
+        basepath = docs_dir / self.name
+        api_docpath = basepath.with_suffix(API_DOC_SUFFIX)
+        response_docpath = basepath.with_suffix(RESPONSE_DOC_SUFFIX)
 
         if os.path.exists(api_docpath):
             with open(api_docpath) as f:

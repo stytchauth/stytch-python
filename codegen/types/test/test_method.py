@@ -147,7 +147,7 @@ class TestMethod(unittest.TestCase):
         # Arrange
         test_method = self.methods["get"]
         test_docs_dir = pathlib.Path("docs")
-        expected_api_path = test_docs_dir / "get.md"
+        expected_api_path = test_docs_dir / "get.request.md"
         expected_response_path = test_docs_dir / "get.response.md"
 
         with self.subTest("no_docs_dir"):

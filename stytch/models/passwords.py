@@ -32,6 +32,7 @@ class StrengthCheckResponse(ResponseBase):
 
 
 class MigrateResponse(ResponseBase):
+    """[Stytch docs](https://stytch.com/docs/api/password-migrate)"""  # noqa
 
     user_id: str
     email_id: str
