@@ -36,6 +36,11 @@ class Email:
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetStartResponse:
+        """[Stytch docs](https://stytch.com/docs/api/password-email-reset-start)
+
+        Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "email": email,
         }
@@ -70,6 +75,11 @@ class Email:
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetStartResponse:
+        """[Stytch docs](https://stytch.com/docs/api/password-email-reset-start)
+
+        Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "email": email,
         }
@@ -106,6 +116,13 @@ class Email:
         options: Optional[Dict[str, str]] = None,
         code_verifier: Optional[str] = None,
     ) -> ResetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/password-email-reset)
+
+        Reset the user’s password and authenticate them. This endpoint checks that the magic link `token` is valid, hasn’t expired, or already been used – and can optionally require additional security settings, such as the IP address and user agent matching the initial reset request.
+
+        The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "token": token,
             "password": password,
@@ -143,6 +160,13 @@ class Email:
         options: Optional[Dict[str, str]] = None,
         code_verifier: Optional[str] = None,
     ) -> ResetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/password-email-reset)
+
+        Reset the user’s password and authenticate them. This endpoint checks that the magic link `token` is valid, hasn’t expired, or already been used – and can optionally require additional security settings, such as the IP address and user agent matching the initial reset request.
+
+        The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "token": token,
             "password": password,

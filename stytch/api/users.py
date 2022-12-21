@@ -52,6 +52,11 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/create-user)
+
+        Add a user to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
@@ -84,6 +89,11 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/create-user)
+
+        Add a user to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
@@ -110,6 +120,11 @@ class Users:
         self,
         user_id: str,
     ) -> GetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/get-user)
+
+        Fetch a given user to see what their various attributes are. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -123,6 +138,11 @@ class Users:
         self,
         user_id: str,
     ) -> GetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/get-user)
+
+        Fetch a given user to see what their various attributes are. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -137,6 +157,11 @@ class Users:
         limit: Optional[int] = None,
         starting_after_id: Optional[str] = None,
     ) -> GetPendingResponse:
+        """[Stytch docs](https://stytch.com/docs/api/get-pending-users)
+
+        Fetch all users with a pending status. Users will show up here if they are added via the `invite_by_email` endpoint or via `login_or_create` where `create_as_pending = true` and have yet to create their account by clicking on the magic link in the email. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if limit is not None:
@@ -154,6 +179,11 @@ class Users:
         limit: Optional[int] = None,
         starting_after_id: Optional[str] = None,
     ) -> GetPendingResponse:
+        """[Stytch docs](https://stytch.com/docs/api/get-pending-users)
+
+        Fetch all users with a pending status. Users will show up here if they are added via the `invite_by_email` endpoint or via `login_or_create` where `create_as_pending = true` and have yet to create their account by clicking on the magic link in the email. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if limit is not None:
@@ -172,6 +202,11 @@ class Users:
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
+        """[Stytch docs](https://stytch.com/docs/api/search-users)
+
+        Search across your users at Stytch. This endpoint also allows you to return all of your users; simply send an empty body and no filtering will be applied.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if limit is not None:
@@ -192,6 +227,11 @@ class Users:
         cursor: Optional[str] = None,
         query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
+        """[Stytch docs](https://stytch.com/docs/api/search-users)
+
+        Search across your users at Stytch. This endpoint also allows you to return all of your users; simply send an empty body and no filtering will be applied.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if limit is not None:
@@ -247,6 +287,10 @@ class Users:
         self,
         user_id: str,
     ) -> DeleteResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user)
+
+        Remove a user from Stytch.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
@@ -257,6 +301,10 @@ class Users:
         self,
         user_id: str,
     ) -> DeleteResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user)
+
+        Remove a user from Stytch.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
@@ -274,6 +322,13 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/update-user)
+
+        Update a user's name or attributes.
+
+        **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing user's Stytch `user_id` while calling the `/send` endpoint, the new email address or phone number will be added to the existing User object upon successful authentication. We require this process to guard against an account takeover vulnerability.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -309,6 +364,13 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/update-user)
+
+        Update a user's name or attributes.
+
+        **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing user's Stytch `user_id` while calling the `/send` endpoint, the new email address or phone number will be added to the existing User object upon successful authentication. We require this process to guard against an account takeover vulnerability.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -337,6 +399,10 @@ class Users:
         self,
         email_id: str,
     ) -> DeleteEmailResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-email)
+
+        Remove an email from a given user.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
@@ -347,6 +413,10 @@ class Users:
         self,
         email_id: str,
     ) -> DeleteEmailResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-email)
+
+        Remove an email from a given user.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
@@ -357,6 +427,10 @@ class Users:
         self,
         phone_id: str,
     ) -> DeletePhoneNumberResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-phone-number)
+
+        Remove a phone number from a given user.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"phone_numbers/{phone_id}"
@@ -369,6 +443,10 @@ class Users:
         self,
         phone_id: str,
     ) -> DeletePhoneNumberResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-phone-number)
+
+        Remove a phone number from a given user.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"phone_numbers/{phone_id}"
@@ -381,6 +459,10 @@ class Users:
         self,
         webauthn_registration_id: str,
     ) -> DeleteWebauthnRegistrationResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-webauthn-registration)
+
+        Delete a previously created WebAuthn registration.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
@@ -395,6 +477,10 @@ class Users:
         self,
         webauthn_registration_id: str,
     ) -> DeleteWebauthnRegistrationResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-webauthn-registration)
+
+        Delete a previously created WebAuthn registration.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
@@ -409,6 +495,10 @@ class Users:
         self,
         totp_id: str,
     ) -> DeleteTotpResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-totp)
+
+        Delete a previously created TOTP instance.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
@@ -419,6 +509,10 @@ class Users:
         self,
         totp_id: str,
     ) -> DeleteTotpResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-totp)
+
+        Delete a previously created TOTP instance.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
@@ -429,6 +523,10 @@ class Users:
         self,
         crypto_wallet_id: str,
     ) -> DeleteCryptoWalletResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-crypto-wallet)
+
+        Delete a crypto wallet.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
@@ -441,6 +539,10 @@ class Users:
         self,
         crypto_wallet_id: str,
     ) -> DeleteCryptoWalletResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-crypto-wallet)
+
+        Delete a crypto wallet.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
@@ -453,6 +555,10 @@ class Users:
         self,
         password_id: str,
     ) -> DeletePasswordResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-password)
+
+        Delete a password.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
@@ -463,6 +569,10 @@ class Users:
         self,
         password_id: str,
     ) -> DeletePasswordResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-password)
+
+        Delete a password.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
@@ -473,6 +583,10 @@ class Users:
         self,
         biometric_registration_id: str,
     ) -> DeleteBiometricRegistrationResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-biometric-registration)
+
+        Delete a previously created biometric registration.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"biometric_registrations/{biometric_registration_id}"
@@ -487,6 +601,10 @@ class Users:
         self,
         biometric_registration_id: str,
     ) -> DeleteBiometricRegistrationResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-biometric-registration)
+
+        Delete a previously created biometric registration.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"biometric_registrations/{biometric_registration_id}"
@@ -501,6 +619,10 @@ class Users:
         self,
         oauth_user_registration_id: str,
     ) -> DeleteOauthUserRegistrationResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-oauth-registration)
+
+        Delete an oauth user registration.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"oauth/{oauth_user_registration_id}"
@@ -515,6 +637,10 @@ class Users:
         self,
         oauth_user_registration_id: str,
     ) -> DeleteOauthUserRegistrationResponse:
+        """[Stytch docs](https://stytch.com/docs/api/delete-user-oauth-registration)
+
+        Delete an oauth user registration.
+        """  # noqa
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, f"oauth/{oauth_user_registration_id}"

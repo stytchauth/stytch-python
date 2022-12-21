@@ -39,6 +39,11 @@ class Sessions:
         self,
         user_id: str,
     ) -> GetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/session-get)
+
+        List all active sessions for a given user ID. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -52,6 +57,11 @@ class Sessions:
         self,
         user_id: str,
     ) -> GetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/session-get)
+
+        List all active sessions for a given user ID. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -68,6 +78,13 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/session-auth)
+
+        Authenticate a session token and retrieve associated session data. If session_duration_minutes is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`
+
+        This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included you will receive a `too_many_session_arguments` error.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if session_token is not None:
@@ -91,6 +108,13 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/session-auth)
+
+        Authenticate a session token and retrieve associated session data. If session_duration_minutes is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`
+
+        This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included you will receive a `too_many_session_arguments` error.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if session_token is not None:
@@ -237,6 +261,11 @@ class Sessions:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> RevokeResponse:
+        """[Stytch docs](https://stytch.com/docs/api/session-revoke)
+
+        Revoke a session, immediately invalidating all of its session tokens. You can revoke a session in three ways: using its ID, or using one of its session tokens, or one of its JWTs. This endpoint requires exactly one of those to be included in the request. It will return an error if multiple are present.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if session_id is not None:
@@ -257,6 +286,11 @@ class Sessions:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> RevokeResponse:
+        """[Stytch docs](https://stytch.com/docs/api/session-revoke)
+
+        Revoke a session, immediately invalidating all of its session tokens. You can revoke a session in three ways: using its ID, or using one of its session tokens, or one of its JWTs. This endpoint requires exactly one of those to be included in the request. It will return an error if multiple are present.
+        """  # noqa
+
         payload: Dict[str, Any] = {}
 
         if session_id is not None:
@@ -275,6 +309,11 @@ class Sessions:
         self,
         project_id: str,
     ) -> JwksResponse:
+        """[Stytch docs](https://stytch.com/docs/api/jwks-get)
+
+        Get the JSON Web Key Set (JWKS) for a project
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "project_id": project_id,
         }
@@ -288,6 +327,11 @@ class Sessions:
         self,
         project_id: str,
     ) -> JwksResponse:
+        """[Stytch docs](https://stytch.com/docs/api/jwks-get)
+
+        Get the JSON Web Key Set (JWKS) for a project
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "project_id": project_id,
         }

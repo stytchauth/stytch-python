@@ -38,6 +38,11 @@ class WebAuthn:
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
     ) -> RegisterStartResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-register-start)
+
+        Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [`public_key_credential_creation_options`](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the create()wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -60,6 +65,11 @@ class WebAuthn:
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
     ) -> RegisterStartResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-register-start)
+
+        Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [`public_key_credential_creation_options`](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the create()wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -80,6 +90,11 @@ class WebAuthn:
         user_id: str,
         public_key_credential: str,
     ) -> RegisterResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-register)
+
+        Complete the creation of a WebAuthn registration by passing the response from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter. If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
@@ -95,6 +110,11 @@ class WebAuthn:
         user_id: str,
         public_key_credential: str,
     ) -> RegisterResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-register)
+
+        Complete the creation of a WebAuthn registration by passing the response from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter. If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
@@ -110,6 +130,11 @@ class WebAuthn:
         user_id: str,
         domain: str,
     ) -> AuthenticateStartResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate-start)
+
+        Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -125,6 +150,11 @@ class WebAuthn:
         user_id: str,
         domain: str,
     ) -> AuthenticateStartResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate-start)
+
+        Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -143,6 +173,11 @@ class WebAuthn:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate)
+
+        Complete the authentication of a WebAuthn registration by passing the response from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint. If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
@@ -169,6 +204,11 @@ class WebAuthn:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate)
+
+        Complete the authentication of a WebAuthn registration by passing the response from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint. If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }

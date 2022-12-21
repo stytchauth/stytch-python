@@ -36,6 +36,11 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/password-existing-password-reset)
+
+        Reset the user’s password using their existing password.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "email": email,
             "existing_password": existing_password,
@@ -66,6 +71,11 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
+        """[Stytch docs](https://stytch.com/docs/api/password-existing-password-reset)
+
+        Reset the user’s password using their existing password.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "email": email,
             "existing_password": existing_password,

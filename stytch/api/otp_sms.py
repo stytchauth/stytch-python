@@ -36,6 +36,19 @@ class SMS:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
+        """[Stytch docs](https://stytch.com/docs/api/send-otp-by-sms)
+
+        Send a one-time passcode to a user's phone number. If you'd like to create a user and send them a passcode with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-sms).
+
+        Note that sending another OTP code before the first has expired will invalidate the first code.
+
+        ## Add a phone number to an existing user
+
+        This endpoint also allows you to add a new phone number to an existing Stytch User. Including a `user_id`, `session_token`, or `session_jwt` in the request will add the phone number to the pre-existing Stytch User upon successful authentication.
+
+        Adding a new phone number to an existing Stytch User requires the user to be present and validate the phone number via OTP. This requirement is in place to prevent account takeover attacks.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "phone_number": phone_number,
         }
@@ -68,6 +81,19 @@ class SMS:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
+        """[Stytch docs](https://stytch.com/docs/api/send-otp-by-sms)
+
+        Send a one-time passcode to a user's phone number. If you'd like to create a user and send them a passcode with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-sms).
+
+        Note that sending another OTP code before the first has expired will invalidate the first code.
+
+        ## Add a phone number to an existing user
+
+        This endpoint also allows you to add a new phone number to an existing Stytch User. Including a `user_id`, `session_token`, or `session_jwt` in the request will add the phone number to the pre-existing Stytch User upon successful authentication.
+
+        Adding a new phone number to an existing Stytch User requires the user to be present and validate the phone number via OTP. This requirement is in place to prevent account takeover attacks.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "phone_number": phone_number,
         }
@@ -98,6 +124,11 @@ class SMS:
         create_user_as_pending: bool = False,
         locale: Optional[str] = None,
     ) -> LoginOrCreateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/log-in-or-create-user-by-sms)
+
+        Send a one-time passcode to a user using their phone number. If the phone number is not associated with a user already, a user will be created.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
@@ -123,6 +154,11 @@ class SMS:
         create_user_as_pending: bool = False,
         locale: Optional[str] = None,
     ) -> LoginOrCreateResponse:
+        """[Stytch docs](https://stytch.com/docs/api/log-in-or-create-user-by-sms)
+
+        Send a one-time passcode to a user using their phone number. If the phone number is not associated with a user already, a user will be created.
+        """  # noqa
+
         payload: Dict[str, Any] = {
             "phone_number": phone_number,
             "create_user_as_pending": create_user_as_pending,
