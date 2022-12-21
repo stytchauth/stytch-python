@@ -44,15 +44,16 @@ class Users:
         return "users"
 
     def create(
-      self,
-      email: Optional[str] = None,
-      phone_number: Optional[str] = None,
-      name: Optional[Name] = None,
-      create_user_as_pending: bool = False,
-      attributes: Optional[Dict[str, str]] = None,
-      trusted_metadata: Optional[Dict[str, Any]] = None,
-      untrusted_metadata: Optional[Dict[str, Any]] = None,
+        self,
+        email: Optional[str] = None,
+        phone_number: Optional[str] = None,
+        name: Optional[Name] = None,
+        create_user_as_pending: bool = False,
+        attributes: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
+
         payload: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
@@ -85,6 +86,7 @@ class Users:
       trusted_metadata: Optional[Dict[str, Any]] = None,
       untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
+
         payload: Dict[str, Any] = {
             "create_user_as_pending": create_user_as_pending,
         }
@@ -108,9 +110,10 @@ class Users:
         return CreateResponse.from_json(res.response.status, res.json)
 
     def get(
-      self,
-      user_id: str,
+        self,
+        user_id: str,
     ) -> GetResponse:
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -125,6 +128,7 @@ class Users:
       self,
       user_id: str,
     ) -> GetResponse:
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -136,10 +140,11 @@ class Users:
         return GetResponse.from_json(res.response.status, res.json)
 
     def get_pending(
-      self,
-      limit: Optional[int] = None,
-      starting_after_id: Optional[str] = None,
+        self,
+        limit: Optional[int] = None,
+        starting_after_id: Optional[str] = None,
     ) -> GetPendingResponse:
+
         payload: Dict[str, Any] = {
         }
 
@@ -158,6 +163,7 @@ class Users:
       limit: Optional[int] = None,
       starting_after_id: Optional[str] = None,
     ) -> GetPendingResponse:
+
         payload: Dict[str, Any] = {
         }
 
@@ -172,11 +178,12 @@ class Users:
         return GetPendingResponse.from_json(res.response.status, res.json)
 
     def search(
-      self,
-      limit: Optional[int] = None,
-      cursor: Optional[str] = None,
-      query: Optional[SearchQuery] = None,
+        self,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
+
         payload: Dict[str, Any] = {
         }
 
@@ -198,6 +205,7 @@ class Users:
       cursor: Optional[str] = None,
       query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
+
         payload: Dict[str, Any] = {
         }
 
@@ -215,10 +223,10 @@ class Users:
 
     # MANUAL(search_all)
     def search_all(
-      self,
-      limit: Optional[int] = None,
-      cursor: Optional[str] = None,
-      query: Optional[SearchQuery] = None,
+        self,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        query: Optional[SearchQuery] = None,
     ) -> None:
         # 1. Check if this method should be async or not
         # 2. Set the return type appropriately
@@ -228,9 +236,10 @@ class Users:
     # ENDMANUAL(search_all)
 
     def delete(
-      self,
-      user_id: str,
+        self,
+        user_id: str,
     ) -> DeleteResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
@@ -242,22 +251,24 @@ class Users:
       user_id: str,
     ) -> DeleteResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, user_id)
 
         res = await self.async_client.delete(url)
         return DeleteResponse.from_json(res.response.status, res.json)
 
     def update(
-      self,
-      user_id: str,
-      emails: Optional[List[str]] = None,
-      phone_numbers: Optional[List[str]] = None,
-      crypto_wallets: Optional[List[str]] = None,
-      name: Optional[Name] = None,
-      attributes: Optional[Dict[str, str]] = None,
-      trusted_metadata: Optional[Dict[str, Any]] = None,
-      untrusted_metadata: Optional[Dict[str, Any]] = None,
+        self,
+        user_id: str,
+        emails: Optional[List[str]] = None,
+        phone_numbers: Optional[List[str]] = None,
+        crypto_wallets: Optional[List[str]] = None,
+        name: Optional[Name] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -293,6 +304,7 @@ class Users:
       trusted_metadata: Optional[Dict[str, Any]] = None,
       untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
+
         payload: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -318,9 +330,10 @@ class Users:
         return UpdateResponse.from_json(res.response.status, res.json)
 
     def delete_email(
-      self,
-      email_id: str,
+        self,
+        email_id: str,
     ) -> DeleteEmailResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
@@ -332,15 +345,17 @@ class Users:
       email_id: str,
     ) -> DeleteEmailResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
 
         res = await self.async_client.delete(url)
         return DeleteEmailResponse.from_json(res.response.status, res.json)
 
     def delete_phone_number(
-      self,
-      phone_id: str,
+        self,
+        phone_id: str,
     ) -> DeletePhoneNumberResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"phone_numbers/{phone_id}")
 
@@ -352,15 +367,17 @@ class Users:
       phone_id: str,
     ) -> DeletePhoneNumberResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, f"phone_numbers/{phone_id}")
 
         res = await self.async_client.delete(url)
         return DeletePhoneNumberResponse.from_json(res.response.status, res.json)
 
     def delete_webauthn_registration(
-      self,
-      webauthn_registration_id: str,
+        self,
+        webauthn_registration_id: str,
     ) -> DeleteWebauthnRegistrationResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"webauthn_registrations/{webauthn_registration_id}")
 
@@ -372,15 +389,17 @@ class Users:
       webauthn_registration_id: str,
     ) -> DeleteWebauthnRegistrationResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, f"webauthn_registrations/{webauthn_registration_id}")
 
         res = await self.async_client.delete(url)
         return DeleteWebauthnRegistrationResponse.from_json(res.response.status, res.json)
 
     def delete_totp(
-      self,
-      totp_id: str,
+        self,
+        totp_id: str,
     ) -> DeleteTotpResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
@@ -392,15 +411,17 @@ class Users:
       totp_id: str,
     ) -> DeleteTotpResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
 
         res = await self.async_client.delete(url)
         return DeleteTotpResponse.from_json(res.response.status, res.json)
 
     def delete_crypto_wallet(
-      self,
-      crypto_wallet_id: str,
+        self,
+        crypto_wallet_id: str,
     ) -> DeleteCryptoWalletResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"crypto_wallets/{crypto_wallet_id}")
 
@@ -412,15 +433,17 @@ class Users:
       crypto_wallet_id: str,
     ) -> DeleteCryptoWalletResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, f"crypto_wallets/{crypto_wallet_id}")
 
         res = await self.async_client.delete(url)
         return DeleteCryptoWalletResponse.from_json(res.response.status, res.json)
 
     def delete_password(
-      self,
-      password_id: str,
+        self,
+        password_id: str,
     ) -> DeletePasswordResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
@@ -432,15 +455,17 @@ class Users:
       password_id: str,
     ) -> DeletePasswordResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
 
         res = await self.async_client.delete(url)
         return DeletePasswordResponse.from_json(res.response.status, res.json)
 
     def delete_biometric_registration(
-      self,
-      biometric_registration_id: str,
+        self,
+        biometric_registration_id: str,
     ) -> DeleteBiometricRegistrationResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"biometric_registrations/{biometric_registration_id}")
 
@@ -452,15 +477,17 @@ class Users:
       biometric_registration_id: str,
     ) -> DeleteBiometricRegistrationResponse:
 
+
         url = self.api_base.route_with_sub_url(self.sub_url, f"biometric_registrations/{biometric_registration_id}")
 
         res = await self.async_client.delete(url)
         return DeleteBiometricRegistrationResponse.from_json(res.response.status, res.json)
 
     def delete_oauth_user_registration(
-      self,
-      oauth_user_registration_id: str,
+        self,
+        oauth_user_registration_id: str,
     ) -> DeleteOauthUserRegistrationResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"oauth/{oauth_user_registration_id}")
 
@@ -471,6 +498,7 @@ class Users:
       self,
       oauth_user_registration_id: str,
     ) -> DeleteOauthUserRegistrationResponse:
+
 
         url = self.api_base.route_with_sub_url(self.sub_url, f"oauth/{oauth_user_registration_id}")
 

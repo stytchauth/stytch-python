@@ -15,16 +15,19 @@ class ResponseType:
     name: str
     d: Dict[str, str]
     extends: Optional[str] = None
+    docstring: Optional[str] = None
 
     def generate(self) -> str:
         template = get_template("response.tmpl")
         return template.render(this=self)
 
     @classmethod
-    def from_dict(cls, name: str, d: Dict[str, Any]) -> ResponseType:
+    def from_dict(
+        cls, name: str, d: Dict[str, Any], docstring: Optional[str] = None
+    ) -> ResponseType:
         extends = None
         if cls.EXTENDS_KEY in d:
             extends = str(d[cls.EXTENDS_KEY])
             del d[cls.EXTENDS_KEY]
 
-        return ResponseType(name=name, d=d, extends=extends)
+        return ResponseType(name=name, d=d, extends=extends, docstring=docstring)

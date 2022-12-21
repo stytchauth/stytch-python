@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+import pathlib
 import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
@@ -105,9 +106,8 @@ class Api:
         return TITLE_TO_SNAKE_REGEX.sub(r"\1_\2", partial).lower()
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Api:
+    def from_dict(cls, data: Dict[str, Any], docs_dir: Optional[str] = None) -> Api:
         classname = data["classname"]
-        methods = [Method.from_dict(m) for m in data["methods"]]
         sub_apis = [cls.from_dict(d) for d in data.get("sub_apis", [])]
         additional_imports = data.get("additional_imports", [])
 
@@ -115,6 +115,12 @@ class Api:
         filename = data.get("filename")
         if filename is None:
             filename = cls._gen_filename_from_classname(data["classname"])
+
+        # Load the methods and the related docstrings if available
+        methods = [Method.from_dict(m) for m in data["methods"]]
+        if docs_dir is not None:
+            for m in methods:
+                m.get_docs_if_available(pathlib.Path(docs_dir) / filename)
 
         # Default to self.filename if sub_url was not given
         sub_url = data.get("sub_url", filename)
@@ -129,7 +135,7 @@ class Api:
         )
 
     @classmethod
-    def from_yml(cls, filepath: str) -> Api:
+    def from_yml(cls, filepath: str, docs_dir: Optional[str] = None) -> Api:
         with open(filepath) as f:
             data = yaml.safe_load(f)
-            return cls.from_dict(data)
+            return cls.from_dict(data, docs_dir)

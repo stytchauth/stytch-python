@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+import pathlib
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -9,6 +11,9 @@ from codegen.types.argument import Argument
 from codegen.types.http_method import HttpMethod
 from codegen.types.response_type import ResponseType
 from codegen.types.templates import get_template
+
+API_DOC_SUFFIX = ".md"
+RESPONSE_DOC_SUFFIX = ".response.md"
 
 
 class InvalidMethodSpecError(ValueError):
@@ -24,6 +29,7 @@ class Method:
     method: Optional[HttpMethod] = None
     eval_api_path: bool = False
     manual_implementation: bool = False
+    docstring: Optional[str] = None
 
     @property
     def params_or_json(self) -> str:
@@ -37,6 +43,20 @@ class Method:
     def is_delete_method(self) -> bool:
         return self.method is HttpMethod.DELETE
 
+    def get_docs_if_available(self, docs_dir: Optional[pathlib.Path]) -> None:
+        if docs_dir is None:
+            return
+
+        api_docpath = (docs_dir / self.name).with_suffix(API_DOC_SUFFIX)
+        response_docpath = api_docpath.with_suffix(RESPONSE_DOC_SUFFIX)
+
+        if os.path.exists(api_docpath):
+            with open(api_docpath) as f:
+                self.docstring = f.read().strip()
+        if self.response_type is not None and os.path.exists(response_docpath):
+            with open(response_docpath) as f:
+                self.response_type.docstring = f.read().strip()
+
     def generate(self) -> str:
         template = get_template("method.tmpl")
         return template.render(this=self)
@@ -47,13 +67,20 @@ class Method:
         return f"{name_to_title}Response"
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Method:
+    def from_dict(
+        cls,
+        data: Dict[str, Any],
+        docstring: Optional[str] = None,
+        response_docstring: Optional[str] = None,
+    ) -> Method:
         name = data["name"]
         args = [Argument.from_dict(a) for a in data["args"]]
         response_type = None
         if "response_type" in data:
             response_type = ResponseType.from_dict(
-                cls.return_type_name(name), data["response_type"]
+                name=cls.return_type_name(name),
+                d=data["response_type"],
+                docstring=response_docstring,
             )
 
         api_path = name
@@ -95,4 +122,5 @@ class Method:
             api_path=api_path,
             manual_implementation=manual_implementation,
             eval_api_path=eval_api_path,
+            docstring=docstring,
         )
