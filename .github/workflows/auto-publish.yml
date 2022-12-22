@@ -1,0 +1,74 @@
+name: Publish stytch PyPI package
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    name: Build and publish stytch package to PyPI
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build source tarball
+        run: python setup.py sdist
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(python -c 'import stytch; print(stytch.__version__)')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "release_tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get changed files
+        id: files
+        uses: jitterbit/get-changed-files@v1
+
+      - name: Check for version.py diff
+        id: diff
+        run: |
+          FOUND=0
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            if [[ $changed_file == "stytch/version.py" ]]; then
+              FOUND=1
+            fi
+          done
+          echo "diff=$FOUND" >> $GITHUB_OUTPUT
+
+      - name: Publish distribution to Test PyPI
+        env:
+          api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        if: steps.diff.outputs.diff != 0 && env.api_token != ''
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+
+      - name: Publish distribution to PyPI
+        env:
+          api_token: ${{ secrets.PYPI_API_TOKEN }}
+        if: steps.diff.outputs.diff != 0 && env.api_token != ''
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Create release draft
+        if: steps.diff.outputs.diff != 0
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.release_tag }}
+          release_name: ${{ steps.version.outputs.release_tag }}
+          draft: true
