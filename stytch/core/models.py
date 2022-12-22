@@ -10,7 +10,7 @@ import pydantic
 
 class ResponseBase(pydantic.BaseModel):
     status_code: int
-    # Optional because sessions/jwks doesn't have it currently
+    # Optional because it won't be present in a 5XX error
     request_id: Optional[str] = None
 
     @classmethod
