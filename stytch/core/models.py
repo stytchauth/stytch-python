@@ -115,6 +115,17 @@ class StytchSession(pydantic.BaseModel):
     user_id: str
 
 
+class OAuthSession(pydantic.BaseModel):
+    stytch_session: Optional[StytchSession]
+    session_id: str
+    user_id: str
+    started_at: Optional[datetime.datetime]
+    last_accessed_at: Optional[datetime.datetime]
+    expires_at: Optional[datetime.datetime]
+    attributes: Optional[Dict[str, str]]
+    authentication_factors: List[AuthenticationFactor]
+
+
 class TOTPInstance(pydantic.BaseModel):
     totp_id: str
     verified: bool
