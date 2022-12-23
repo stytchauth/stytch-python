@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, create_autospec, patch
 from stytch.api.sessions import Sessions
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.core.models import AuthenticationFactor, StytchSession
+from stytch.core.models import StytchSession
 from stytch.models.sessions import AuthenticateResponse
 
 
@@ -91,7 +91,7 @@ class TestSessions(unittest.TestCase):
         }
         expected_session = StytchSession(
             attributes=attributes,
-            authentication_factors=[AuthenticationFactor(**auth_factor)],
+            authentication_factors=[auth_factor],
             custom_claims=None,
             expires_at=now_dt,
             last_accessed_at=now_dt,

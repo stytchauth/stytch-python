@@ -97,16 +97,9 @@ class EmailFactor(pydantic.BaseModel):
     email_id: str
 
 
-class AuthenticationFactor(pydantic.BaseModel):
-    delivery_method: str
-    email_factor: EmailFactor
-    last_authenticated_at: datetime.datetime
-    type: str
-
-
 class StytchSession(pydantic.BaseModel):
     attributes: Optional[Dict[str, str]]
-    authentication_factors: List[AuthenticationFactor]
+    authentication_factors: List[Dict[str, Any]]
     custom_claims: Optional[Dict[str, Any]]
     expires_at: datetime.datetime
     last_accessed_at: datetime.datetime
@@ -127,7 +120,7 @@ class OAuthSession(pydantic.BaseModel):
     last_accessed_at: Optional[datetime.datetime]
     expires_at: Optional[datetime.datetime]
     attributes: Optional[Dict[str, str]]
-    authentication_factors: List[AuthenticationFactor]
+    authentication_factors: List[Dict[str, Any]]
 
 
 class TOTPInstance(pydantic.BaseModel):
