@@ -4,19 +4,20 @@ from typing import Any, Dict, List, Optional
 
 
 from stytch.core.models import (
-    AuthenticationFactor,
     BiometricRegistration,
     CryptoWallet,
     Email,
     EmailFactor,
     Name,
     OAuthProvider,
+    OAuthSession,
     Operand,
     Password,
     PhoneNumber,
     ResponseBase,
     SearchQuery,
     SearchResultsMetadata,
+    SessionPtr,
     StytchSession,
     TOTPInstance,
     TOTPInstanceWithRecoveryCodes,

@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, Optional
 
-from stytch.core.models import ResponseBase, StytchSession, User
+from stytch.core.models import OAuthSession, ResponseBase, User
 
 
 class AuthenticateResponse(ResponseBase):
@@ -42,7 +42,7 @@ class AuthenticateResponse(ResponseBase):
     provider_type: str
     provider_values: Optional[Dict[str, Any]]
     reset_sessions: bool
-    session: Optional[StytchSession]
+    session: Optional[OAuthSession]
     session_jwt: str
     session_token: str
 
