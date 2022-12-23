@@ -115,8 +115,12 @@ class StytchSession(pydantic.BaseModel):
     user_id: str
 
 
+class SessionPtr(pydantic.BaseModel):
+    session: Optional[StytchSession]
+
+
 class OAuthSession(pydantic.BaseModel):
-    stytch_session: Optional[StytchSession]
+    stytch_session: Optional[SessionPtr]
     session_id: str
     user_id: str
     started_at: Optional[datetime.datetime]
