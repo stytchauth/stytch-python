@@ -1,5 +1,5 @@
-{% if self.extends %}
-class {{ this.name }}({{ self.extends }}):
+{% if this.extends %}
+class {{ this.name }}(ResponseBase, {{ this.extends }}):
 {% else %}
 class {{ this.name }}(ResponseBase):
 {% endif %}

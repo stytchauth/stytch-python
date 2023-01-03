@@ -22,7 +22,7 @@ class CreateResponse(ResponseBase):
     status: str
 
 
-class GetResponse(ResponseBase):
+class GetResponse(ResponseBase, User):
     """[Stytch docs](https://stytch.com/docs/api/get-user)"""  # noqa
 
     user_id: str
