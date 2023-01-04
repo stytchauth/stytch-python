@@ -12,6 +12,7 @@ class Argument:
     arg_type: str
     map_with: Optional[str] = None
     map_with_method: Optional[str] = None
+    map_pydantic: bool = False
     include_if_null: bool = False
 
     def generate_in_params(self) -> str:
@@ -23,6 +24,9 @@ class Argument:
             value = f"{self.map_with}({self.name})"
         elif self.map_with_method:
             value = f"{self.name}.{self.map_with_method}"
+        elif self.map_pydantic:
+            cond = f"isinstance({self.name}, pydantic.BaseModel)"
+            value = f"{self.name}.dict() if {cond} else {self.name}"
         return f'"{self.name}": {value},'
 
     def generate_in_dict_assignment(self, dict_name: str) -> str:
@@ -31,6 +35,9 @@ class Argument:
             value = f"{self.map_with}({self.name})"
         elif self.map_with_method:
             value = f"{self.name}.{self.map_with_method}"
+        elif self.map_pydantic:
+            cond = f"isinstance({self.name}, pydantic.BaseModel)"
+            value = f"{self.name}.dict() if {cond} else {self.name}"
         return f'{dict_name}["{self.name}"] = {value}'
 
     @property
