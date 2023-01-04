@@ -4,7 +4,9 @@
 # or your changes may be overwritten later!
 # !!!
 
-from typing import Any, AsyncGenerator, Dict, Generator, List, Optional
+from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Union
+
+import pydantic
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -46,7 +48,7 @@ class Users:
         self,
         email: Optional[str] = None,
         phone_number: Optional[str] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
         create_user_as_pending: bool = False,
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
@@ -66,7 +68,9 @@ class Users:
         if phone_number is not None:
             payload["phone_number"] = phone_number
         if name is not None:
-            payload["name"] = name.dict()
+            payload["name"] = (
+                name.dict() if isinstance(name, pydantic.BaseModel) else name
+            )
         if attributes is not None:
             payload["attributes"] = attributes
         if trusted_metadata is not None:
@@ -83,7 +87,7 @@ class Users:
         self,
         email: Optional[str] = None,
         phone_number: Optional[str] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
         create_user_as_pending: bool = False,
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
@@ -103,7 +107,9 @@ class Users:
         if phone_number is not None:
             payload["phone_number"] = phone_number
         if name is not None:
-            payload["name"] = name.dict()
+            payload["name"] = (
+                name.dict() if isinstance(name, pydantic.BaseModel) else name
+            )
         if attributes is not None:
             payload["attributes"] = attributes
         if trusted_metadata is not None:
@@ -200,7 +206,7 @@ class Users:
         self,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
-        query: Optional[SearchQuery] = None,
+        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
         """[Stytch docs](https://stytch.com/docs/api/search-users)
 
@@ -214,7 +220,9 @@ class Users:
         if cursor is not None:
             payload["cursor"] = cursor
         if query is not None:
-            payload["query"] = query.dict()
+            payload["query"] = (
+                query.dict() if isinstance(query, pydantic.BaseModel) else query
+            )
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
@@ -225,7 +233,7 @@ class Users:
         self,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
-        query: Optional[SearchQuery] = None,
+        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
         """[Stytch docs](https://stytch.com/docs/api/search-users)
 
@@ -239,7 +247,9 @@ class Users:
         if cursor is not None:
             payload["cursor"] = cursor
         if query is not None:
-            payload["query"] = query.dict()
+            payload["query"] = (
+                query.dict() if isinstance(query, pydantic.BaseModel) else query
+            )
 
         url = self.api_base.route_with_sub_url(self.sub_url, "search")
 
@@ -317,7 +327,7 @@ class Users:
         emails: Optional[List[str]] = None,
         phone_numbers: Optional[List[str]] = None,
         crypto_wallets: Optional[List[str]] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -340,7 +350,9 @@ class Users:
         if crypto_wallets is not None:
             payload["crypto_wallets"] = crypto_wallets
         if name is not None:
-            payload["name"] = name.dict()
+            payload["name"] = (
+                name.dict() if isinstance(name, pydantic.BaseModel) else name
+            )
         if attributes is not None:
             payload["attributes"] = attributes
         if trusted_metadata is not None:
@@ -359,7 +371,7 @@ class Users:
         emails: Optional[List[str]] = None,
         phone_numbers: Optional[List[str]] = None,
         crypto_wallets: Optional[List[str]] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
         attributes: Optional[Dict[str, str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -382,7 +394,9 @@ class Users:
         if crypto_wallets is not None:
             payload["crypto_wallets"] = crypto_wallets
         if name is not None:
-            payload["name"] = name.dict()
+            payload["name"] = (
+                name.dict() if isinstance(name, pydantic.BaseModel) else name
+            )
         if attributes is not None:
             payload["attributes"] = attributes
         if trusted_metadata is not None:

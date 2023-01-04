@@ -12,8 +12,8 @@ methods:
       - name: phone_number
         arg_type: Optional[str] = None
       - name: name
-        arg_type: Optional[Name] = None
-        map_with_method: dict()
+        arg_type: Optional[Union[Name, Dict[str, str]]] = None
+        map_pydantic: true
       - name: create_user_as_pending
         arg_type: bool = False
       - name: attributes
@@ -59,8 +59,8 @@ methods:
       - name: cursor
         arg_type: Optional[str] = None
       - name: query
-        arg_type: Optional[SearchQuery] = None
-        map_with_method: dict()
+        arg_type: Optional[Union[SearchQuery, Dict[str, Any]]] = None
+        map_pydantic: true
     response_type:
       results: List[User]
       results_metadata: SearchResultsMetadata
@@ -72,8 +72,7 @@ methods:
       - name: cursor
         arg_type: Optional[str] = None
       - name: query
-        arg_type: Optional[SearchQuery] = None
-        map_with_method: dict()
+        arg_type: Optional[Union[Dict[str, Any], SearchQuery]] = None
   - name: delete
     method: DELETE
     api_path: user_id
@@ -97,8 +96,8 @@ methods:
       - name: crypto_wallets
         arg_type: Optional[List[str]] = None
       - name: name
-        arg_type: Optional[Name] = None
-        map_with_method: dict()
+        arg_type: Optional[Union[Name, Dict[str, str]]] = None
+        map_pydantic: true
       - name: attributes
         arg_type: Optional[Dict[str, str]] = None
       - name: trusted_metadata

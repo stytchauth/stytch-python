@@ -4,7 +4,9 @@
 # or your changes may be overwritten later!
 # !!!
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
+
+import pydantic
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -317,7 +319,7 @@ class Email:
         email: str,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Dict[str, str], Name]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
     ) -> InviteResponse:
@@ -353,7 +355,9 @@ class Email:
         if invite_expiration_minutes is not None:
             payload["invite_expiration_minutes"] = invite_expiration_minutes
         if name is not None:
-            payload["name"] = name
+            payload["name"] = (
+                name.dict() if isinstance(name, pydantic.BaseModel) else name
+            )
         if locale is not None:
             payload["locale"] = locale
         if attributes is not None:
@@ -369,7 +373,7 @@ class Email:
         email: str,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Dict[str, str], Name]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
     ) -> InviteResponse:
@@ -405,7 +409,9 @@ class Email:
         if invite_expiration_minutes is not None:
             payload["invite_expiration_minutes"] = invite_expiration_minutes
         if name is not None:
-            payload["name"] = name
+            payload["name"] = (
+                name.dict() if isinstance(name, pydantic.BaseModel) else name
+            )
         if locale is not None:
             payload["locale"] = locale
         if attributes is not None:
