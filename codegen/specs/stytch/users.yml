@@ -72,7 +72,8 @@ methods:
       - name: cursor
         arg_type: Optional[str] = None
       - name: query
-        arg_type: Optional[Union[Dict[str, Any], SearchQuery]] = None
+        arg_type: Optional[Union[SearchQuery, Dict[str, Any]]] = None
+        map_pydantic: true
   - name: delete
     method: DELETE
     api_path: user_id

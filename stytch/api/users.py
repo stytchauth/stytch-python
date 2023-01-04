@@ -261,7 +261,7 @@ class Users:
         self,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
-        query: Optional[SearchQuery] = None,
+        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
     ) -> Generator[SearchResponse, None, None]:
         # 1. Check if this method should be async or not
         # 2. Set the return type appropriately
@@ -278,7 +278,7 @@ class Users:
         self,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
-        query: Optional[SearchQuery] = None,
+        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
     ) -> AsyncGenerator[SearchResponse, None]:
         # 1. Check if this method should be async or not
         # 2. Set the return type appropriately
