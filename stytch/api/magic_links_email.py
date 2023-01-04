@@ -319,7 +319,7 @@ class Email:
         email: str,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
-        name: Optional[Union[Dict[str, str], Name]] = None,
+        name: Optional[Name, Union[Dict[str, str]]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
     ) -> InviteResponse:
@@ -373,7 +373,7 @@ class Email:
         email: str,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
-        name: Optional[Union[Dict[str, str], Name]] = None,
+        name: Optional[Name, Union[Dict[str, str]]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
     ) -> InviteResponse:

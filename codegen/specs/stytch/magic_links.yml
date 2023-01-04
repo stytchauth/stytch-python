@@ -109,7 +109,7 @@ sub_apis:
           - name: invite_expiration_minutes
             arg_type: Optional[int] = None
           - name: name
-            arg_type: Optional[Union[Dict[str, str], Name]] = None
+            arg_type: Optional[Name, Union[Dict[str, str]]] = None
             map_pydantic: true
           - name: locale
             arg_type: Optional[str] = None
