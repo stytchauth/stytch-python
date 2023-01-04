@@ -18,10 +18,9 @@ RESOURCES_DIR = pathlib.Path(__file__).parent / "resources"
 INPUT_EXTENSION = ".snippets_test"
 OLD_SNIPPETS_EXTENSION = ".snippets"
 SNIPPETS_EXTENSION = ".snippets"
+OUTPUT_EXTENSION = ".expected"
 EXPECTED_EXTENSION = ".expected"
 ERROR_EXTENSION = ".error"
-
-
 @dataclass
 class SnippetTest:
     input_path: str
@@ -82,32 +81,25 @@ class TestSnippetSet(unittest.TestCase):
 
     def test_len(self) -> None:
         s = SnippetSet({"a": "b", "c": "d"})
-        self.assertEqual(2, len(s))
+        self.assertEqual(len(s), 2)
 
     def test_replace_all(self) -> None:
         for name, test in self.tests.items():
-            with self.subTest(name):
-                # Arrange
+            with self.subTest(name=name):
                 snippet_set = SnippetSet(snippets=test.snippets)
                 if isinstance(test.expected, str):
-                    # Act
                     actual = snippet_set.replace_all(test.input_lines)
-                    # Assert
-                    self.assertEqual(test.expected, actual)
+                    self.assertEqual(actual, test.expected)
                 else:
-                    # Act and assert
                     with self.assertRaises(test.expected):
                         snippet_set.replace_all(test.input_lines)
 
     def test_from_file(self) -> None:
         for name, test in self.tests.items():
-            with self.subTest(name):
+            with self.subTest(name=name):
                 if isinstance(test.expected, str):
-                    # Act
                     actual = SnippetSet.from_file(test.input_path).snippets
-                    # Assert
-                    self.assertEqual(test.old_snippets, actual)
+                    self.assertEqual(actual, test.old_snippets)
                 else:
-                    # Act and assert
                     with self.assertRaises(test.expected):
                         SnippetSet.from_file(test.input_path)

@@ -2,7 +2,7 @@
 
 import sys
 import unittest
-from unittest.mock import MagicMock, create_autospec
+from unittest.mock import create_autospec
 
 if sys.version_info < (3, 8):
     # When running 3.7, we unfortunately can't test async properly
@@ -12,13 +12,13 @@ else:
     from unittest import IsolatedAsyncioTestCase
     from unittest.mock import AsyncMock
 
-from stytch.api.test.test_users import EXPECTED_RESPONSES, get_fake_search_responses
+from stytch.api.test.test_users import EXPECTED_RESPONSES, generate_fake_search_responses
 from stytch.api.users import Users
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
 
-class TestUsersAsync(IsolatedAsyncioTestCase):
+class TestUsersAsyncSearch(IsolatedAsyncioTestCase):
     async def test_search_all_async(self) -> None:
         # Arrange
         users = Users(
@@ -27,7 +27,7 @@ class TestUsersAsync(IsolatedAsyncioTestCase):
             async_client=create_autospec(AsyncClient),
         )
         users.search_async = AsyncMock(  # type: ignore [assignment]
-            side_effect=get_fake_search_responses(EXPECTED_RESPONSES)
+            side_effect=generate_fake_search_responses(EXPECTED_RESPONSES)
         )
         # Act
         async for _ in users.search_all_async():

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-
 import unittest
 from typing import List
-from unittest.mock import MagicMock, create_autospec
+from unittest.mock import create_autospec
 
 from stytch.api.users import Users
 from stytch.core.api_base import ApiBase
@@ -14,13 +13,13 @@ from stytch.models.users import SearchResponse
 EXPECTED_RESPONSES = 3
 
 
-def get_fake_search_responses(num_results: int) -> List[SearchResponse]:
+def generate_fake_search_responses(num_results: int) -> List[SearchResponse]:
     return [
         SearchResponse(
             status_code=200,
             request_id=f"request-{i}",
             results=[create_autospec(User)],
-            results_metadata=SearchResultsMetadata(next_cursor="cursor{i}", total=1),
+            results_metadata=SearchResultsMetadata(next_cursor=f"cursor{i}", total=1),
         )
         for i in range(num_results - 1)
     ] + [
@@ -43,7 +42,7 @@ class TestUsers(unittest.TestCase):
         )
         # mypy doesn't approve of monkey-patching methods
         users.search = MagicMock(  # type: ignore [assignment]
-            side_effect=get_fake_search_responses(EXPECTED_RESPONSES)
+            side_effect=generate_fake_search_responses(EXPECTED_RESPONSES)
         )
         # Act
         for _ in users.search_all():
