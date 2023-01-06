@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
-from stytch.core.models import ResponseBase, StytchSession
+from stytch.core.models import ResponseBase, StytchSession, User
 
 
 class GetResponse(ResponseBase):
@@ -15,6 +15,9 @@ class AuthenticateResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/session-auth)"""  # noqa
 
     session: StytchSession
+    session_jwt: str
+    session_token: str
+    user: Optional[User]
 
 
 class RevokeResponse(ResponseBase):

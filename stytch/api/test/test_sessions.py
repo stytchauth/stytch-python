@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, create_autospec, patch
 from stytch.api.sessions import Sessions
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.core.models import StytchSession
+from stytch.core.models import StytchSession, User
 from stytch.models.sessions import AuthenticateResponse
 
 
@@ -28,6 +28,9 @@ class TestSessions(unittest.TestCase):
                 status_code=200,
                 request_id="request-api",
                 session=create_autospec(StytchSession),
+                session_jwt="",
+                session_token="",
+                user=create_autospec(User),
             )
         )
 
@@ -39,6 +42,9 @@ class TestSessions(unittest.TestCase):
                     status_code=200,
                     request_id="request-local",
                     session=create_autospec(StytchSession),
+                    session_jwt="",
+                    session_token="",
+                    user=create_autospec(User),
                 )
             )
             # Act

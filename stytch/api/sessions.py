@@ -251,6 +251,9 @@ class Sessions:
             status_code=200,
             request_id="local-jwt-verification",
             session=session,
+            session_jwt=session_jwt,
+            session_token="",
+            user=None,
         )
 
     # ENDMANUAL(authenticate_jwt_local)
