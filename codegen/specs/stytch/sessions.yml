@@ -27,6 +27,7 @@ methods:
       session: StytchSession
       session_jwt: str
       session_token: str
+      # TODO(v7): Make this non-Optional and change authenticate_jwt{_local} to return StytchSession directly
       user: Optional[User]
   - name: authenticate_jwt
     manual_implementation: true
