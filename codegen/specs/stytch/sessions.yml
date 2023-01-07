@@ -2,7 +2,7 @@ classname: Sessions
 additional_imports:
   - import jwt
   - import time
-  - from stytch.core.models import StytchSession
+  - from stytch.core.models import StytchSession, User
 methods:
   - name: get
     use_base_path_as_api_path: True
@@ -25,6 +25,10 @@ methods:
         arg_type: Optional[Dict[str, Any]] = None
     response_type:
       session: StytchSession
+      session_jwt: str
+      session_token: str
+      # TODO(v7): Make this non-Optional and change authenticate_jwt{_local} to return StytchSession directly
+      user: Optional[User]
   - name: authenticate_jwt
     manual_implementation: true
     args:
