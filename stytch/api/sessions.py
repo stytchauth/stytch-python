@@ -146,6 +146,11 @@ class Sessions:
 
         To force remote validation for all tokens, set max_token_age_seconds to
         zero or use the authenticate method instead.
+
+        NOTE: The response object will only have the user field set (ie, not None), if
+        authentication is done remotely. Local authentication will *not* set the user
+        field of the response object. In v7, it is planned for this method to directly
+        return a StytchSession object to avoid this "partially set response" confusion.
         """
         # Return the local_result if available, otherwise call the Stytch API
         return self.authenticate_jwt_local(
@@ -194,6 +199,11 @@ class Sessions:
 
         The value for leeway is the maximum allowable difference in seconds when
         comparing timestamps. It defaults to zero.
+
+        NOTE: The response object will *never* have the user field set (ie, not None).
+        Local authentication will *not* set the user field of the response object.
+        In v7, it is planned for this method to directly return a StytchSession object
+        to avoid this "partially set response" confusion.
         """
         project_id = self.sync_client.project_id
         jwt_audience = project_id
