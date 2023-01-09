@@ -14,6 +14,7 @@ methods:
       status_code: int
       request_id: str
       user_id: str
+      token: str
   - name: authenticate
     method: POST
     args:

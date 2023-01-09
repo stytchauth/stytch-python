@@ -18,6 +18,7 @@ class CreateResponse(ResponseBase):
     status_code: int
     request_id: str
     user_id: str
+    token: str
 
 
 class AuthenticateResponse(ResponseBase):
