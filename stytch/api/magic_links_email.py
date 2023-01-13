@@ -346,7 +346,7 @@ class Email:
         name: Optional[Union[Name, Dict[str, str]]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
-        template_id: Optional[str] = None,
+        invite_template_id: Optional[str] = None,
     ) -> InviteResponse:
         """[Stytch docs](https://stytch.com/docs/api/invite-by-email)
 
@@ -387,8 +387,8 @@ class Email:
             payload["locale"] = locale
         if attributes is not None:
             payload["attributes"] = attributes
-        if template_id is not None:
-            payload["template_id"] = template_id
+        if invite_template_id is not None:
+            payload["invite_template_id"] = invite_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 
@@ -403,7 +403,7 @@ class Email:
         name: Optional[Union[Name, Dict[str, str]]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
-        template_id: Optional[str] = None,
+        invite_template_id: Optional[str] = None,
     ) -> InviteResponse:
         """[Stytch docs](https://stytch.com/docs/api/invite-by-email)
 
@@ -444,8 +444,8 @@ class Email:
             payload["locale"] = locale
         if attributes is not None:
             payload["attributes"] = attributes
-        if template_id is not None:
-            payload["template_id"] = template_id
+        if invite_template_id is not None:
+            payload["invite_template_id"] = invite_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 
