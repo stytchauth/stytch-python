@@ -76,6 +76,10 @@ sub_apis:
             arg_type: Optional[str] = None
           - name: session_jwt
             arg_type: Optional[str] = None
+          - name: login_template_id
+            arg_type: Optional[str] = None
+          - name: signup_template_id
+            arg_type: Optional[str] = None
         response_type:
           user_id: str
           email_id: str
@@ -95,6 +99,10 @@ sub_apis:
           - name: create_user_as_pending
             arg_type: Optional[bool] = None
           - name: locale
+            arg_type: Optional[str] = None
+          - name: login_template_id
+            arg_type: Optional[str] = None
+          - name: signup_template_id
             arg_type: Optional[str] = None
         response_type:
           user_id: str
@@ -116,6 +124,8 @@ sub_apis:
             arg_type: Optional[str] = None
           - name: attributes
             arg_type: Optional[Dict[str, str]] = None
+          - name: invite_template_id
+            arg_type: Optional[str] = None
         response_type:
           user_id: str
           email_id: str
