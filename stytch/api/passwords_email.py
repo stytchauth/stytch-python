@@ -35,6 +35,7 @@ class Email:
         attributes: Optional[Dict[str, str]] = None,
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
+        template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """[Stytch docs](https://stytch.com/docs/api/password-email-reset-start)
 
@@ -59,6 +60,8 @@ class Email:
             payload["code_challenge"] = code_challenge
         if locale is not None:
             payload["locale"] = locale
+        if template_id is not None:
+            payload["template_id"] = template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
 
@@ -74,6 +77,7 @@ class Email:
         attributes: Optional[Dict[str, str]] = None,
         code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
+        template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """[Stytch docs](https://stytch.com/docs/api/password-email-reset-start)
 
@@ -98,6 +102,8 @@ class Email:
             payload["code_challenge"] = code_challenge
         if locale is not None:
             payload["locale"] = locale
+        if template_id is not None:
+            payload["template_id"] = template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
 
