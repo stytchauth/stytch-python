@@ -122,6 +122,13 @@ class OAuthSession(pydantic.BaseModel):
     attributes: Optional[Dict[str, str]]
     authentication_factors: List[Dict[str, Any]]
 
+    @property
+    def session(self) -> Optional[StytchSession]:
+        """Convenience property to retrieve the inner StytchSession if it exists"""
+        if self.stytch_session is not None and self.stytch_session.session is not None:
+            return self.stytch_session.session
+        return None
+
 
 class TOTPInstance(pydantic.BaseModel):
     totp_id: str
