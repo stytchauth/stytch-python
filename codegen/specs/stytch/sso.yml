@@ -1,0 +1,112 @@
+classname: SSOService
+methods:
+  - name: CreateSAMLConnection
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: identity_provider
+        arg_type: str
+    response_type:
+      request_id: str
+      connection: null
+    method: post
+    api_path: /v1/b2b/sso/saml/{organization_id}
+  - name: UpdateSAMLConnection
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: connection_id
+        arg_type: str
+      - name: entity_id
+        arg_type: str
+      - name: display_name
+        arg_type: str
+      - name: attribute_mapping
+        arg_type: Optional[Dict[str, str]] = None
+      - name: x509_certificate
+        arg_type: str
+    response_type:
+      request_id: str
+      connection: null
+    method: put
+    api_path: /v1/b2b/sso/saml/{organization_id}/connections/{connection_id}
+  - name: UpdateSAMLConnectionByURL
+    args:
+      - name: connection_id
+        arg_type: str
+      - name: metadata_url
+        arg_type: str
+    response_type:
+      request_id: str
+      connection: null
+    method: put
+    api_path: /v1/b2b/sso/saml/{connection_id}/url
+  - name: UpdateSAMLConnectionByDoc
+    args:
+      - name: connection_id
+        arg_type: str
+      - name: metadata
+        arg_type: null
+    response_type:
+      request_id: str
+      connection: null
+    method: put
+    api_path: /v1/b2b/sso/saml/{connection_id}/doc
+  - name: GetSSOConnections
+    args:
+      - name: organization_id
+        arg_type: str
+    response_type:
+      request_id: str
+      saml_connections: null
+    method: get
+    api_path: /v1/b2b/sso/{organization_id}
+  - name: DeleteSSOConnection
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: connection_id
+        arg_type: str
+    response_type:
+      request_id: str
+      connection_id: str
+    method: delete
+    api_path: /v1/b2b/sso/{organization_id}/connections/{connection_id}
+  - name: SSOAuthenticate
+    args:
+      - name: token
+        arg_type: str
+      - name: code_verifier
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      request_id: str
+      member_id: str
+      organization_id: str
+      member: null
+      session_token: str
+      session_jwt: str
+      session: null
+      reset_session: bool
+    method: post
+    api_path: /v1/b2b/sso/authenticate
+  - name: DeleteSAMLVerificationCertificate
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: connection_id
+        arg_type: str
+      - name: certificate_id
+        arg_type: str
+    response_type:
+      request_id: str
+      certificate_id: str
+    method: delete
+    api_path: /v1/b2b/sso/{organization_id}/connections/{connection_id}/verification_certificate/{certificate_id}

@@ -1,0 +1,45 @@
+classname: MultiTenantSessionService
+methods:
+  - name: MultiTenantSessionsGet
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_id
+        arg_type: str
+    response_type:
+      request_id: str
+      sessions: null
+    method: get
+    api_path: /v1/b2b/sessions
+  - name: MultiTenantSessionsAuthenticate
+    args:
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      request_id: str
+      member_session: null
+      session_token: str
+      session_jwt: str
+      member: null
+    method: post
+    api_path: /v1/b2b/sessions/authenticate
+  - name: MultiTenantSessionsRevoke
+    args:
+      - name: member_session_id
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: member_id
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+    method: post
+    api_path: /v1/b2b/sessions/revoke

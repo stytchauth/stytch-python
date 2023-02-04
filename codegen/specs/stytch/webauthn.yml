@@ -1,59 +1,64 @@
-classname: WebAuthn
-filename: webauthn
+classname: WebAuthnService
 methods:
-  - name: register_start
-    api_path: register/start
-    method: POST
+  - name: WebAuthnRegisterStart
     args:
       - name: user_id
         arg_type: str
       - name: domain
         arg_type: str
       - name: user_agent
-        arg_type: Optional[str] = None
+        arg_type: str
       - name: authenticator_type
         arg_type: Optional[str] = None
     response_type:
+      request_id: str
       user_id: str
       public_key_credential_creation_options: str
-  - name: register
-    method: POST
+    method: post
+    api_path: /v1/webauthn/register/start
+  - name: WebAuthnRegister
     args:
       - name: user_id
         arg_type: str
       - name: public_key_credential
         arg_type: str
     response_type:
+      request_id: str
       user_id: str
       webauthn_registration_id: str
-  - name: authenticate_start
-    api_path: authenticate/start
-    method: POST
+    method: post
+    api_path: /v1/webauthn/register
+  - name: WebAuthnAuthenticateStart
     args:
       - name: user_id
         arg_type: str
       - name: domain
         arg_type: str
     response_type:
+      request_id: str
       user_id: str
       public_key_credential_request_options: str
-  - name: authenticate
-    method: POST
+    method: post
+    api_path: /v1/webauthn/authenticate/start
+  - name: WebAuthnAuthenticate
     args:
       - name: public_key_credential
         arg_type: str
       - name: session_token
         arg_type: Optional[str] = None
-      - name: session_jwt
-        arg_type: Optional[str] = None
       - name: session_duration_minutes
         arg_type: Optional[int] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, Any]] = None
+        arg_type: Optional[Dict[str, str]] = None
     response_type:
+      request_id: str
       user_id: str
-      user: User
       webauthn_registration_id: str
-      session_jwt: str
       session_token: str
       session: Optional[StytchSession]
+      session_jwt: str
+      user: User
+    method: post
+    api_path: /v1/webauthn/authenticate

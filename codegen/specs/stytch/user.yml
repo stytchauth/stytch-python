@@ -1,0 +1,210 @@
+classname: UserService
+methods:
+  - name: CreateUser
+    args:
+      - name: email
+        arg_type: Optional[str] = None
+      - name: name
+        arg_type: null
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: phone_number
+        arg_type: Optional[str] = None
+      - name: create_user_as_pending
+        arg_type: bool
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+      status: str
+      phone_id: str
+      user: User
+    method: post
+    api_path: /v1/users
+  - name: GetPendingUsers
+    args:
+      - name: starting_after_id
+        arg_type: Optional[str] = None
+      - name: limit
+        arg_type: Optional[int] = None
+    response_type:
+      request_id: str
+      users: null
+      has_more: bool
+      next_starting_after_id: str
+      total: null
+    method: get
+    api_path: /v1/users/pending
+  - name: GetUser
+    args:
+      - name: user_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      name: null
+      emails: null
+      status: str
+      phone_numbers: null
+      birthday: null
+      webauthn_registrations: null
+      created_at: null
+      providers: null
+      totps: null
+      crypto_wallets: null
+      password: null
+      biometric_registrations: null
+      trusted_metadata: Optional[Dict[str, str]] = None
+      untrusted_metadata: Optional[Dict[str, str]] = None
+      project_id: str
+    method: get
+    api_path: /v1/users/{user_id}
+  - name: SearchUsersExternal
+    args:
+      - name: cursor
+        arg_type: str
+      - name: limit
+        arg_type: Optional[int] = None
+      - name: SearchUsersExternalQuery
+        arg_type: null
+      - name: operands
+        arg_type: null
+    response_type:
+      request_id: str
+      results: null
+      ResultsMetadata: null
+      next_cursor: Optional[str] = None
+    method: post
+    api_path: /v1/users/search
+  - name: UpdateUser
+    args:
+      - name: user_id
+        arg_type: str
+      - name: name
+        arg_type: null
+      - name: emails
+        arg_type: null
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: phone_numbers
+        arg_type: null
+      - name: crypto_wallets
+        arg_type: null
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      request_id: str
+      user_id: str
+      emails: null
+      phone_numbers: null
+      crypto_wallets: null
+      user: User
+    method: put
+    api_path: /v1/users/{user_id}
+  - name: DeleteUser
+    args:
+      - name: user_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+    method: delete
+    api_path: /v1/users/{user_id}
+  - name: GetUserByEmailAndProjectID
+    args:
+      - name: email
+        arg_type: str
+      - name: project_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+    method: get
+    api_path: /v1/sdk/users
+  - name: DeleteUserEmail
+    args:
+      - name: email_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/emails/{email_id}
+  - name: DeleteUserPhoneNumber
+    args:
+      - name: phone_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/phone_numbers/{phone_id}
+  - name: DeleteUserWebAuthnRegistration
+    args:
+      - name: webauthn_registration_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/webauthn_registrations/{webauthn_registration_id}
+  - name: DeleteUserBiometricRegistration
+    args:
+      - name: biometric_registration_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/biometric_registrations/{biometric_registration_id}
+  - name: DeleteUserTOTP
+    args:
+      - name: totp_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/totps/{totp_id}
+  - name: DeleteUserCryptoWallet
+    args:
+      - name: crypto_wallet_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/crypto_wallets/{crypto_wallet_id}
+  - name: DeleteUserPassword
+    args:
+      - name: password_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/passwords/{password_id}
+  - name: DeleteUserOAuthUserRegistration
+    args:
+      - name: oauth_user_registration_id
+        arg_type: str
+    response_type:
+      request_id: str
+      user_id: str
+      user: User
+    method: delete
+    api_path: /v1/users/oauth/{oauth_user_registration_id}
