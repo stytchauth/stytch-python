@@ -29,6 +29,8 @@ class StrengthCheckResponse(ResponseBase):
     score: int
     breached_password: bool
     feedback: Dict[str, Any]
+    strength_policy: str
+    breach_detection_on_create: bool
 
 
 class MigrateResponse(ResponseBase):
