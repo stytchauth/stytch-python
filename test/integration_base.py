@@ -14,6 +14,7 @@ from test.constants import (
 )
 from typing import AsyncGenerator, Generator, Optional, Union
 
+from stytch.b2b.client import Client as B2BClient
 from stytch.client import Client
 from stytch.core.models import StytchError
 
@@ -50,6 +51,7 @@ class IntegrationTestBase(unittest.TestCase):
         self.project_id: str = project_id
         self.secret: str = secret
         self.client = Client(self.project_id, self.secret, environment="test")
+        self.b2b_client = B2BClient(self.project_id, self.secret, environment="test")
 
     @contextmanager
     def skip_if_stytcherror(
