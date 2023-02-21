@@ -13,11 +13,13 @@ from stytch.core.http.client import AsyncClient, SyncClient
 {% for sub_api in this.sub_apis %}
 from {{ api_path_in_gen }}.{{ sub_api.filename_base }} import {{ sub_api.classname }}
 {% endfor %}
+{% if this.methods %}
 from {{ models_path_in_gen }}.{{ this.filename_base }} import (
   {% for method in this.methods if not method.manual_implementation %}
   {{ method.response_type.name }},
   {% endfor %}
 )
+{% endif %}
 {% for additional_import in this.additional_imports %}
 {{ additional_import }}
 {% endfor %}
