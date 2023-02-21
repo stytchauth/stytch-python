@@ -23,7 +23,7 @@ class AuthenticateResponse(ResponseBase):
 
     - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
 
-    - `session`: The B2BStytchSession object.
+    - `member_session`: The B2BStytchSession object.
     """  # noqa
 
     member_id: str
@@ -33,4 +33,4 @@ class AuthenticateResponse(ResponseBase):
     member: Member
     session_token: str
     session_jwt: str
-    session: Optional[B2BStytchSession]
+    member_session: Optional[B2BStytchSession]

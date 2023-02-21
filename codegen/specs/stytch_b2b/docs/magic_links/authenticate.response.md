@@ -14,4 +14,4 @@ Response fields beyond those defined in `ResponseBase`:
 
 - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
 
-- `session`: The B2BStytchSession object.
+- `member_session`: The B2BStytchSession object.

@@ -23,7 +23,7 @@ methods:
       member: Member
       session_token: str
       session_jwt: str
-      session: Optional[B2BStytchSession]
+      member_session: Optional[B2BStytchSession]
 sub_apis:
   - classname: Email
     additional_imports:

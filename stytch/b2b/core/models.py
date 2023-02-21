@@ -25,8 +25,7 @@ class Organization(pydantic.BaseModel):
 class SSORegistration(pydantic.BaseModel):
     connection_id: str
     identity_provider: str
-    # TODO: Should this be external_id? (missing l)
-    externa_id: str
+    external_id: str
     registration_id: str
     sso_registration_attributes: Dict[str, Any]
 
