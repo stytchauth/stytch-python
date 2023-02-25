@@ -47,6 +47,8 @@ class Email:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        signup_template_id: Optional[str] = None,
     ) -> SendResponse:
         """[Stytch docs](https://stytch.com/docs/api/send-by-email)
 
@@ -107,6 +109,10 @@ class Email:
             payload["session_token"] = session_token
         if session_jwt is not None:
             payload["session_jwt"] = session_jwt
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "send")
 
@@ -126,6 +132,8 @@ class Email:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        signup_template_id: Optional[str] = None,
     ) -> SendResponse:
         """[Stytch docs](https://stytch.com/docs/api/send-by-email)
 
@@ -186,6 +194,10 @@ class Email:
             payload["session_token"] = session_token
         if session_jwt is not None:
             payload["session_jwt"] = session_jwt
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "send")
 
@@ -201,6 +213,8 @@ class Email:
         signup_expiration_minutes: Optional[int] = None,
         create_user_as_pending: Optional[bool] = None,
         locale: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        signup_template_id: Optional[str] = None,
     ) -> LoginOrCreateResponse:
         """[Stytch docs](https://stytch.com/docs/api/log-in-or-create-user-by-email)
 
@@ -247,6 +261,10 @@ class Email:
             payload["create_user_as_pending"] = create_user_as_pending
         if locale is not None:
             payload["locale"] = locale
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "login_or_create")
 
@@ -262,6 +280,8 @@ class Email:
         signup_expiration_minutes: Optional[int] = None,
         create_user_as_pending: Optional[bool] = None,
         locale: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        signup_template_id: Optional[str] = None,
     ) -> LoginOrCreateResponse:
         """[Stytch docs](https://stytch.com/docs/api/log-in-or-create-user-by-email)
 
@@ -308,6 +328,10 @@ class Email:
             payload["create_user_as_pending"] = create_user_as_pending
         if locale is not None:
             payload["locale"] = locale
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "login_or_create")
 
@@ -322,6 +346,7 @@ class Email:
         name: Optional[Union[Name, Dict[str, str]]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
+        invite_template_id: Optional[str] = None,
     ) -> InviteResponse:
         """[Stytch docs](https://stytch.com/docs/api/invite-by-email)
 
@@ -362,6 +387,8 @@ class Email:
             payload["locale"] = locale
         if attributes is not None:
             payload["attributes"] = attributes
+        if invite_template_id is not None:
+            payload["invite_template_id"] = invite_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 
@@ -376,6 +403,7 @@ class Email:
         name: Optional[Union[Name, Dict[str, str]]] = None,
         locale: Optional[str] = None,
         attributes: Optional[Dict[str, str]] = None,
+        invite_template_id: Optional[str] = None,
     ) -> InviteResponse:
         """[Stytch docs](https://stytch.com/docs/api/invite-by-email)
 
@@ -416,6 +444,8 @@ class Email:
             payload["locale"] = locale
         if attributes is not None:
             payload["attributes"] = attributes
+        if invite_template_id is not None:
+            payload["invite_template_id"] = invite_template_id
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 
