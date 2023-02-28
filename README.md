@@ -112,7 +112,7 @@ Learn more about errors in the [docs](https://stytch.com/docs/api/errors).
 
 See example requests and responses for all the endpoints in the [Stytch API Reference](https://stytch.com/docs/api).
 
-Follow one of the [integration guides](https://stytch.com/docs/guides) or start with one of our [example apps](https://stytch.com/docs/example-apps).
+Follow one of the [integration guides](https://stytch.com/docs/home#guides) or start with one of our [example apps](https://stytch.com/docs/home#example-apps).
 
 ## Support
 
