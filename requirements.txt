@@ -9,7 +9,7 @@ autoflake
 # black
 coverage
 isort
-mypy
+mypy==0.991
 pyright
 pyyaml
 types-PyYAML
