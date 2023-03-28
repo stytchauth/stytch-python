@@ -11,6 +11,7 @@ from stytch.api.passwords_existing_password import ExistingPassword
 from stytch.api.passwords_session import Session
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.core.models import Name
 from stytch.models.passwords import (
     AuthenticateResponse,
     CreateResponse,
