@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from stytch.b2b.core.models import B2BStytchSession, Organization
+from stytch.b2b.core.models import B2BStytchSession, Member, Organization
 from stytch.core.models import ResponseBase
 
 
@@ -24,7 +24,7 @@ class ResetResponse(ResponseBase):
     - `organization`: The Organization object.
     """  # noqa
 
-    member: str
+    member: Member
     member_id: str
     organization_id: str
     organization: Organization

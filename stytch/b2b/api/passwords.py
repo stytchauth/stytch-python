@@ -11,7 +11,6 @@ from stytch.b2b.api.passwords_existing_password import ExistingPassword
 from stytch.b2b.api.passwords_session import Session
 from stytch.b2b.models.passwords import (
     AuthenticateResponse,
-    DeleteResponse,
     MigrateResponse,
     StrengthCheckResponse,
 )
@@ -329,45 +328,3 @@ class Passwords:
 
         res = await self.async_client.post(url, json=payload)
         return MigrateResponse.from_json(res.response.status, res.json)
-
-    def delete(
-        self,
-        organization_id: str,
-        member_password_id: str,
-    ) -> DeleteResponse:
-        """Delete a member's password.
-
-        Parameters:
-
-        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
-
-        - `member_password_id`: The UUID of the password to be deleted.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"{organization_id}/members/passwords/{member_password_id}"
-        )
-
-        res = self.sync_client.delete(url)
-        return DeleteResponse.from_json(res.response.status_code, res.json)
-
-    async def delete_async(
-        self,
-        organization_id: str,
-        member_password_id: str,
-    ) -> DeleteResponse:
-        """Delete a member's password.
-
-        Parameters:
-
-        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
-
-        - `member_password_id`: The UUID of the password to be deleted.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"{organization_id}/members/passwords/{member_password_id}"
-        )
-
-        res = await self.async_client.delete(url)
-        return DeleteResponse.from_json(res.response.status, res.json)

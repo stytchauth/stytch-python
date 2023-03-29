@@ -10,6 +10,7 @@ import pydantic
 
 from stytch.b2b.models.organizations import (
     CreateResponse,
+    DeleteMemberPasswordResponse,
     DeleteMemberResponse,
     DeleteResponse,
     GetResponse,
@@ -448,6 +449,50 @@ class Organizations:
 
         res = await self.async_client.delete(url)
         return DeleteMemberResponse.from_json(res.response.status, res.json)
+
+    def delete_member_password(
+        self,
+        organization_id: str,
+        member_password_id: str,
+    ) -> DeleteMemberPasswordResponse:
+        """Delete a member's password.
+
+        Parameters:
+
+        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+
+        - `member_password_id`: The UUID of the password to be deleted.
+        """  # noqa
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/members/passwords/{member_password_id}"
+        )
+
+        res = self.sync_client.delete(url)
+        return DeleteMemberPasswordResponse.from_json(
+            res.response.status_code, res.json
+        )
+
+    async def delete_member_password_async(
+        self,
+        organization_id: str,
+        member_password_id: str,
+    ) -> DeleteMemberPasswordResponse:
+        """Delete a member's password.
+
+        Parameters:
+
+        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+
+        - `member_password_id`: The UUID of the password to be deleted.
+        """  # noqa
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/members/passwords/{member_password_id}"
+        )
+
+        res = await self.async_client.delete(url)
+        return DeleteMemberPasswordResponse.from_json(res.response.status, res.json)
 
     def search(
         self,

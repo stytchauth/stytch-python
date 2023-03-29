@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from stytch.b2b.core.models import B2BStytchSession, Organization
+from stytch.b2b.core.models import B2BStytchSession, Member, Organization
 from stytch.core.models import ResponseBase
 
 
@@ -33,11 +33,14 @@ class ResetResponse(ResponseBase):
 
     - `member_id`: Globally unique UUID that identifies a specific Member in the Stytch API. The member_id is critical to perform operations on a Member, so be sure to preserve this value.
 
+    - `member_email_id`: Globally unique UUID that identifies a member's email
+
     - `organization`: The Organization object.
     """  # noqa
 
-    member: str
+    member: Member
     member_id: str
+    member_email_id: str
     organization_id: str
     organization: Organization
     session_token: str

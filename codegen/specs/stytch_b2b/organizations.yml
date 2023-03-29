@@ -81,6 +81,20 @@ methods:
         arg_type: str
     response_type:
       member_id: str
+  - name: delete_member_password
+    method: DELETE
+    api_path: 'f"{organization_id}/members/passwords/{member_password_id}"'
+    eval_api_path: true
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_password_id
+        arg_type: str
+    response_type:
+      member: Member
+      member_id: str
+      member: Member
+      organization: Organization
   - name: search
     method: POST
     args:

@@ -28,6 +28,7 @@ class Session:
 
     def reset(
         self,
+        organization_id: str,
         password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
@@ -35,6 +36,8 @@ class Session:
         """Reset the member's password using their existing session. The endpoint will error if the session does not an authentication factor that has been issued within the last 5 minutes.
 
         Parameters:
+
+        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
 
         - `password`: The new password for the user.
 
@@ -44,6 +47,7 @@ class Session:
         """  # noqa
 
         payload: Dict[str, Any] = {
+            "organization_id": organization_id,
             "password": password,
         }
 
@@ -59,6 +63,7 @@ class Session:
 
     async def reset_async(
         self,
+        organization_id: str,
         password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
@@ -66,6 +71,8 @@ class Session:
         """Reset the member's password using their existing session. The endpoint will error if the session does not an authentication factor that has been issued within the last 5 minutes.
 
         Parameters:
+
+        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
 
         - `password`: The new password for the user.
 
@@ -75,6 +82,7 @@ class Session:
         """  # noqa
 
         payload: Dict[str, Any] = {
+            "organization_id": organization_id,
             "password": password,
         }
 
