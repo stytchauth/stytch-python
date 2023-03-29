@@ -17,3 +17,9 @@ Parameters:
 - `md_5_config`: Optional parameters for MD-5 hash types.
 
 - `sha_1_config`: Optional parameters for SHA-1 hash types.
+
+- `name`: The name of the user. Each field in the name object is optional.
+
+- `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data.
+
+- `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the Metadata reference for complete field behavior details.

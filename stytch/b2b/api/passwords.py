@@ -4,7 +4,7 @@
 # or your changes may be overwritten later!
 # !!!
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.api.passwords_email import Email
 from stytch.b2b.api.passwords_existing_password import ExistingPassword
@@ -203,6 +203,9 @@ class Passwords:
         argon_2_config: Optional[Dict[str, Any]] = None,
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, and SHA-1. This endpoint has a rate limit of 10 requests per second.
 
@@ -223,6 +226,12 @@ class Passwords:
         - `md_5_config`: Optional parameters for MD-5 hash types.
 
         - `sha_1_config`: Optional parameters for SHA-1 hash types.
+
+        - `name`: The name of the user. Each field in the name object is optional.
+
+        - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data.
+
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the Metadata reference for complete field behavior details.
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -240,6 +249,12 @@ class Passwords:
             payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
             payload["scrypt_config"] = scrypt_config
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
@@ -256,6 +271,9 @@ class Passwords:
         argon_2_config: Optional[Dict[str, Any]] = None,
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, and SHA-1. This endpoint has a rate limit of 10 requests per second.
 
@@ -276,6 +294,12 @@ class Passwords:
         - `md_5_config`: Optional parameters for MD-5 hash types.
 
         - `sha_1_config`: Optional parameters for SHA-1 hash types.
+
+        - `name`: The name of the user. Each field in the name object is optional.
+
+        - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data.
+
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the Metadata reference for complete field behavior details.
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -293,6 +317,12 @@ class Passwords:
             payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
             payload["scrypt_config"] = scrypt_config
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
