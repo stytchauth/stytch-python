@@ -17,6 +17,7 @@ from stytch.b2b.models.passwords import (
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.core.models import Name
 
 
 class Passwords:
