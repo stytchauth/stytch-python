@@ -4,13 +4,14 @@
 # or your changes may be overwritten later!
 # !!!
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.api.passwords_email import Email
 from stytch.api.passwords_existing_password import ExistingPassword
 from stytch.api.passwords_session import Session
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.core.models import Name
 from stytch.models.passwords import (
     AuthenticateResponse,
     CreateResponse,
@@ -41,8 +42,11 @@ class Passwords:
         self,
         email: str,
         password: str,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """[Stytch docs](https://stytch.com/docs/api/password-create)
 
@@ -58,10 +62,16 @@ class Passwords:
             "password": password,
         }
 
+        if name is not None:
+            payload["name"] = name
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
@@ -72,8 +82,11 @@ class Passwords:
         self,
         email: str,
         password: str,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """[Stytch docs](https://stytch.com/docs/api/password-create)
 
@@ -89,10 +102,16 @@ class Passwords:
             "password": password,
         }
 
+        if name is not None:
+            payload["name"] = name
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
@@ -250,6 +269,9 @@ class Passwords:
         argon_2_config: Optional[Dict[str, Any]] = None,
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
         """[Stytch docs](https://stytch.com/docs/api/password-migrate)
 
@@ -270,6 +292,12 @@ class Passwords:
             payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
             payload["scrypt_config"] = scrypt_config
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
@@ -285,6 +313,9 @@ class Passwords:
         argon_2_config: Optional[Dict[str, Any]] = None,
         sha_1_config: Optional[Dict[str, Any]] = None,
         scrypt_config: Optional[Dict[str, Any]] = None,
+        name: Optional[Union[Name, Dict[str, str]]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
         """[Stytch docs](https://stytch.com/docs/api/password-migrate)
 
@@ -305,6 +336,12 @@ class Passwords:
             payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
             payload["scrypt_config"] = scrypt_config
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "migrate")
 
