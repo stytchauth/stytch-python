@@ -70,6 +70,21 @@ methods:
         arg_type: str
     response_type:
       organization_id: str
+  - name: get_member
+    method: GET
+    api_path: 'f"{organization_id}/member"'
+    eval_api_path: true
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_id
+        arg_type: Optional[str] = None
+      - name: email_address
+        arg_type: Optional[str] = None
+    response_type:
+      member_id: str
+      member: Member
+      organization: Organization
   - name: delete_member
     method: DELETE
     api_path: 'f"{organization_id}/member/{member_id}"'
@@ -91,7 +106,6 @@ methods:
       - name: member_password_id
         arg_type: str
     response_type:
-      member: Member
       member_id: str
       member: Member
       organization: Organization
