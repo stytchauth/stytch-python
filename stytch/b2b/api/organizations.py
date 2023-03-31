@@ -13,6 +13,7 @@ from stytch.b2b.models.organizations import (
     DeleteMemberPasswordResponse,
     DeleteMemberResponse,
     DeleteResponse,
+    GetMemberResponse,
     GetResponse,
     SearchMembersResponse,
     SearchResponse,
@@ -407,6 +408,52 @@ class Organizations:
 
         res = await self.async_client.delete(url)
         return DeleteResponse.from_json(res.response.status, res.json)
+
+    def get_member(
+        self,
+        organization_id: str,
+        member_id: Optional[str] = None,
+        email_address: Optional[str] = None,
+    ) -> GetMemberResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        if member_id is not None:
+            payload["member_id"] = member_id
+        if email_address is not None:
+            payload["email_address"] = email_address
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/member"
+        )
+
+        res = self.sync_client.get(url, params=payload)
+        return GetMemberResponse.from_json(res.response.status_code, res.json)
+
+    async def get_member_async(
+        self,
+        organization_id: str,
+        member_id: Optional[str] = None,
+        email_address: Optional[str] = None,
+    ) -> GetMemberResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        if member_id is not None:
+            payload["member_id"] = member_id
+        if email_address is not None:
+            payload["email_address"] = email_address
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/member"
+        )
+
+        res = await self.async_client.get(url, params=payload)
+        return GetMemberResponse.from_json(res.response.status, res.json)
 
     def delete_member(
         self,

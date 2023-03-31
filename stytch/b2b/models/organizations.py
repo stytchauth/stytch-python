@@ -42,6 +42,13 @@ class DeleteResponse(ResponseBase):
     organization_id: str
 
 
+class GetMemberResponse(ResponseBase):
+
+    member_id: str
+    member: Member
+    organization: Organization
+
+
 class DeleteMemberResponse(ResponseBase):
     """Response fields beyond those defined in `ResponseBase`:
 
@@ -61,8 +68,8 @@ class DeleteMemberPasswordResponse(ResponseBase):
     - `organization`: The Organization object.
     """  # noqa
 
-    member: Member
     member_id: str
+    member: Member
     organization: Organization
 
 
