@@ -30,7 +30,7 @@ This client library supports all of Stytch's live products:
 - [x] [WebAuthn](https://stytch.com/docs/api/webauthn-overview)
 - [x] [Time-based one-time passcodes (TOTPs)](https://stytch.com/docs/api/totps-overview)
 - [x] [Crypto wallets](https://stytch.com/docs/api/crypto-wallet-overview)
-- [x] [Passwords (Beta)](https://stytch.com/docs/api/password-overview)
+- [x] [Passwords](https://stytch.com/docs/api/password-overview)
 
 ### Example usage
 
