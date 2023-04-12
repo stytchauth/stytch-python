@@ -41,3 +41,23 @@ methods:
       - name: member_id
         arg_type: Optional[str] = None
     response_type: {}
+  - name: exchange
+    method: POST
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      member_id: str
+      member_session: B2BStytchSession
+      session_token: str
+      session_jwt: str
+      member: Member
+      organization: Organization

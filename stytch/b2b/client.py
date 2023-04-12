@@ -6,6 +6,7 @@ from stytch.b2b.api.magic_links import MagicLinks
 from stytch.b2b.api.organizations import Organizations
 from stytch.b2b.api.passwords import Passwords
 from stytch.b2b.api.sessions import Sessions
+from stytch.b2b.api.discovery import Discovery
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -33,6 +34,7 @@ class Client:
         self.organizations = Organizations(api_base, sync_client, async_client)
         self.sessions = Sessions(api_base, sync_client, async_client)
         self.passwords = Passwords(api_base, sync_client, async_client)
+        self.discovery = Discovery(api_base, sync_client, async_client)
 
     @classmethod
     def _env_url(cls, env: str, suppress_warnings: bool = False) -> str:

@@ -6,6 +6,7 @@
 
 from typing import Any, Dict, Optional
 
+from stytch.b2b.api.magic_links_discovery import Discovery
 from stytch.b2b.api.magic_links_email import Email
 from stytch.b2b.models.magic_links import AuthenticateResponse
 from stytch.core.api_base import ApiBase
@@ -23,6 +24,7 @@ class MagicLinks:
         self.sync_client = sync_client
         self.async_client = async_client
         self.email = Email(api_base, sync_client, async_client)
+        self.discovery = Discovery(api_base, sync_client, async_client)
 
     @property
     def sub_url(self) -> str:

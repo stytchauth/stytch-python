@@ -59,3 +59,15 @@ class B2BStytchSession(pydantic.BaseModel):
     expires_at: datetime.datetime
     authentication_factors: List[Dict[str, Any]]
     custom_claims: Optional[Dict[str, Any]]
+
+
+class Membership(pydantic.BaseModel):
+    type: str
+    details: Optional[Dict[str, Any]]
+    member: Optional[Member]
+
+
+class DiscoveredOrganization(pydantic.BaseModel):
+    organization: Organization
+    membership: Membership
+    member_authenticated: bool
