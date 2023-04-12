@@ -43,6 +43,44 @@ class DeleteResponse(ResponseBase):
 
 
 class GetMemberResponse(ResponseBase):
+    """Response fields beyond those defined in `ResponseBase`:
+
+    - `member_id`: The UUID of the Member.
+
+    - `member`: The Member object.
+
+    - `organization`: The Organization object.
+    """  # noqa
+
+    member_id: str
+    member: Member
+    organization: Organization
+
+
+class CreateMemberResponse(ResponseBase):
+    """Response fields beyond those defined in `ResponseBase`:
+
+    - `member_id`: The UUID of the Member.
+
+    - `member`: The Member object.
+
+    - `organization`: The Organization object.
+    """  # noqa
+
+    member_id: str
+    member: Member
+    organization: Organization
+
+
+class UpdateMemberResponse(ResponseBase):
+    """Response fields beyond those defined in `ResponseBase`:
+
+    - `member_id`: The UUID of the Member.
+
+    - `member`: The Member object.
+
+    - `organization`: The Organization object.
+    """  # noqa
 
     member_id: str
     member: Member

@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Optional
 import pydantic
 
 from stytch.b2b.models.organizations import (
+    CreateMemberResponse,
     CreateResponse,
     DeleteMemberPasswordResponse,
     DeleteMemberResponse,
@@ -17,6 +18,7 @@ from stytch.b2b.models.organizations import (
     GetResponse,
     SearchMembersResponse,
     SearchResponse,
+    UpdateMemberResponse,
     UpdateResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -43,15 +45,18 @@ class Organizations:
         self,
         organization_name: str,
         organization_slug: str,
+        organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         email_jit_provisioning: Optional[str] = None,
         email_invites: Optional[str] = None,
         email_allowed_domains: Optional[List[str]] = None,
         sso_jit_provisioning: Optional[str] = None,
+        auth_methods: Optional[str] = None,
+        allowed_auth_methods: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates a new Organization. It requires a name and a unique slug.
 
-        See the Organization authentication settings resource to learn more about fields like email_jit_provisioning, email_allowed_domains, sso_jit_provisioning, etc., and their behaviors.
+        See the [Organization authentication settings resource](https://stytch.com/docs/b2b/api/org-auth-settings) to learn more about fields like `email_jit_provisioning`, `email_allowed_domains`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Parameters:
 
@@ -59,27 +64,33 @@ class Organizations:
 
         - `organization_slug`: The unique URL slug of the Organization.
 
-        - `organzation_logo_url`: The image URL of the Organization’s logo.
+        - `organization_logo_url`: The image URL of the Organization’s logo.
 
         - `trusted_metadata`: An arbitrary JSON object for storing application-specific data.
 
         - `email_jit_provisioning`: The setting that controls the JIT provisioning of new Members when authenticating via email. The accepted values are:
 
-          - RESTRICTED – only new Members with verified emails that comply with email_allowed_domains can be provisioned upon authentication.
+          - RESTRICTED – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication.
           - NOT_ALLOWED – disable JIT provisioning.
 
         - `email_invites`: The setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
           - ALL_ALLOWED – any new Member can be invited to join
-          - RESTRICTED – only new Members with verified emails that comply with email_allowed_domains can be invited
+          - RESTRICTED – only new Members with verified emails that comply with `email_allowed_domains` can be invited
           - NOT_ALLOWED – disable invites
 
         - `email_allowed_domains`: An array of email domains that allow invitations or JIT provisioning for new Members. This list is enforced when either email_invites or email_jit_provisioning is set to RESTRICTED.
 
         - `sso_jit_provisioning`: The setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
           - ALL_ALLOWED – any new Member can be provisioned upon authentication
-          - RESTRICTED – only new Members with SSO logins that comply with sso_jit_provisioning_allowed_connections can be provisioned upon authentication
+          - RESTRICTED – only new Members with SSO logins that comply with `sso_jit_provisioning_allowed_connections` can be provisioned upon authentication
           - NOT_ALLOWED – disable JIT provisioning
+
+        - `auth_methods`: The setting that controls which authentication methods can be used by Members of an Organization. The accepted values are:
+          - ALL_ALLOWED – the default setting which allows all authentication methods to be used.
+          - RESTRICTED - only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+        - `allowed_auth_methods`: An array of allowed authentication methods. This list is enforced when auth_methods is set to RESTRICTED. The list's accepted values are: `sso`, `magic_link`, and `password`.
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -87,6 +98,8 @@ class Organizations:
             "organization_slug": organization_slug,
         }
 
+        if organization_logo_url is not None:
+            payload["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
         if email_jit_provisioning is not None:
@@ -97,6 +110,10 @@ class Organizations:
             payload["email_allowed_domains"] = email_allowed_domains
         if sso_jit_provisioning is not None:
             payload["sso_jit_provisioning"] = sso_jit_provisioning
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
+        if allowed_auth_methods is not None:
+            payload["allowed_auth_methods"] = allowed_auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
@@ -107,15 +124,18 @@ class Organizations:
         self,
         organization_name: str,
         organization_slug: str,
+        organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         email_jit_provisioning: Optional[str] = None,
         email_invites: Optional[str] = None,
         email_allowed_domains: Optional[List[str]] = None,
         sso_jit_provisioning: Optional[str] = None,
+        auth_methods: Optional[str] = None,
+        allowed_auth_methods: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates a new Organization. It requires a name and a unique slug.
 
-        See the Organization authentication settings resource to learn more about fields like email_jit_provisioning, email_allowed_domains, sso_jit_provisioning, etc., and their behaviors.
+        See the [Organization authentication settings resource](https://stytch.com/docs/b2b/api/org-auth-settings) to learn more about fields like `email_jit_provisioning`, `email_allowed_domains`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Parameters:
 
@@ -123,27 +143,33 @@ class Organizations:
 
         - `organization_slug`: The unique URL slug of the Organization.
 
-        - `organzation_logo_url`: The image URL of the Organization’s logo.
+        - `organization_logo_url`: The image URL of the Organization’s logo.
 
         - `trusted_metadata`: An arbitrary JSON object for storing application-specific data.
 
         - `email_jit_provisioning`: The setting that controls the JIT provisioning of new Members when authenticating via email. The accepted values are:
 
-          - RESTRICTED – only new Members with verified emails that comply with email_allowed_domains can be provisioned upon authentication.
+          - RESTRICTED – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication.
           - NOT_ALLOWED – disable JIT provisioning.
 
         - `email_invites`: The setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
           - ALL_ALLOWED – any new Member can be invited to join
-          - RESTRICTED – only new Members with verified emails that comply with email_allowed_domains can be invited
+          - RESTRICTED – only new Members with verified emails that comply with `email_allowed_domains` can be invited
           - NOT_ALLOWED – disable invites
 
         - `email_allowed_domains`: An array of email domains that allow invitations or JIT provisioning for new Members. This list is enforced when either email_invites or email_jit_provisioning is set to RESTRICTED.
 
         - `sso_jit_provisioning`: The setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
           - ALL_ALLOWED – any new Member can be provisioned upon authentication
-          - RESTRICTED – only new Members with SSO logins that comply with sso_jit_provisioning_allowed_connections can be provisioned upon authentication
+          - RESTRICTED – only new Members with SSO logins that comply with `sso_jit_provisioning_allowed_connections` can be provisioned upon authentication
           - NOT_ALLOWED – disable JIT provisioning
+
+        - `auth_methods`: The setting that controls which authentication methods can be used by Members of an Organization. The accepted values are:
+          - ALL_ALLOWED – the default setting which allows all authentication methods to be used.
+          - RESTRICTED - only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+        - `allowed_auth_methods`: An array of allowed authentication methods. This list is enforced when auth_methods is set to RESTRICTED. The list's accepted values are: `sso`, `magic_link`, and `password`.
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -151,6 +177,8 @@ class Organizations:
             "organization_slug": organization_slug,
         }
 
+        if organization_logo_url is not None:
+            payload["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
         if email_jit_provisioning is not None:
@@ -161,6 +189,10 @@ class Organizations:
             payload["email_allowed_domains"] = email_allowed_domains
         if sso_jit_provisioning is not None:
             payload["sso_jit_provisioning"] = sso_jit_provisioning
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
+        if allowed_auth_methods is not None:
+            payload["allowed_auth_methods"] = allowed_auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, None)
 
@@ -220,10 +252,12 @@ class Organizations:
         email_allowed_domains: Optional[List[str]] = None,
         email_jit_provisioning: Optional[str] = None,
         email_invites: Optional[str] = None,
+        auth_methods: Optional[str] = None,
+        allowed_auth_methods: Optional[List[str]] = None,
     ) -> UpdateResponse:
-        """Updates an Organization specified by organization_id.
+        """Updates an Organization specified by `organization_id`.
 
-        See the Organization authentication settings resource to learn more about fields like email_jit_provisioning, email_allowed_domains, sso_jit_provisioning, etc., and their behaviors.
+        See the [Organization authentication settings resource](https://stytch.com/docs/b2b/api/org-auth-settings) to learn more about fields like `email_jit_provisioning`, `email_allowed_domains`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Parameters:
 
@@ -239,7 +273,7 @@ class Organizations:
 
         - `sso_default_connection_id`: The default connection used for SSO when there are multiple active connections.
 
-        - `sso_jit_provisioning_allowed_connections`: An array of connections used for SSO when sso_jit_provisiniong is set to RESTRICTED.
+        - `sso_jit_provisioning_allowed_connections`: An array of connections used for SSO when `sso_jit_provisioniong` is set to RESTRICTED.
 
         - `sso_jit_provisioning`: The setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
 
@@ -258,6 +292,12 @@ class Organizations:
           - ALL_ALLOWED – any new Member can be invited to join
           - RESTRICTED – only new Members with verified emails that comply with email_allowed_domains can be invited
           - NOT_ALLOWED – disable invites
+
+        - `auth_methods`: The setting that controls which authentication methods can be used by Members of an Organization. The accepted values are:
+          - ALL_ALLOWED – the default setting which allows all authentication methods to be used.
+          - RESTRICTED - only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+        - `allowed_auth_methods`: An array of allowed authentication methods. This list is enforced when auth_methods is set to RESTRICTED. The list's accepted values are: `sso`, `magic_link`, and `password`.
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -286,6 +326,10 @@ class Organizations:
             payload["email_jit_provisioning"] = email_jit_provisioning
         if email_invites is not None:
             payload["email_invites"] = email_invites
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
+        if allowed_auth_methods is not None:
+            payload["allowed_auth_methods"] = allowed_auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, organization_id)
 
@@ -305,10 +349,12 @@ class Organizations:
         email_allowed_domains: Optional[List[str]] = None,
         email_jit_provisioning: Optional[str] = None,
         email_invites: Optional[str] = None,
+        auth_methods: Optional[str] = None,
+        allowed_auth_methods: Optional[List[str]] = None,
     ) -> UpdateResponse:
-        """Updates an Organization specified by organization_id.
+        """Updates an Organization specified by `organization_id`.
 
-        See the Organization authentication settings resource to learn more about fields like email_jit_provisioning, email_allowed_domains, sso_jit_provisioning, etc., and their behaviors.
+        See the [Organization authentication settings resource](https://stytch.com/docs/b2b/api/org-auth-settings) to learn more about fields like `email_jit_provisioning`, `email_allowed_domains`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Parameters:
 
@@ -324,7 +370,7 @@ class Organizations:
 
         - `sso_default_connection_id`: The default connection used for SSO when there are multiple active connections.
 
-        - `sso_jit_provisioning_allowed_connections`: An array of connections used for SSO when sso_jit_provisiniong is set to RESTRICTED.
+        - `sso_jit_provisioning_allowed_connections`: An array of connections used for SSO when `sso_jit_provisioniong` is set to RESTRICTED.
 
         - `sso_jit_provisioning`: The setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
 
@@ -343,6 +389,12 @@ class Organizations:
           - ALL_ALLOWED – any new Member can be invited to join
           - RESTRICTED – only new Members with verified emails that comply with email_allowed_domains can be invited
           - NOT_ALLOWED – disable invites
+
+        - `auth_methods`: The setting that controls which authentication methods can be used by Members of an Organization. The accepted values are:
+          - ALL_ALLOWED – the default setting which allows all authentication methods to be used.
+          - RESTRICTED - only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+        - `allowed_auth_methods`: An array of allowed authentication methods. This list is enforced when auth_methods is set to RESTRICTED. The list's accepted values are: `sso`, `magic_link`, and `password`.
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -371,6 +423,10 @@ class Organizations:
             payload["email_jit_provisioning"] = email_jit_provisioning
         if email_invites is not None:
             payload["email_invites"] = email_invites
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
+        if allowed_auth_methods is not None:
+            payload["allowed_auth_methods"] = allowed_auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, organization_id)
 
@@ -415,6 +471,16 @@ class Organizations:
         member_id: Optional[str] = None,
         email_address: Optional[str] = None,
     ) -> GetMemberResponse:
+        """Gets a Member by `member_id` or `email_address`.
+
+        Parameters:
+
+        - `organization_id`: The UUID of the Organization that the Member belongs to.
+
+        - `member_id`: The UUID of the Member.
+
+        - `email_address`: The email address of the Member.
+        """  # noqa
 
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -438,6 +504,16 @@ class Organizations:
         member_id: Optional[str] = None,
         email_address: Optional[str] = None,
     ) -> GetMemberResponse:
+        """Gets a Member by `member_id` or `email_address`.
+
+        Parameters:
+
+        - `organization_id`: The UUID of the Organization that the Member belongs to.
+
+        - `member_id`: The UUID of the Member.
+
+        - `email_address`: The email address of the Member.
+        """  # noqa
 
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -454,6 +530,204 @@ class Organizations:
 
         res = await self.async_client.get(url, params=payload)
         return GetMemberResponse.from_json(res.response.status, res.json)
+
+    def create_member(
+        self,
+        organization_id: str,
+        email_address: str,
+        name: Optional[str] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
+        create_member_as_pending: Optional[bool] = None,
+        is_breakglass: Optional[bool] = None,
+    ) -> CreateMemberResponse:
+        """Creates a Member. An `organization_id` and `email_address` are required.
+
+        Parameters:
+
+        - `organization_id`: The UUID of the Organization that the Member should be created within.
+
+        - `email_address`: The email address of the Member.
+
+        - `name`: The name of the Member.
+
+        - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data.
+
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for complete field behavior details.
+
+        - `create_member_as_pending`: Flag for whether to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
+
+        - `is_breakglass`: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+        """  # noqa
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "email_address": email_address,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if create_member_as_pending is not None:
+            payload["create_member_as_pending"] = create_member_as_pending
+        if is_breakglass is not None:
+            payload["is_breakglass"] = is_breakglass
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/members"
+        )
+
+        res = self.sync_client.post(url, json=payload)
+        return CreateMemberResponse.from_json(res.response.status_code, res.json)
+
+    async def create_member_async(
+        self,
+        organization_id: str,
+        email_address: str,
+        name: Optional[str] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
+        create_member_as_pending: Optional[bool] = None,
+        is_breakglass: Optional[bool] = None,
+    ) -> CreateMemberResponse:
+        """Creates a Member. An `organization_id` and `email_address` are required.
+
+        Parameters:
+
+        - `organization_id`: The UUID of the Organization that the Member should be created within.
+
+        - `email_address`: The email address of the Member.
+
+        - `name`: The name of the Member.
+
+        - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data.
+
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for complete field behavior details.
+
+        - `create_member_as_pending`: Flag for whether to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
+
+        - `is_breakglass`: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+        """  # noqa
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "email_address": email_address,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if create_member_as_pending is not None:
+            payload["create_member_as_pending"] = create_member_as_pending
+        if is_breakglass is not None:
+            payload["is_breakglass"] = is_breakglass
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/members"
+        )
+
+        res = await self.async_client.post(url, json=payload)
+        return CreateMemberResponse.from_json(res.response.status, res.json)
+
+    def update_member(
+        self,
+        organization_id: str,
+        member_id: str,
+        name: Optional[str] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
+        is_breakglass: Optional[bool] = None,
+    ) -> UpdateMemberResponse:
+        """Updates a member specified by `organization_id` and `member_id`.
+
+        Parameters:
+
+        - `organization_id`: The UUID of the Organization that the Member belongs to.
+
+        - `member_id`: The UUID of the Member.
+
+        - `name`: The new name of the Member.
+
+        - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for information on how metadata updates are handled.
+
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for complete field behavior details.
+
+        - `is_breakglass`: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+        """  # noqa
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if is_breakglass is not None:
+            payload["is_breakglass"] = is_breakglass
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/members/{member_id}"
+        )
+
+        res = self.sync_client.put(url, json=payload)
+        return UpdateMemberResponse.from_json(res.response.status_code, res.json)
+
+    async def update_member_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        name: Optional[str] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
+        is_breakglass: Optional[bool] = None,
+    ) -> UpdateMemberResponse:
+        """Updates a member specified by `organization_id` and `member_id`.
+
+        Parameters:
+
+        - `organization_id`: The UUID of the Organization that the Member belongs to.
+
+        - `member_id`: The UUID of the Member.
+
+        - `name`: The new name of the Member.
+
+        - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for information on how metadata updates are handled.
+
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for complete field behavior details.
+
+        - `is_breakglass`: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+        """  # noqa
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if is_breakglass is not None:
+            payload["is_breakglass"] = is_breakglass
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, f"{organization_id}/members/{member_id}"
+        )
+
+        res = await self.async_client.put(url, json=payload)
+        return UpdateMemberResponse.from_json(res.response.status, res.json)
 
     def delete_member(
         self,
@@ -618,7 +892,7 @@ class Organizations:
 
         Parameters:
 
-        - `organization_ids`: List of globally unique UUIDs that identify specific Organizations. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+        - `organization_ids`: List of organization IDs to search Members by. You must specify at least one Organization.
 
         - `cursor`: The cursor field allows you to paginate through your results. Each result array is limited to 1000 results, if your query returns more than 1000 results, you will need to paginate the responses using the cursor. If you receive a response that includes a non-null next_cursor in the results_metadata object, you should repeat the call, being sure to include all of the original fields, but pass in the next_cursor in the cursor field. Continue to make calls until the next_cursor in the response is null.
 
@@ -656,7 +930,7 @@ class Organizations:
 
         Parameters:
 
-        - `organization_ids`: List of globally unique UUIDs that identify specific Organizations. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+        - `organization_ids`: List of organization IDs to search Members by. You must specify at least one Organization.
 
         - `cursor`: The cursor field allows you to paginate through your results. Each result array is limited to 1000 results, if your query returns more than 1000 results, you will need to paginate the responses using the cursor. If you receive a response that includes a non-null next_cursor in the results_metadata object, you should repeat the call, being sure to include all of the original fields, but pass in the next_cursor in the cursor field. Continue to make calls until the next_cursor in the response is null.
 
