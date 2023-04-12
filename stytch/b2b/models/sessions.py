@@ -2,7 +2,7 @@
 
 from typing import List
 
-from stytch.b2b.core.models import B2BStytchSession, Member
+from stytch.b2b.core.models import B2BStytchSession, Member, Organization
 from stytch.core.models import ResponseBase
 
 
@@ -25,12 +25,15 @@ class AuthenticateResponse(ResponseBase):
     - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our session management guide.
 
     - `member`: The Member object.
+
+    - `organization`: The Organization object.
     """  # noqa
 
     member_session: B2BStytchSession
     session_token: str
     session_jwt: str
     member: Member
+    organization: Organization
 
 
 class RevokeResponse(ResponseBase):

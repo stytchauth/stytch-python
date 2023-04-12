@@ -34,7 +34,6 @@ class AuthenticateResponse(ResponseBase):
 
 
 class StrengthCheckResponse(ResponseBase):
-
     breach_detection_on_create: bool
     breached_password: bool
     luds_feedback: dict

@@ -1,6 +1,6 @@
-Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned If both the signature and the underlying Session are still valid.
+Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-This endpoint requires only one of either the session_jwt or session_token be included in the request. It will return an error if both are present.
+This endpoint requires only one of either the `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
 Parameters:
 

@@ -28,6 +28,7 @@ methods:
       session_token: str
       session_jwt: str
       member: Member
+      organization: Organization
   - name: revoke
     method: POST
     args:
