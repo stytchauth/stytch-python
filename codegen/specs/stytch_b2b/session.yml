@@ -1,0 +1,11 @@
+classname: SessionService
+methods:
+  - name: MultiTenantSessionsJwks
+    args:
+      - name: project_id
+        arg_type: str
+    response_type:
+      keys: List[Dict[str, Any]]
+      request_id: str
+    method: get
+    api_path: /v1/b2b/sessions/jwks/{project_id}

@@ -1,0 +1,10 @@
+classname: DebugService
+methods: 
+  - name: WhoAmI
+    args: []
+    response_type:
+      request_id: str
+      project_id: str
+      name: str
+    method: get
+    api_path: /v1/debug/whoami

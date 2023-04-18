@@ -1,42 +1,47 @@
-classname: OAuth
-filename: oauth
+classname: OAuthService
 methods:
-  - name: authenticate
-    method: POST
+  - name: OAuthAttach
     args:
-      - name: token
+      - name: provider
+        arg_type: str
+      - name: user_id
         arg_type: str
       - name: session_token
         arg_type: Optional[str] = None
       - name: session_jwt
         arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      oauth_attach_token: str
+    method: post
+    api_path: /v1/oauth/attach
+  - name: OAuthAuthenticate
+    args:
+      - name: token
+        arg_type: str
+      - name: session_management_type
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
       - name: session_duration_minutes
         arg_type: Optional[int] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
       - name: session_custom_claims
         arg_type: Optional[Dict[str, Any]] = None
       - name: code_verifier
         arg_type: Optional[str] = None
     response_type:
+      request_id: str
       user_id: str
-      user: Optional[User]
-      oauth_user_registration_id: str
       provider_subject: str
-      provider_type: str # TODO: Could possibly enum-ify this
-      provider_values: Optional[Dict[str, Any]]
-      reset_sessions: bool
-      session: Optional[OAuthSession]
-      session_jwt: str
+      provider_type: str
+      session: OAuthSession
       session_token: str
-  - name: attach
-    method: POST
-    args:
-      - name: provider
-        arg_type: str
-      - name: user_id
-        arg_type: Optional[str] = None
-      - name: session_token
-        arg_type: Optional[str] = None
-      - name: session_jwt
-        arg_type: Optional[str] = None
-    response_type:
-      oauth_attach_token: str
+      session_jwt: str
+      provider_values: null
+      user: User
+      reset_sessions: bool
+      oauth_user_registration_id: str
+    method: post
+    api_path: /v1/oauth/authenticate

@@ -1,0 +1,280 @@
+classname: MagicService
+methods:
+  - name: SendMagicByEmail
+    args:
+      - name: email
+        arg_type: str
+      - name: magic_link_url
+        arg_type: Optional[str] = None
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+      - name: login_template_id
+        arg_type: Optional[str] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: login_magic_link_url
+        arg_type: str
+      - name: signup_magic_link_url
+        arg_type: str
+      - name: login_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: signup_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: code_challenge
+        arg_type: Optional[str] = None
+      - name: user_id
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
+      - name: signup_template_id
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+    method: post
+    api_path: /v1/magic_links/send_by_email
+  - name: MagicLinksEmailSend
+    args:
+      - name: email
+        arg_type: str
+      - name: magic_link_url
+        arg_type: Optional[str] = None
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+      - name: login_template_id
+        arg_type: Optional[str] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: login_magic_link_url
+        arg_type: str
+      - name: signup_magic_link_url
+        arg_type: str
+      - name: login_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: signup_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: code_challenge
+        arg_type: Optional[str] = None
+      - name: user_id
+        arg_type: str
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
+      - name: signup_template_id
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+    method: post
+    api_path: /v1/magic_links/email/send
+  - name: AuthenticateMagic
+    args:
+      - name: token
+        arg_type: str
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: options
+        arg_type: Optional[Dict[str, str]] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: code_verifier
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      user_id: str
+      method_id: str
+      session_token: str
+      session: Optional[StytchSession]
+      session_jwt: str
+      user: User
+      reset_sessions: bool
+    method: post
+    api_path: /v1/magic_links/{token}/authenticate
+  - name: MagicLinksAuthenticate
+    args:
+      - name: token
+        arg_type: str
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: options
+        arg_type: Optional[Dict[str, str]] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: code_verifier
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      user_id: str
+      method_id: str
+      session_token: str
+      session: Optional[StytchSession]
+      session_jwt: str
+      user: User
+      reset_sessions: bool
+    method: post
+    api_path: /v1/magic_links/authenticate
+  - name: MagicLinksEmailLoginOrCreate
+    args:
+      - name: email
+        arg_type: str
+      - name: login_magic_link_url
+        arg_type: str
+      - name: signup_magic_link_url
+        arg_type: str
+      - name: login_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: signup_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: login_template_id
+        arg_type: Optional[str] = None
+      - name: signup_template_id
+        arg_type: Optional[str] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: create_user_as_pending
+        arg_type: bool
+      - name: code_challenge
+        arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+      user_created: bool
+    method: post
+    api_path: /v1/magic_links/email/login_or_create
+  - name: SDKMagicLinksEmailLoginOrCreate
+    args:
+      - name: public_token
+        arg_type: str
+      - name: request
+        arg_type: null
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+    method: post
+    api_path: /v1/sdk/magic_links/email/login_or_create
+  - name: InviteByEmail
+    args:
+      - name: email
+        arg_type: str
+      - name: magic_link_url
+        arg_type: Optional[str] = None
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+      - name: invite_template_id
+        arg_type: Optional[str] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: name
+        arg_type: null
+      - name: invite_magic_link_url
+        arg_type: str
+      - name: invite_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: locale
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+    method: post
+    api_path: /v1/magic_links/invite_by_email
+  - name: MagicLinksEmailInvite
+    args:
+      - name: email
+        arg_type: str
+      - name: magic_link_url
+        arg_type: Optional[str] = None
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+      - name: invite_template_id
+        arg_type: Optional[str] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+      - name: name
+        arg_type: null
+      - name: invite_magic_link_url
+        arg_type: str
+      - name: invite_expiration_minutes
+        arg_type: Optional[int] = None
+      - name: locale
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      user_id: str
+      email_id: str
+    method: post
+    api_path: /v1/magic_links/email/invite
+  - name: MagicLinksEmailRevokeInvite
+    args:
+      - name: email
+        arg_type: str
+    response_type:
+      request_id: str
+    method: post
+    api_path: /v1/magic_links/email/revoke_invite
+  - name: MagicLinksCreate
+    args:
+      - name: user_id
+        arg_type: str
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      request_id: str
+      user_id: str
+      token: str
+    method: post
+    api_path: /v1/magic_links
+  - name: MagicLinkRedirect
+    args:
+      - name: public_token
+        arg_type: str
+      - name: token
+        arg_type: str
+      - name: stytch_token_type
+        arg_type: str
+    response_type:
+      request_id: str
+      redirect_url: str
+      html_response_data: null
+    method: get
+    api_path: /v1/magic_links/redirect
+  - name: MagicLinksRedirectCaptcha
+    args:
+      - name: public_token
+        arg_type: str
+      - name: redirect_url
+        arg_type: str
+      - name: captcha
+        arg_type: str
+    response_type:
+      request_id: str
+      redirect_url: str
+    method: post
+    api_path: /v1/magic_links/redirect/captcha

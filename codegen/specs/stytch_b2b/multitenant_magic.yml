@@ -1,0 +1,111 @@
+classname: MultiTenantMagicService
+methods:
+  - name: MultiTenantMagicLinksEmailLoginOrSignup
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: email_address
+        arg_type: str
+      - name: login_redirect_url
+        arg_type: Optional[str] = None
+      - name: signup_redirect_url
+        arg_type: Optional[str] = None
+      - name: pkce_code_challenge
+        arg_type: Optional[str] = None
+      - name: login_template_id
+        arg_type: Optional[str] = None
+      - name: signup_template_id
+        arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      member_id: str
+      member_created: bool
+      member: null
+      organization: null
+    method: post
+    api_path: /v1/b2b/magic_links/email/login_or_signup
+  - name: MultiTenantMagicLinksEmailInvite
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: email_address
+        arg_type: str
+      - name: invite_redirect_url
+        arg_type: Optional[str] = None
+      - name: invited_by_member_id
+        arg_type: Optional[str] = None
+      - name: name
+        arg_type: Optional[str] = None
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: invite_template_id
+        arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      member_id: str
+      member: null
+      organization: null
+    method: post
+    api_path: /v1/b2b/magic_links/email/invite
+  - name: MultiTenantMagicLinksAuthenticate
+    args:
+      - name: magic_links_token
+        arg_type: str
+      - name: pkce_code_verifier
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, Any]] = None
+    response_type:
+      request_id: str
+      member_id: str
+      method_id: str
+      reset_sessions: bool
+      organization_id: str
+      member: null
+      session_token: str
+      session_jwt: str
+      member_session: null
+      organization: null
+    method: post
+    api_path: /v1/b2b/magic_links/authenticate
+  - name: B2BMagicLinksEmailDiscoverySend
+    args:
+      - name: email_address
+        arg_type: str
+      - name: discovery_redirect_url
+        arg_type: Optional[str] = None
+      - name: pkce_code_challenge
+        arg_type: Optional[str] = None
+      - name: login_template_id
+        arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+    method: post
+    api_path: /v1/b2b/magic_links/email/discovery/send
+  - name: B2BMagicLinksDiscoveryAuthenticate
+    args:
+      - name: discovery_magic_links_token
+        arg_type: str
+      - name: pkce_code_verifier
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      intermediate_session_token: str
+      email_address: str
+      discovered_organizations: null
+    method: post
+    api_path: /v1/b2b/magic_links/discovery/authenticate
