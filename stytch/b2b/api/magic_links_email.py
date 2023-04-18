@@ -30,12 +30,12 @@ class Email:
         self,
         organization_id: str,
         email_address: str,
-        create_member_as_pending: Optional[bool] = None,
         login_redirect_url: Optional[str] = None,
         signup_redirect_url: Optional[str] = None,
         pkce_code_challenge: Optional[str] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> LoginOrSignupResponse:
         """Send either a login or signup magic link to a Member. A new or pending Member will receive a signup Email Magic Link. An active Member will receive a login Email Magic Link.
 
@@ -44,8 +44,6 @@ class Email:
         - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
 
         - `email_address`: The email of the Member who will receive the Email Magic Link for login or signup.
-
-        - `create_member_as_pending`: Flag for whether or not to save a Member as pending vs active in Stytch. Defaults to false. If true, new Members will be created with status pending in Stytch's backend. Their status will remain pending and they will continue to receive sign-up magic links until a magic link is authenticated for that Member. If false, new Members will be created with status active. They will receive a sign-up magic link for their first magic link but subsequent magic links will use the login email template, even if the Member never authenticated their initial magic link.
 
         - `login_redirect_url`: The URL that Member clicks from the login email magic link. This URL should be an endpoint in the backend server that verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
 
@@ -56,6 +54,12 @@ class Email:
         - `login_template_id`: Use a custom template for login emails. By default, it will use your default email template The template must be a template using our built-in customizations or a custom HTML email for Magic links - Login.
 
         - `signup_template_id`: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
+
+        - `locale`: Used to determine which language to use when sending the user this delivery method. Parameter is a two character [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"` or `"es"`.
+
+          Currently supported languages are English (en) and Spanish (es); if no value is provided, the copy defaults to English.
+
+          Request more languages for support [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link)!
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -63,8 +67,6 @@ class Email:
             "email_address": email_address,
         }
 
-        if create_member_as_pending is not None:
-            payload["create_member_as_pending"] = create_member_as_pending
         if login_redirect_url is not None:
             payload["login_redirect_url"] = login_redirect_url
         if signup_redirect_url is not None:
@@ -75,6 +77,8 @@ class Email:
             payload["login_template_id"] = login_template_id
         if signup_template_id is not None:
             payload["signup_template_id"] = signup_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "login_or_signup")
 
@@ -85,12 +89,12 @@ class Email:
         self,
         organization_id: str,
         email_address: str,
-        create_member_as_pending: Optional[bool] = None,
         login_redirect_url: Optional[str] = None,
         signup_redirect_url: Optional[str] = None,
         pkce_code_challenge: Optional[str] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> LoginOrSignupResponse:
         """Send either a login or signup magic link to a Member. A new or pending Member will receive a signup Email Magic Link. An active Member will receive a login Email Magic Link.
 
@@ -99,8 +103,6 @@ class Email:
         - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
 
         - `email_address`: The email of the Member who will receive the Email Magic Link for login or signup.
-
-        - `create_member_as_pending`: Flag for whether or not to save a Member as pending vs active in Stytch. Defaults to false. If true, new Members will be created with status pending in Stytch's backend. Their status will remain pending and they will continue to receive sign-up magic links until a magic link is authenticated for that Member. If false, new Members will be created with status active. They will receive a sign-up magic link for their first magic link but subsequent magic links will use the login email template, even if the Member never authenticated their initial magic link.
 
         - `login_redirect_url`: The URL that Member clicks from the login email magic link. This URL should be an endpoint in the backend server that verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
 
@@ -111,6 +113,12 @@ class Email:
         - `login_template_id`: Use a custom template for login emails. By default, it will use your default email template The template must be a template using our built-in customizations or a custom HTML email for Magic links - Login.
 
         - `signup_template_id`: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
+
+        - `locale`: Used to determine which language to use when sending the user this delivery method. Parameter is a two character [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"` or `"es"`.
+
+          Currently supported languages are English (en) and Spanish (es); if no value is provided, the copy defaults to English.
+
+          Request more languages for support [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link)!
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -118,8 +126,6 @@ class Email:
             "email_address": email_address,
         }
 
-        if create_member_as_pending is not None:
-            payload["create_member_as_pending"] = create_member_as_pending
         if login_redirect_url is not None:
             payload["login_redirect_url"] = login_redirect_url
         if signup_redirect_url is not None:
@@ -130,6 +136,8 @@ class Email:
             payload["login_template_id"] = login_template_id
         if signup_template_id is not None:
             payload["signup_template_id"] = signup_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "login_or_signup")
 
@@ -141,11 +149,12 @@ class Email:
         organization_id: str,
         email_address: str,
         invite_redirect_url: Optional[str] = None,
-        invite_by_member_id: Optional[str] = None,
+        invited_by_member_id: Optional[str] = None,
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         invite_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> InviteResponse:
         """Send an invite email to a new Member to join an Organization. The Member will be created with a pending status until they successfully authenticate.
 
@@ -157,15 +166,21 @@ class Email:
 
         - `invite_redirect_url`: The URL that Members click from the login email magic link. This URL should be an endpoint in the backend server that verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
 
-        - `invite_by_member_id`: The member_id of the Member who sent the invite.
+        - `invited_by_member_id`: The member_id of the Member who sent the invite.
 
         - `name`: The name of the invited Member.
 
         - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data.
 
-        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the Metadata reference for complete field behavior details.
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for complete field behavior details.
 
         - `invite_template_id`: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Invite.
+
+        - `locale`: Used to determine which language to use when sending the user this delivery method. Parameter is a two character [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"` or `"es"`.
+
+          Currently supported languages are English (en) and Spanish (es); if no value is provided, the copy defaults to English.
+
+          Request more languages for support [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link)!
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -175,8 +190,8 @@ class Email:
 
         if invite_redirect_url is not None:
             payload["invite_redirect_url"] = invite_redirect_url
-        if invite_by_member_id is not None:
-            payload["invite_by_member_id"] = invite_by_member_id
+        if invited_by_member_id is not None:
+            payload["invited_by_member_id"] = invited_by_member_id
         if name is not None:
             payload["name"] = name
         if trusted_metadata is not None:
@@ -185,6 +200,8 @@ class Email:
             payload["untrusted_metadata"] = untrusted_metadata
         if invite_template_id is not None:
             payload["invite_template_id"] = invite_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 
@@ -196,11 +213,12 @@ class Email:
         organization_id: str,
         email_address: str,
         invite_redirect_url: Optional[str] = None,
-        invite_by_member_id: Optional[str] = None,
+        invited_by_member_id: Optional[str] = None,
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         invite_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> InviteResponse:
         """Send an invite email to a new Member to join an Organization. The Member will be created with a pending status until they successfully authenticate.
 
@@ -212,15 +230,21 @@ class Email:
 
         - `invite_redirect_url`: The URL that Members click from the login email magic link. This URL should be an endpoint in the backend server that verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
 
-        - `invite_by_member_id`: The member_id of the Member who sent the invite.
+        - `invited_by_member_id`: The member_id of the Member who sent the invite.
 
         - `name`: The name of the invited Member.
 
         - `trusted_metadata`: An arbitrary JSON object for storing application-specific or identity-provider-specific data.
 
-        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the Metadata reference for complete field behavior details.
+        - `untrusted_metadata`: The untrusted_metadata field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end Members directly via the SDK, and cannot be used to store critical information. See the [Metadata reference](https://stytch.com/docs/b2b/api/metadata) for complete field behavior details.
 
         - `invite_template_id`: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Invite.
+
+        - `locale`: Used to determine which language to use when sending the user this delivery method. Parameter is a two character [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"` or `"es"`.
+
+          Currently supported languages are English (en) and Spanish (es); if no value is provided, the copy defaults to English.
+
+          Request more languages for support [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link)!
         """  # noqa
 
         payload: Dict[str, Any] = {
@@ -230,8 +254,8 @@ class Email:
 
         if invite_redirect_url is not None:
             payload["invite_redirect_url"] = invite_redirect_url
-        if invite_by_member_id is not None:
-            payload["invite_by_member_id"] = invite_by_member_id
+        if invited_by_member_id is not None:
+            payload["invited_by_member_id"] = invited_by_member_id
         if name is not None:
             payload["name"] = name
         if trusted_metadata is not None:
@@ -240,6 +264,8 @@ class Email:
             payload["untrusted_metadata"] = untrusted_metadata
         if invite_template_id is not None:
             payload["invite_template_id"] = invite_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(self.sub_url, "invite")
 

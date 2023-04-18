@@ -38,8 +38,6 @@ sub_apis:
             arg_type: str
           - name: email_address
             arg_type: str
-          - name: create_member_as_pending
-            arg_type: Optional[bool] = None
           - name: login_redirect_url
             arg_type: Optional[str] = None
           - name: signup_redirect_url
@@ -50,10 +48,13 @@ sub_apis:
             arg_type: Optional[str] = None
           - name: signup_template_id
             arg_type: Optional[str] = None
+          - name: locale
+            arg_type: Optional[str] = None
         response_type:
           member_id: str
           member_created: bool
           member: Member
+          organization: Organization
       - name: invite
         method: POST
         args:
@@ -63,7 +64,7 @@ sub_apis:
             arg_type: str
           - name: invite_redirect_url
             arg_type: Optional[str] = None
-          - name: invite_by_member_id
+          - name: invited_by_member_id
             arg_type: Optional[str] = None
           - name: name
             arg_type: Optional[str] = None
@@ -73,6 +74,9 @@ sub_apis:
             arg_type: Optional[Dict[str, Any]] = None
           - name: invite_template_id
             arg_type: Optional[str] = None
+          - name: locale
+            arg_type: Optional[str] = None
         response_type:
           member_id: str
           member: Member
+          organization: Organization

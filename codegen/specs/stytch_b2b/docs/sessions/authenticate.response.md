@@ -7,3 +7,5 @@ Response fields beyond those defined in `ResponseBase`:
 - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our session management guide.
 
 - `member`: The Member object.
+
+- `organization`: The Organization object.

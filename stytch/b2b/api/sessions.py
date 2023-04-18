@@ -81,9 +81,9 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned If both the signature and the underlying Session are still valid.
+        """Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-        This endpoint requires only one of either the session_jwt or session_token be included in the request. It will return an error if both are present.
+        This endpoint requires only one of either the `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
         Parameters:
 
@@ -119,9 +119,9 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned If both the signature and the underlying Session are still valid.
+        """Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-        This endpoint requires only one of either the session_jwt or session_token be included in the request. It will return an error if both are present.
+        This endpoint requires only one of either the `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
         Parameters:
 
@@ -157,17 +157,17 @@ class Sessions:
         session_jwt: Optional[str] = None,
         member_id: Optional[str] = None,
     ) -> RevokeResponse:
-        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the member_session_id, session_token, or session_jwt. To revoke all Sessions for a Member, pass the member_id. This endpoint requires exactly one body param to be included in the request. It will return an error if multiple are present.
+        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`. This endpoint requires exactly one body param to be included in the request. It will return an error if multiple are present.
 
         Parameters:
 
-        - `member_session_id`: Globally unique UUID that identifies a specific Member’s Session.
+        - `member_session_id`: The UUID of the specific Member Session to revoke.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session Management guide.
+        - `session_token`: The `session_token` of the specific Member Session to revoke.
 
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
+        - `session_jwt`: The JSON Web Token (JWT) of the specific Member Session to revoke.
 
-        - `member_id`: Globally unique UUID that identifies a specific Member. The member_id is critical to perform operations on a Member, so be sure to preserve this value.
+        - `member_id`: The UUID of the Member to revoke all sessions for.
         """  # noqa
 
         payload: Dict[str, Any] = {}
@@ -193,17 +193,17 @@ class Sessions:
         session_jwt: Optional[str] = None,
         member_id: Optional[str] = None,
     ) -> RevokeResponse:
-        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the member_session_id, session_token, or session_jwt. To revoke all Sessions for a Member, pass the member_id. This endpoint requires exactly one body param to be included in the request. It will return an error if multiple are present.
+        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`. This endpoint requires exactly one body param to be included in the request. It will return an error if multiple are present.
 
         Parameters:
 
-        - `member_session_id`: Globally unique UUID that identifies a specific Member’s Session.
+        - `member_session_id`: The UUID of the specific Member Session to revoke.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session Management guide.
+        - `session_token`: The `session_token` of the specific Member Session to revoke.
 
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
+        - `session_jwt`: The JSON Web Token (JWT) of the specific Member Session to revoke.
 
-        - `member_id`: Globally unique UUID that identifies a specific Member. The member_id is critical to perform operations on a Member, so be sure to preserve this value.
+        - `member_id`: The UUID of the Member to revoke all sessions for.
         """  # noqa
 
         payload: Dict[str, Any] = {}

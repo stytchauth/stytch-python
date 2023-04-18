@@ -4,13 +4,12 @@
 setuptools>=65.5.1
 
 # For type checking, codegen, and testing
-Jinja2
-autoflake
-# black
-coverage
-isort
-mypy
-pyright
-pyyaml
-types-PyYAML
-types-requests
+Jinja2==3.1.2
+autoflake==2.0.0
+#black==22.12.0
+isort==5.11.2
+mypy==0.991
+pyright==1.1.284
+pyyaml==6.0
+types-PyYAML==6.0.12.2
+types-requests==2.28.11.5

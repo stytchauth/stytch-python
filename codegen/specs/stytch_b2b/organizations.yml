@@ -11,6 +11,8 @@ methods:
         arg_type: str
       - name: organization_slug
         arg_type: str
+      - name: organization_logo_url
+        arg_type: Optional[str] = None
       - name: trusted_metadata
         arg_type: Optional[Dict[str, Any]] = None
       - name: email_jit_provisioning
@@ -21,6 +23,10 @@ methods:
         arg_type: Optional[List[str]] = None
       - name: sso_jit_provisioning
         arg_type: Optional[str] = None
+      - name: auth_methods
+        arg_type: Optional[str] = None
+      - name: allowed_auth_methods
+        arg_type: Optional[List[str]] = None
     response_type:
       organization: Organization
   - name: get
@@ -59,6 +65,10 @@ methods:
         arg_type: Optional[str] = None
       - name: email_invites
         arg_type: Optional[str] = None
+      - name: auth_methods
+        arg_type: Optional[str] = None
+      - name: allowed_auth_methods
+        arg_type: Optional[List[str]] = None
     response_type:
       organization: Organization
   - name: delete
@@ -70,6 +80,65 @@ methods:
         arg_type: str
     response_type:
       organization_id: str
+  - name: get_member
+    method: GET
+    api_path: 'f"{organization_id}/member"'
+    eval_api_path: true
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_id
+        arg_type: Optional[str] = None
+      - name: email_address
+        arg_type: Optional[str] = None
+    response_type:
+      member_id: str
+      member: Member
+      organization: Organization
+  - name: create_member
+    method: POST
+    api_path: 'f"{organization_id}/members"'
+    eval_api_path: true
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: email_address
+        arg_type: str
+      - name: name
+        arg_type: Optional[str] = None
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: create_member_as_pending
+        arg_type: Optional[bool] = None
+      - name: is_breakglass
+        arg_type: Optional[bool] = None
+    response_type:
+      member_id: str
+      member: Member
+      organization: Organization
+  - name: update_member
+    method: PUT
+    api_path: 'f"{organization_id}/members/{member_id}"'
+    eval_api_path: true
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_id
+        arg_type: str
+      - name: name
+        arg_type: Optional[str] = None
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, Any]] = None
+      - name: is_breakglass
+        arg_type: Optional[bool] = None
+    response_type:
+      member_id: str
+      member: Member
+      organization: Organization
   - name: delete_member
     method: DELETE
     api_path: 'f"{organization_id}/member/{member_id}"'
@@ -81,6 +150,19 @@ methods:
         arg_type: str
     response_type:
       member_id: str
+  - name: delete_member_password
+    method: DELETE
+    api_path: 'f"{organization_id}/members/passwords/{member_password_id}"'
+    eval_api_path: true
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_password_id
+        arg_type: str
+    response_type:
+      member_id: str
+      member: Member
+      organization: Organization
   - name: search
     method: POST
     args:

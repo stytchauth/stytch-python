@@ -2,7 +2,7 @@ Search for members within an Organization. It requires an organization_id. Submi
 
 Parameters:
 
-- `organization_ids`: List of globally unique UUIDs that identify specific Organizations. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+- `organization_ids`: List of organization IDs to search Members by. You must specify at least one Organization.
 
 - `cursor`: The cursor field allows you to paginate through your results. Each result array is limited to 1000 results, if your query returns more than 1000 results, you will need to paginate the responses using the cursor. If you receive a response that includes a non-null next_cursor in the results_metadata object, you should repeat the call, being sure to include all of the original fields, but pass in the next_cursor in the cursor field. Continue to make calls until the next_cursor in the response is null.
 
