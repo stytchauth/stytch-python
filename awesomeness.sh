@@ -38,3 +38,5 @@ do
     cp $line $b2bFile
   fi
 done
+
+./bin/generate-api.sh
