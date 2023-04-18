@@ -6,14 +6,13 @@
 
 from typing import Any, Dict, Optional
 
-
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.web_authn_service import (
-    WebauthnregisterstartResponse,
-    WebauthnregisterResponse,
-    WebauthnauthenticatestartResponse,
     WebauthnauthenticateResponse,
+    WebauthnauthenticatestartResponse,
+    WebauthnregisterResponse,
+    WebauthnregisterstartResponse,
 )
 
 

@@ -30,6 +30,8 @@ class PasswordsstrengthcheckResponse(ResponseBase):
     score: None
     breached_password: bool
     feedback: None
+    strength_policy: str
+    breach_detection_on_create: bool
 
 
 class PasswordsemailresetstartResponse(ResponseBase):

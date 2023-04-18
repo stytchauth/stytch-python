@@ -11,14 +11,16 @@ import pydantic
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.sso_service import (
-  CreatesamlconnectionResponse,
-  UpdatesamlconnectionResponse,
-  UpdatesamlconnectionbyurlResponse,
-  UpdatesamlconnectionbydocResponse,
-  GetssoconnectionsResponse,
-  DeletessoconnectionResponse,
-  SsoauthenticateResponse,
-  DeletesamlverificationcertificateResponse,
+    CreateoidcconnectionResponse,
+    CreatesamlconnectionResponse,
+    DeletesamlverificationcertificateResponse,
+    DeletessoconnectionResponse,
+    GetssoconnectionsResponse,
+    SsoauthenticateResponse,
+    UpdateoidcconnectionResponse,
+    UpdatesamlconnectionbydocResponse,
+    UpdatesamlconnectionbyurlResponse,
+    UpdatesamlconnectionResponse,
 )
 
 
@@ -37,15 +39,49 @@ class SSOService:
     def sub_url(self) -> str:
         return "sso_service"
 
+    def CreateOIDCConnection(
+        self,
+        organization_id: str,
+        display_name: str,
+    ) -> CreateoidcconnectionResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "display_name": display_name,
+        }
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/oidc/{organization_id}")
+
+        res = self.sync_client.post(url, json=payload)
+        return CreateoidcconnectionResponse.from_json(res.response.status_code, res.json)
+
+    async def CreateOIDCConnection_async(
+      self,
+      organization_id: str,
+      display_name: str,
+    ) -> CreateoidcconnectionResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "display_name": display_name,
+        }
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/oidc/{organization_id}")
+
+        res = await self.async_client.post(url, json=payload)
+        return CreateoidcconnectionResponse.from_json(res.response.status, res.json)
+
     def CreateSAMLConnection(
         self,
         organization_id: str,
-        identity_provider: str,
+        display_name: str,
     ) -> CreatesamlconnectionResponse:
 
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
-            "identity_provider": identity_provider,
+            "display_name": display_name,
         }
 
 
@@ -57,12 +93,12 @@ class SSOService:
     async def CreateSAMLConnection_async(
       self,
       organization_id: str,
-      identity_provider: str,
+      display_name: str,
     ) -> CreatesamlconnectionResponse:
 
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
-            "identity_provider": identity_provider,
+            "display_name": display_name,
         }
 
 
@@ -71,26 +107,97 @@ class SSOService:
         res = await self.async_client.post(url, json=payload)
         return CreatesamlconnectionResponse.from_json(res.response.status, res.json)
 
+    def UpdateOIDCConnection(
+        self,
+        organization_id: str,
+        connection_id: str,
+        display_name: str,
+        client_id: str,
+        client_secret: str,
+        issuer: str,
+        authorization_url: str,
+        token_url: str,
+        userinfo_url: str,
+        jwks_url: str,
+    ) -> UpdateoidcconnectionResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+            "display_name": display_name,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "issuer": issuer,
+            "authorization_url": authorization_url,
+            "token_url": token_url,
+            "userinfo_url": userinfo_url,
+            "jwks_url": jwks_url,
+        }
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/oidc/{organization_id}/connections/{connection_id}")
+
+        res = self.sync_client.put(url, json=payload)
+        return UpdateoidcconnectionResponse.from_json(res.response.status_code, res.json)
+
+    async def UpdateOIDCConnection_async(
+      self,
+      organization_id: str,
+      connection_id: str,
+      display_name: str,
+      client_id: str,
+      client_secret: str,
+      issuer: str,
+      authorization_url: str,
+      token_url: str,
+      userinfo_url: str,
+      jwks_url: str,
+    ) -> UpdateoidcconnectionResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+            "display_name": display_name,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "issuer": issuer,
+            "authorization_url": authorization_url,
+            "token_url": token_url,
+            "userinfo_url": userinfo_url,
+            "jwks_url": jwks_url,
+        }
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/oidc/{organization_id}/connections/{connection_id}")
+
+        res = await self.async_client.put(url, json=payload)
+        return UpdateoidcconnectionResponse.from_json(res.response.status, res.json)
+
     def UpdateSAMLConnection(
         self,
         organization_id: str,
         connection_id: str,
-        entity_id: str,
+        idp_entity_id: str,
         display_name: str,
         attribute_mapping: Optional[Dict[str, str]] = None,
         x509_certificate: str,
+        idp_sso_url: str,
+        None: None,
     ) -> UpdatesamlconnectionResponse:
 
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
-            "entity_id": entity_id,
+            "idp_entity_id": idp_entity_id,
             "display_name": display_name,
             "x509_certificate": x509_certificate,
+            "idp_sso_url": idp_sso_url,
         }
 
         if attribute_mapping is not None:
             payload["attribute_mapping"] = attribute_mapping
+        if None is not None:
+            payload["None"] = None
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}")
 
@@ -101,22 +208,27 @@ class SSOService:
       self,
       organization_id: str,
       connection_id: str,
-      entity_id: str,
+      idp_entity_id: str,
       display_name: str,
       attribute_mapping: Optional[Dict[str, str]] = None,
       x509_certificate: str,
+      idp_sso_url: str,
+      None: None,
     ) -> UpdatesamlconnectionResponse:
 
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
-            "entity_id": entity_id,
+            "idp_entity_id": idp_entity_id,
             "display_name": display_name,
             "x509_certificate": x509_certificate,
+            "idp_sso_url": idp_sso_url,
         }
 
         if attribute_mapping is not None:
             payload["attribute_mapping"] = attribute_mapping
+        if None is not None:
+            payload["None"] = None
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}")
 
@@ -249,8 +361,8 @@ class SSOService:
 
     def SSOAuthenticate(
         self,
-        token: str,
-        code_verifier: Optional[str] = None,
+        sso_token: str,
+        pkce_code_verifier: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
@@ -258,11 +370,11 @@ class SSOService:
     ) -> SsoauthenticateResponse:
 
         payload: Dict[str, Any] = {
-            "token": token,
+            "sso_token": sso_token,
         }
 
-        if code_verifier is not None:
-            payload["code_verifier"] = code_verifier
+        if pkce_code_verifier is not None:
+            payload["pkce_code_verifier"] = pkce_code_verifier
         if session_token is not None:
             payload["session_token"] = session_token
         if session_jwt is not None:
@@ -279,8 +391,8 @@ class SSOService:
 
     async def SSOAuthenticate_async(
       self,
-      token: str,
-      code_verifier: Optional[str] = None,
+      sso_token: str,
+      pkce_code_verifier: Optional[str] = None,
       session_token: Optional[str] = None,
       session_jwt: Optional[str] = None,
       session_duration_minutes: Optional[int] = None,
@@ -288,11 +400,11 @@ class SSOService:
     ) -> SsoauthenticateResponse:
 
         payload: Dict[str, Any] = {
-            "token": token,
+            "sso_token": sso_token,
         }
 
-        if code_verifier is not None:
-            payload["code_verifier"] = code_verifier
+        if pkce_code_verifier is not None:
+            payload["pkce_code_verifier"] = pkce_code_verifier
         if session_token is not None:
             payload["session_token"] = session_token
         if session_jwt is not None:
@@ -315,7 +427,7 @@ class SSOService:
     ) -> DeletesamlverificationcertificateResponse:
 
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/{organization_id}/connections/{connection_id}/verification_certificate/{certificate_id}")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/verification_certificates/{certificate_id}")
 
         res = self.sync_client.delete(url)
         return DeletesamlverificationcertificateResponse.from_json(res.response.status_code, res.json)
@@ -328,7 +440,7 @@ class SSOService:
     ) -> DeletesamlverificationcertificateResponse:
 
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/{organization_id}/connections/{connection_id}/verification_certificate/{certificate_id}")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/verification_certificates/{certificate_id}")
 
         res = await self.async_client.delete(url)
         return DeletesamlverificationcertificateResponse.from_json(res.response.status, res.json)

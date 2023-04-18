@@ -72,6 +72,7 @@ methods:
       session_jwt: str
       user: User
       reset_sessions: bool
+      user_created: bool
     method: post
     api_path: /v1/oauth/google/id_token/authenticate
   - name: OAuthMicrosoftStart
@@ -141,6 +142,7 @@ methods:
       session_jwt: str
       user: User
       reset_sessions: bool
+      user_created: bool
     method: post
     api_path: /v1/oauth/apple/id_token/authenticate
   - name: OAuthGithubStart

@@ -6,15 +6,14 @@
 
 from typing import Any, Dict, Optional
 
-
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.session_service import (
-    SessionsgetResponse,
-    SessionsauthenticateResponse,
-    SessionsrevokeResponse,
-    SessionsjwksResponse,
     MultitenantsessionsjwksResponse,
+    SessionsauthenticateResponse,
+    SessionsgetResponse,
+    SessionsjwksResponse,
+    SessionsrevokeResponse,
 )
 
 

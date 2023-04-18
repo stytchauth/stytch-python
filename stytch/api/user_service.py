@@ -11,21 +11,21 @@ import pydantic
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.user_service import (
-  CreateuserResponse,
-  GetpendingusersResponse,
-  GetuserResponse,
-  SearchusersexternalResponse,
-  UpdateuserResponse,
-  DeleteuserResponse,
-  GetuserbyemailandprojectidResponse,
-  DeleteuseremailResponse,
-  DeleteuserphonenumberResponse,
-  DeleteuserwebauthnregistrationResponse,
-  DeleteuserbiometricregistrationResponse,
-  DeleteusertotpResponse,
-  DeleteusercryptowalletResponse,
-  DeleteuserpasswordResponse,
-  DeleteuseroauthuserregistrationResponse,
+    CreateuserResponse,
+    DeleteuserbiometricregistrationResponse,
+    DeleteusercryptowalletResponse,
+    DeleteuseremailResponse,
+    DeleteuseroauthuserregistrationResponse,
+    DeleteuserpasswordResponse,
+    DeleteuserphonenumberResponse,
+    DeleteuserResponse,
+    DeleteusertotpResponse,
+    DeleteuserwebauthnregistrationResponse,
+    GetpendingusersResponse,
+    GetuserbyemailandprojectidResponse,
+    GetuserResponse,
+    SearchusersexternalResponse,
+    UpdateuserResponse,
 )
 
 

@@ -243,6 +243,8 @@ methods:
         arg_type: str
       - name: token
         arg_type: str
+      - name: stytch_token_type
+        arg_type: str
     response_type:
       request_id: str
       redirect_url: str

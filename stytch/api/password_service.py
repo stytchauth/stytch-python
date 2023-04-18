@@ -11,14 +11,14 @@ import pydantic
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.password_service import (
-  PasswordscreateResponse,
-  PasswordsauthenticateResponse,
-  PasswordsstrengthcheckResponse,
-  PasswordsemailresetstartResponse,
-  PasswordsemailresetResponse,
-  PasswordsexistingpasswordresetResponse,
-  PasswordssessionresetResponse,
-  PasswordsmigrateResponse,
+    PasswordsauthenticateResponse,
+    PasswordscreateResponse,
+    PasswordsemailresetResponse,
+    PasswordsemailresetstartResponse,
+    PasswordsexistingpasswordresetResponse,
+    PasswordsmigrateResponse,
+    PasswordssessionresetResponse,
+    PasswordsstrengthcheckResponse,
 )
 
 
@@ -43,6 +43,9 @@ class PasswordService:
         password: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, str]] = None,
+        untrusted_metadata: Optional[Dict[str, str]] = None,
+        name: None,
     ) -> PasswordscreateResponse:
 
         payload: Dict[str, Any] = {
@@ -54,6 +57,12 @@ class PasswordService:
             payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if name is not None:
+            payload["name"] = name
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords")
 
@@ -66,6 +75,9 @@ class PasswordService:
       password: str,
       session_duration_minutes: Optional[int] = None,
       session_custom_claims: Optional[Dict[str, str]] = None,
+      trusted_metadata: Optional[Dict[str, str]] = None,
+      untrusted_metadata: Optional[Dict[str, str]] = None,
+      name: None,
     ) -> PasswordscreateResponse:
 
         payload: Dict[str, Any] = {
@@ -77,6 +89,12 @@ class PasswordService:
             payload["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if name is not None:
+            payload["name"] = name
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords")
 
@@ -434,12 +452,20 @@ class PasswordService:
         argon_2_config: None,
         sha_1_config: None,
         scrypt_config: None,
+        first_name: str,
+        last_name: str,
+        trusted_metadata: Optional[Dict[str, str]] = None,
+        untrusted_metadata: Optional[Dict[str, str]] = None,
+        set_email_verified: bool,
     ) -> PasswordsmigrateResponse:
 
         payload: Dict[str, Any] = {
             "email": email,
             "hash": hash,
             "hash_type": hash_type,
+            "first_name": first_name,
+            "last_name": last_name,
+            "set_email_verified": set_email_verified,
         }
 
         if md_5_config is not None:
@@ -450,6 +476,10 @@ class PasswordService:
             payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
             payload["scrypt_config"] = scrypt_config
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords/migrate")
 
@@ -465,12 +495,20 @@ class PasswordService:
       argon_2_config: None,
       sha_1_config: None,
       scrypt_config: None,
+      first_name: str,
+      last_name: str,
+      trusted_metadata: Optional[Dict[str, str]] = None,
+      untrusted_metadata: Optional[Dict[str, str]] = None,
+      set_email_verified: bool,
     ) -> PasswordsmigrateResponse:
 
         payload: Dict[str, Any] = {
             "email": email,
             "hash": hash,
             "hash_type": hash_type,
+            "first_name": first_name,
+            "last_name": last_name,
+            "set_email_verified": set_email_verified,
         }
 
         if md_5_config is not None:
@@ -481,6 +519,10 @@ class PasswordService:
             payload["sha_1_config"] = sha_1_config
         if scrypt_config is not None:
             payload["scrypt_config"] = scrypt_config
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords/migrate")
 

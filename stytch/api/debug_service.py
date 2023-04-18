@@ -6,12 +6,9 @@
 
 from typing import Any, Dict
 
-
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.debug_service import (
-    WhoamiResponse,
-)
+from stytch.models.debug_service import WhoamiResponse
 
 
 class DebugService:

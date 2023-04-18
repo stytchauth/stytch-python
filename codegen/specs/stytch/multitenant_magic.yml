@@ -6,8 +6,6 @@ methods:
         arg_type: str
       - name: email_address
         arg_type: str
-      - name: create_user_as_pending
-        arg_type: bool
       - name: login_redirect_url
         arg_type: Optional[str] = None
       - name: signup_redirect_url
@@ -18,11 +16,14 @@ methods:
         arg_type: Optional[str] = None
       - name: signup_template_id
         arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
     response_type:
       request_id: str
       member_id: str
       member_created: bool
       member: null
+      organization: null
     method: post
     api_path: /v1/b2b/magic_links/email/login_or_signup
   - name: MultiTenantMagicLinksEmailInvite
@@ -43,10 +44,13 @@ methods:
         arg_type: Optional[Dict[str, str]] = None
       - name: invite_template_id
         arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
     response_type:
       request_id: str
       member_id: str
       member: null
+      organization: null
     method: post
     api_path: /v1/b2b/magic_links/email/invite
   - name: MultiTenantMagicLinksAuthenticate
@@ -72,6 +76,36 @@ methods:
       member: null
       session_token: str
       session_jwt: str
-      session: null
+      member_session: null
+      organization: null
     method: post
     api_path: /v1/b2b/magic_links/authenticate
+  - name: B2BMagicLinksEmailDiscoverySend
+    args:
+      - name: email_address
+        arg_type: str
+      - name: discovery_redirect_url
+        arg_type: Optional[str] = None
+      - name: pkce_code_challenge
+        arg_type: Optional[str] = None
+      - name: login_template_id
+        arg_type: Optional[str] = None
+      - name: locale
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+    method: post
+    api_path: /v1/b2b/magic_links/email/discovery/send
+  - name: B2BMagicLinksDiscoveryAuthenticate
+    args:
+      - name: discovery_magic_links_token
+        arg_type: str
+      - name: pkce_code_verifier
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      intermediate_session_token: str
+      email_address: str
+      discovered_organizations: null
+    method: post
+    api_path: /v1/b2b/magic_links/discovery/authenticate

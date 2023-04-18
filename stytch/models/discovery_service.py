@@ -4,13 +4,15 @@
 from stytch.core.models import ResponseBase
 
 
-class MultitenantsessionsgetResponse(ResponseBase):
+class DiscoveryorganizationsResponse(ResponseBase):
     request_id: str
-    member_sessions: None
+    email_address: str
+    discovered_organizations: None
 
 
-class MultitenantsessionsauthenticateResponse(ResponseBase):
+class DiscoveryintermediatesessionexchangeResponse(ResponseBase):
     request_id: str
+    member_id: str
     member_session: None
     session_token: str
     session_jwt: str
@@ -18,11 +20,7 @@ class MultitenantsessionsauthenticateResponse(ResponseBase):
     organization: None
 
 
-class MultitenantsessionsrevokeResponse(ResponseBase):
-    request_id: str
-
-
-class MultitenantsessionsexchangeResponse(ResponseBase):
+class DiscoveryorganizationcreateResponse(ResponseBase):
     request_id: str
     member_id: str
     member_session: None

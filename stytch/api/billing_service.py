@@ -9,7 +9,7 @@ from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
 
-class ScriptService:
+class BillingService:
     def __init__(
         self,
         api_base: ApiBase,
@@ -22,4 +22,4 @@ class ScriptService:
 
     @property
     def sub_url(self) -> str:
-        return "script_service"
+        return "billing_service"

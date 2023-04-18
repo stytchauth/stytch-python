@@ -4,22 +4,17 @@
 # or your changes may be overwritten later!
 # !!!
 
-from typing import Any, Dict, List, Optional, Union
-
-import pydantic
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.email_template_service import (
-)
 
 
 class EmailTemplateService:
     def __init__(
-      self,
-      api_base: ApiBase,
-      sync_client: SyncClient,
-      async_client: AsyncClient,
+        self,
+        api_base: ApiBase,
+        sync_client: SyncClient,
+        async_client: AsyncClient,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -28,4 +23,3 @@ class EmailTemplateService:
     @property
     def sub_url(self) -> str:
         return "email_template_service"
-

@@ -1,0 +1,74 @@
+classname: DiscoveryService
+methods:
+  - name: DiscoveryOrganizations
+    args:
+      - name: intermediate_session_token
+        arg_type: Optional[str] = None
+      - name: session_token
+        arg_type: Optional[str] = None
+      - name: session_jwt
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      email_address: str
+      discovered_organizations: null
+    method: post
+    api_path: /v1/b2b/discovery/organizations
+  - name: DiscoveryIntermediateSessionExchange
+    args:
+      - name: intermediate_session_token
+        arg_type: str
+      - name: organization_id
+        arg_type: str
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      request_id: str
+      member_id: str
+      member_session: null
+      session_token: str
+      session_jwt: str
+      member: null
+      organization: null
+    method: post
+    api_path: /v1/b2b/discovery/intermediate_sessions/exchange
+  - name: DiscoveryOrganizationCreate
+    args:
+      - name: intermediate_session_token
+        arg_type: str
+      - name: session_duration_minutes
+        arg_type: Optional[int] = None
+      - name: session_custom_claims
+        arg_type: Optional[Dict[str, str]] = None
+      - name: organization_name
+        arg_type: str
+      - name: organization_slug
+        arg_type: str
+      - name: organization_logo_url
+        arg_type: str
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+      - name: sso_jit_provisioning
+        arg_type: Optional[str] = None
+      - name: email_allowed_domains
+        arg_type: List[str]
+      - name: email_jit_provisioning
+        arg_type: Optional[str] = None
+      - name: email_invites
+        arg_type: Optional[str] = None
+      - name: auth_methods
+        arg_type: Optional[str] = None
+      - name: allowed_auth_methods
+        arg_type: List[str]
+    response_type:
+      request_id: str
+      member_id: str
+      member_session: null
+      session_token: str
+      session_jwt: str
+      member: null
+      organization: null
+    method: post
+    api_path: /v1/b2b/discovery/organizations/create

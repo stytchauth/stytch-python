@@ -6,14 +6,13 @@
 
 from typing import Any, Dict, Optional
 
-
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.biometric_service import (
-    BiometricsregisterstartResponse,
-    BiometricsregisterResponse,
-    BiometricsauthenticatestartResponse,
     BiometricsauthenticateResponse,
+    BiometricsauthenticatestartResponse,
+    BiometricsregisterResponse,
+    BiometricsregisterstartResponse,
 )
 
 

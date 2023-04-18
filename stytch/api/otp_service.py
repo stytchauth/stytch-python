@@ -11,13 +11,13 @@ import pydantic
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.otp_service import (
-  OtpssmssendResponse,
-  OtpssmsloginorcreateResponse,
-  OtpswhatsappsendResponse,
-  OtpswhatsapploginorcreateResponse,
-  OtpsemailsendResponse,
-  OtpsemailloginorcreateResponse,
-  OtpsauthenticateResponse,
+    OtpsauthenticateResponse,
+    OtpsemailloginorcreateResponse,
+    OtpsemailsendResponse,
+    OtpssmsloginorcreateResponse,
+    OtpssmssendResponse,
+    OtpswhatsapploginorcreateResponse,
+    OtpswhatsappsendResponse,
 )
 
 

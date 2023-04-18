@@ -6,13 +6,14 @@
 
 from typing import Any, Dict, Optional
 
-
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.multi_tenant_magic_service import (
-    MultitenantmagiclinksemailloginorsignupResponse,
-    MultitenantmagiclinksemailinviteResponse,
+    B2BmagiclinksdiscoveryauthenticateResponse,
+    B2BmagiclinksemaildiscoverysendResponse,
     MultitenantmagiclinksauthenticateResponse,
+    MultitenantmagiclinksemailinviteResponse,
+    MultitenantmagiclinksemailloginorsignupResponse,
 )
 
 
@@ -35,17 +36,16 @@ class MultiTenantMagicService:
         self,
         organization_id: str,
         email_address: str,
-        create_user_as_pending: bool,
         login_redirect_url: Optional[str] = None,
         signup_redirect_url: Optional[str] = None,
         pkce_code_challenge: Optional[str] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> MultitenantmagiclinksemailloginorsignupResponse:
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
-            "create_user_as_pending": create_user_as_pending,
         }
 
         if login_redirect_url is not None:
@@ -58,6 +58,8 @@ class MultiTenantMagicService:
             payload["login_template_id"] = login_template_id
         if signup_template_id is not None:
             payload["signup_template_id"] = signup_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "/v1/b2b/magic_links/email/login_or_signup"
@@ -72,17 +74,16 @@ class MultiTenantMagicService:
         self,
         organization_id: str,
         email_address: str,
-        create_user_as_pending: bool,
         login_redirect_url: Optional[str] = None,
         signup_redirect_url: Optional[str] = None,
         pkce_code_challenge: Optional[str] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> MultitenantmagiclinksemailloginorsignupResponse:
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
-            "create_user_as_pending": create_user_as_pending,
         }
 
         if login_redirect_url is not None:
@@ -95,6 +96,8 @@ class MultiTenantMagicService:
             payload["login_template_id"] = login_template_id
         if signup_template_id is not None:
             payload["signup_template_id"] = signup_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "/v1/b2b/magic_links/email/login_or_signup"
@@ -115,6 +118,7 @@ class MultiTenantMagicService:
         trusted_metadata: Optional[Dict[str, str]] = None,
         untrusted_metadata: Optional[Dict[str, str]] = None,
         invite_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> MultitenantmagiclinksemailinviteResponse:
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -133,6 +137,8 @@ class MultiTenantMagicService:
             payload["untrusted_metadata"] = untrusted_metadata
         if invite_template_id is not None:
             payload["invite_template_id"] = invite_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "/v1/b2b/magic_links/email/invite"
@@ -153,6 +159,7 @@ class MultiTenantMagicService:
         trusted_metadata: Optional[Dict[str, str]] = None,
         untrusted_metadata: Optional[Dict[str, str]] = None,
         invite_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
     ) -> MultitenantmagiclinksemailinviteResponse:
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -171,6 +178,8 @@ class MultiTenantMagicService:
             payload["untrusted_metadata"] = untrusted_metadata
         if invite_template_id is not None:
             payload["invite_template_id"] = invite_template_id
+        if locale is not None:
+            payload["locale"] = locale
 
         url = self.api_base.route_with_sub_url(
             self.sub_url, "/v1/b2b/magic_links/email/invite"
@@ -244,5 +253,107 @@ class MultiTenantMagicService:
 
         res = await self.async_client.post(url, json=payload)
         return MultitenantmagiclinksauthenticateResponse.from_json(
+            res.response.status, res.json
+        )
+
+    def B2BMagicLinksEmailDiscoverySend(
+        self,
+        email_address: str,
+        discovery_redirect_url: Optional[str] = None,
+        pkce_code_challenge: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
+    ) -> B2BmagiclinksemaildiscoverysendResponse:
+        payload: Dict[str, Any] = {
+            "email_address": email_address,
+        }
+
+        if discovery_redirect_url is not None:
+            payload["discovery_redirect_url"] = discovery_redirect_url
+        if pkce_code_challenge is not None:
+            payload["pkce_code_challenge"] = pkce_code_challenge
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+        if locale is not None:
+            payload["locale"] = locale
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/b2b/magic_links/email/discovery/send"
+        )
+
+        res = self.sync_client.post(url, json=payload)
+        return B2BmagiclinksemaildiscoverysendResponse.from_json(
+            res.response.status_code, res.json
+        )
+
+    async def B2BMagicLinksEmailDiscoverySend_async(
+        self,
+        email_address: str,
+        discovery_redirect_url: Optional[str] = None,
+        pkce_code_challenge: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        locale: Optional[str] = None,
+    ) -> B2BmagiclinksemaildiscoverysendResponse:
+        payload: Dict[str, Any] = {
+            "email_address": email_address,
+        }
+
+        if discovery_redirect_url is not None:
+            payload["discovery_redirect_url"] = discovery_redirect_url
+        if pkce_code_challenge is not None:
+            payload["pkce_code_challenge"] = pkce_code_challenge
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+        if locale is not None:
+            payload["locale"] = locale
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/b2b/magic_links/email/discovery/send"
+        )
+
+        res = await self.async_client.post(url, json=payload)
+        return B2BmagiclinksemaildiscoverysendResponse.from_json(
+            res.response.status, res.json
+        )
+
+    def B2BMagicLinksDiscoveryAuthenticate(
+        self,
+        discovery_magic_links_token: str,
+        pkce_code_verifier: Optional[str] = None,
+    ) -> B2BmagiclinksdiscoveryauthenticateResponse:
+        payload: Dict[str, Any] = {
+            "discovery_magic_links_token": discovery_magic_links_token,
+        }
+
+        if pkce_code_verifier is not None:
+            payload["pkce_code_verifier"] = pkce_code_verifier
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/b2b/magic_links/discovery/authenticate"
+        )
+
+        res = self.sync_client.post(url, json=payload)
+        return B2BmagiclinksdiscoveryauthenticateResponse.from_json(
+            res.response.status_code, res.json
+        )
+
+    async def B2BMagicLinksDiscoveryAuthenticate_async(
+        self,
+        discovery_magic_links_token: str,
+        pkce_code_verifier: Optional[str] = None,
+    ) -> B2BmagiclinksdiscoveryauthenticateResponse:
+        payload: Dict[str, Any] = {
+            "discovery_magic_links_token": discovery_magic_links_token,
+        }
+
+        if pkce_code_verifier is not None:
+            payload["pkce_code_verifier"] = pkce_code_verifier
+
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/b2b/magic_links/discovery/authenticate"
+        )
+
+        res = await self.async_client.post(url, json=payload)
+        return B2BmagiclinksdiscoveryauthenticateResponse.from_json(
             res.response.status, res.json
         )

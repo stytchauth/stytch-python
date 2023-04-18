@@ -11,18 +11,18 @@ import pydantic
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.magic_service import (
-  SendmagicbyemailResponse,
-  MagiclinksemailsendResponse,
-  AuthenticatemagicResponse,
-  MagiclinksauthenticateResponse,
-  MagiclinksemailloginorcreateResponse,
-  SdkmagiclinksemailloginorcreateResponse,
-  InvitebyemailResponse,
-  MagiclinksemailinviteResponse,
-  MagiclinksemailrevokeinviteResponse,
-  MagiclinkredirectResponse,
-  MagiclinksredirectcaptchaResponse,
-  MagiclinkscreateResponse,
+    AuthenticatemagicResponse,
+    InvitebyemailResponse,
+    MagiclinkredirectResponse,
+    MagiclinksauthenticateResponse,
+    MagiclinkscreateResponse,
+    MagiclinksemailinviteResponse,
+    MagiclinksemailloginorcreateResponse,
+    MagiclinksemailrevokeinviteResponse,
+    MagiclinksemailsendResponse,
+    MagiclinksredirectcaptchaResponse,
+    SdkmagiclinksemailloginorcreateResponse,
+    SendmagicbyemailResponse,
 )
 
 
@@ -707,11 +707,13 @@ class MagicService:
         self,
         public_token: str,
         token: str,
+        stytch_token_type: str,
     ) -> MagiclinkredirectResponse:
 
         payload: Dict[str, Any] = {
             "public_token": public_token,
             "token": token,
+            "stytch_token_type": stytch_token_type,
         }
 
 
@@ -724,11 +726,13 @@ class MagicService:
       self,
       public_token: str,
       token: str,
+      stytch_token_type: str,
     ) -> MagiclinkredirectResponse:
 
         payload: Dict[str, Any] = {
             "public_token": public_token,
             "token": token,
+            "stytch_token_type": stytch_token_type,
         }
 
 

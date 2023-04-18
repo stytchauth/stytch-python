@@ -14,8 +14,12 @@ from stytch.models.organization_service import (
     OrganizationscreateResponse,
     OrganizationsdeleteResponse,
     OrganizationsgetResponse,
+    OrganizationsmembercreateResponse,
+    OrganizationsmemberdeletepasswordResponse,
     OrganizationsmemberdeleteResponse,
+    OrganizationsmembergetResponse,
     OrganizationsmembersearchexternalResponse,
+    OrganizationsmemberupdateResponse,
     OrganizationssearchexternalResponse,
     OrganizationsupdateResponse,
 )
@@ -42,9 +46,12 @@ class OrganizationService:
         organization_slug: str,
         organization_logo_url: str,
         trusted_metadata: Optional[Dict[str, str]] = None,
+        sso_jit_provisioning: Optional[str] = None,
         email_allowed_domains: List[str],
         email_jit_provisioning: Optional[str] = None,
         email_invites: Optional[str] = None,
+        auth_methods: Optional[str] = None,
+        allowed_auth_methods: List[str],
     ) -> OrganizationscreateResponse:
 
         payload: Dict[str, Any] = {
@@ -52,14 +59,19 @@ class OrganizationService:
             "organization_slug": organization_slug,
             "organization_logo_url": organization_logo_url,
             "email_allowed_domains": email_allowed_domains,
+            "allowed_auth_methods": allowed_auth_methods,
         }
 
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
+        if sso_jit_provisioning is not None:
+            payload["sso_jit_provisioning"] = sso_jit_provisioning
         if email_jit_provisioning is not None:
             payload["email_jit_provisioning"] = email_jit_provisioning
         if email_invites is not None:
             payload["email_invites"] = email_invites
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations")
 
@@ -72,9 +84,12 @@ class OrganizationService:
       organization_slug: str,
       organization_logo_url: str,
       trusted_metadata: Optional[Dict[str, str]] = None,
+      sso_jit_provisioning: Optional[str] = None,
       email_allowed_domains: List[str],
       email_jit_provisioning: Optional[str] = None,
       email_invites: Optional[str] = None,
+      auth_methods: Optional[str] = None,
+      allowed_auth_methods: List[str],
     ) -> OrganizationscreateResponse:
 
         payload: Dict[str, Any] = {
@@ -82,14 +97,19 @@ class OrganizationService:
             "organization_slug": organization_slug,
             "organization_logo_url": organization_logo_url,
             "email_allowed_domains": email_allowed_domains,
+            "allowed_auth_methods": allowed_auth_methods,
         }
 
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
+        if sso_jit_provisioning is not None:
+            payload["sso_jit_provisioning"] = sso_jit_provisioning
         if email_jit_provisioning is not None:
             payload["email_jit_provisioning"] = email_jit_provisioning
         if email_invites is not None:
             payload["email_invites"] = email_invites
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations")
 
@@ -134,9 +154,13 @@ class OrganizationService:
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, str]] = None,
         sso_default_connection_id: Optional[str] = None,
+        sso_jit_provisioning: Optional[str] = None,
+        sso_jit_provisioning_allowed_connections: Optional[List[str]] = None,
         email_allowed_domains: Optional[List[str]] = None,
         email_jit_provisioning: Optional[str] = None,
         email_invites: Optional[str] = None,
+        auth_methods: Optional[str] = None,
+        allowed_auth_methods: Optional[List[str]] = None,
     ) -> OrganizationsupdateResponse:
 
         payload: Dict[str, Any] = {
@@ -153,12 +177,20 @@ class OrganizationService:
             payload["trusted_metadata"] = trusted_metadata
         if sso_default_connection_id is not None:
             payload["sso_default_connection_id"] = sso_default_connection_id
+        if sso_jit_provisioning is not None:
+            payload["sso_jit_provisioning"] = sso_jit_provisioning
+        if sso_jit_provisioning_allowed_connections is not None:
+            payload["sso_jit_provisioning_allowed_connections"] = sso_jit_provisioning_allowed_connections
         if email_allowed_domains is not None:
             payload["email_allowed_domains"] = email_allowed_domains
         if email_jit_provisioning is not None:
             payload["email_jit_provisioning"] = email_jit_provisioning
         if email_invites is not None:
             payload["email_invites"] = email_invites
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
+        if allowed_auth_methods is not None:
+            payload["allowed_auth_methods"] = allowed_auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}")
 
@@ -173,9 +205,13 @@ class OrganizationService:
       organization_logo_url: Optional[str] = None,
       trusted_metadata: Optional[Dict[str, str]] = None,
       sso_default_connection_id: Optional[str] = None,
+      sso_jit_provisioning: Optional[str] = None,
+      sso_jit_provisioning_allowed_connections: Optional[List[str]] = None,
       email_allowed_domains: Optional[List[str]] = None,
       email_jit_provisioning: Optional[str] = None,
       email_invites: Optional[str] = None,
+      auth_methods: Optional[str] = None,
+      allowed_auth_methods: Optional[List[str]] = None,
     ) -> OrganizationsupdateResponse:
 
         payload: Dict[str, Any] = {
@@ -192,12 +228,20 @@ class OrganizationService:
             payload["trusted_metadata"] = trusted_metadata
         if sso_default_connection_id is not None:
             payload["sso_default_connection_id"] = sso_default_connection_id
+        if sso_jit_provisioning is not None:
+            payload["sso_jit_provisioning"] = sso_jit_provisioning
+        if sso_jit_provisioning_allowed_connections is not None:
+            payload["sso_jit_provisioning_allowed_connections"] = sso_jit_provisioning_allowed_connections
         if email_allowed_domains is not None:
             payload["email_allowed_domains"] = email_allowed_domains
         if email_jit_provisioning is not None:
             payload["email_jit_provisioning"] = email_jit_provisioning
         if email_invites is not None:
             payload["email_invites"] = email_invites
+        if auth_methods is not None:
+            payload["auth_methods"] = auth_methods
+        if allowed_auth_methods is not None:
+            payload["allowed_auth_methods"] = allowed_auth_methods
 
         url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}")
 
@@ -226,6 +270,124 @@ class OrganizationService:
         res = await self.async_client.delete(url)
         return OrganizationsdeleteResponse.from_json(res.response.status, res.json)
 
+    def OrganizationsMemberCreate(
+        self,
+        organization_id: str,
+        email_address: str,
+        name: Optional[str] = None,
+        trusted_metadata: Optional[Dict[str, str]] = None,
+        untrusted_metadata: Optional[Dict[str, str]] = None,
+        create_member_as_pending: bool,
+        is_breakglass: bool,
+    ) -> OrganizationsmembercreateResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "email_address": email_address,
+            "create_member_as_pending": create_member_as_pending,
+            "is_breakglass": is_breakglass,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members")
+
+        res = self.sync_client.post(url, json=payload)
+        return OrganizationsmembercreateResponse.from_json(res.response.status_code, res.json)
+
+    async def OrganizationsMemberCreate_async(
+      self,
+      organization_id: str,
+      email_address: str,
+      name: Optional[str] = None,
+      trusted_metadata: Optional[Dict[str, str]] = None,
+      untrusted_metadata: Optional[Dict[str, str]] = None,
+      create_member_as_pending: bool,
+      is_breakglass: bool,
+    ) -> OrganizationsmembercreateResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "email_address": email_address,
+            "create_member_as_pending": create_member_as_pending,
+            "is_breakglass": is_breakglass,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members")
+
+        res = await self.async_client.post(url, json=payload)
+        return OrganizationsmembercreateResponse.from_json(res.response.status, res.json)
+
+    def OrganizationsMemberUpdate(
+        self,
+        organization_id: str,
+        member_id: str,
+        name: Optional[str] = None,
+        trusted_metadata: Optional[Dict[str, str]] = None,
+        untrusted_metadata: Optional[Dict[str, str]] = None,
+        is_breakglass: Optional[bool] = None,
+    ) -> OrganizationsmemberupdateResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if is_breakglass is not None:
+            payload["is_breakglass"] = is_breakglass
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members/{member_id}")
+
+        res = self.sync_client.put(url, json=payload)
+        return OrganizationsmemberupdateResponse.from_json(res.response.status_code, res.json)
+
+    async def OrganizationsMemberUpdate_async(
+      self,
+      organization_id: str,
+      member_id: str,
+      name: Optional[str] = None,
+      trusted_metadata: Optional[Dict[str, str]] = None,
+      untrusted_metadata: Optional[Dict[str, str]] = None,
+      is_breakglass: Optional[bool] = None,
+    ) -> OrganizationsmemberupdateResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        if name is not None:
+            payload["name"] = name
+        if trusted_metadata is not None:
+            payload["trusted_metadata"] = trusted_metadata
+        if untrusted_metadata is not None:
+            payload["untrusted_metadata"] = untrusted_metadata
+        if is_breakglass is not None:
+            payload["is_breakglass"] = is_breakglass
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members/{member_id}")
+
+        res = await self.async_client.put(url, json=payload)
+        return OrganizationsmemberupdateResponse.from_json(res.response.status, res.json)
+
     def OrganizationsMemberDelete(
         self,
         organization_id: str,
@@ -233,7 +395,7 @@ class OrganizationService:
     ) -> OrganizationsmemberdeleteResponse:
 
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/member/{member_id}")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members/{member_id}")
 
         res = self.sync_client.delete(url)
         return OrganizationsmemberdeleteResponse.from_json(res.response.status_code, res.json)
@@ -245,7 +407,7 @@ class OrganizationService:
     ) -> OrganizationsmemberdeleteResponse:
 
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/member/{member_id}")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members/{member_id}")
 
         res = await self.async_client.delete(url)
         return OrganizationsmemberdeleteResponse.from_json(res.response.status, res.json)
@@ -295,13 +457,13 @@ class OrganizationService:
         cursor: str,
         limit: Optional[int] = None,
         query: ExternalSearchQuery,
-        organization_id: str,
+        organization_ids: List[str],
     ) -> OrganizationsmembersearchexternalResponse:
 
         payload: Dict[str, Any] = {
             "cursor": cursor,
             "query": query,
-            "organization_id": organization_id,
+            "organization_ids": organization_ids,
         }
 
         if limit is not None:
@@ -317,13 +479,13 @@ class OrganizationService:
       cursor: str,
       limit: Optional[int] = None,
       query: ExternalSearchQuery,
-      organization_id: str,
+      organization_ids: List[str],
     ) -> OrganizationsmembersearchexternalResponse:
 
         payload: Dict[str, Any] = {
             "cursor": cursor,
             "query": query,
-            "organization_id": organization_id,
+            "organization_ids": organization_ids,
         }
 
         if limit is not None:
@@ -333,4 +495,70 @@ class OrganizationService:
 
         res = await self.async_client.post(url, json=payload)
         return OrganizationsmembersearchexternalResponse.from_json(res.response.status, res.json)
+
+    def OrganizationsMemberDeletePassword(
+        self,
+        organization_id: str,
+        member_password_id: str,
+    ) -> OrganizationsmemberdeletepasswordResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members/passwords/{member_password_id}")
+
+        res = self.sync_client.delete(url)
+        return OrganizationsmemberdeletepasswordResponse.from_json(res.response.status_code, res.json)
+
+    async def OrganizationsMemberDeletePassword_async(
+      self,
+      organization_id: str,
+      member_password_id: str,
+    ) -> OrganizationsmemberdeletepasswordResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/members/passwords/{member_password_id}")
+
+        res = await self.async_client.delete(url)
+        return OrganizationsmemberdeletepasswordResponse.from_json(res.response.status, res.json)
+
+    def OrganizationsMemberGet(
+        self,
+        organization_id: str,
+        member_id: Optional[str] = None,
+        email_address: Optional[str] = None,
+    ) -> OrganizationsmembergetResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        if member_id is not None:
+            payload["member_id"] = member_id
+        if email_address is not None:
+            payload["email_address"] = email_address
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/member")
+
+        res = self.sync_client.get(url, params=payload)
+        return OrganizationsmembergetResponse.from_json(res.response.status_code, res.json)
+
+    async def OrganizationsMemberGet_async(
+      self,
+      organization_id: str,
+      member_id: Optional[str] = None,
+      email_address: Optional[str] = None,
+    ) -> OrganizationsmembergetResponse:
+
+        payload: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        if member_id is not None:
+            payload["member_id"] = member_id
+        if email_address is not None:
+            payload["email_address"] = email_address
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/b2b/organizations/{organization_id}/member")
+
+        res = await self.async_client.get(url, params=payload)
+        return OrganizationsmembergetResponse.from_json(res.response.status, res.json)
 

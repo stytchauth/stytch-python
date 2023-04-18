@@ -33,6 +33,7 @@ class OauthgoogleidtokenauthenticateResponse(ResponseBase):
     session_jwt: str
     user: User
     reset_sessions: bool
+    user_created: bool
 
 
 class OauthmicrosoftstartResponse(ResponseBase):
@@ -58,6 +59,7 @@ class OauthappleidtokenauthenticateResponse(ResponseBase):
     session_jwt: str
     user: User
     reset_sessions: bool
+    user_created: bool
 
 
 class OauthgithubstartResponse(ResponseBase):

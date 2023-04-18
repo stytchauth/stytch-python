@@ -10,12 +10,18 @@ methods:
         arg_type: str
       - name: trusted_metadata
         arg_type: Optional[Dict[str, str]] = None
+      - name: sso_jit_provisioning
+        arg_type: Optional[str] = None
       - name: email_allowed_domains
         arg_type: List[str]
       - name: email_jit_provisioning
         arg_type: Optional[str] = None
       - name: email_invites
         arg_type: Optional[str] = None
+      - name: auth_methods
+        arg_type: Optional[str] = None
+      - name: allowed_auth_methods
+        arg_type: List[str]
     response_type:
       request_id: str
       organization: Organization
@@ -44,12 +50,20 @@ methods:
         arg_type: Optional[Dict[str, str]] = None
       - name: sso_default_connection_id
         arg_type: Optional[str] = None
+      - name: sso_jit_provisioning
+        arg_type: Optional[str] = None
+      - name: sso_jit_provisioning_allowed_connections
+        arg_type: Optional[List[str]] = None
       - name: email_allowed_domains
         arg_type: Optional[List[str]] = None
       - name: email_jit_provisioning
         arg_type: Optional[str] = None
       - name: email_invites
         arg_type: Optional[str] = None
+      - name: auth_methods
+        arg_type: Optional[str] = None
+      - name: allowed_auth_methods
+        arg_type: Optional[List[str]] = None
     response_type:
       request_id: str
       organization: Organization
@@ -64,6 +78,50 @@ methods:
       organization_id: str
     method: delete
     api_path: /v1/b2b/organizations/{organization_id}
+  - name: OrganizationsMemberCreate
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: email_address
+        arg_type: str
+      - name: name
+        arg_type: Optional[str] = None
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+      - name: create_member_as_pending
+        arg_type: bool
+      - name: is_breakglass
+        arg_type: bool
+    response_type:
+      request_id: str
+      member_id: str
+      member: null
+      organization: Organization
+    method: post
+    api_path: /v1/b2b/organizations/{organization_id}/members
+  - name: OrganizationsMemberUpdate
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_id
+        arg_type: str
+      - name: name
+        arg_type: Optional[str] = None
+      - name: trusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+      - name: untrusted_metadata
+        arg_type: Optional[Dict[str, str]] = None
+      - name: is_breakglass
+        arg_type: Optional[bool] = None
+    response_type:
+      request_id: str
+      member_id: str
+      member: null
+      organization: Organization
+    method: put
+    api_path: /v1/b2b/organizations/{organization_id}/members/{member_id}
   - name: OrganizationsMemberDelete
     args:
       - name: organization_id
@@ -74,7 +132,7 @@ methods:
       request_id: str
       member_id: str
     method: delete
-    api_path: /v1/b2b/organizations/{organization_id}/member/{member_id}
+    api_path: /v1/b2b/organizations/{organization_id}/members/{member_id}
   - name: OrganizationsSearchExternal
     args:
       - name: cursor
@@ -97,11 +155,39 @@ methods:
         arg_type: Optional[int] = None
       - name: query
         arg_type: ExternalSearchQuery
-      - name: organization_id
-        arg_type: str
+      - name: organization_ids
+        arg_type: List[str]
     response_type:
       request_id: str
       members: List[Member]
       results_metadata: ResultsMetadata
     method: post
     api_path: /v1/b2b/organizations/members/search
+  - name: OrganizationsMemberDeletePassword
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_password_id
+        arg_type: str
+    response_type:
+      request_id: str
+      member_id: str
+      member: null
+      organization: null
+    method: delete
+    api_path: /v1/b2b/organizations/{organization_id}/members/passwords/{member_password_id}
+  - name: OrganizationsMemberGet
+    args:
+      - name: organization_id
+        arg_type: str
+      - name: member_id
+        arg_type: Optional[str] = None
+      - name: email_address
+        arg_type: Optional[str] = None
+    response_type:
+      request_id: str
+      member_id: str
+      member: null
+      organization: null
+    method: get
+    api_path: /v1/b2b/organizations/{organization_id}/member
