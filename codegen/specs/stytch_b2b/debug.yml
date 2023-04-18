@@ -1,5 +1,5 @@
 classname: DebugService
-methods:
+methods: 
   - name: WhoAmI
     args: []
     response_type:

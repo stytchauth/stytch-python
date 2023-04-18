@@ -24,16 +24,6 @@ class PasswordsauthenticateResponse(ResponseBase):
     user: User
 
 
-class PasswordsstrengthcheckResponse(ResponseBase):
-    request_id: str
-    valid_password: bool
-    score: None
-    breached_password: bool
-    feedback: None
-    strength_policy: str
-    breach_detection_on_create: bool
-
-
 class PasswordsemailresetstartResponse(ResponseBase):
     request_id: str
     user_id: str
@@ -71,3 +61,13 @@ class PasswordsmigrateResponse(ResponseBase):
     email_id: str
     user_created: bool
     user: User
+
+
+class PasswordsstrengthcheckResponse(ResponseBase):
+    request_id: str
+    valid_password: bool
+    score: None
+    breached_password: bool
+    feedback: None
+    strength_policy: str
+    breach_detection_on_create: bool

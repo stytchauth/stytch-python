@@ -159,42 +159,6 @@ class PasswordService:
         res = await self.async_client.post(url, json=payload)
         return PasswordsauthenticateResponse.from_json(res.response.status, res.json)
 
-    def PasswordsStrengthCheck(
-        self,
-        password: str,
-        email: Optional[str] = None,
-    ) -> PasswordsstrengthcheckResponse:
-
-        payload: Dict[str, Any] = {
-            "password": password,
-        }
-
-        if email is not None:
-            payload["email"] = email
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords/strength_check")
-
-        res = self.sync_client.post(url, json=payload)
-        return PasswordsstrengthcheckResponse.from_json(res.response.status_code, res.json)
-
-    async def PasswordsStrengthCheck_async(
-      self,
-      password: str,
-      email: Optional[str] = None,
-    ) -> PasswordsstrengthcheckResponse:
-
-        payload: Dict[str, Any] = {
-            "password": password,
-        }
-
-        if email is not None:
-            payload["email"] = email
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords/strength_check")
-
-        res = await self.async_client.post(url, json=payload)
-        return PasswordsstrengthcheckResponse.from_json(res.response.status, res.json)
-
     def PasswordsEmailResetStart(
         self,
         email: str,
@@ -528,4 +492,40 @@ class PasswordService:
 
         res = await self.async_client.post(url, json=payload)
         return PasswordsmigrateResponse.from_json(res.response.status, res.json)
+
+    def PasswordsStrengthCheck(
+        self,
+        password: str,
+        email: Optional[str] = None,
+    ) -> PasswordsstrengthcheckResponse:
+
+        payload: Dict[str, Any] = {
+            "password": password,
+        }
+
+        if email is not None:
+            payload["email"] = email
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords/strength_check")
+
+        res = self.sync_client.post(url, json=payload)
+        return PasswordsstrengthcheckResponse.from_json(res.response.status_code, res.json)
+
+    async def PasswordsStrengthCheck_async(
+      self,
+      password: str,
+      email: Optional[str] = None,
+    ) -> PasswordsstrengthcheckResponse:
+
+        payload: Dict[str, Any] = {
+            "password": password,
+        }
+
+        if email is not None:
+            payload["email"] = email
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/passwords/strength_check")
+
+        res = await self.async_client.post(url, json=payload)
+        return PasswordsstrengthcheckResponse.from_json(res.response.status, res.json)
 

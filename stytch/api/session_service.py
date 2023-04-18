@@ -9,7 +9,6 @@ from typing import Any, Dict, Optional
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.session_service import (
-    MultitenantsessionsjwksResponse,
     SessionsauthenticateResponse,
     SessionsgetResponse,
     SessionsjwksResponse,
@@ -179,35 +178,3 @@ class SessionService:
 
         res = await self.async_client.get(url, params=payload)
         return SessionsjwksResponse.from_json(res.response.status, res.json)
-
-    def MultiTenantSessionsJwks(
-        self,
-        project_id: str,
-    ) -> MultitenantsessionsjwksResponse:
-        payload: Dict[str, Any] = {
-            "project_id": project_id,
-        }
-
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "/v1/b2b/sessions/jwks/{project_id}"
-        )
-
-        res = self.sync_client.get(url, params=payload)
-        return MultitenantsessionsjwksResponse.from_json(
-            res.response.status_code, res.json
-        )
-
-    async def MultiTenantSessionsJwks_async(
-        self,
-        project_id: str,
-    ) -> MultitenantsessionsjwksResponse:
-        payload: Dict[str, Any] = {
-            "project_id": project_id,
-        }
-
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, "/v1/b2b/sessions/jwks/{project_id}"
-        )
-
-        res = await self.async_client.get(url, params=payload)
-        return MultitenantsessionsjwksResponse.from_json(res.response.status, res.json)

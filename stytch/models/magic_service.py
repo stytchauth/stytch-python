@@ -68,6 +68,12 @@ class MagiclinksemailrevokeinviteResponse(ResponseBase):
     request_id: str
 
 
+class MagiclinkscreateResponse(ResponseBase):
+    request_id: str
+    user_id: str
+    token: str
+
+
 class MagiclinkredirectResponse(ResponseBase):
     request_id: str
     redirect_url: str
@@ -77,9 +83,3 @@ class MagiclinkredirectResponse(ResponseBase):
 class MagiclinksredirectcaptchaResponse(ResponseBase):
     request_id: str
     redirect_url: str
-
-
-class MagiclinkscreateResponse(ResponseBase):
-    request_id: str
-    user_id: str
-    token: str

@@ -1,0 +1,29 @@
+classname: MagicService
+methods: 
+  - name: MagicLinkRedirect
+    args:
+      - name: public_token
+        arg_type: str
+      - name: token
+        arg_type: str
+      - name: stytch_token_type
+        arg_type: str
+    response_type:
+      request_id: str
+      redirect_url: str
+      html_response_data: null
+    method: get
+    api_path: /v1/magic_links/redirect
+  - name: MagicLinksRedirectCaptcha
+    args:
+      - name: public_token
+        arg_type: str
+      - name: redirect_url
+        arg_type: str
+      - name: captcha
+        arg_type: str
+    response_type:
+      request_id: str
+      redirect_url: str
+    method: post
+    api_path: /v1/magic_links/redirect/captcha

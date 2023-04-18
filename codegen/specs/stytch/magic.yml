@@ -237,6 +237,20 @@ methods:
       request_id: str
     method: post
     api_path: /v1/magic_links/email/revoke_invite
+  - name: MagicLinksCreate
+    args:
+      - name: user_id
+        arg_type: str
+      - name: expiration_minutes
+        arg_type: Optional[int] = None
+      - name: attributes
+        arg_type: Optional[Dict[str, str]] = None
+    response_type:
+      request_id: str
+      user_id: str
+      token: str
+    method: post
+    api_path: /v1/magic_links
   - name: MagicLinkRedirect
     args:
       - name: public_token
@@ -264,17 +278,3 @@ methods:
       redirect_url: str
     method: post
     api_path: /v1/magic_links/redirect/captcha
-  - name: MagicLinksCreate
-    args:
-      - name: user_id
-        arg_type: str
-      - name: expiration_minutes
-        arg_type: Optional[int] = None
-      - name: attributes
-        arg_type: Optional[Dict[str, str]] = None
-    response_type:
-      request_id: str
-      user_id: str
-      token: str
-    method: post
-    api_path: /v1/magic_links

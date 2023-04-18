@@ -25,8 +25,3 @@ class SessionsrevokeResponse(ResponseBase):
 class SessionsjwksResponse(ResponseBase):
     keys: List[Dict[str, Any]]
     request_id: str
-
-
-class MultitenantsessionsjwksResponse(ResponseBase):
-    keys: List[Dict[str, Any]]
-    request_id: str

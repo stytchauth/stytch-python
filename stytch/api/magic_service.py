@@ -703,6 +703,48 @@ class MagicService:
         res = await self.async_client.post(url, json=payload)
         return MagiclinksemailrevokeinviteResponse.from_json(res.response.status, res.json)
 
+    def MagicLinksCreate(
+        self,
+        user_id: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict[str, str]] = None,
+    ) -> MagiclinkscreateResponse:
+
+        payload: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/magic_links")
+
+        res = self.sync_client.post(url, json=payload)
+        return MagiclinkscreateResponse.from_json(res.response.status_code, res.json)
+
+    async def MagicLinksCreate_async(
+      self,
+      user_id: str,
+      expiration_minutes: Optional[int] = None,
+      attributes: Optional[Dict[str, str]] = None,
+    ) -> MagiclinkscreateResponse:
+
+        payload: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/magic_links")
+
+        res = await self.async_client.post(url, json=payload)
+        return MagiclinkscreateResponse.from_json(res.response.status, res.json)
+
     def MagicLinkRedirect(
         self,
         public_token: str,
@@ -778,46 +820,4 @@ class MagicService:
 
         res = await self.async_client.post(url, json=payload)
         return MagiclinksredirectcaptchaResponse.from_json(res.response.status, res.json)
-
-    def MagicLinksCreate(
-        self,
-        user_id: str,
-        expiration_minutes: Optional[int] = None,
-        attributes: Optional[Dict[str, str]] = None,
-    ) -> MagiclinkscreateResponse:
-
-        payload: Dict[str, Any] = {
-            "user_id": user_id,
-        }
-
-        if expiration_minutes is not None:
-            payload["expiration_minutes"] = expiration_minutes
-        if attributes is not None:
-            payload["attributes"] = attributes
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/magic_links")
-
-        res = self.sync_client.post(url, json=payload)
-        return MagiclinkscreateResponse.from_json(res.response.status_code, res.json)
-
-    async def MagicLinksCreate_async(
-      self,
-      user_id: str,
-      expiration_minutes: Optional[int] = None,
-      attributes: Optional[Dict[str, str]] = None,
-    ) -> MagiclinkscreateResponse:
-
-        payload: Dict[str, Any] = {
-            "user_id": user_id,
-        }
-
-        if expiration_minutes is not None:
-            payload["expiration_minutes"] = expiration_minutes
-        if attributes is not None:
-            payload["attributes"] = attributes
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/magic_links")
-
-        res = await self.async_client.post(url, json=payload)
-        return MagiclinkscreateResponse.from_json(res.response.status, res.json)
 
