@@ -34,7 +34,7 @@ methods:
       - name: session_jwt
         arg_type: Optional[str] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
     response_type:
       request_id: str
       user_id: str

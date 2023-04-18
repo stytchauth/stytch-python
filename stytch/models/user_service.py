@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from stytch.core.models import ResponseBase, User
 
@@ -37,8 +37,8 @@ class GetuserResponse(ResponseBase):
     crypto_wallets: None
     password: None
     biometric_registrations: None
-    trusted_metadata: Optional[Dict[str, str]] = None
-    untrusted_metadata: Optional[Dict[str, str]] = None
+    trusted_metadata: Optional[Dict[str, Any]] = None
+    untrusted_metadata: Optional[Dict[str, Any]] = None
     project_id: str
 
 

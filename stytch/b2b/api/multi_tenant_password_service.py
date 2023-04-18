@@ -83,8 +83,8 @@ class MultiTenantPasswordService:
         scrypt_config: None,
         organization_id: str,
         name: str,
-        trusted_metadata: Optional[Dict[str, str]] = None,
-        untrusted_metadata: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> MultitenantpasswordmigrateResponse:
 
         payload: Dict[str, Any] = {
@@ -124,8 +124,8 @@ class MultiTenantPasswordService:
       scrypt_config: None,
       organization_id: str,
       name: str,
-      trusted_metadata: Optional[Dict[str, str]] = None,
-      untrusted_metadata: Optional[Dict[str, str]] = None,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
+      untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> MultitenantpasswordmigrateResponse:
 
         payload: Dict[str, Any] = {
@@ -162,7 +162,7 @@ class MultiTenantPasswordService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantpasswordauthenticateResponse:
 
         payload: Dict[str, Any] = {
@@ -193,7 +193,7 @@ class MultiTenantPasswordService:
       session_token: Optional[str] = None,
       session_duration_minutes: Optional[int] = None,
       session_jwt: Optional[str] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantpasswordauthenticateResponse:
 
         payload: Dict[str, Any] = {
@@ -290,7 +290,7 @@ class MultiTenantPasswordService:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         code_verifier: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantpasswordemailresetResponse:
 
         payload: Dict[str, Any] = {
@@ -322,7 +322,7 @@ class MultiTenantPasswordService:
       session_duration_minutes: Optional[int] = None,
       session_jwt: Optional[str] = None,
       code_verifier: Optional[str] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantpasswordemailresetResponse:
 
         payload: Dict[str, Any] = {
@@ -400,7 +400,7 @@ class MultiTenantPasswordService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
         organization_id: str,
     ) -> MultitenantpasswordexistingpasswordresetResponse:
 
@@ -433,7 +433,7 @@ class MultiTenantPasswordService:
       session_token: Optional[str] = None,
       session_duration_minutes: Optional[int] = None,
       session_jwt: Optional[str] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
       organization_id: str,
     ) -> MultitenantpasswordexistingpasswordresetResponse:
 

@@ -95,7 +95,7 @@ class CryptoWalletService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> CryptowalletsauthenticateResponse:
         payload: Dict[str, Any] = {
             "crypto_wallet_type": crypto_wallet_type,
@@ -129,7 +129,7 @@ class CryptoWalletService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> CryptowalletsauthenticateResponse:
         payload: Dict[str, Any] = {
             "crypto_wallet_type": crypto_wallet_type,

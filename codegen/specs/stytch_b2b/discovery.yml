@@ -23,7 +23,7 @@ methods:
       - name: session_duration_minutes
         arg_type: Optional[int] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
     response_type:
       request_id: str
       member_id: str
@@ -41,7 +41,7 @@ methods:
       - name: session_duration_minutes
         arg_type: Optional[int] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: organization_name
         arg_type: str
       - name: organization_slug
@@ -49,7 +49,7 @@ methods:
       - name: organization_logo_url
         arg_type: str
       - name: trusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: sso_jit_provisioning
         arg_type: Optional[str] = None
       - name: email_allowed_domains

@@ -68,7 +68,7 @@ class MultiTenantSessionService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantsessionsauthenticateResponse:
         payload: Dict[str, Any] = {}
 
@@ -95,7 +95,7 @@ class MultiTenantSessionService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantsessionsauthenticateResponse:
         payload: Dict[str, Any] = {}
 
@@ -173,7 +173,7 @@ class MultiTenantSessionService:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantsessionsexchangeResponse:
         payload: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -203,7 +203,7 @@ class MultiTenantSessionService:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantsessionsexchangeResponse:
         payload: Dict[str, Any] = {
             "organization_id": organization_id,

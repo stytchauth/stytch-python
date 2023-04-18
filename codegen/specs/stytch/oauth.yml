@@ -62,7 +62,7 @@ methods:
       - name: session_jwt
         arg_type: Optional[str] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
     response_type:
       request_id: str
       user_id: str
@@ -128,7 +128,7 @@ methods:
       - name: session_jwt
         arg_type: Optional[str] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: name
         arg_type: null
       - name: nonce
@@ -536,7 +536,7 @@ methods:
       - name: session_jwt
         arg_type: Optional[str] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: code_verifier
         arg_type: Optional[str] = None
     response_type:

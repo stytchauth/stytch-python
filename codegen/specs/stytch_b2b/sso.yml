@@ -61,7 +61,7 @@ methods:
       - name: display_name
         arg_type: str
       - name: attribute_mapping
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: x509_certificate
         arg_type: str
       - name: idp_sso_url
@@ -129,7 +129,7 @@ methods:
       - name: session_duration_minutes
         arg_type: Optional[int] = None
       - name: session_custom_claims
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
     response_type:
       request_id: str
       member_id: str

@@ -115,8 +115,8 @@ class MultiTenantMagicService:
         invite_redirect_url: Optional[str] = None,
         invited_by_member_id: Optional[str] = None,
         name: Optional[str] = None,
-        trusted_metadata: Optional[Dict[str, str]] = None,
-        untrusted_metadata: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
         invite_template_id: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> MultitenantmagiclinksemailinviteResponse:
@@ -156,8 +156,8 @@ class MultiTenantMagicService:
         invite_redirect_url: Optional[str] = None,
         invited_by_member_id: Optional[str] = None,
         name: Optional[str] = None,
-        trusted_metadata: Optional[Dict[str, str]] = None,
-        untrusted_metadata: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
         invite_template_id: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> MultitenantmagiclinksemailinviteResponse:
@@ -197,7 +197,7 @@ class MultiTenantMagicService:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantmagiclinksauthenticateResponse:
         payload: Dict[str, Any] = {
             "magic_links_token": magic_links_token,
@@ -230,7 +230,7 @@ class MultiTenantMagicService:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MultitenantmagiclinksauthenticateResponse:
         payload: Dict[str, Any] = {
             "magic_links_token": magic_links_token,

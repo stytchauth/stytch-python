@@ -179,7 +179,7 @@ class SSOService:
         connection_id: str,
         idp_entity_id: str,
         display_name: str,
-        attribute_mapping: Optional[Dict[str, str]] = None,
+        attribute_mapping: Optional[Dict[str, Any]] = None,
         x509_certificate: str,
         idp_sso_url: str,
         None: None,
@@ -210,7 +210,7 @@ class SSOService:
       connection_id: str,
       idp_entity_id: str,
       display_name: str,
-      attribute_mapping: Optional[Dict[str, str]] = None,
+      attribute_mapping: Optional[Dict[str, Any]] = None,
       x509_certificate: str,
       idp_sso_url: str,
       None: None,
@@ -366,7 +366,7 @@ class SSOService:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> SsoauthenticateResponse:
 
         payload: Dict[str, Any] = {
@@ -396,7 +396,7 @@ class SSOService:
       session_token: Optional[str] = None,
       session_jwt: Optional[str] = None,
       session_duration_minutes: Optional[int] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> SsoauthenticateResponse:
 
         payload: Dict[str, Any] = {

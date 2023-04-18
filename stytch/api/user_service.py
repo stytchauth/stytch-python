@@ -51,8 +51,8 @@ class UserService:
         attributes: Optional[Dict[str, str]] = None,
         phone_number: Optional[str] = None,
         create_user_as_pending: bool,
-        trusted_metadata: Optional[Dict[str, str]] = None,
-        untrusted_metadata: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateuserResponse:
 
         payload: Dict[str, Any] = {
@@ -84,8 +84,8 @@ class UserService:
       attributes: Optional[Dict[str, str]] = None,
       phone_number: Optional[str] = None,
       create_user_as_pending: bool,
-      trusted_metadata: Optional[Dict[str, str]] = None,
-      untrusted_metadata: Optional[Dict[str, str]] = None,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
+      untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateuserResponse:
 
         payload: Dict[str, Any] = {
@@ -234,8 +234,8 @@ class UserService:
         attributes: Optional[Dict[str, str]] = None,
         phone_numbers: None,
         crypto_wallets: None,
-        trusted_metadata: Optional[Dict[str, str]] = None,
-        untrusted_metadata: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateuserResponse:
 
         payload: Dict[str, Any] = {
@@ -270,8 +270,8 @@ class UserService:
       attributes: Optional[Dict[str, str]] = None,
       phone_numbers: None,
       crypto_wallets: None,
-      trusted_metadata: Optional[Dict[str, str]] = None,
-      untrusted_metadata: Optional[Dict[str, str]] = None,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
+      untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateuserResponse:
 
         payload: Dict[str, Any] = {

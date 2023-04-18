@@ -42,9 +42,9 @@ class PasswordService:
         email: str,
         password: str,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
-        trusted_metadata: Optional[Dict[str, str]] = None,
-        untrusted_metadata: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
         name: None,
     ) -> PasswordscreateResponse:
 
@@ -74,9 +74,9 @@ class PasswordService:
       email: str,
       password: str,
       session_duration_minutes: Optional[int] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
-      trusted_metadata: Optional[Dict[str, str]] = None,
-      untrusted_metadata: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
+      untrusted_metadata: Optional[Dict[str, Any]] = None,
       name: None,
     ) -> PasswordscreateResponse:
 
@@ -108,7 +108,7 @@ class PasswordService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> PasswordsauthenticateResponse:
 
         payload: Dict[str, Any] = {
@@ -137,7 +137,7 @@ class PasswordService:
       session_token: Optional[str] = None,
       session_duration_minutes: Optional[int] = None,
       session_jwt: Optional[str] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> PasswordsauthenticateResponse:
 
         payload: Dict[str, Any] = {
@@ -271,7 +271,7 @@ class PasswordService:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         code_verifier: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
         attributes: Optional[Dict[str, str]] = None,
         options: Optional[Dict[str, str]] = None,
     ) -> PasswordsemailresetResponse:
@@ -309,7 +309,7 @@ class PasswordService:
       session_duration_minutes: Optional[int] = None,
       session_jwt: Optional[str] = None,
       code_verifier: Optional[str] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
       attributes: Optional[Dict[str, str]] = None,
       options: Optional[Dict[str, str]] = None,
     ) -> PasswordsemailresetResponse:
@@ -347,7 +347,7 @@ class PasswordService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> PasswordsexistingpasswordresetResponse:
 
         payload: Dict[str, Any] = {
@@ -378,7 +378,7 @@ class PasswordService:
       session_token: Optional[str] = None,
       session_duration_minutes: Optional[int] = None,
       session_jwt: Optional[str] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> PasswordsexistingpasswordresetResponse:
 
         payload: Dict[str, Any] = {
@@ -454,8 +454,8 @@ class PasswordService:
         scrypt_config: None,
         first_name: str,
         last_name: str,
-        trusted_metadata: Optional[Dict[str, str]] = None,
-        untrusted_metadata: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
+        untrusted_metadata: Optional[Dict[str, Any]] = None,
         set_email_verified: bool,
     ) -> PasswordsmigrateResponse:
 
@@ -497,8 +497,8 @@ class PasswordService:
       scrypt_config: None,
       first_name: str,
       last_name: str,
-      trusted_metadata: Optional[Dict[str, str]] = None,
-      untrusted_metadata: Optional[Dict[str, str]] = None,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
+      untrusted_metadata: Optional[Dict[str, Any]] = None,
       set_email_verified: bool,
     ) -> PasswordsmigrateResponse:
 

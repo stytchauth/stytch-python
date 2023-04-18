@@ -81,7 +81,7 @@ class DiscoveryService:
         intermediate_session_token: str,
         organization_id: str,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> DiscoveryintermediatesessionexchangeResponse:
 
         payload: Dict[str, Any] = {
@@ -104,7 +104,7 @@ class DiscoveryService:
       intermediate_session_token: str,
       organization_id: str,
       session_duration_minutes: Optional[int] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> DiscoveryintermediatesessionexchangeResponse:
 
         payload: Dict[str, Any] = {
@@ -126,11 +126,11 @@ class DiscoveryService:
         self,
         intermediate_session_token: str,
         session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
         organization_name: str,
         organization_slug: str,
         organization_logo_url: str,
-        trusted_metadata: Optional[Dict[str, str]] = None,
+        trusted_metadata: Optional[Dict[str, Any]] = None,
         sso_jit_provisioning: Optional[str] = None,
         email_allowed_domains: List[str],
         email_jit_provisioning: Optional[str] = None,
@@ -172,11 +172,11 @@ class DiscoveryService:
       self,
       intermediate_session_token: str,
       session_duration_minutes: Optional[int] = None,
-      session_custom_claims: Optional[Dict[str, str]] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
       organization_name: str,
       organization_slug: str,
       organization_logo_url: str,
-      trusted_metadata: Optional[Dict[str, str]] = None,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
       sso_jit_provisioning: Optional[str] = None,
       email_allowed_domains: List[str],
       email_jit_provisioning: Optional[str] = None,

@@ -9,7 +9,7 @@ methods:
       - name: organization_logo_url
         arg_type: str
       - name: trusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: sso_jit_provisioning
         arg_type: Optional[str] = None
       - name: email_allowed_domains
@@ -47,7 +47,7 @@ methods:
       - name: organization_logo_url
         arg_type: Optional[str] = None
       - name: trusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: sso_default_connection_id
         arg_type: Optional[str] = None
       - name: sso_jit_provisioning
@@ -87,9 +87,9 @@ methods:
       - name: name
         arg_type: Optional[str] = None
       - name: trusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: untrusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: create_member_as_pending
         arg_type: bool
       - name: is_breakglass
@@ -110,9 +110,9 @@ methods:
       - name: name
         arg_type: Optional[str] = None
       - name: trusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: untrusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: is_breakglass
         arg_type: Optional[bool] = None
     response_type:

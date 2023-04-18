@@ -13,9 +13,9 @@ methods:
       - name: create_user_as_pending
         arg_type: bool
       - name: trusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: untrusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
     response_type:
       request_id: str
       user_id: str
@@ -58,8 +58,8 @@ methods:
       crypto_wallets: null
       password: null
       biometric_registrations: null
-      trusted_metadata: Optional[Dict[str, str]] = None
-      untrusted_metadata: Optional[Dict[str, str]] = None
+      trusted_metadata: Optional[Dict[str, Any]] = None
+      untrusted_metadata: Optional[Dict[str, Any]] = None
       project_id: str
     method: get
     api_path: /v1/users/{user_id}
@@ -95,9 +95,9 @@ methods:
       - name: crypto_wallets
         arg_type: null
       - name: trusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
       - name: untrusted_metadata
-        arg_type: Optional[Dict[str, str]] = None
+        arg_type: Optional[Dict[str, Any]] = None
     response_type:
       request_id: str
       user_id: str

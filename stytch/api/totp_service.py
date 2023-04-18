@@ -72,7 +72,7 @@ class TOTPService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> TotpsauthenticateResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
@@ -100,7 +100,7 @@ class TOTPService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> TotpsauthenticateResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
@@ -156,7 +156,7 @@ class TOTPService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> TotpsrecoverResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
@@ -184,7 +184,7 @@ class TOTPService:
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, str]] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> TotpsrecoverResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
