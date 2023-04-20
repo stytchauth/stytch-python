@@ -17,6 +17,7 @@ class AuthenticateStartResponse(ResponseBase):
     - `user_created`: Whether or not a new user was created as part of this request
     """  # noqa
 
+    request_id: str
     user_id: str
     challenge: str
     user_created: bool
@@ -38,8 +39,9 @@ class AuthenticateResponse(ResponseBase):
     - `session`: An optional `StytchSession`
     """  # noqa
 
+    request_id: str
     user_id: str
-    user: User
-    session_jwt: str
     session_token: str
     session: Optional[StytchSession]
+    session_jwt: str
+    user: User

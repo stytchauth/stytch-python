@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
 
+from typing import Optional
 
-from stytch.core.models import ResponseBase
+from stytch.core.models import ResponseBase, StytchSession, User
 
 
-class ResetStartResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/password-email-reset-start)"""  # noqa
-
+class PasswordssessionresetResponse(ResponseBase):
+    request_id: str
     user_id: str
-    email_id: str
-
-
-class ResetResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/password-email-reset)"""  # noqa
-
-    user_id: str
+    session: Optional[StytchSession]
+    user: User

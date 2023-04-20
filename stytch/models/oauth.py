@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 
-from typing import Any, Dict, Optional
 
 from stytch.core.models import OAuthSession, ResponseBase, User
+
+
+class AttachResponse(ResponseBase):
+    """[Stytch docs](https://stytch.com/docs/api/oauth-overview)"""  # noqa
+
+    request_id: str
+    oauth_attach_token: str
 
 
 class AuthenticateResponse(ResponseBase):
@@ -35,19 +41,14 @@ class AuthenticateResponse(ResponseBase):
     - `session_jwt`: The JSON Web Token (JWT) for a given Stytch session. Read more about JWTs in our [session management guide](https://stytch.com/docs/sessions#using-sessions).
     """  # noqa
 
+    request_id: str
     user_id: str
-    user: Optional[User]
-    oauth_user_registration_id: str
     provider_subject: str
     provider_type: str
-    provider_values: Optional[Dict[str, Any]]
-    reset_sessions: bool
-    session: Optional[OAuthSession]
-    session_jwt: str
+    session: OAuthSession
     session_token: str
-
-
-class AttachResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/oauth-overview)"""  # noqa
-
-    oauth_attach_token: str
+    session_jwt: str
+    provider_values: TODO
+    user: User
+    reset_sessions: bool
+    oauth_user_registration_id: str

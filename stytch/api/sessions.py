@@ -4,20 +4,11 @@
 # or your changes may be overwritten later!
 # !!!
 
-import time
-from typing import Any, Dict, Optional
-
-import jwt
+from typing import Any, Dict
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.core.models import StytchSession
-from stytch.models.sessions import (
-    AuthenticateResponse,
-    GetResponse,
-    JwksResponse,
-    RevokeResponse,
-)
+from stytch.models.sessions import MultitenantsessionsjwksResponse
 
 
 class Sessions:
@@ -35,321 +26,34 @@ class Sessions:
     def sub_url(self) -> str:
         return "sessions"
 
-    def get(
-        self,
-        user_id: str,
-    ) -> GetResponse:
-        """[Stytch docs](https://stytch.com/docs/api/session-get)
-
-        List all active sessions for a given user ID. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-        """  # noqa
-
-        payload: Dict[str, Any] = {
-            "user_id": user_id,
-        }
-
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
-
-        res = self.sync_client.get(url, params=payload)
-        return GetResponse.from_json(res.response.status_code, res.json)
-
-    async def get_async(
-        self,
-        user_id: str,
-    ) -> GetResponse:
-        """[Stytch docs](https://stytch.com/docs/api/session-get)
-
-        List all active sessions for a given user ID. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-        """  # noqa
-
-        payload: Dict[str, Any] = {
-            "user_id": user_id,
-        }
-
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
-
-        res = await self.async_client.get(url, params=payload)
-        return GetResponse.from_json(res.response.status, res.json)
-
-    def authenticate(
-        self,
-        session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
-        session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/session-auth)
-
-        Authenticate a session token and retrieve associated session data. If session_duration_minutes is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`
-
-        This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included you will receive a `too_many_session_arguments` error.
-        """  # noqa
-
-        payload: Dict[str, Any] = {}
-
-        if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
-        if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
-        if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(res.response.status_code, res.json)
-
-    async def authenticate_async(
-        self,
-        session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
-        session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/session-auth)
-
-        Authenticate a session token and retrieve associated session data. If session_duration_minutes is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`
-
-        This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included you will receive a `too_many_session_arguments` error.
-        """  # noqa
-
-        payload: Dict[str, Any] = {}
-
-        if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
-        if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
-        if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(res.response.status, res.json)
-
-    # MANUAL(authenticate_jwt)
-    def authenticate_jwt(
-        self,
-        session_jwt: str,
-        max_token_age_seconds: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        """Parse a JWT and verify the signature, preferring local verification
-        over remote.
-
-        If max_token_age_seconds is set, remote verification will be forced if the
-        JWT was issued at (based on the "iat" claim) more than that many seconds ago.
-
-        To force remote validation for all tokens, set max_token_age_seconds to
-        zero or use the authenticate method instead.
-
-        NOTE: The response object will only have the user field set (ie, not None), if
-        authentication is done remotely. Local authentication will *not* set the user
-        field of the response object. In v7, it is planned for this method to directly
-        return a StytchSession object to avoid this "partially set response" confusion.
-        """
-        # Return the local_result if available, otherwise call the Stytch API
-        return self.authenticate_jwt_local(
-            session_jwt=session_jwt,
-            max_token_age_seconds=max_token_age_seconds,
-        ) or self.authenticate(
-            session_custom_claims=session_custom_claims, session_jwt=session_jwt
-        )
-
-    async def authenticate_jwt_async(
-        self,
-        session_jwt: str,
-        max_token_age_seconds: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        # Return the local_result if available, otherwise call the Stytch API
-        return self.authenticate_jwt_local(
-            session_jwt=session_jwt,
-            max_token_age_seconds=max_token_age_seconds,
-        ) or await self.authenticate_async(
-            session_custom_claims=session_custom_claims, session_jwt=session_jwt
-        )
-
-    # ENDMANUAL(authenticate_jwt)
-
-    # MANUAL(authenticate_jwt_local)
-    def get_jwks_client(self) -> jwt.PyJWKClient:
-        project_id = self.sync_client.project_id
-        jwks_url = self.api_base.route_with_sub_url("sessions/jwks", project_id)
-        return jwt.PyJWKClient(jwks_url)
-
-    def authenticate_jwt_local(
-        self,
-        session_jwt: str,
-        max_token_age_seconds: Optional[int] = None,
-        leeway: int = 0,
-    ) -> Optional[AuthenticateResponse]:
-        """Parse a JWT and verify the signature locally
-        (without calling /authenticate in the API).
-
-        If max_token_age_seconds is set, this will return an error if the JWT was issued
-        (based on the "iat" claim) more than maxTokenAge seconds ago.
-
-        If max_token_age_seconds is explicitly set to zero, all tokens will be
-        considered too old, even if they are otherwise valid.
-
-        The value for leeway is the maximum allowable difference in seconds when
-        comparing timestamps. It defaults to zero.
-
-        NOTE: The response object will *never* have the user field set (ie, not None).
-        Local authentication will *not* set the user field of the response object.
-        In v7, it is planned for this method to directly return a StytchSession object
-        to avoid this "partially set response" confusion.
-        """
-        project_id = self.sync_client.project_id
-        jwt_audience = project_id
-        jwt_issuer = "stytch.com/{}".format(project_id)
-        _session_claim = "https://stytch.com/session"
-
-        jwks_client = self.get_jwks_client()
-        now = time.time()
-
-        signing_key = jwks_client.get_signing_key_from_jwt(session_jwt)
-
-        # NOTE: The max_token_age_seconds value is applied after decoding.
-        payload = jwt.decode(
-            session_jwt,
-            signing_key.key,
-            algorithms=["RS256"],
-            options={
-                "require": ["aud", "iss", "exp", "iat", "nbf"],
-                "verify_signature": True,
-                "verify_aud": True,
-                "verify_iss": True,
-                "verify_exp": True,
-                "verify_iat": True,
-                "verify_nbf": True,
-            },
-            audience=jwt_audience,
-            issuer=jwt_issuer,
-            leeway=leeway,
-        )
-
-        if max_token_age_seconds is not None:
-            iat = payload["iat"]
-            if now - iat >= max_token_age_seconds:
-                # JWT was issued too long ago, don't verify
-                return None
-
-        # Unpack the session claim to match the detached session format.
-        claim = payload[_session_claim]
-
-        # For JWTs that include it, prefer the inner expires_at claim.
-        expires_at = claim.get("expires_at", payload["exp"])
-
-        session = StytchSession(
-            attributes=claim["attributes"],
-            authentication_factors=claim["authentication_factors"],
-            expires_at=expires_at,
-            last_accessed_at=claim["last_accessed_at"],
-            session_id=claim["id"],
-            started_at=claim["started_at"],
-            user_id=payload["sub"],
-            custom_claims=None,
-        )
-
-        return AuthenticateResponse(
-            status_code=200,
-            request_id="local-jwt-verification",
-            session=session,
-            session_jwt=session_jwt,
-            session_token="",
-            user=None,
-        )
-
-    # ENDMANUAL(authenticate_jwt_local)
-
-    def revoke(
-        self,
-        session_id: Optional[str] = None,
-        session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
-    ) -> RevokeResponse:
-        """[Stytch docs](https://stytch.com/docs/api/session-revoke)
-
-        Revoke a session, immediately invalidating all of its session tokens. You can revoke a session in three ways: using its ID, or using one of its session tokens, or one of its JWTs. This endpoint requires exactly one of those to be included in the request. It will return an error if multiple are present.
-        """  # noqa
-
-        payload: Dict[str, Any] = {}
-
-        if session_id is not None:
-            payload["session_id"] = session_id
-        if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
-
-        res = self.sync_client.post(url, json=payload)
-        return RevokeResponse.from_json(res.response.status_code, res.json)
-
-    async def revoke_async(
-        self,
-        session_id: Optional[str] = None,
-        session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
-    ) -> RevokeResponse:
-        """[Stytch docs](https://stytch.com/docs/api/session-revoke)
-
-        Revoke a session, immediately invalidating all of its session tokens. You can revoke a session in three ways: using its ID, or using one of its session tokens, or one of its JWTs. This endpoint requires exactly one of those to be included in the request. It will return an error if multiple are present.
-        """  # noqa
-
-        payload: Dict[str, Any] = {}
-
-        if session_id is not None:
-            payload["session_id"] = session_id
-        if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
-
-        res = await self.async_client.post(url, json=payload)
-        return RevokeResponse.from_json(res.response.status, res.json)
-
-    def jwks(
+    def MultiTenantSessionsJwks(
         self,
         project_id: str,
-    ) -> JwksResponse:
-        """[Stytch docs](https://stytch.com/docs/api/jwks-get)
-
-        Get the JSON Web Key Set (JWKS) for a project
-        """  # noqa
-
+    ) -> MultitenantsessionsjwksResponse:
         payload: Dict[str, Any] = {
             "project_id": project_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/b2b/sessions/jwks/{project_id}"
+        )
 
         res = self.sync_client.get(url, params=payload)
-        return JwksResponse.from_json(res.response.status_code, res.json)
+        return MultitenantsessionsjwksResponse.from_json(
+            res.response.status_code, res.json
+        )
 
-    async def jwks_async(
+    async def MultiTenantSessionsJwks_async(
         self,
         project_id: str,
-    ) -> JwksResponse:
-        """[Stytch docs](https://stytch.com/docs/api/jwks-get)
-
-        Get the JSON Web Key Set (JWKS) for a project
-        """  # noqa
-
+    ) -> MultitenantsessionsjwksResponse:
         payload: Dict[str, Any] = {
             "project_id": project_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, f"jwks/{project_id}")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/b2b/sessions/jwks/{project_id}"
+        )
 
         res = await self.async_client.get(url, params=payload)
-        return JwksResponse.from_json(res.response.status, res.json)
+        return MultitenantsessionsjwksResponse.from_json(res.response.status, res.json)

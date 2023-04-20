@@ -9,10 +9,10 @@ from typing import Any, Dict, Optional
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.models.webauthn import (
-    AuthenticateResponse,
-    AuthenticateStartResponse,
-    RegisterResponse,
-    RegisterStartResponse,
+    WebauthnauthenticateResponse,
+    WebauthnauthenticatestartResponse,
+    WebauthnregisterResponse,
+    WebauthnregisterstartResponse,
 )
 
 
@@ -31,198 +31,182 @@ class WebAuthn:
     def sub_url(self) -> str:
         return "webauthn"
 
-    def register_start(
+    def WebAuthnRegisterStart(
         self,
         user_id: str,
         domain: str,
-        user_agent: Optional[str] = None,
+        user_agent: str,
         authenticator_type: Optional[str] = None,
-    ) -> RegisterStartResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-register-start)
-
-        Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [`public_key_credential_creation_options`](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the create()wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
-        """  # noqa
-
+    ) -> WebauthnregisterstartResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
+            "user_agent": user_agent,
         }
 
-        if user_agent is not None:
-            payload["user_agent"] = user_agent
         if authenticator_type is not None:
             payload["authenticator_type"] = authenticator_type
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/webauthn/register/start"
+        )
 
         res = self.sync_client.post(url, json=payload)
-        return RegisterStartResponse.from_json(res.response.status_code, res.json)
+        return WebauthnregisterstartResponse.from_json(
+            res.response.status_code, res.json
+        )
 
-    async def register_start_async(
+    async def WebAuthnRegisterStart_async(
         self,
         user_id: str,
         domain: str,
-        user_agent: Optional[str] = None,
+        user_agent: str,
         authenticator_type: Optional[str] = None,
-    ) -> RegisterStartResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-register-start)
-
-        Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [`public_key_credential_creation_options`](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the create()wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
-        """  # noqa
-
+    ) -> WebauthnregisterstartResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
+            "user_agent": user_agent,
         }
 
-        if user_agent is not None:
-            payload["user_agent"] = user_agent
         if authenticator_type is not None:
             payload["authenticator_type"] = authenticator_type
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "register/start")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/webauthn/register/start"
+        )
 
         res = await self.async_client.post(url, json=payload)
-        return RegisterStartResponse.from_json(res.response.status, res.json)
+        return WebauthnregisterstartResponse.from_json(res.response.status, res.json)
 
-    def register(
+    def WebAuthnRegister(
         self,
         user_id: str,
         public_key_credential: str,
-    ) -> RegisterResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-register)
-
-        Complete the creation of a WebAuthn registration by passing the response from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter. If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
-        """  # noqa
-
+    ) -> WebauthnregisterResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "register")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/webauthn/register")
 
         res = self.sync_client.post(url, json=payload)
-        return RegisterResponse.from_json(res.response.status_code, res.json)
+        return WebauthnregisterResponse.from_json(res.response.status_code, res.json)
 
-    async def register_async(
+    async def WebAuthnRegister_async(
         self,
         user_id: str,
         public_key_credential: str,
-    ) -> RegisterResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-register)
-
-        Complete the creation of a WebAuthn registration by passing the response from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter. If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
-        """  # noqa
-
+    ) -> WebauthnregisterResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "register")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/webauthn/register")
 
         res = await self.async_client.post(url, json=payload)
-        return RegisterResponse.from_json(res.response.status, res.json)
+        return WebauthnregisterResponse.from_json(res.response.status, res.json)
 
-    def authenticate_start(
+    def WebAuthnAuthenticateStart(
         self,
         user_id: str,
         domain: str,
-    ) -> AuthenticateStartResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate-start)
-
-        Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
-        """  # noqa
-
+    ) -> WebauthnauthenticatestartResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/webauthn/authenticate/start"
+        )
 
         res = self.sync_client.post(url, json=payload)
-        return AuthenticateStartResponse.from_json(res.response.status_code, res.json)
+        return WebauthnauthenticatestartResponse.from_json(
+            res.response.status_code, res.json
+        )
 
-    async def authenticate_start_async(
+    async def WebAuthnAuthenticateStart_async(
         self,
         user_id: str,
         domain: str,
-    ) -> AuthenticateStartResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate-start)
-
-        Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the [webauthn-json](https://github.com/github/webauthn-json) library. If you are not using the webauthn-json library, the `public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
-        """  # noqa
-
+    ) -> WebauthnauthenticatestartResponse:
         payload: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate/start")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/webauthn/authenticate/start"
+        )
 
         res = await self.async_client.post(url, json=payload)
-        return AuthenticateStartResponse.from_json(res.response.status, res.json)
+        return WebauthnauthenticatestartResponse.from_json(
+            res.response.status, res.json
+        )
 
-    def authenticate(
+    def WebAuthnAuthenticate(
         self,
         public_key_credential: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate)
-
-        Complete the authentication of a WebAuthn registration by passing the response from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint. If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
-        """  # noqa
-
+    ) -> WebauthnauthenticateResponse:
         payload: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
 
         if session_token is not None:
             payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/webauthn/authenticate"
+        )
 
         res = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(res.response.status_code, res.json)
+        return WebauthnauthenticateResponse.from_json(
+            res.response.status_code, res.json
+        )
 
-    async def authenticate_async(
+    async def WebAuthnAuthenticate_async(
         self,
         public_key_credential: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/webauthn-authenticate)
-
-        Complete the authentication of a WebAuthn registration by passing the response from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint. If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [`navigator.credentials.get()`](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
-        """  # noqa
-
+    ) -> WebauthnauthenticateResponse:
         payload: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
 
         if session_token is not None:
             payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+        url = self.api_base.route_with_sub_url(
+            self.sub_url, "/v1/webauthn/authenticate"
+        )
 
         res = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(res.response.status, res.json)
+        return WebauthnauthenticateResponse.from_json(res.response.status, res.json)

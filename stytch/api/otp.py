@@ -4,108 +4,614 @@
 # or your changes may be overwritten later!
 # !!!
 
-from typing import Any, Dict, Optional
+import time
+from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Union
 
-from stytch.api.otp_email import Email
-from stytch.api.otp_sms import SMS
-from stytch.api.otp_whatsapp import Whatsapp
+import jwt
+import pydantic
 from stytch.core.api_base import ApiBase
+from stytch.core.b2b.models import B2BStytchSession, Member, Organization
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.models.otp import AuthenticateResponse
+from stytch.core.models import (
+    Name,
+    SearchQuery,
+    SearchResultsMetadata,
+    StytchSession,
+    User,
+)
+from stytch.models.otp import (
+    OtpsauthenticateResponse,
+    OtpsemailloginorcreateResponse,
+    OtpsemailsendResponse,
+    OtpssmsloginorcreateResponse,
+    OtpssmssendResponse,
+    OtpswhatsapploginorcreateResponse,
+    OtpswhatsappsendResponse,
+)
 
 
 class OTP:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+      self,
+      api_base: ApiBase,
+      sync_client: SyncClient,
+      async_client: AsyncClient,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.email = Email(api_base, sync_client, async_client)
-        self.sms = SMS(api_base, sync_client, async_client)
-        self.whatsapp = Whatsapp(api_base, sync_client, async_client)
 
     @property
     def sub_url(self) -> str:
-        return "otps"
+        return "otp"
 
-    def authenticate(
+    def OTPsSMSSend(
         self,
-        method_id: str,
-        code: str,
+        phone_number: str,
+        expiration_minutes: Optional[int] = None,
         attributes: Optional[Dict[str, str]] = None,
-        options: Optional[Dict[str, str]] = None,
+        locale: Optional[str] = None,
+        user_id: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-        session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/authenticate-otp)
-
-        Authenticate a user given a method ID and a code. This endpoint verifies that the code is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied. A given `method_id` may only have a single active OTP code at any given time, if a user requests another OTP code before the first one has expired, the first one will be invalidated.
-        """  # noqa
+        template_id: Optional[str] = None,
+        template_values: Optional[Dict[str, Any]] = None,
+    ) -> OtpssmssendResponse:
 
         payload: Dict[str, Any] = {
-            "method_id": method_id,
-            "code": code,
+            "phone_number": phone_number,
+
+            "user_id": user_id,
+
         }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
 
         if attributes is not None:
             payload["attributes"] = attributes
-        if options is not None:
-            payload["options"] = options
+
+        if locale is not None:
+            payload["locale"] = locale
+
         if session_token is not None:
             payload["session_token"] = session_token
+
         if session_jwt is not None:
             payload["session_jwt"] = session_jwt
-        if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
-        if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+        if template_id is not None:
+            payload["template_id"] = template_id
+
+        if template_values is not None:
+            payload["template_values"] = template_values
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/sms/send")
 
         res = self.sync_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(res.response.status_code, res.json)
+        return OtpssmssendResponse.from_json(res.response.status_code, res.json)
 
-    async def authenticate_async(
+    async def OTPsSMSSend_async(
+      self,
+      phone_number: str,
+      expiration_minutes: Optional[int] = None,
+      attributes: Optional[Dict[str, str]] = None,
+      locale: Optional[str] = None,
+      user_id: str,
+      session_token: Optional[str] = None,
+      session_jwt: Optional[str] = None,
+      template_id: Optional[str] = None,
+      template_values: Optional[Dict[str, Any]] = None,
+    ) -> OtpssmssendResponse:
+
+        payload: Dict[str, Any] = {
+            "phone_number": phone_number,
+
+            "user_id": user_id,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if session_token is not None:
+            payload["session_token"] = session_token
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+        if template_id is not None:
+            payload["template_id"] = template_id
+
+        if template_values is not None:
+            payload["template_values"] = template_values
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/sms/send")
+
+        res = await self.async_client.post(url, json=payload)
+        return OtpssmssendResponse.from_json(res.response.status, res.json)
+
+    def OTPsSMSLoginOrCreate(
+        self,
+        phone_number: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        create_user_as_pending: bool,
+        locale: Optional[str] = None,
+        template_id: Optional[str] = None,
+        template_values: Optional[Dict[str, Any]] = None,
+    ) -> OtpssmsloginorcreateResponse:
+
+        payload: Dict[str, Any] = {
+            "phone_number": phone_number,
+
+            "create_user_as_pending": create_user_as_pending,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if template_id is not None:
+            payload["template_id"] = template_id
+
+        if template_values is not None:
+            payload["template_values"] = template_values
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/sms/login_or_create")
+
+        res = self.sync_client.post(url, json=payload)
+        return OtpssmsloginorcreateResponse.from_json(res.response.status_code, res.json)
+
+    async def OTPsSMSLoginOrCreate_async(
+      self,
+      phone_number: str,
+      expiration_minutes: Optional[int] = None,
+      attributes: Optional[Dict[str, str]] = None,
+      create_user_as_pending: bool,
+      locale: Optional[str] = None,
+      template_id: Optional[str] = None,
+      template_values: Optional[Dict[str, Any]] = None,
+    ) -> OtpssmsloginorcreateResponse:
+
+        payload: Dict[str, Any] = {
+            "phone_number": phone_number,
+
+            "create_user_as_pending": create_user_as_pending,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if template_id is not None:
+            payload["template_id"] = template_id
+
+        if template_values is not None:
+            payload["template_values"] = template_values
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/sms/login_or_create")
+
+        res = await self.async_client.post(url, json=payload)
+        return OtpssmsloginorcreateResponse.from_json(res.response.status, res.json)
+
+    def OTPsWhatsAppSend(
+        self,
+        phone_number: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        locale: Optional[str] = None,
+        user_id: str,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> OtpswhatsappsendResponse:
+
+        payload: Dict[str, Any] = {
+            "phone_number": phone_number,
+
+            "user_id": user_id,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if session_token is not None:
+            payload["session_token"] = session_token
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/whatsapp/send")
+
+        res = self.sync_client.post(url, json=payload)
+        return OtpswhatsappsendResponse.from_json(res.response.status_code, res.json)
+
+    async def OTPsWhatsAppSend_async(
+      self,
+      phone_number: str,
+      expiration_minutes: Optional[int] = None,
+      attributes: Optional[Dict[str, str]] = None,
+      locale: Optional[str] = None,
+      user_id: str,
+      session_token: Optional[str] = None,
+      session_jwt: Optional[str] = None,
+    ) -> OtpswhatsappsendResponse:
+
+        payload: Dict[str, Any] = {
+            "phone_number": phone_number,
+
+            "user_id": user_id,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if session_token is not None:
+            payload["session_token"] = session_token
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/whatsapp/send")
+
+        res = await self.async_client.post(url, json=payload)
+        return OtpswhatsappsendResponse.from_json(res.response.status, res.json)
+
+    def OTPsWhatsAppLoginOrCreate(
+        self,
+        phone_number: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        create_user_as_pending: bool,
+        locale: Optional[str] = None,
+    ) -> OtpswhatsapploginorcreateResponse:
+
+        payload: Dict[str, Any] = {
+            "phone_number": phone_number,
+
+            "create_user_as_pending": create_user_as_pending,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/whatsapp/login_or_create")
+
+        res = self.sync_client.post(url, json=payload)
+        return OtpswhatsapploginorcreateResponse.from_json(res.response.status_code, res.json)
+
+    async def OTPsWhatsAppLoginOrCreate_async(
+      self,
+      phone_number: str,
+      expiration_minutes: Optional[int] = None,
+      attributes: Optional[Dict[str, str]] = None,
+      create_user_as_pending: bool,
+      locale: Optional[str] = None,
+    ) -> OtpswhatsapploginorcreateResponse:
+
+        payload: Dict[str, Any] = {
+            "phone_number": phone_number,
+
+            "create_user_as_pending": create_user_as_pending,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/whatsapp/login_or_create")
+
+        res = await self.async_client.post(url, json=payload)
+        return OtpswhatsapploginorcreateResponse.from_json(res.response.status, res.json)
+
+    def OTPsEmailSend(
+        self,
+        email: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        locale: Optional[str] = None,
+        user_id: str,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        signup_template_id: Optional[str] = None,
+    ) -> OtpsemailsendResponse:
+
+        payload: Dict[str, Any] = {
+            "email": email,
+
+            "user_id": user_id,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if session_token is not None:
+            payload["session_token"] = session_token
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/email/send")
+
+        res = self.sync_client.post(url, json=payload)
+        return OtpsemailsendResponse.from_json(res.response.status_code, res.json)
+
+    async def OTPsEmailSend_async(
+      self,
+      email: str,
+      expiration_minutes: Optional[int] = None,
+      attributes: Optional[Dict[str, str]] = None,
+      locale: Optional[str] = None,
+      user_id: str,
+      session_token: Optional[str] = None,
+      session_jwt: Optional[str] = None,
+      login_template_id: Optional[str] = None,
+      signup_template_id: Optional[str] = None,
+    ) -> OtpsemailsendResponse:
+
+        payload: Dict[str, Any] = {
+            "email": email,
+
+            "user_id": user_id,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if session_token is not None:
+            payload["session_token"] = session_token
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/email/send")
+
+        res = await self.async_client.post(url, json=payload)
+        return OtpsemailsendResponse.from_json(res.response.status, res.json)
+
+    def OTPsEmailLoginOrCreate(
+        self,
+        email: str,
+        expiration_minutes: Optional[int] = None,
+        attributes: Optional[Dict[str, str]] = None,
+        create_user_as_pending: bool,
+        locale: Optional[str] = None,
+        login_template_id: Optional[str] = None,
+        signup_template_id: Optional[str] = None,
+    ) -> OtpsemailloginorcreateResponse:
+
+        payload: Dict[str, Any] = {
+            "email": email,
+
+            "create_user_as_pending": create_user_as_pending,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/email/login_or_create")
+
+        res = self.sync_client.post(url, json=payload)
+        return OtpsemailloginorcreateResponse.from_json(res.response.status_code, res.json)
+
+    async def OTPsEmailLoginOrCreate_async(
+      self,
+      email: str,
+      expiration_minutes: Optional[int] = None,
+      attributes: Optional[Dict[str, str]] = None,
+      create_user_as_pending: bool,
+      locale: Optional[str] = None,
+      login_template_id: Optional[str] = None,
+      signup_template_id: Optional[str] = None,
+    ) -> OtpsemailloginorcreateResponse:
+
+        payload: Dict[str, Any] = {
+            "email": email,
+
+            "create_user_as_pending": create_user_as_pending,
+
+        }
+
+        if expiration_minutes is not None:
+            payload["expiration_minutes"] = expiration_minutes
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if locale is not None:
+            payload["locale"] = locale
+
+        if login_template_id is not None:
+            payload["login_template_id"] = login_template_id
+
+        if signup_template_id is not None:
+            payload["signup_template_id"] = signup_template_id
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/email/login_or_create")
+
+        res = await self.async_client.post(url, json=payload)
+        return OtpsemailloginorcreateResponse.from_json(res.response.status, res.json)
+
+    def OTPsAuthenticate(
         self,
         method_id: str,
         code: str,
         attributes: Optional[Dict[str, str]] = None,
         options: Optional[Dict[str, str]] = None,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> AuthenticateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/authenticate-otp)
-
-        Authenticate a user given a method ID and a code. This endpoint verifies that the code is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied. A given `method_id` may only have a single active OTP code at any given time, if a user requests another OTP code before the first one has expired, the first one will be invalidated.
-        """  # noqa
+    ) -> OtpsauthenticateResponse:
 
         payload: Dict[str, Any] = {
             "method_id": method_id,
+
             "code": code,
+
         }
 
         if attributes is not None:
             payload["attributes"] = attributes
+
         if options is not None:
             payload["options"] = options
+
         if session_token is not None:
             payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/authenticate")
+
+        res = self.sync_client.post(url, json=payload)
+        return OtpsauthenticateResponse.from_json(res.response.status_code, res.json)
+
+    async def OTPsAuthenticate_async(
+      self,
+      method_id: str,
+      code: str,
+      attributes: Optional[Dict[str, str]] = None,
+      options: Optional[Dict[str, str]] = None,
+      session_token: Optional[str] = None,
+      session_duration_minutes: Optional[int] = None,
+      session_jwt: Optional[str] = None,
+      session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> OtpsauthenticateResponse:
+
+        payload: Dict[str, Any] = {
+            "method_id": method_id,
+
+            "code": code,
+
+        }
+
+        if attributes is not None:
+            payload["attributes"] = attributes
+
+        if options is not None:
+            payload["options"] = options
+
+        if session_token is not None:
+            payload["session_token"] = session_token
+
+        if session_duration_minutes is not None:
+            payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
+        if session_custom_claims is not None:
+            payload["session_custom_claims"] = session_custom_claims
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/otps/authenticate")
 
         res = await self.async_client.post(url, json=payload)
-        return AuthenticateResponse.from_json(res.response.status, res.json)
+        return OtpsauthenticateResponse.from_json(res.response.status, res.json)
+

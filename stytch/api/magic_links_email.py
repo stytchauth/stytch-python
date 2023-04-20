@@ -7,7 +7,6 @@
 from typing import Any, Dict, Optional, Union
 
 import pydantic
-
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.core.models import Name

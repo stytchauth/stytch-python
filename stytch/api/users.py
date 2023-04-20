@@ -4,37 +4,46 @@
 # or your changes may be overwritten later!
 # !!!
 
+import time
 from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Union
 
+import jwt
 import pydantic
-
 from stytch.core.api_base import ApiBase
+from stytch.core.b2b.models import B2BStytchSession, Member, Organization
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.core.models import Name, SearchQuery
+from stytch.core.models import (
+    Name,
+    SearchQuery,
+    SearchResultsMetadata,
+    StytchSession,
+    User,
+)
 from stytch.models.users import (
     CreateResponse,
-    DeleteBiometricRegistrationResponse,
-    DeleteCryptoWalletResponse,
     DeleteEmailResponse,
     DeleteOauthUserRegistrationResponse,
-    DeletePasswordResponse,
     DeletePhoneNumberResponse,
-    DeleteResponse,
-    DeleteTotpResponse,
-    DeleteWebauthnRegistrationResponse,
-    GetPendingResponse,
+    DeleteuserbiometricregistrationResponse,
+    DeleteusercryptowalletResponse,
+    DeleteuserpasswordResponse,
+    DeleteuserResponse,
+    DeleteusertotpResponse,
+    DeleteuserwebauthnregistrationResponse,
+    GetbyemailandprojectidResponse,
+    GetpendingusersResponse,
     GetResponse,
-    SearchResponse,
-    UpdateResponse,
+    SearchusersexternalResponse,
+    UpdateuserResponse,
 )
 
 
 class Users:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+      self,
+      api_base: ApiBase,
+      sync_client: SyncClient,
+      async_client: AsyncClient,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -47,80 +56,130 @@ class Users:
     def create(
         self,
         email: Optional[str] = None,
-        phone_number: Optional[str] = None,
-        name: Optional[Union[Name, Dict[str, str]]] = None,
-        create_user_as_pending: bool = False,
+        name: TODO,
         attributes: Optional[Dict[str, str]] = None,
+        phone_number: Optional[str] = None,
+        create_user_as_pending: bool,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """[Stytch docs](https://stytch.com/docs/api/create-user)
 
-        Add a user to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
+    Add a user to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
         """  # noqa
 
         payload: Dict[str, Any] = {
+            "name": name,
+
             "create_user_as_pending": create_user_as_pending,
+
         }
 
         if email is not None:
             payload["email"] = email
-        if phone_number is not None:
-            payload["phone_number"] = phone_number
-        if name is not None:
-            payload["name"] = (
-                name.dict() if isinstance(name, pydantic.BaseModel) else name
-            )
+
         if attributes is not None:
             payload["attributes"] = attributes
+
+        if phone_number is not None:
+            payload["phone_number"] = phone_number
+
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
+
         if untrusted_metadata is not None:
             payload["untrusted_metadata"] = untrusted_metadata
 
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users")
 
         res = self.sync_client.post(url, json=payload)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
-        self,
-        email: Optional[str] = None,
-        phone_number: Optional[str] = None,
-        name: Optional[Union[Name, Dict[str, str]]] = None,
-        create_user_as_pending: bool = False,
-        attributes: Optional[Dict[str, str]] = None,
-        trusted_metadata: Optional[Dict[str, Any]] = None,
-        untrusted_metadata: Optional[Dict[str, Any]] = None,
+      self,
+      email: Optional[str] = None,
+      name: TODO,
+      attributes: Optional[Dict[str, str]] = None,
+      phone_number: Optional[str] = None,
+      create_user_as_pending: bool,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
+      untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """[Stytch docs](https://stytch.com/docs/api/create-user)
 
-        Add a user to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
+    Add a user to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
         """  # noqa
 
         payload: Dict[str, Any] = {
+            "name": name,
+
             "create_user_as_pending": create_user_as_pending,
+
         }
 
         if email is not None:
             payload["email"] = email
-        if phone_number is not None:
-            payload["phone_number"] = phone_number
-        if name is not None:
-            payload["name"] = (
-                name.dict() if isinstance(name, pydantic.BaseModel) else name
-            )
+
         if attributes is not None:
             payload["attributes"] = attributes
+
+        if phone_number is not None:
+            payload["phone_number"] = phone_number
+
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
+
         if untrusted_metadata is not None:
             payload["untrusted_metadata"] = untrusted_metadata
 
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users")
 
         res = await self.async_client.post(url, json=payload)
         return CreateResponse.from_json(res.response.status, res.json)
+
+    def GetPendingUsers(
+        self,
+        starting_after_id: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> GetpendingusersResponse:
+
+        payload: Dict[str, Any] = {
+        }
+
+        if starting_after_id is not None:
+            payload["starting_after_id"] = starting_after_id
+
+        if limit is not None:
+            payload["limit"] = limit
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/pending")
+
+        res = self.sync_client.get(url, params=payload)
+        return GetpendingusersResponse.from_json(res.response.status_code, res.json)
+
+    async def GetPendingUsers_async(
+      self,
+      starting_after_id: Optional[str] = None,
+      limit: Optional[int] = None,
+    ) -> GetpendingusersResponse:
+
+        payload: Dict[str, Any] = {
+        }
+
+        if starting_after_id is not None:
+            payload["starting_after_id"] = starting_after_id
+
+        if limit is not None:
+            payload["limit"] = limit
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/pending")
+
+        res = await self.async_client.get(url, params=payload)
+        return GetpendingusersResponse.from_json(res.response.status, res.json)
 
     def get(
         self,
@@ -128,286 +187,225 @@ class Users:
     ) -> GetResponse:
         """[Stytch docs](https://stytch.com/docs/api/get-user)
 
-        Fetch a given user to see what their various attributes are. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+    Fetch a given user to see what their various attributes are. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
         """  # noqa
 
         payload: Dict[str, Any] = {
             "user_id": user_id,
+
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, user_id)
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/{user_id}")
 
         res = self.sync_client.get(url, params=payload)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
-        self,
-        user_id: str,
+      self,
+      user_id: str,
     ) -> GetResponse:
         """[Stytch docs](https://stytch.com/docs/api/get-user)
 
-        Fetch a given user to see what their various attributes are. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+    Fetch a given user to see what their various attributes are. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
         """  # noqa
 
         payload: Dict[str, Any] = {
             "user_id": user_id,
+
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, user_id)
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/{user_id}")
 
         res = await self.async_client.get(url, params=payload)
         return GetResponse.from_json(res.response.status, res.json)
 
-    def get_pending(
+    def SearchUsersExternal(
         self,
+        cursor: str,
         limit: Optional[int] = None,
-        starting_after_id: Optional[str] = None,
-    ) -> GetPendingResponse:
-        """[Stytch docs](https://stytch.com/docs/api/get-pending-users)
+        query: TODO,
+    ) -> SearchusersexternalResponse:
 
-        Fetch all users with a pending status. Users will show up here if they are added via the `invite_by_email` endpoint or via `login_or_create` where `create_as_pending = true` and have yet to create their account by clicking on the magic link in the email. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-        """  # noqa
+        payload: Dict[str, Any] = {
+            "cursor": cursor,
 
-        payload: Dict[str, Any] = {}
+            "query": query,
+
+        }
 
         if limit is not None:
             payload["limit"] = limit
-        if starting_after_id is not None:
-            payload["starting_after_id"] = starting_after_id
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "pending")
 
-        res = self.sync_client.get(url, params=payload)
-        return GetPendingResponse.from_json(res.response.status_code, res.json)
-
-    async def get_pending_async(
-        self,
-        limit: Optional[int] = None,
-        starting_after_id: Optional[str] = None,
-    ) -> GetPendingResponse:
-        """[Stytch docs](https://stytch.com/docs/api/get-pending-users)
-
-        Fetch all users with a pending status. Users will show up here if they are added via the `invite_by_email` endpoint or via `login_or_create` where `create_as_pending = true` and have yet to create their account by clicking on the magic link in the email. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-        """  # noqa
-
-        payload: Dict[str, Any] = {}
-
-        if limit is not None:
-            payload["limit"] = limit
-        if starting_after_id is not None:
-            payload["starting_after_id"] = starting_after_id
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "pending")
-
-        res = await self.async_client.get(url, params=payload)
-        return GetPendingResponse.from_json(res.response.status, res.json)
-
-    def search(
-        self,
-        limit: Optional[int] = None,
-        cursor: Optional[str] = None,
-        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
-    ) -> SearchResponse:
-        """[Stytch docs](https://stytch.com/docs/api/search-users)
-
-        Search across your users at Stytch. This endpoint also allows you to return all of your users; simply send an empty body and no filtering will be applied.
-        """  # noqa
-
-        payload: Dict[str, Any] = {}
-
-        if limit is not None:
-            payload["limit"] = limit
-        if cursor is not None:
-            payload["cursor"] = cursor
-        if query is not None:
-            payload["query"] = (
-                query.dict() if isinstance(query, pydantic.BaseModel) else query
-            )
-
-        url = self.api_base.route_with_sub_url(self.sub_url, "search")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/search")
 
         res = self.sync_client.post(url, json=payload)
-        return SearchResponse.from_json(res.response.status_code, res.json)
+        return SearchusersexternalResponse.from_json(res.response.status_code, res.json)
 
-    async def search_async(
-        self,
-        limit: Optional[int] = None,
-        cursor: Optional[str] = None,
-        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
-    ) -> SearchResponse:
-        """[Stytch docs](https://stytch.com/docs/api/search-users)
+    async def SearchUsersExternal_async(
+      self,
+      cursor: str,
+      limit: Optional[int] = None,
+      query: TODO,
+    ) -> SearchusersexternalResponse:
 
-        Search across your users at Stytch. This endpoint also allows you to return all of your users; simply send an empty body and no filtering will be applied.
-        """  # noqa
+        payload: Dict[str, Any] = {
+            "cursor": cursor,
 
-        payload: Dict[str, Any] = {}
+            "query": query,
+
+        }
 
         if limit is not None:
             payload["limit"] = limit
-        if cursor is not None:
-            payload["cursor"] = cursor
-        if query is not None:
-            payload["query"] = (
-                query.dict() if isinstance(query, pydantic.BaseModel) else query
-            )
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "search")
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/search")
 
         res = await self.async_client.post(url, json=payload)
-        return SearchResponse.from_json(res.response.status, res.json)
+        return SearchusersexternalResponse.from_json(res.response.status, res.json)
 
-    # MANUAL(search_all)
-    def search_all(
-        self,
-        limit: Optional[int] = None,
-        cursor: Optional[str] = None,
-        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
-    ) -> Generator[SearchResponse, None, None]:
-        # 1. Check if this method should be async or not
-        # 2. Set the return type appropriately
-        # 3. Fill out the method details
-        # 4. Remember to write a test since this is manually generated
-        while True:
-            results = self.search(limit, cursor, query)
-            yield results
-            cursor = results.results_metadata.next_cursor
-            if cursor is None:
-                break
-
-    async def search_all_async(
-        self,
-        limit: Optional[int] = None,
-        cursor: Optional[str] = None,
-        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
-    ) -> AsyncGenerator[SearchResponse, None]:
-        # 1. Check if this method should be async or not
-        # 2. Set the return type appropriately
-        # 3. Fill out the method details
-        # 4. Remember to write a test since this is manually generated
-        while True:
-            results = await self.search_async(limit, cursor, query)
-            yield results
-            cursor = results.results_metadata.next_cursor
-            if cursor is None:
-                break
-
-    # ENDMANUAL(search_all)
-
-    def delete(
+    def UpdateUser(
         self,
         user_id: str,
-    ) -> DeleteResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user)
-
-        Remove a user from Stytch.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(self.sub_url, user_id)
-
-        res = self.sync_client.delete(url)
-        return DeleteResponse.from_json(res.response.status_code, res.json)
-
-    async def delete_async(
-        self,
-        user_id: str,
-    ) -> DeleteResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user)
-
-        Remove a user from Stytch.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(self.sub_url, user_id)
-
-        res = await self.async_client.delete(url)
-        return DeleteResponse.from_json(res.response.status, res.json)
-
-    def update(
-        self,
-        user_id: str,
-        emails: Optional[List[str]] = None,
-        phone_numbers: Optional[List[str]] = None,
-        crypto_wallets: Optional[List[str]] = None,
-        name: Optional[Union[Name, Dict[str, str]]] = None,
+        name: TODO,
+        emails: TODO,
         attributes: Optional[Dict[str, str]] = None,
+        phone_numbers: TODO,
+        crypto_wallets: TODO,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
-    ) -> UpdateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/update-user)
-
-        Update a user's name or attributes.
-
-        **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing user's Stytch `user_id` while calling the `/send` endpoint, the new email address or phone number will be added to the existing User object upon successful authentication. We require this process to guard against an account takeover vulnerability.
-        """  # noqa
+    ) -> UpdateuserResponse:
 
         payload: Dict[str, Any] = {
             "user_id": user_id,
+
+            "name": name,
+
+            "emails": emails,
+
+            "phone_numbers": phone_numbers,
+
+            "crypto_wallets": crypto_wallets,
+
         }
 
-        if emails is not None:
-            payload["emails"] = emails
-        if phone_numbers is not None:
-            payload["phone_numbers"] = phone_numbers
-        if crypto_wallets is not None:
-            payload["crypto_wallets"] = crypto_wallets
-        if name is not None:
-            payload["name"] = (
-                name.dict() if isinstance(name, pydantic.BaseModel) else name
-            )
         if attributes is not None:
             payload["attributes"] = attributes
+
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
+
         if untrusted_metadata is not None:
             payload["untrusted_metadata"] = untrusted_metadata
 
-        url = self.api_base.route_with_sub_url(self.sub_url, user_id)
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/{user_id}")
 
         res = self.sync_client.put(url, json=payload)
-        return UpdateResponse.from_json(res.response.status_code, res.json)
+        return UpdateuserResponse.from_json(res.response.status_code, res.json)
 
-    async def update_async(
-        self,
-        user_id: str,
-        emails: Optional[List[str]] = None,
-        phone_numbers: Optional[List[str]] = None,
-        crypto_wallets: Optional[List[str]] = None,
-        name: Optional[Union[Name, Dict[str, str]]] = None,
-        attributes: Optional[Dict[str, str]] = None,
-        trusted_metadata: Optional[Dict[str, Any]] = None,
-        untrusted_metadata: Optional[Dict[str, Any]] = None,
-    ) -> UpdateResponse:
-        """[Stytch docs](https://stytch.com/docs/api/update-user)
-
-        Update a user's name or attributes.
-
-        **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing user's Stytch `user_id` while calling the `/send` endpoint, the new email address or phone number will be added to the existing User object upon successful authentication. We require this process to guard against an account takeover vulnerability.
-        """  # noqa
+    async def UpdateUser_async(
+      self,
+      user_id: str,
+      name: TODO,
+      emails: TODO,
+      attributes: Optional[Dict[str, str]] = None,
+      phone_numbers: TODO,
+      crypto_wallets: TODO,
+      trusted_metadata: Optional[Dict[str, Any]] = None,
+      untrusted_metadata: Optional[Dict[str, Any]] = None,
+    ) -> UpdateuserResponse:
 
         payload: Dict[str, Any] = {
             "user_id": user_id,
+
+            "name": name,
+
+            "emails": emails,
+
+            "phone_numbers": phone_numbers,
+
+            "crypto_wallets": crypto_wallets,
+
         }
 
-        if emails is not None:
-            payload["emails"] = emails
-        if phone_numbers is not None:
-            payload["phone_numbers"] = phone_numbers
-        if crypto_wallets is not None:
-            payload["crypto_wallets"] = crypto_wallets
-        if name is not None:
-            payload["name"] = (
-                name.dict() if isinstance(name, pydantic.BaseModel) else name
-            )
         if attributes is not None:
             payload["attributes"] = attributes
+
         if trusted_metadata is not None:
             payload["trusted_metadata"] = trusted_metadata
+
         if untrusted_metadata is not None:
             payload["untrusted_metadata"] = untrusted_metadata
 
-        url = self.api_base.route_with_sub_url(self.sub_url, user_id)
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/{user_id}")
 
         res = await self.async_client.put(url, json=payload)
-        return UpdateResponse.from_json(res.response.status, res.json)
+        return UpdateuserResponse.from_json(res.response.status, res.json)
+
+    def DeleteUser(
+        self,
+        user_id: str,
+    ) -> DeleteuserResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/{user_id}")
+
+        res = self.sync_client.delete(url)
+        return DeleteuserResponse.from_json(res.response.status_code, res.json)
+
+    async def DeleteUser_async(
+      self,
+      user_id: str,
+    ) -> DeleteuserResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/{user_id}")
+
+        res = await self.async_client.delete(url)
+        return DeleteuserResponse.from_json(res.response.status, res.json)
+
+    def getByEmailAndProjectID(
+        self,
+        email: str,
+        project_id: str,
+    ) -> GetbyemailandprojectidResponse:
+
+        payload: Dict[str, Any] = {
+            "email": email,
+
+            "project_id": project_id,
+
+        }
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/sdk/users")
+
+        res = self.sync_client.get(url, params=payload)
+        return GetbyemailandprojectidResponse.from_json(res.response.status_code, res.json)
+
+    async def getByEmailAndProjectID_async(
+      self,
+      email: str,
+      project_id: str,
+    ) -> GetbyemailandprojectidResponse:
+
+        payload: Dict[str, Any] = {
+            "email": email,
+
+            "project_id": project_id,
+
+        }
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/sdk/users")
+
+        res = await self.async_client.get(url, params=payload)
+        return GetbyemailandprojectidResponse.from_json(res.response.status, res.json)
 
     def delete_email(
         self,
@@ -415,24 +413,26 @@ class Users:
     ) -> DeleteEmailResponse:
         """[Stytch docs](https://stytch.com/docs/api/delete-user-email)
 
-        Remove an email from a given user.
+    Remove an email from a given user.
         """  # noqa
 
-        url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/emails/{email_id}")
 
         res = self.sync_client.delete(url)
         return DeleteEmailResponse.from_json(res.response.status_code, res.json)
 
     async def delete_email_async(
-        self,
-        email_id: str,
+      self,
+      email_id: str,
     ) -> DeleteEmailResponse:
         """[Stytch docs](https://stytch.com/docs/api/delete-user-email)
 
-        Remove an email from a given user.
+    Remove an email from a given user.
         """  # noqa
 
-        url = self.api_base.route_with_sub_url(self.sub_url, f"emails/{email_id}")
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/emails/{email_id}")
 
         res = await self.async_client.delete(url)
         return DeleteEmailResponse.from_json(res.response.status, res.json)
@@ -443,191 +443,139 @@ class Users:
     ) -> DeletePhoneNumberResponse:
         """[Stytch docs](https://stytch.com/docs/api/delete-user-phone-number)
 
-        Remove a phone number from a given user.
+    Remove a phone number from a given user.
         """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"phone_numbers/{phone_id}"
-        )
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/phone_numbers/{phone_id}")
 
         res = self.sync_client.delete(url)
         return DeletePhoneNumberResponse.from_json(res.response.status_code, res.json)
 
     async def delete_phone_number_async(
-        self,
-        phone_id: str,
+      self,
+      phone_id: str,
     ) -> DeletePhoneNumberResponse:
         """[Stytch docs](https://stytch.com/docs/api/delete-user-phone-number)
 
-        Remove a phone number from a given user.
+    Remove a phone number from a given user.
         """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"phone_numbers/{phone_id}"
-        )
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/phone_numbers/{phone_id}")
 
         res = await self.async_client.delete(url)
         return DeletePhoneNumberResponse.from_json(res.response.status, res.json)
 
-    def delete_webauthn_registration(
+    def DeleteUserWebAuthnRegistration(
         self,
         webauthn_registration_id: str,
-    ) -> DeleteWebauthnRegistrationResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-webauthn-registration)
+    ) -> DeleteuserwebauthnregistrationResponse:
 
-        Delete a previously created WebAuthn registration.
-        """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/webauthn_registrations/{webauthn_registration_id}")
 
         res = self.sync_client.delete(url)
-        return DeleteWebauthnRegistrationResponse.from_json(
-            res.response.status_code, res.json
-        )
+        return DeleteuserwebauthnregistrationResponse.from_json(res.response.status_code, res.json)
 
-    async def delete_webauthn_registration_async(
-        self,
-        webauthn_registration_id: str,
-    ) -> DeleteWebauthnRegistrationResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-webauthn-registration)
+    async def DeleteUserWebAuthnRegistration_async(
+      self,
+      webauthn_registration_id: str,
+    ) -> DeleteuserwebauthnregistrationResponse:
 
-        Delete a previously created WebAuthn registration.
-        """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"webauthn_registrations/{webauthn_registration_id}"
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/webauthn_registrations/{webauthn_registration_id}")
 
         res = await self.async_client.delete(url)
-        return DeleteWebauthnRegistrationResponse.from_json(
-            res.response.status, res.json
-        )
+        return DeleteuserwebauthnregistrationResponse.from_json(res.response.status, res.json)
 
-    def delete_totp(
-        self,
-        totp_id: str,
-    ) -> DeleteTotpResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-totp)
-
-        Delete a previously created TOTP instance.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
-
-        res = self.sync_client.delete(url)
-        return DeleteTotpResponse.from_json(res.response.status_code, res.json)
-
-    async def delete_totp_async(
-        self,
-        totp_id: str,
-    ) -> DeleteTotpResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-totp)
-
-        Delete a previously created TOTP instance.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(self.sub_url, f"totps/{totp_id}")
-
-        res = await self.async_client.delete(url)
-        return DeleteTotpResponse.from_json(res.response.status, res.json)
-
-    def delete_crypto_wallet(
-        self,
-        crypto_wallet_id: str,
-    ) -> DeleteCryptoWalletResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-crypto-wallet)
-
-        Delete a crypto wallet.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
-        )
-
-        res = self.sync_client.delete(url)
-        return DeleteCryptoWalletResponse.from_json(res.response.status_code, res.json)
-
-    async def delete_crypto_wallet_async(
-        self,
-        crypto_wallet_id: str,
-    ) -> DeleteCryptoWalletResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-crypto-wallet)
-
-        Delete a crypto wallet.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"crypto_wallets/{crypto_wallet_id}"
-        )
-
-        res = await self.async_client.delete(url)
-        return DeleteCryptoWalletResponse.from_json(res.response.status, res.json)
-
-    def delete_password(
-        self,
-        password_id: str,
-    ) -> DeletePasswordResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-password)
-
-        Delete a password.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
-
-        res = self.sync_client.delete(url)
-        return DeletePasswordResponse.from_json(res.response.status_code, res.json)
-
-    async def delete_password_async(
-        self,
-        password_id: str,
-    ) -> DeletePasswordResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-password)
-
-        Delete a password.
-        """  # noqa
-
-        url = self.api_base.route_with_sub_url(self.sub_url, f"passwords/{password_id}")
-
-        res = await self.async_client.delete(url)
-        return DeletePasswordResponse.from_json(res.response.status, res.json)
-
-    def delete_biometric_registration(
+    def DeleteUserBiometricRegistration(
         self,
         biometric_registration_id: str,
-    ) -> DeleteBiometricRegistrationResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-biometric-registration)
+    ) -> DeleteuserbiometricregistrationResponse:
 
-        Delete a previously created biometric registration.
-        """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"biometric_registrations/{biometric_registration_id}"
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/biometric_registrations/{biometric_registration_id}")
 
         res = self.sync_client.delete(url)
-        return DeleteBiometricRegistrationResponse.from_json(
-            res.response.status_code, res.json
-        )
+        return DeleteuserbiometricregistrationResponse.from_json(res.response.status_code, res.json)
 
-    async def delete_biometric_registration_async(
-        self,
-        biometric_registration_id: str,
-    ) -> DeleteBiometricRegistrationResponse:
-        """[Stytch docs](https://stytch.com/docs/api/delete-user-biometric-registration)
+    async def DeleteUserBiometricRegistration_async(
+      self,
+      biometric_registration_id: str,
+    ) -> DeleteuserbiometricregistrationResponse:
 
-        Delete a previously created biometric registration.
-        """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"biometric_registrations/{biometric_registration_id}"
-        )
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/biometric_registrations/{biometric_registration_id}")
 
         res = await self.async_client.delete(url)
-        return DeleteBiometricRegistrationResponse.from_json(
-            res.response.status, res.json
-        )
+        return DeleteuserbiometricregistrationResponse.from_json(res.response.status, res.json)
+
+    def DeleteUserTOTP(
+        self,
+        totp_id: str,
+    ) -> DeleteusertotpResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/totps/{totp_id}")
+
+        res = self.sync_client.delete(url)
+        return DeleteusertotpResponse.from_json(res.response.status_code, res.json)
+
+    async def DeleteUserTOTP_async(
+      self,
+      totp_id: str,
+    ) -> DeleteusertotpResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/totps/{totp_id}")
+
+        res = await self.async_client.delete(url)
+        return DeleteusertotpResponse.from_json(res.response.status, res.json)
+
+    def DeleteUserCryptoWallet(
+        self,
+        crypto_wallet_id: str,
+    ) -> DeleteusercryptowalletResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/crypto_wallets/{crypto_wallet_id}")
+
+        res = self.sync_client.delete(url)
+        return DeleteusercryptowalletResponse.from_json(res.response.status_code, res.json)
+
+    async def DeleteUserCryptoWallet_async(
+      self,
+      crypto_wallet_id: str,
+    ) -> DeleteusercryptowalletResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/crypto_wallets/{crypto_wallet_id}")
+
+        res = await self.async_client.delete(url)
+        return DeleteusercryptowalletResponse.from_json(res.response.status, res.json)
+
+    def DeleteUserPassword(
+        self,
+        password_id: str,
+    ) -> DeleteuserpasswordResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/passwords/{password_id}")
+
+        res = self.sync_client.delete(url)
+        return DeleteuserpasswordResponse.from_json(res.response.status_code, res.json)
+
+    async def DeleteUserPassword_async(
+      self,
+      password_id: str,
+    ) -> DeleteuserpasswordResponse:
+
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/passwords/{password_id}")
+
+        res = await self.async_client.delete(url)
+        return DeleteuserpasswordResponse.from_json(res.response.status, res.json)
 
     def delete_oauth_user_registration(
         self,
@@ -635,32 +583,27 @@ class Users:
     ) -> DeleteOauthUserRegistrationResponse:
         """[Stytch docs](https://stytch.com/docs/api/delete-user-oauth-registration)
 
-        Delete an oauth user registration.
+    Delete an oauth user registration.
         """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"oauth/{oauth_user_registration_id}"
-        )
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/oauth/{oauth_user_registration_id}")
 
         res = self.sync_client.delete(url)
-        return DeleteOauthUserRegistrationResponse.from_json(
-            res.response.status_code, res.json
-        )
+        return DeleteOauthUserRegistrationResponse.from_json(res.response.status_code, res.json)
 
     async def delete_oauth_user_registration_async(
-        self,
-        oauth_user_registration_id: str,
+      self,
+      oauth_user_registration_id: str,
     ) -> DeleteOauthUserRegistrationResponse:
         """[Stytch docs](https://stytch.com/docs/api/delete-user-oauth-registration)
 
-        Delete an oauth user registration.
+    Delete an oauth user registration.
         """  # noqa
 
-        url = self.api_base.route_with_sub_url(
-            self.sub_url, f"oauth/{oauth_user_registration_id}"
-        )
+
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/users/oauth/{oauth_user_registration_id}")
 
         res = await self.async_client.delete(url)
-        return DeleteOauthUserRegistrationResponse.from_json(
-            res.response.status, res.json
-        )
+        return DeleteOauthUserRegistrationResponse.from_json(res.response.status, res.json)
+

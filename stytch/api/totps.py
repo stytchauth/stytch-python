@@ -48,7 +48,7 @@ class TOTPs:
         if expiration_minutes is not None:
             payload["expiration_minutes"] = expiration_minutes
 
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps")
 
         res = self.sync_client.post(url, json=payload)
         return CreateResponse.from_json(res.response.status_code, res.json)
@@ -70,7 +70,7 @@ class TOTPs:
         if expiration_minutes is not None:
             payload["expiration_minutes"] = expiration_minutes
 
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps")
 
         res = await self.async_client.post(url, json=payload)
         return CreateResponse.from_json(res.response.status, res.json)
@@ -80,8 +80,8 @@ class TOTPs:
         user_id: str,
         totp_code: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
         """[Stytch docs](https://stytch.com/docs/api/totp-authenticate)
@@ -96,14 +96,17 @@ class TOTPs:
 
         if session_token is not None:
             payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps/authenticate")
 
         res = self.sync_client.post(url, json=payload)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
@@ -113,8 +116,8 @@ class TOTPs:
         user_id: str,
         totp_code: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
         """[Stytch docs](https://stytch.com/docs/api/totp-authenticate)
@@ -129,14 +132,17 @@ class TOTPs:
 
         if session_token is not None:
             payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps/authenticate")
 
         res = await self.async_client.post(url, json=payload)
         return AuthenticateResponse.from_json(res.response.status, res.json)
@@ -154,7 +160,7 @@ class TOTPs:
             "user_id": user_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps/recovery_codes")
 
         res = self.sync_client.post(url, json=payload)
         return RecoveryCodesResponse.from_json(res.response.status_code, res.json)
@@ -172,7 +178,7 @@ class TOTPs:
             "user_id": user_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "recovery_codes")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps/recovery_codes")
 
         res = await self.async_client.post(url, json=payload)
         return RecoveryCodesResponse.from_json(res.response.status, res.json)
@@ -182,8 +188,8 @@ class TOTPs:
         user_id: str,
         recovery_code: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
         """[Stytch docs](https://stytch.com/docs/api/totp-recover)
@@ -198,14 +204,17 @@ class TOTPs:
 
         if session_token is not None:
             payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "recover")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps/recover")
 
         res = self.sync_client.post(url, json=payload)
         return RecoverResponse.from_json(res.response.status_code, res.json)
@@ -215,8 +224,8 @@ class TOTPs:
         user_id: str,
         recovery_code: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
         """[Stytch docs](https://stytch.com/docs/api/totp-recover)
@@ -231,14 +240,17 @@ class TOTPs:
 
         if session_token is not None:
             payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+
         if session_duration_minutes is not None:
             payload["session_duration_minutes"] = session_duration_minutes
+
+        if session_jwt is not None:
+            payload["session_jwt"] = session_jwt
+
         if session_custom_claims is not None:
             payload["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "recover")
+        url = self.api_base.route_with_sub_url(self.sub_url, "/v1/totps/recover")
 
         res = await self.async_client.post(url, json=payload)
         return RecoverResponse.from_json(res.response.status, res.json)
