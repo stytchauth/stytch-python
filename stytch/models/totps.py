@@ -13,28 +13,31 @@ from stytch.core.models import (
 class CreateResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/totp-create)"""  # noqa
 
-    secret: str
+    request_id: str
     totp_id: str
+    secret: str
     qr_code: str
     recovery_codes: List[str]
+    user: User
     user_id: str
-    user: Optional[User]
 
 
 class AuthenticateResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/totp-authenticate)"""  # noqa
 
+    request_id: str
     user_id: str
-    user: User
-    totp_id: str
-    session_jwt: str
     session_token: str
     session: Optional[StytchSession]
+    totp_id: str
+    session_jwt: str
+    user: User
 
 
 class RecoveryCodesResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/totp-get-recovery-codes)"""  # noqa
 
+    request_id: str
     user_id: str
     totps: List[TOTPInstanceWithRecoveryCodes]
 
@@ -42,9 +45,10 @@ class RecoveryCodesResponse(ResponseBase):
 class RecoverResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/totp-recover)"""  # noqa
 
-    user_id: str
-    user: User
+    request_id: str
     totp_id: str
-    session_jwt: str
+    user_id: str
     session_token: str
     session: Optional[StytchSession]
+    session_jwt: str
+    user: User

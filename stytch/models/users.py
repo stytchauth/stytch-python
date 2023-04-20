@@ -1,68 +1,81 @@
 #!/usr/bin/env python3
 
-from typing import List
+from typing import Any, Dict, List, Optional
 
-from stytch.core.models import (
-    CryptoWallet,
-    Email,
-    PhoneNumber,
-    ResponseBase,
-    SearchResultsMetadata,
-    User,
-)
+from stytch.core.models import ResponseBase, TOTPInstance, User
 
 
 class CreateResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/create-user)"""  # noqa
 
+    request_id: str
     user_id: str
-    user: User
     email_id: str
-    phone_id: str
     status: str
+    phone_id: str
+    user: User
 
 
-class GetResponse(ResponseBase, User):
-    """[Stytch docs](https://stytch.com/docs/api/get-user)"""  # noqa
-
-    user_id: str
-
-
-class GetPendingResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/get-pending-users)"""  # noqa
-
-    users: List[User]
+class GetpendingusersResponse(ResponseBase):
+    request_id: str
+    users: TODO
     has_more: bool
     next_starting_after_id: str
-    total: int
+    total: TODO
 
 
-class SearchResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/search-users)"""  # noqa
+class GetResponse(ResponseBase):
+    """[Stytch docs](https://stytch.com/docs/api/get-user)"""  # noqa
 
-    results: List[User]
-    results_metadata: SearchResultsMetadata
-
-
-class DeleteResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/delete-user)"""  # noqa
-
+    request_id: str
     user_id: str
+    name: TODO
+    emails: TODO
+    status: str
+    phone_numbers: TODO
+    birthday: TODO
+    webauthn_registrations: TODO
+    created_at: TODO
+    providers: TODO
+    totps: List[TOTPInstance]
+    crypto_wallets: TODO
+    password: TODO
+    biometric_registrations: TODO
+    trusted_metadata: Optional[Dict[str, Any]] = None
+    untrusted_metadata: Optional[Dict[str, Any]] = None
+    project_id: str
 
 
-class UpdateResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/update-user)"""  # noqa
+class SearchusersexternalResponse(ResponseBase):
+    request_id: str
+    results: TODO
+    results_metadata: ResultsMetadata
 
+
+class UpdateuserResponse(ResponseBase):
+    request_id: str
     user_id: str
+    emails: TODO
+    phone_numbers: TODO
+    crypto_wallets: TODO
     user: User
-    emails: List[Email]
-    phone_numbers: List[PhoneNumber]
-    crypto_wallets: List[CryptoWallet]
+
+
+class DeleteuserResponse(ResponseBase):
+    request_id: str
+    user_id: str
+
+
+class GetbyemailandprojectidResponse(ResponseBase):
+    request_id: str
+    user_id: str
+    email_id: str
 
 
 class DeleteEmailResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/delete-user-email)"""  # noqa
 
+    request_id: str
     user_id: str
     user: User
 
@@ -70,41 +83,37 @@ class DeleteEmailResponse(ResponseBase):
 class DeletePhoneNumberResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/delete-user-phone-number)"""  # noqa
 
+    request_id: str
     user_id: str
     user: User
 
 
-class DeleteWebauthnRegistrationResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/delete-user-webauthn-registration)"""  # noqa
-
+class DeleteuserwebauthnregistrationResponse(ResponseBase):
+    request_id: str
     user_id: str
     user: User
 
 
-class DeleteTotpResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/delete-user-totp)"""  # noqa
-
+class DeleteuserbiometricregistrationResponse(ResponseBase):
+    request_id: str
     user_id: str
     user: User
 
 
-class DeleteCryptoWalletResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/delete-user-crypto-wallet)"""  # noqa
-
+class DeleteusertotpResponse(ResponseBase):
+    request_id: str
     user_id: str
     user: User
 
 
-class DeletePasswordResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/delete-user-password)"""  # noqa
-
+class DeleteusercryptowalletResponse(ResponseBase):
+    request_id: str
     user_id: str
     user: User
 
 
-class DeleteBiometricRegistrationResponse(ResponseBase):
-    """[Stytch docs](https://stytch.com/docs/api/delete-user-biometric-registration)"""  # noqa
-
+class DeleteuserpasswordResponse(ResponseBase):
+    request_id: str
     user_id: str
     user: User
 
@@ -112,5 +121,6 @@ class DeleteBiometricRegistrationResponse(ResponseBase):
 class DeleteOauthUserRegistrationResponse(ResponseBase):
     """[Stytch docs](https://stytch.com/docs/api/delete-user-oauth-registration)"""  # noqa
 
+    request_id: str
     user_id: str
     user: User
