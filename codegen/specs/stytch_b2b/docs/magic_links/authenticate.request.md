@@ -6,9 +6,9 @@ Parameters:
 
 - `pkce_code_verifier`: A base64url encoded one-time secret used to validate that the request starts and ends on the same device.
 
-- `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session Management guide.
+- `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
 
-- `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
+- `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
 
 - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
 

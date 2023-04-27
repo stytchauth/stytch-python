@@ -6,6 +6,7 @@
 
 from typing import Any, Dict, Optional
 
+from stytch.b2b.api.magic_links_email_discovery import Discovery
 from stytch.b2b.models.magic_links_email import InviteResponse, LoginOrSignupResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -21,6 +22,7 @@ class Email:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
+        self.discovery = Discovery(api_base, sync_client, async_client)
 
     @property
     def sub_url(self) -> str:

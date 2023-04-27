@@ -119,10 +119,12 @@ class Api:
             filename = cls._gen_filename_from_classname(data["classname"])
 
         # Load the methods and the related docstrings if available
-        methods = [Method.from_dict(m) for m in data["methods"]]
-        if docs_dir is not None:
-            for m in methods:
-                m.get_docs_if_available(pathlib.Path(docs_dir) / filename)
+        methods = []
+        if data["methods"] is not None:
+            methods = [Method.from_dict(m) for m in data["methods"]]
+            if docs_dir is not None:
+                for m in methods:
+                    m.get_docs_if_available(pathlib.Path(docs_dir) / filename)
 
         # Default to self.filename if sub_url was not given
         sub_url = data.get("sub_url", filename)

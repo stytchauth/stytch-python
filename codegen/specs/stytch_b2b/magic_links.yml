@@ -27,7 +27,7 @@ methods:
 sub_apis:
   - classname: Email
     additional_imports:
-      - from stytch.core.b2b.models import B2BStytchSession, Member
+      - from stytch.b2b.core.models import B2BStytchSession, Member
     sub_url: magic_links/email
     filename: magic_links_email
     methods:
@@ -80,3 +80,39 @@ sub_apis:
           member_id: str
           member: Member
           organization: Organization
+    sub_apis:
+      - classname: Discovery
+        sub_url: magic_links/email/discovery
+        filename: magic_links_email_discovery
+        methods:
+          - name: send
+            method: POST
+            args:
+              - name: email_address
+                arg_type: str
+              - name: discovery_redirect_url
+                arg_type: Optional[str] = None
+              - name: pkce_code_challenge
+                arg_type: Optional[str] = None
+              - name: login_template_id
+                arg_type: Optional[str] = None
+              - name: locale
+                arg_type: Optional[str] = None
+            response_type: { }
+  - classname: Discovery
+    additional_imports:
+      - from stytch.b2b.core.models import B2BStytchSession, Member, DiscoveredOrganization
+    sub_url: magic_links/discovery
+    filename: magic_links_discovery
+    methods:
+      - name: authenticate
+        method: POST
+        args:
+          - name: discovery_magic_links_token
+            arg_type: str
+          - name: pkce_code_verifier
+            arg_type: Optional[str] = None
+        response_type:
+          intermediate_session_token: str
+          email_address: str
+          discovered_organizations: List[DiscoveredOrganization]
