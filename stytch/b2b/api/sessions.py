@@ -92,9 +92,9 @@ class Sessions:
 
         Parameters:
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our session management guide.
+        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
 
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
+        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
 
         - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
 
@@ -130,9 +130,9 @@ class Sessions:
 
         Parameters:
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our session management guide.
+        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
 
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
+        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
 
         - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
 

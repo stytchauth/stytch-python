@@ -46,7 +46,7 @@ class RevokeResponse(ResponseBase):
 class ExchangeResponse(ResponseBase):
     """Response fields beyond those defined in `ResponseBase`:
 
-    `member_id`: The UUID of the Member object that was created.
+    - `member_id`: The UUID of the Member object that was created.
 
     - `session_token`: A secret token for a given Stytch session.
 

@@ -13,7 +13,7 @@ class ExchangeResponse(ResponseBase):
 
     - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
 
-    - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
+    - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
 
     - `member_session`: The B2BStytchSession object.
 
