@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List
+from typing import Dict, List
 
 from stytch.b2b.core.models import Member, Organization
 from stytch.core.models import ResponseBase, SearchResultsMetadata
@@ -132,4 +132,5 @@ class SearchMembersResponse(ResponseBase):
     """  # noqa
 
     members: List[Member]
+    organizations: Dict[str, Organization]
     results_metadata: SearchResultsMetadata

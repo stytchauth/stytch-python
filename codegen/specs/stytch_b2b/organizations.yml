@@ -190,4 +190,5 @@ methods:
         map_pydantic: true
     response_type:
       members: List[Member]
+      organizations: Dict[str, Organization]
       results_metadata: SearchResultsMetadata
