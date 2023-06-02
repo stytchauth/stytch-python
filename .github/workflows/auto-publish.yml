@@ -63,12 +63,8 @@ jobs:
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
-      - name: Create release draft
+      - name: Create release
         if: steps.diff.outputs.diff != 0
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version.outputs.release_tag }}
-          release_name: ${{ steps.version.outputs.release_tag }}
-          draft: true
+        run: gh release create "${{ steps.version.outputs.release_tag }}" --generate-notes
