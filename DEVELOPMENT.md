@@ -6,7 +6,7 @@ Thanks for contributing to Stytch's Python library! If you run into trouble, fin
 
 1. Install [Python](https://www.python.org/) version 3.7 or greater.
 2. (Recommended, but optional) Create a new [virtualenv](https://docs.python.org/3/tutorial/venv.html).
-3. `pip install -r requirements.txt`
+3. `pip install -r requirements_dev.txt`
 
 ## Generating (and regenerating) the API
 

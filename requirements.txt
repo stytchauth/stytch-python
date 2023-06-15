@@ -1,15 +1,6 @@
 -e .
 
-# For distributing the package
-setuptools>=65.5.1
-
-# For type checking, codegen, and testing
-Jinja2==3.1.2
-autoflake==2.0.0
-black==22.12.0
-isort==5.11.2
-mypy==0.991
-pyright==1.1.284
-pyyaml==6.0
-types-PyYAML==6.0.12.2
-types-requests==2.28.11.5
+aiohttp>=3.8.3
+requests>=2.7.0
+pydantic>=1.10.2
+pyjwt[crypto]>=2.4.0
