@@ -28,8 +28,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Check types
-        run: mypy stytch codegen test
+      - name: Check types and run linter
+        run: make lint
 
       - name: Run unit tests
-        run: python -m unittest
+        run: make test

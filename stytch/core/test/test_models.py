@@ -109,11 +109,11 @@ class TestModels(unittest.TestCase):
 
     def test_stytcherror_fields(self) -> None:
         resp = {
-          "status_code": 418,
-          "request_id": "request-id-test-fea11c44-5514-4aac-a76b-3ca685e3443a",
-          "error_type": "is_a_teapot",
-          "error_message": "I'm a teapot!",
-          "error_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418",
+            "status_code": 418,
+            "request_id": "request-id-test-fea11c44-5514-4aac-a76b-3ca685e3443a",
+            "error_type": "is_a_teapot",
+            "error_message": "I'm a teapot!",
+            "error_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418",
         }
         expected = models.StytchErrorDetails(**resp)
 
