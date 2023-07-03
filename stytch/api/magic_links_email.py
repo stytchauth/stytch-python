@@ -213,6 +213,7 @@ class Email:
         signup_expiration_minutes: Optional[int] = None,
         create_user_as_pending: Optional[bool] = None,
         locale: Optional[str] = None,
+        attributes: Optional[Dict[str, str]] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
     ) -> LoginOrCreateResponse:
@@ -261,6 +262,8 @@ class Email:
             payload["create_user_as_pending"] = create_user_as_pending
         if locale is not None:
             payload["locale"] = locale
+        if attributes is not None:
+            payload["attributes"] = attributes
         if login_template_id is not None:
             payload["login_template_id"] = login_template_id
         if signup_template_id is not None:
@@ -280,6 +283,7 @@ class Email:
         signup_expiration_minutes: Optional[int] = None,
         create_user_as_pending: Optional[bool] = None,
         locale: Optional[str] = None,
+        attributes: Optional[Dict[str, str]] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
     ) -> LoginOrCreateResponse:
@@ -328,6 +332,8 @@ class Email:
             payload["create_user_as_pending"] = create_user_as_pending
         if locale is not None:
             payload["locale"] = locale
+        if attributes is not None:
+            payload["attributes"] = attributes
         if login_template_id is not None:
             payload["login_template_id"] = login_template_id
         if signup_template_id is not None:
