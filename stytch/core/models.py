@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional
 
 try:
     import pydantic.v1 as pydantic
-except:
+except ImportError:
     import pydantic
 
 

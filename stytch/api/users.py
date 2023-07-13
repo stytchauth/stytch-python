@@ -8,7 +8,7 @@ from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Union
 
 try:
     import pydantic.v1 as pydantic
-except:
+except ImportError:
     import pydantic
 
 from stytch.core.api_base import ApiBase
