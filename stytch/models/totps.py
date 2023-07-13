@@ -18,7 +18,7 @@ class CreateResponse(ResponseBase):
     qr_code: str
     recovery_codes: List[str]
     user_id: str
-    user: Optional[User]
+    user: Optional[User] = None
 
 
 class AuthenticateResponse(ResponseBase):
@@ -29,7 +29,7 @@ class AuthenticateResponse(ResponseBase):
     totp_id: str
     session_jwt: str
     session_token: str
-    session: Optional[StytchSession]
+    session: Optional[StytchSession] = None
 
 
 class RecoveryCodesResponse(ResponseBase):
@@ -47,4 +47,4 @@ class RecoverResponse(ResponseBase):
     totp_id: str
     session_jwt: str
     session_token: str
-    session: Optional[StytchSession]
+    session: Optional[StytchSession] = None

@@ -50,9 +50,9 @@ class ResponseBase(pydantic.BaseModel):
 
 
 class StytchErrorDetails(ResponseBase):
-    error_type: Optional[str]
+    error_type: Optional[str] = None
     error_message: str
-    error_url: Optional[str]
+    error_url: Optional[str] = None
 
     @classmethod
     def from_unknown(cls, status_code: int) -> StytchErrorDetails:
@@ -84,7 +84,7 @@ class Name(pydantic.BaseModel):
 
 class Operand(pydantic.BaseModel):
     filter_name: str
-    filter_value: Any
+    filter_value: Any = None
 
 
 class SearchQuery(pydantic.BaseModel):
@@ -98,9 +98,9 @@ class EmailFactor(pydantic.BaseModel):
 
 
 class StytchSession(pydantic.BaseModel):
-    attributes: Optional[Dict[str, str]]
+    attributes: Optional[Dict[str, str]] = None
     authentication_factors: List[Dict[str, Any]]
-    custom_claims: Optional[Dict[str, Any]]
+    custom_claims: Optional[Dict[str, Any]] = None
     expires_at: datetime.datetime
     last_accessed_at: datetime.datetime
     session_id: str
@@ -109,17 +109,17 @@ class StytchSession(pydantic.BaseModel):
 
 
 class SessionPtr(pydantic.BaseModel):
-    session: Optional[StytchSession]
+    session: Optional[StytchSession] = None
 
 
 class OAuthSession(pydantic.BaseModel):
-    stytch_session: Optional[SessionPtr]
+    stytch_session: Optional[SessionPtr] = None
     session_id: str
     user_id: str
-    started_at: Optional[datetime.datetime]
-    last_accessed_at: Optional[datetime.datetime]
-    expires_at: Optional[datetime.datetime]
-    attributes: Optional[Dict[str, str]]
+    started_at: Optional[datetime.datetime] = None
+    last_accessed_at: Optional[datetime.datetime] = None
+    expires_at: Optional[datetime.datetime] = None
+    attributes: Optional[Dict[str, str]] = None
     authentication_factors: List[Dict[str, Any]]
 
     @property
@@ -163,7 +163,7 @@ class WebAuthnRegistration(pydantic.BaseModel):
     webauthn_registration_id: str
     domain: str
     user_agent: str
-    authenticator_type: Optional[str]
+    authenticator_type: Optional[str] = None
     verified: bool
 
 
@@ -185,10 +185,10 @@ class Password(pydantic.BaseModel):
 
 
 class User(pydantic.BaseModel):
-    name: Optional[Name]
+    name: Optional[Name] = None
     user_id: str
-    trusted_metadata: Optional[Dict[str, Any]]
-    untrusted_metadata: Optional[Dict[str, Any]]
+    trusted_metadata: Optional[Dict[str, Any]] = None
+    untrusted_metadata: Optional[Dict[str, Any]] = None
     emails: List[Email]
     phone_numbers: List[PhoneNumber]
     providers: List[OAuthProvider]
@@ -196,11 +196,11 @@ class User(pydantic.BaseModel):
     biometric_registrations: List[BiometricRegistration]
     totps: List[TOTPInstance]
     crypto_wallets: List[CryptoWallet]
-    password: Optional[Password]
-    created_at: Optional[datetime.datetime]
+    password: Optional[Password] = None
+    created_at: Optional[datetime.datetime] = None
     status: str
 
 
 class SearchResultsMetadata(pydantic.BaseModel):
-    next_cursor: Optional[str]
+    next_cursor: Optional[str] = None
     total: int

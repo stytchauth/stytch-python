@@ -21,4 +21,4 @@ class ResetResponse(ResponseBase):
     member: Member
     member_id: str
     organization: Organization
-    member_session: Optional[B2BStytchSession]
+    member_session: Optional[B2BStytchSession] = None

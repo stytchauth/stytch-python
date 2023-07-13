@@ -34,4 +34,4 @@ class AuthenticateResponse(ResponseBase):
     webauthn_registration_id: str
     session_jwt: str
     session_token: str
-    session: Optional[StytchSession]
+    session: Optional[StytchSession] = None
