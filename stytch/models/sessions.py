@@ -22,7 +22,7 @@ class AuthenticateResponse(ResponseBase):
     session: StytchSession
     session_jwt: str
     session_token: str
-    user: Optional[User]
+    user: Optional[User] = None
 
 
 class RevokeResponse(ResponseBase):

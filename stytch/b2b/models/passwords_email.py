@@ -45,4 +45,4 @@ class ResetResponse(ResponseBase):
     organization: Organization
     session_token: str
     session_jwt: str
-    member_session: Optional[B2BStytchSession]
+    member_session: Optional[B2BStytchSession] = None

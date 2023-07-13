@@ -19,7 +19,7 @@ class Organization(pydantic.BaseModel):
     organization_slug: str
     organization_logo_url: str
     trusted_metadata: Dict[str, Any]
-    sso_default_connection_id: Optional[str]
+    sso_default_connection_id: Optional[str] = None
     sso_jit_provisioning_allowed_connections: List[str]
     sso_active_connections: List[ActiveSSOConnection]
     sso_jit_provisioning: str
@@ -58,13 +58,13 @@ class B2BStytchSession(pydantic.BaseModel):
     last_accessed_at: datetime.datetime
     expires_at: datetime.datetime
     authentication_factors: List[Dict[str, Any]]
-    custom_claims: Optional[Dict[str, Any]]
+    custom_claims: Optional[Dict[str, Any]] = None
 
 
 class Membership(pydantic.BaseModel):
     type: str
-    details: Optional[Dict[str, Any]]
-    member: Optional[Member]
+    details: Optional[Dict[str, Any]] = None
+    member: Optional[Member] = None
 
 
 class DiscoveredOrganization(pydantic.BaseModel):

@@ -48,4 +48,4 @@ class AuthenticateResponse(ResponseBase):
     reset_sessions: bool
     session_jwt: str
     session_token: str
-    session: Optional[StytchSession]
+    session: Optional[StytchSession] = None

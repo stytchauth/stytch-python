@@ -36,13 +36,13 @@ class AuthenticateResponse(ResponseBase):
     """  # noqa
 
     user_id: str
-    user: Optional[User]
+    user: Optional[User] = None
     oauth_user_registration_id: str
     provider_subject: str
     provider_type: str
-    provider_values: Optional[Dict[str, Any]]
+    provider_values: Optional[Dict[str, Any]] = None
     reset_sessions: bool
-    session: Optional[OAuthSession]
+    session: Optional[OAuthSession] = None
     session_jwt: str
     session_token: str
 

@@ -23,7 +23,7 @@ class ExchangeResponse(ResponseBase):
     """  # noqa
 
     member_id: str
-    member_session: Optional[B2BStytchSession]
+    member_session: Optional[B2BStytchSession] = None
     session_token: str
     session_jwt: str
     member: Member

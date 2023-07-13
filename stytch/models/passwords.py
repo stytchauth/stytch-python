@@ -19,7 +19,7 @@ class AuthenticateResponse(ResponseBase):
     user: User
     session_jwt: str
     session_token: str
-    session: Optional[StytchSession]
+    session: Optional[StytchSession] = None
 
 
 class StrengthCheckResponse(ResponseBase):
