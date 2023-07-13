@@ -5,7 +5,10 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, List, Optional
 
-import pydantic
+try:
+    import pydantic.v1 as pydantic
+except:
+    import pydantic
 
 
 class ResponseBase(pydantic.BaseModel):

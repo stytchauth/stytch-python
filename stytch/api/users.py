@@ -6,7 +6,10 @@
 
 from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Union
 
-import pydantic
+try:
+    import pydantic.v1 as pydantic
+except:
+    import pydantic
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
