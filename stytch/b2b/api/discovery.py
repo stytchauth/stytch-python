@@ -4,6 +4,7 @@
 # or your changes may be overwritten later!
 # !!!
 
+from __future__ import annotations
 
 from stytch.b2b.api.discovery_intermediate_sessions import IntermediateSessions
 from stytch.b2b.api.discovery_organizations import Organizations
@@ -21,11 +22,7 @@ class Discovery:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.organizations = Organizations(api_base, sync_client, async_client)
         self.intermediate_sessions = IntermediateSessions(
             api_base, sync_client, async_client
         )
-
-    @property
-    def sub_url(self) -> str:
-        return "discovery"
+        self.organizations = Organizations(api_base, sync_client, async_client)

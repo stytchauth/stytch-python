@@ -1,5 +1,0 @@
-value = 123
-# MANUAL(snippet1)
-old_snippet1
-# ENDMANUAL(snippet2)
-value2 = 456

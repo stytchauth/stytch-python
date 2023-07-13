@@ -31,7 +31,7 @@ else:
 
 class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
     async def test_crypto_wallets_async(self) -> None:
-        api = self.client.crypto_wallets
+        api = self.b2c_client.crypto_wallets
 
         self.assertTrue(
             (
@@ -52,7 +52,7 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
         )
 
     async def test_magic_links_async(self) -> None:
-        api = self.client.magic_links
+        api = self.b2c_client.magic_links
 
         self.assertTrue(
             (await api.authenticate_async(token=TEST_MAGIC_TOKEN)).is_success
@@ -88,14 +88,14 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
             self.assertTrue((await api.email.send_async(TEST_MAGIC_EMAIL)).is_success)
 
     async def test_oauth_async(self) -> None:
-        api = self.client.oauth
+        api = self.b2c_client.oauth
 
         self.assertTrue(
             (await api.authenticate_async(token=TEST_OAUTH_TOKEN)).is_success
         )
 
     async def test_otp_async(self) -> None:
-        api = self.client.otps
+        api = self.b2c_client.otps
 
         with self.subTest("email"):
             self.assertTrue(
@@ -150,7 +150,7 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
             )
 
     async def test_passwords_async(self) -> None:
-        api = self.client.passwords
+        api = self.b2c_client.passwords
 
         async with self._get_temporary_user_async(create=False) as user:
             self.assertTrue(
@@ -165,7 +165,7 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
             )
             self.assertTrue(authenticate_response.is_success)
             # Remember to manually delete since we manually created!
-            await self.client.users.delete_async(create_response.user_id)
+            await self.b2c_client.users.delete_async(create_response.user_id)
 
         # Migrate an existing user created via magic link
         async with self._get_temporary_user_async(via_magic_link=True) as user:
@@ -217,7 +217,7 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
                 # TODO: We don't have a sample session token (see skipTest above)
                 self.assertTrue(
                     (
-                        await api.session.reset_async(
+                        await api.sessions.reset_async(
                             session_token="",
                             password=user.new_password,
                         )
@@ -225,7 +225,7 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
                 )
 
     async def test_sessions_async(self) -> None:
-        api = self.client.sessions
+        api = self.b2c_client.sessions
 
         async with self._get_temporary_user_async() as user:
             # TODO: With @overload, it should be possible to let
@@ -242,11 +242,11 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
             # Can't test revoke -- it doesn't support the TEST_SESSION_TOKEN
             # self.assertTrue(api.revoke(session_token=TEST_SESSION_TOKEN).is_success)
             self.assertTrue(
-                (await api.jwks_async(project_id=self.project_id)).is_success
+                (await api.get_jwks_async(project_id=self.project_id)).is_success
             )
 
     async def test_totps_async(self) -> None:
-        api = self.client.totps
+        api = self.b2c_client.totps
 
         self.assertTrue((await api.create_async(user_id=TEST_TOTP_USER_ID)).is_success)
         self.assertTrue(
@@ -271,12 +271,11 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
         # NOTE: the various `delete_XXX` can't easily be tested (yet)
         # since it would require we first create the user with each of those
         # methods/auth factors present (and possibly authenticated?).
-        api = self.client.users
+        api = self.b2c_client.users
 
         async with self._get_temporary_user_async(create=False) as user:
             create_resp = await api.create_async(email=user.email)
             self.assertTrue(create_resp.is_success)
-            self.assertTrue((await api.get_pending_async()).is_success)
             self.assertTrue((await api.search_async(limit=10)).is_success)
             self.assertTrue(
                 (
@@ -294,7 +293,7 @@ class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
             )
 
     async def test_webauthn_async(self) -> None:
-        api = self.client.webauthn
+        api = self.b2c_client.webauthn
         # Can't test: webauthn requires calling browser functions
         # It would probably work if we had some way of using test API
         # sample values (like a sample public_key_credential for testing)

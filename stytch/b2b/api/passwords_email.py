@@ -4,9 +4,15 @@
 # or your changes may be overwritten later!
 # !!!
 
+from __future__ import annotations
+
 from typing import Any, Dict, Optional
 
-from stytch.b2b.models.passwords_email import ResetResponse, ResetStartResponse
+from stytch.b2b.models.passwords_email import (
+    ResetResponse,
+    ResetStartRequestLocale,
+    ResetStartResponse,
+)
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -22,120 +28,128 @@ class Email:
         self.sync_client = sync_client
         self.async_client = async_client
 
-    @property
-    def sub_url(self) -> str:
-        return "passwords/email"
-
     def reset_start(
         self,
         organization_id: str,
         email_address: str,
-        login_redirect_url: Optional[str] = None,
         reset_password_redirect_url: Optional[str] = None,
         reset_password_expiration_minutes: Optional[int] = None,
-        locale: Optional[str] = None,
+        code_challenge: Optional[str] = None,
+        login_redirect_url: Optional[str] = None,
+        locale: Optional[ResetStartRequestLocale] = None,
         reset_password_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
-        """[Stytch docs](https://stytch.com/docs/api/password-email-reset-start)
+        """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
-        Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
+        This endpoint adapts to your Project's password strength configuration.
+        If you're using [zxcvbn](https://stytch.com/docs/passwords#strength-requirements), the default, your passwords are considered valid
+        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/passwords#strength-requirements), your passwords are
+        considered valid if they meet the requirements that you've set with Stytch.
+        You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
 
-        Parameters:
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - email_address: The email address of the Member to start the email reset process for.
+          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
+          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
+          If you have not set a default `reset_password_redirect_url`, an error is returned.
+          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
+          - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
+          - login_redirect_url: The URL that the member clicks from the reset without password link. This URL should be an endpoint in the backend server
+              that verifies the request by querying Stytch's authenticate endpoint and finishes the magic link flow. If this value is not passed, the
+              default `login_redirect_url` that you set in your Dashboard is used. This value is only used if magic links are enabled for the member. If
+              you have not set a default `login_redirect_url` and magic links are not enabled for the member, an error is returned.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
-        - `email_address`: The email of the Member
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-        - `reset_password_redirect_url`: The URL that the Member clicks from the reset password link
-
-        - `login_redirect_url`: The URL that the Member clicks from the reset without password link
-
-        - `reset_password_template_id`: Use a custom template for reset password emails.
-
-        - `locale`: Used to determine which language to use when sending the member an email.
-
-        - `reset_password_expiration_minutes`: Sets a time limit after which the email link to reset the member's password will no longer be valid.
-
-        - `code_challenge`: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
+          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
         }
-
-        if login_redirect_url is not None:
-            payload["login_redirect_url"] = login_redirect_url
         if reset_password_redirect_url is not None:
-            payload["reset_password_redirect_url"] = reset_password_redirect_url
+            data["reset_password_redirect_url"] = reset_password_redirect_url
         if reset_password_expiration_minutes is not None:
-            payload[
+            data[
                 "reset_password_expiration_minutes"
             ] = reset_password_expiration_minutes
+        if code_challenge is not None:
+            data["code_challenge"] = code_challenge
+        if login_redirect_url is not None:
+            data["login_redirect_url"] = login_redirect_url
         if locale is not None:
-            payload["locale"] = locale
+            data["locale"] = locale.value
         if reset_password_template_id is not None:
-            payload["reset_password_template_id"] = reset_password_template_id
+            data["reset_password_template_id"] = reset_password_template_id
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/passwords/email/reset/start", data)
+        res = self.sync_client.post(url, data)
         return ResetStartResponse.from_json(res.response.status_code, res.json)
 
     async def reset_start_async(
         self,
         organization_id: str,
         email_address: str,
-        login_redirect_url: Optional[str] = None,
         reset_password_redirect_url: Optional[str] = None,
         reset_password_expiration_minutes: Optional[int] = None,
-        locale: Optional[str] = None,
+        code_challenge: Optional[str] = None,
+        login_redirect_url: Optional[str] = None,
+        locale: Optional[ResetStartRequestLocale] = None,
         reset_password_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
-        """[Stytch docs](https://stytch.com/docs/api/password-email-reset-start)
+        """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
-        Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
+        This endpoint adapts to your Project's password strength configuration.
+        If you're using [zxcvbn](https://stytch.com/docs/passwords#strength-requirements), the default, your passwords are considered valid
+        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/passwords#strength-requirements), your passwords are
+        considered valid if they meet the requirements that you've set with Stytch.
+        You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
 
-        Parameters:
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - email_address: The email address of the Member to start the email reset process for.
+          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
+          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
+          If you have not set a default `reset_password_redirect_url`, an error is returned.
+          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
+          - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
+          - login_redirect_url: The URL that the member clicks from the reset without password link. This URL should be an endpoint in the backend server
+              that verifies the request by querying Stytch's authenticate endpoint and finishes the magic link flow. If this value is not passed, the
+              default `login_redirect_url` that you set in your Dashboard is used. This value is only used if magic links are enabled for the member. If
+              you have not set a default `login_redirect_url` and magic links are not enabled for the member, an error is returned.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        - `organization_id`: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
-        - `email_address`: The email of the Member
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-        - `reset_password_redirect_url`: The URL that the Member clicks from the reset password link
-
-        - `login_redirect_url`: The URL that the Member clicks from the reset without password link
-
-        - `reset_password_template_id`: Use a custom template for reset password emails.
-
-        - `locale`: Used to determine which language to use when sending the member an email.
-
-        - `reset_password_expiration_minutes`: Sets a time limit after which the email link to reset the member's password will no longer be valid.
-
-        - `code_challenge`: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
+          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
         }
-
-        if login_redirect_url is not None:
-            payload["login_redirect_url"] = login_redirect_url
         if reset_password_redirect_url is not None:
-            payload["reset_password_redirect_url"] = reset_password_redirect_url
+            data["reset_password_redirect_url"] = reset_password_redirect_url
         if reset_password_expiration_minutes is not None:
-            payload[
+            data[
                 "reset_password_expiration_minutes"
             ] = reset_password_expiration_minutes
+        if code_challenge is not None:
+            data["code_challenge"] = code_challenge
+        if login_redirect_url is not None:
+            data["login_redirect_url"] = login_redirect_url
         if locale is not None:
-            payload["locale"] = locale
+            data["locale"] = locale.value
         if reset_password_template_id is not None:
-            payload["reset_password_template_id"] = reset_password_template_id
+            data["reset_password_template_id"] = reset_password_template_id
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "reset/start")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/passwords/email/reset/start", data)
+        res = await self.async_client.post(url, data)
         return ResetStartResponse.from_json(res.response.status, res.json)
 
     def reset(
@@ -143,49 +157,57 @@ class Email:
         password_reset_token: str,
         password: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
+        code_verifier: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
         """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 
         The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
 
-        Parameters:
+        Fields:
+          - password_reset_token: The password reset token to authenticate.
+          - password: The password to reset.
+          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
+              If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
+              both `session_token` and `session_jwt` are provided.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `password_reset_token`: The password reset token to authenticate.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `password`: The password to authenticate
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session Management guide.
-
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
-
-        - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
-
-        - `session_custom_claims`: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in Session duration minutes. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes
-
-        - `code_verifier`: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_jwt: Reuse an existing session instead of creating a new one. If you provide a `session_jwt`, Stytch will update the session. If the `session_jwt`
+              and `magic_links_token` belong to different Members, the `session_jwt` will be ignored. This endpoint will error if both `session_token` and `session_jwt`
+              are provided.
+          - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "password_reset_token": password_reset_token,
             "password": password,
         }
-
         if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_token"] = session_token
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+        if code_verifier is not None:
+            data["code_verifier"] = code_verifier
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "reset")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/passwords/email/reset", data)
+        res = self.sync_client.post(url, data)
         return ResetResponse.from_json(res.response.status_code, res.json)
 
     async def reset_async(
@@ -193,47 +215,55 @@ class Email:
         password_reset_token: str,
         password: str,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
+        code_verifier: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
         """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 
         The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
 
-        Parameters:
+        Fields:
+          - password_reset_token: The password reset token to authenticate.
+          - password: The password to reset.
+          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
+              If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
+              both `session_token` and `session_jwt` are provided.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `password_reset_token`: The password reset token to authenticate.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `password`: The password to authenticate
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session Management guide.
-
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session Management guide.
-
-        - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
-
-        - `session_custom_claims`: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in Session duration minutes. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes
-
-        - `code_verifier`: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_jwt: Reuse an existing session instead of creating a new one. If you provide a `session_jwt`, Stytch will update the session. If the `session_jwt`
+              and `magic_links_token` belong to different Members, the `session_jwt` will be ignored. This endpoint will error if both `session_token` and `session_jwt`
+              are provided.
+          - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "password_reset_token": password_reset_token,
             "password": password,
         }
-
         if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_token"] = session_token
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+        if code_verifier is not None:
+            data["code_verifier"] = code_verifier
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "reset")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/passwords/email/reset", data)
+        res = await self.async_client.post(url, data)
         return ResetResponse.from_json(res.response.status, res.json)

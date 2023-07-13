@@ -51,7 +51,7 @@ def create_test_users(client: stytch.Client, n: int) -> List[str]:
 
 def delete_test_users(client: stytch.Client, user_ids: List[str]) -> None:
     for i, user_id in enumerate(user_ids, start=1):
-        client.users.delete(user_id)
+        client.users.delete(user_id=user_id)
         if i % 10 == 0:
             logging.debug(f"Deleted {i} users")
 

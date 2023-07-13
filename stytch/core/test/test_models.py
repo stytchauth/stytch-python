@@ -5,10 +5,10 @@ from __future__ import annotations
 import unittest
 from unittest.mock import create_autospec
 
-from stytch.core import models
+from stytch.core.response_base import ResponseBase, StytchError, StytchErrorDetails
 
 
-class DummyResponse(models.ResponseBase):
+class DummyResponse(ResponseBase):
     extra_string: str
 
     @classmethod
@@ -84,27 +84,26 @@ class TestModels(unittest.TestCase):
         self.assertFalse(resp2.is_server_error)
 
     def test_stytcherror_from_validation_error(self) -> None:
-        with self.assertRaises(models.StytchError) as e:
+        with self.assertRaises(StytchError) as e:
             DummyResponse.error()
         self.assertTrue(e.exception.details.is_client_error)
 
     def test_stytcherror_from_unknown(self) -> None:
         # Test for when we can't even load a StytchErrorDetails object
-        with self.assertRaises(models.StytchError) as e:
+        with self.assertRaises(StytchError) as e:
             DummyResponse.fatal()
         self.assertTrue(e.exception.details.is_server_error)
 
     def test_stytcherror(self) -> None:
-
         # Just check that calling repr/str calls str on
         # the underlying details object
         with self.subTest("repr"):
-            mock_details = create_autospec(models.StytchErrorDetails)
-            repr(models.StytchError(mock_details))
+            mock_details = create_autospec(StytchErrorDetails)
+            repr(StytchError(mock_details))
             mock_details.__str__.assert_called_once()
         with self.subTest("str"):
-            mock_details = create_autospec(models.StytchErrorDetails)
-            str(models.StytchError(mock_details))
+            mock_details = create_autospec(StytchErrorDetails)
+            str(StytchError(mock_details))
             mock_details.__str__.assert_called_once()
 
     def test_stytcherror_fields(self) -> None:
@@ -115,9 +114,9 @@ class TestModels(unittest.TestCase):
             "error_message": "I'm a teapot!",
             "error_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418",
         }
-        expected = models.StytchErrorDetails(**resp)
+        expected = StytchErrorDetails(**resp)
 
-        with self.assertRaises(models.StytchError) as e:
+        with self.assertRaises(StytchError) as e:
             DummyResponse.from_json(418, resp)
 
         self.assertEqual(e.exception.details, expected)

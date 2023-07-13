@@ -14,9 +14,8 @@ from test.constants import (
 )
 from typing import AsyncGenerator, Generator, Optional, Union
 
-from stytch.b2b.client import Client as B2BClient
-from stytch.client import Client
-from stytch.core.models import StytchError
+from stytch import B2BClient, Client
+from stytch.core.response_base import StytchError
 
 
 @dataclass
@@ -50,7 +49,7 @@ class IntegrationTestBase(unittest.TestCase):
 
         self.project_id: str = project_id
         self.secret: str = secret
-        self.client = Client(self.project_id, self.secret, environment="test")
+        self.b2c_client = Client(self.project_id, self.secret, environment="test")
         self.b2b_client = B2BClient(self.project_id, self.secret, environment="test")
 
     @contextmanager
@@ -105,16 +104,16 @@ class IntegrationTestBase(unittest.TestCase):
         test_user = self.__get_temporary_test_user()
         if create:
             if via_magic_link:
-                users_resp = self.client.users.create(email=test_user.email)
+                users_resp = self.b2c_client.users.create(email=test_user.email)
                 user_id = users_resp.user_id
             else:
-                pw_resp = self.client.passwords.create(
+                pw_resp = self.b2c_client.passwords.create(
                     email=test_user.email, password=test_user.old_password
                 )
                 user_id = pw_resp.user_id
 
             yield self.__get_temporary_created_test_user(test_user, user_id)
-            self.client.users.delete(user_id=user_id)
+            self.b2c_client.users.delete(user_id=user_id)
         else:
             yield test_user
 
@@ -125,15 +124,17 @@ class IntegrationTestBase(unittest.TestCase):
         test_user = self.__get_temporary_test_user()
         if create:
             if via_magic_link:
-                users_resp = await self.client.users.create_async(email=test_user.email)
+                users_resp = await self.b2c_client.users.create_async(
+                    email=test_user.email
+                )
                 user_id = users_resp.user_id
             else:
-                pw_resp = await self.client.passwords.create_async(
+                pw_resp = await self.b2c_client.passwords.create_async(
                     email=test_user.email, password=test_user.old_password
                 )
                 user_id = pw_resp.user_id
 
             yield self.__get_temporary_created_test_user(test_user, user_id)
-            await self.client.users.delete_async(user_id=user_id)
+            await self.b2c_client.users.delete_async(user_id=user_id)
         else:
             yield test_user

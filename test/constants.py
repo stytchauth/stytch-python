@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from stytch.core.models import Name
+from stytch.consumer.models.passwords import MigrateRequestHashType
+from stytch.consumer.models.users import Name
 
 # Constants for loading creds to call the real API
 RUN_INTEGRATION_TESTS_ENV_KEY = "STYTCH_PYTHON_RUN_INTEGRATION_TESTS"
@@ -22,7 +23,7 @@ TEST_OTP_PHONE_NUMBER = "+10000000000"
 TEST_OTP_CODE = "000000"
 # Passwords test constants
 TEST_PW_HASH = "$2a$12$vefoDBbzuMb/NczV/fc9QemTizkNAZr9EO02pIUHPAAJibcYp0.ne"
-TEST_PW_HASH_TYPE = "bcrypt"
+TEST_PW_HASH_TYPE = MigrateRequestHashType.BCRYPT
 # Sessions test constants
 TEST_SESSION_TOKEN = "WJtR5BCy38Szd5AfoDpf0iqFKEt4EE5JhjlWUY7l3FtY"
 # TOTP test constants

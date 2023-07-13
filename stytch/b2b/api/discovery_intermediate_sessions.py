@@ -4,6 +4,8 @@
 # or your changes may be overwritten later!
 # !!!
 
+from __future__ import annotations
+
 from typing import Any, Dict, Optional
 
 from stytch.b2b.models.discovery_intermediate_sessions import ExchangeResponse
@@ -22,10 +24,6 @@ class IntermediateSessions:
         self.sync_client = sync_client
         self.async_client = async_client
 
-    @property
-    def sub_url(self) -> str:
-        return "discovery/intermediate_sessions"
-
     def exchange(
         self,
         intermediate_session_token: str,
@@ -33,37 +31,42 @@ class IntermediateSessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ExchangeResponse:
-        """Exchange an Intermediate Session for a fully realized Member Session in a desired Organization. This operation consumes the Intermediate Session.
+        """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) in a desired [Organization](https://stytch.com/docs/b2b/api/organization-object).
+        This operation consumes the Intermediate Session.
 
         This endpoint can be used to accept invites and create new members via domain matching.
 
-        Parameters:
+        Fields:
+          - intermediate_session_token: The Intermediate Session Token. This token does not belong to a specific instance of a member, but may be exchanged for an existing Member Session or used to create a new organization.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `intermediate_session_token`: The Intermediate Session Token to consume to create the new Member.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `organization_id`: The UUID of the Organization to create the new Member and Member Session in.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_duration_minutes`: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-            - This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-            - If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-            - If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want to use the Stytch session product, you can ignore the session fields in the response.
-
-        - `session_custom_claims`: Add a custom claims map to the session being authenticated. Claims will be included on the session object and in the JWT. To update a key in an existing session, supply a new value. To delete a key, supply a null value.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "intermediate_session_token": intermediate_session_token,
             "organization_id": organization_id,
         }
-
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "exchange")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for(
+            "/v1/b2b/discovery/intermediate_sessions/exchange", data
+        )
+        res = self.sync_client.post(url, data)
         return ExchangeResponse.from_json(res.response.status_code, res.json)
 
     async def exchange_async(
@@ -73,35 +76,40 @@ class IntermediateSessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ExchangeResponse:
-        """Exchange an Intermediate Session for a fully realized Member Session in a desired Organization. This operation consumes the Intermediate Session.
+        """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) in a desired [Organization](https://stytch.com/docs/b2b/api/organization-object).
+        This operation consumes the Intermediate Session.
 
         This endpoint can be used to accept invites and create new members via domain matching.
 
-        Parameters:
+        Fields:
+          - intermediate_session_token: The Intermediate Session Token. This token does not belong to a specific instance of a member, but may be exchanged for an existing Member Session or used to create a new organization.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `intermediate_session_token`: The Intermediate Session Token to consume to create the new Member.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `organization_id`: The UUID of the Organization to create the new Member and Member Session in.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_duration_minutes`: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-            - This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-            - If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-            - If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want to use the Stytch session product, you can ignore the session fields in the response.
-
-        - `session_custom_claims`: Add a custom claims map to the session being authenticated. Claims will be included on the session object and in the JWT. To update a key in an existing session, supply a new value. To delete a key, supply a null value.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "intermediate_session_token": intermediate_session_token,
             "organization_id": organization_id,
         }
-
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "exchange")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for(
+            "/v1/b2b/discovery/intermediate_sessions/exchange", data
+        )
+        res = await self.async_client.post(url, data)
         return ExchangeResponse.from_json(res.response.status, res.json)
