@@ -4,6 +4,8 @@
 # or your changes may be overwritten later!
 # !!!
 
+from __future__ import annotations
+
 from typing import Any, Dict, Optional
 
 from stytch.b2b.models.magic_links_discovery import AuthenticateResponse
@@ -22,34 +24,25 @@ class Discovery:
         self.sync_client = sync_client
         self.async_client = async_client
 
-    @property
-    def sub_url(self) -> str:
-        return "magic_links/discovery"
-
     def authenticate(
         self,
         discovery_magic_links_token: str,
         pkce_code_verifier: Optional[str] = None,
     ) -> AuthenticateResponse:
-        """Authenticates the discovery Magic Link token and exchanges it for an Intermediate Session Token. Intermediate Session Tokens can be used for various [Discovery](https://stytch.com/docs/b2b/api/discovery-overview) login flows and are valid for 10 minutes.
+        """Authenticates the Discovery Magic Link token and exchanges it for an Intermediate Session Token. Intermediate Session Tokens can be used for various Discovery login flows and are valid for 10 minutes.
 
-        Parameters:
-
-        - `discovery_magic_links_token`: The Discovery Email Magic Link token to authenticate.
-
-        - `pkce_code_verifier`: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+        Fields:
+          - discovery_magic_links_token: The Discovery Email Magic Link token to authenticate.
+          - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "discovery_magic_links_token": discovery_magic_links_token,
         }
-
         if pkce_code_verifier is not None:
-            payload["pkce_code_verifier"] = pkce_code_verifier
+            data["pkce_code_verifier"] = pkce_code_verifier
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/magic_links/discovery/authenticate", data)
+        res = self.sync_client.post(url, data)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -57,23 +50,18 @@ class Discovery:
         discovery_magic_links_token: str,
         pkce_code_verifier: Optional[str] = None,
     ) -> AuthenticateResponse:
-        """Authenticates the discovery Magic Link token and exchanges it for an Intermediate Session Token. Intermediate Session Tokens can be used for various [Discovery](https://stytch.com/docs/b2b/api/discovery-overview) login flows and are valid for 10 minutes.
+        """Authenticates the Discovery Magic Link token and exchanges it for an Intermediate Session Token. Intermediate Session Tokens can be used for various Discovery login flows and are valid for 10 minutes.
 
-        Parameters:
-
-        - `discovery_magic_links_token`: The Discovery Email Magic Link token to authenticate.
-
-        - `pkce_code_verifier`: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+        Fields:
+          - discovery_magic_links_token: The Discovery Email Magic Link token to authenticate.
+          - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "discovery_magic_links_token": discovery_magic_links_token,
         }
-
         if pkce_code_verifier is not None:
-            payload["pkce_code_verifier"] = pkce_code_verifier
+            data["pkce_code_verifier"] = pkce_code_verifier
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/magic_links/discovery/authenticate", data)
+        res = await self.async_client.post(url, data)
         return AuthenticateResponse.from_json(res.response.status, res.json)

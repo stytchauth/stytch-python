@@ -4,11 +4,14 @@
 # or your changes may be overwritten later!
 # !!!
 
+from __future__ import annotations
+
 from typing import Any, Dict, Optional
 
 from stytch.b2b.models.sessions import (
     AuthenticateResponse,
     ExchangeResponse,
+    GetJWKSResponse,
     GetResponse,
     RevokeResponse,
 )
@@ -27,10 +30,6 @@ class Sessions:
         self.sync_client = sync_client
         self.async_client = async_client
 
-    @property
-    def sub_url(self) -> str:
-        return "sessions"
-
     def get(
         self,
         organization_id: str,
@@ -38,21 +37,17 @@ class Sessions:
     ) -> GetResponse:
         """Retrieves all active Sessions for a Member.
 
-        Parameters:
-
-        - `organization_id`: Globally unique UUID that identifies a specific Organization in the Stytch API. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
-
-        - `member_id`: Globally unique UUID that identifies a specific Member. The member_id is critical to perform operations on a Member, so be sure to preserve this value.
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
-
-        res = self.sync_client.get(url, params=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions", data)
+        res = self.sync_client.get(url, data)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
@@ -62,97 +57,103 @@ class Sessions:
     ) -> GetResponse:
         """Retrieves all active Sessions for a Member.
 
-        Parameters:
-
-        - `organization_id`: Globally unique UUID that identifies a specific Organization in the Stytch API. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
-
-        - `member_id`: Globally unique UUID that identifies a specific Member. The member_id is critical to perform operations on a Member, so be sure to preserve this value.
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
         }
 
-        url = self.api_base.route_with_sub_url(self.sub_url, None)
-
-        res = await self.async_client.get(url, params=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions", data)
+        res = await self.async_client.get(url, data)
         return GetResponse.from_json(res.response.status, res.json)
 
     def authenticate(
         self,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
+        """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
-        This endpoint requires only one of either the `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
+        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-        Parameters:
+        Fields:
+          - session_token: A secret token for a given Stytch Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
-
-        - `sessions_custom_claims`: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in session_duration_minutes. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value. Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {}
-
+        data: Dict[str, Any] = {}
         if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_token"] = session_token
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
+        res = self.sync_client.post(url, data)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
         self,
         session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Authenticates a Session. You may provide a JWT that needs to be refreshed and is expired according to its exp claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
+        """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
-        This endpoint requires only one of either the `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
+        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-        Parameters:
+        Fields:
+          - session_token: A secret token for a given Stytch Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
-
-        - `sessions_custom_claims`: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in session_duration_minutes. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value. Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {}
-
+        data: Dict[str, Any] = {}
         if session_token is not None:
-            payload["session_token"] = session_token
-        if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_token"] = session_token
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
+        res = await self.async_client.post(url, data)
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def revoke(
@@ -162,33 +163,26 @@ class Sessions:
         session_jwt: Optional[str] = None,
         member_id: Optional[str] = None,
     ) -> RevokeResponse:
-        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`. This endpoint requires exactly one body param to be included in the request. It will return an error if multiple are present.
+        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`.
 
-        Parameters:
-
-        - `member_session_id`: The UUID of the specific Member Session to revoke.
-
-        - `session_token`: The `session_token` of the specific Member Session to revoke.
-
-        - `session_jwt`: The JSON Web Token (JWT) of the specific Member Session to revoke.
-
-        - `member_id`: The UUID of the Member to revoke all sessions for.
+        Fields:
+          - member_session_id: Globally unique UUID that identifies a specific Session in the Stytch API. The `member_session_id` is critical to perform operations on an Session, so be sure to preserve this value.
+          - session_token: A secret token for a given Stytch Session.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
-
-        payload: Dict[str, Any] = {}
-
+        data: Dict[str, Any] = {}
         if member_session_id is not None:
-            payload["member_session_id"] = member_session_id
+            data["member_session_id"] = member_session_id
         if session_token is not None:
-            payload["session_token"] = session_token
+            data["session_token"] = session_token
         if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_jwt"] = session_jwt
         if member_id is not None:
-            payload["member_id"] = member_id
+            data["member_id"] = member_id
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions/revoke", data)
+        res = self.sync_client.post(url, data)
         return RevokeResponse.from_json(res.response.status_code, res.json)
 
     async def revoke_async(
@@ -198,33 +192,26 @@ class Sessions:
         session_jwt: Optional[str] = None,
         member_id: Optional[str] = None,
     ) -> RevokeResponse:
-        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`. This endpoint requires exactly one body param to be included in the request. It will return an error if multiple are present.
+        """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`.
 
-        Parameters:
-
-        - `member_session_id`: The UUID of the specific Member Session to revoke.
-
-        - `session_token`: The `session_token` of the specific Member Session to revoke.
-
-        - `session_jwt`: The JSON Web Token (JWT) of the specific Member Session to revoke.
-
-        - `member_id`: The UUID of the Member to revoke all sessions for.
+        Fields:
+          - member_session_id: Globally unique UUID that identifies a specific Session in the Stytch API. The `member_session_id` is critical to perform operations on an Session, so be sure to preserve this value.
+          - session_token: A secret token for a given Stytch Session.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
-
-        payload: Dict[str, Any] = {}
-
+        data: Dict[str, Any] = {}
         if member_session_id is not None:
-            payload["member_session_id"] = member_session_id
+            data["member_session_id"] = member_session_id
         if session_token is not None:
-            payload["session_token"] = session_token
+            data["session_token"] = session_token
         if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_jwt"] = session_jwt
         if member_id is not None:
-            payload["member_id"] = member_id
+            data["member_id"] = member_id
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "revoke")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions/revoke", data)
+        res = await self.async_client.post(url, data)
         return RevokeResponse.from_json(res.response.status, res.json)
 
     def exchange(
@@ -239,38 +226,39 @@ class Sessions:
 
         To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
 
-        Parameters:
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_token: The `session_token` belonging to the member that you wish to associate the email with.
+          - session_jwt: The `session_jwt` belonging to the member that you wish to associate the email with.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `organization_id`: The UUID of the Organization to create the new session in.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `session_token`: The `session_token` belonging to the member that you wish to associate the email with.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_jwt`: The `session_jwt` belonging to the member that you wish to associate the email with.
-
-        - `session_duration_minutes`: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-          - This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-          - If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-          - If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want to use the Stytch session product, you can ignore the session fields in the response.
-
-        - `session_custom_claims`: Add a custom claims map to the session being authenticated. Claims will be included on the session object and in the JWT. To update a key in an existing session, supply a new value. To delete a key, supply a null value.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
-
         if session_token is not None:
-            payload["session_token"] = session_token
+            data["session_token"] = session_token
         if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "exchange")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
+        res = self.sync_client.post(url, data)
         return ExchangeResponse.from_json(res.response.status_code, res.json)
 
     async def exchange_async(
@@ -285,36 +273,71 @@ class Sessions:
 
         To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
 
-        Parameters:
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_token: The `session_token` belonging to the member that you wish to associate the email with.
+          - session_jwt: The `session_jwt` belonging to the member that you wish to associate the email with.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `organization_id`: The UUID of the Organization to create the new session in.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `session_token`: The `session_token` belonging to the member that you wish to associate the email with.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_jwt`: The `session_jwt` belonging to the member that you wish to associate the email with.
-
-        - `session_duration_minutes`: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-          - This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-          - If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-          - If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want to use the Stytch session product, you can ignore the session fields in the response.
-
-        - `session_custom_claims`: Add a custom claims map to the session being authenticated. Claims will be included on the session object and in the JWT. To update a key in an existing session, supply a new value. To delete a key, supply a null value.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
-
         if session_token is not None:
-            payload["session_token"] = session_token
+            data["session_token"] = session_token
         if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "exchange")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
+        res = await self.async_client.post(url, data)
         return ExchangeResponse.from_json(res.response.status, res.json)
+
+    def get_jwks(
+        self,
+        project_id: str,
+    ) -> GetJWKSResponse:
+        """Get the JSON Web Key Set (JWKS) for a project.
+
+        Fields:
+          - project_id: The `project_id` to get the JWKS for.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "project_id": project_id,
+        }
+
+        url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
+        res = self.sync_client.get(url, data)
+        return GetJWKSResponse.from_json(res.response.status_code, res.json)
+
+    async def get_jwks_async(
+        self,
+        project_id: str,
+    ) -> GetJWKSResponse:
+        """Get the JSON Web Key Set (JWKS) for a project.
+
+        Fields:
+          - project_id: The `project_id` to get the JWKS for.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "project_id": project_id,
+        }
+
+        url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
+        res = await self.async_client.get(url, data)
+        return GetJWKSResponse.from_json(res.response.status, res.json)

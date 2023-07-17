@@ -1,3 +1,0 @@
-[Stytch docs](https://stytch.com/docs/api/webauthn-register)
-
-Complete the creation of a WebAuthn registration by passing the response from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter. If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [`navigator.credentials.create()`](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.

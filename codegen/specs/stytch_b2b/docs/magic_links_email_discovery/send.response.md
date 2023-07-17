@@ -1,1 +1,0 @@
-No response fields beyond those defined in `ResponseBase`

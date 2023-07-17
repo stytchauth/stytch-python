@@ -24,7 +24,7 @@ from test.integration_base import CreatedTestUser, IntegrationTestBase
 
 class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
     def test_crypto_wallets(self) -> None:
-        api = self.client.crypto_wallets
+        api = self.b2c_client.crypto_wallets
 
         self.assertTrue(
             api.authenticate_start(
@@ -41,7 +41,7 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
         )
 
     def test_magic_links(self) -> None:
-        api = self.client.magic_links
+        api = self.b2c_client.magic_links
 
         self.assertTrue(api.authenticate(token=TEST_MAGIC_TOKEN).is_success)
 
@@ -67,12 +67,21 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             self.assertTrue(api.email.send(TEST_MAGIC_EMAIL).is_success)
 
     def test_oauth(self) -> None:
-        api = self.client.oauth
+        api = self.b2c_client.oauth
+
+        with self.skip_if_stytcherror(
+            subtest_name="attach",
+            skip_reason="No OAuth config set up",
+            error_message_pattern="OAuth config",
+        ):
+            with self._get_temporary_user() as user:
+                assert isinstance(user, CreatedTestUser)
+                self.assertTrue(api.attach(provider="google", user_id=user.user_id))
 
         self.assertTrue(api.authenticate(token=TEST_OAUTH_TOKEN).is_success)
 
     def test_otp(self) -> None:
-        api = self.client.otps
+        api = self.b2c_client.otps
 
         with self.subTest("email"):
             self.assertTrue(api.email.login_or_create(email=TEST_OTP_EMAIL).is_success)
@@ -109,7 +118,7 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             )
 
     def test_passwords(self) -> None:
-        api = self.client.passwords
+        api = self.b2c_client.passwords
 
         with self._get_temporary_user(create=False) as user:
             self.assertTrue(api.strength_check(password=user.old_password).is_success)
@@ -120,7 +129,7 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             )
             self.assertTrue(authenticate_response.is_success)
             # Remember to manually delete since we manually created!
-            self.client.users.delete(create_response.user_id)
+            self.b2c_client.users.delete(create_response.user_id)
 
         # Migrate an existing user created via magic link
         with self._get_temporary_user(via_magic_link=True) as user:
@@ -132,20 +141,8 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
                 ).is_success
             )
 
-        with self.skip_if_stytcherror(
-            subtest_name="email",
-            skip_reason="No login_redirect_url set up",
-            error_message_pattern="There are no .* URLs",
-        ):
-            # Can't test: there's no reset token that can be used for testing the API
-            self.skipTest("No reset token to use for testing")
-            with self._get_temporary_user() as user:
-                reset_start_response = api.email.reset_start(email=user.email)
-                self.assertTrue(reset_start_response.is_success)
-                # TODO: We don't have a sample reset token (see skipTest above)
-                self.assertTrue(
-                    api.email.reset(token="", password=user.new_password).is_success
-                )
+        # NOTE: email and sessions sub-APIS are not tested since there's no reset token
+        # defined in test resources
         with self.subTest("existing_password"):
             with self._get_temporary_user() as user:
                 self.assertTrue(
@@ -155,20 +152,9 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
                         new_password=user.new_password,
                     ).is_success
                 )
-        with self.subTest("session"):
-            # Can't test: there's no sesison token that can be used for testing the API
-            self.skipTest("No session token to use for testing")
-            with self._get_temporary_user() as user:
-                # TODO: We don't have a sample session token (see skipTest above)
-                self.assertTrue(
-                    api.session.reset(
-                        session_token="",
-                        password=user.new_password,
-                    ).is_success
-                )
 
     def test_sessions(self) -> None:
-        api = self.client.sessions
+        api = self.b2c_client.sessions
 
         with self._get_temporary_user() as user:
             # TODO: With @overload, it should be possible to let
@@ -182,10 +168,10 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             )
             # Can't test revoke -- it doesn't support the TEST_SESSION_TOKEN
             # self.assertTrue(api.revoke(session_token=TEST_SESSION_TOKEN).is_success)
-            self.assertTrue(api.jwks(project_id=self.project_id).is_success)
+            self.assertTrue(api.get_jwks(project_id=self.project_id).is_success)
 
     def test_totps(self) -> None:
-        api = self.client.totps
+        api = self.b2c_client.totps
 
         self.assertTrue(api.create(user_id=TEST_TOTP_USER_ID).is_success)
         self.assertTrue(
@@ -204,12 +190,11 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
         # NOTE: the various `delete_XXX` can't easily be tested (yet)
         # since it would require we first create the user with each of those
         # methods/auth factors present (and possibly authenticated?).
-        api = self.client.users
+        api = self.b2c_client.users
 
         with self._get_temporary_user(create=False) as user:
             create_resp = api.create(email=user.email)
             self.assertTrue(create_resp.is_success)
-            self.assertTrue(api.get_pending().is_success)
             self.assertTrue(api.search(limit=10).is_success)
             self.assertTrue(
                 api.update(
@@ -221,7 +206,7 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             self.assertTrue(api.delete(user_id=create_resp.user_id).is_success)
 
     def test_webauthn(self) -> None:
-        api = self.client.webauthn
+        api = self.b2c_client.webauthn
         # Can't test: webauthn requires calling browser functions
         # It would probably work if we had some way of using test API
         # sample values (like a sample public_key_credential for testing)

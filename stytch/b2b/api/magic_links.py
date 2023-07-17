@@ -4,6 +4,8 @@
 # or your changes may be overwritten later!
 # !!!
 
+from __future__ import annotations
+
 from typing import Any, Dict, Optional
 
 from stytch.b2b.api.magic_links_discovery import Discovery
@@ -26,10 +28,6 @@ class MagicLinks:
         self.email = Email(api_base, sync_client, async_client)
         self.discovery = Discovery(api_base, sync_client, async_client)
 
-    @property
-    def sub_url(self) -> str:
-        return "magic_links"
-
     def authenticate(
         self,
         magic_links_token: str,
@@ -39,42 +37,48 @@ class MagicLinks:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Authenticate a Member with a magic link. This endpoint requires a magic link token to validate, making sure it's not expired or previously used. If the Member’s status is invited or pending, they will be updated to active.
+        """Authenticate a Member with a Magic Link. This endpoint requires a Magic Link token that is not expired or previously used. If the Member’s status is `pending` or `invited`, they will be updated to `active`. Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
-        Parameters:
+        Fields:
+          - magic_links_token: The Email Magic Link token to authenticate.
+          - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
+              If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
+              both `session_token` and `session_jwt` are provided.
+          - session_jwt: Reuse an existing session instead of creating a new one. If you provide a `session_jwt`, Stytch will update the session. If the `session_jwt`
+              and `magic_links_token` belong to different Members, the `session_jwt` will be ignored. This endpoint will error if both `session_token` and `session_jwt`
+              are provided.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `magic_links_token`: The token to authenticate.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `pkce_code_verifier`: A base64url encoded one-time secret used to validate that the request starts and ends on the same device.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
-
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
-
-        - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
-
-        - `session_custom_claims`: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in Session duration minutes. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "magic_links_token": magic_links_token,
         }
-
         if pkce_code_verifier is not None:
-            payload["pkce_code_verifier"] = pkce_code_verifier
+            data["pkce_code_verifier"] = pkce_code_verifier
         if session_token is not None:
-            payload["session_token"] = session_token
+            data["session_token"] = session_token
         if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = self.sync_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/magic_links/authenticate", data)
+        res = self.sync_client.post(url, data)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -86,40 +90,46 @@ class MagicLinks:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Authenticate a Member with a magic link. This endpoint requires a magic link token to validate, making sure it's not expired or previously used. If the Member’s status is invited or pending, they will be updated to active.
+        """Authenticate a Member with a Magic Link. This endpoint requires a Magic Link token that is not expired or previously used. If the Member’s status is `pending` or `invited`, they will be updated to `active`. Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
-        Parameters:
+        Fields:
+          - magic_links_token: The Email Magic Link token to authenticate.
+          - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
+              If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
+              both `session_token` and `session_jwt` are provided.
+          - session_jwt: Reuse an existing session instead of creating a new one. If you provide a `session_jwt`, Stytch will update the session. If the `session_jwt`
+              and `magic_links_token` belong to different Members, the `session_jwt` will be ignored. This endpoint will error if both `session_token` and `session_jwt`
+              are provided.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-        - `magic_links_token`: The token to authenticate.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-        - `pkce_code_verifier`: A base64url encoded one-time secret used to validate that the request starts and ends on the same device.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-        - `session_token`: A secret token for a given Stytch Session. Read more about session_token in our Session management guide.
-
-        - `session_jwt`: The JSON Web Token (JWT) for a given Stytch Session. Read more about session_token in our Session management guide.
-
-        - `session_duration_minutes`: The Session lifetime of this many minutes from now; minimum of 5 and a maximum of 129600 minutes (90 days). Note that a successful authentication will continue to extend the Session this many minutes.
-
-        - `session_custom_claims`: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in Session duration minutes. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
         """  # noqa
-
-        payload: Dict[str, Any] = {
+        data: Dict[str, Any] = {
             "magic_links_token": magic_links_token,
         }
-
         if pkce_code_verifier is not None:
-            payload["pkce_code_verifier"] = pkce_code_verifier
+            data["pkce_code_verifier"] = pkce_code_verifier
         if session_token is not None:
-            payload["session_token"] = session_token
+            data["session_token"] = session_token
         if session_jwt is not None:
-            payload["session_jwt"] = session_jwt
+            data["session_jwt"] = session_jwt
         if session_duration_minutes is not None:
-            payload["session_duration_minutes"] = session_duration_minutes
+            data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
-            payload["session_custom_claims"] = session_custom_claims
+            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.route_with_sub_url(self.sub_url, "authenticate")
-
-        res = await self.async_client.post(url, json=payload)
+        url = self.api_base.url_for("/v1/b2b/magic_links/authenticate", data)
+        res = await self.async_client.post(url, data)
         return AuthenticateResponse.from_json(res.response.status, res.json)
