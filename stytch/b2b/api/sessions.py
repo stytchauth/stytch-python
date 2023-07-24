@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional
 
 from stytch.b2b.models.sessions import (
     AuthenticateResponse,
+    ExchangeRequestLocale,
     ExchangeResponse,
     GetJWKSResponse,
     GetResponse,
@@ -221,6 +222,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[ExchangeRequestLocale] = None,
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 
@@ -244,6 +246,7 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -256,6 +259,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = self.sync_client.post(url, data)
@@ -268,6 +273,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[ExchangeRequestLocale] = None,
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 
@@ -291,6 +297,7 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -303,6 +310,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = await self.async_client.post(url, data)

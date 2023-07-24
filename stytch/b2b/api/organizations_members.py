@@ -12,6 +12,7 @@ from stytch.b2b.models.organizations import SearchQuery
 from stytch.b2b.models.organizations_members import (
     CreateResponse,
     DeletePasswordResponse,
+    DeletePhoneNumberResponse,
     DeleteResponse,
     GetResponse,
     SearchResponse,
@@ -40,6 +41,8 @@ class Members:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         is_breakglass: Optional[bool] = None,
+        phone_number: Optional[str] = None,
+        mfa_enrolled: Optional[bool] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
 
@@ -52,6 +55,8 @@ class Members:
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - phone_number: (no documentation yet)
+          - mfa_enrolled: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -65,6 +70,10 @@ class Members:
             data["untrusted_metadata"] = untrusted_metadata
         if is_breakglass is not None:
             data["is_breakglass"] = is_breakglass
+        if phone_number is not None:
+            data["phone_number"] = phone_number
+        if mfa_enrolled is not None:
+            data["mfa_enrolled"] = mfa_enrolled
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -80,6 +89,8 @@ class Members:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         is_breakglass: Optional[bool] = None,
+        phone_number: Optional[str] = None,
+        mfa_enrolled: Optional[bool] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
 
@@ -92,6 +103,8 @@ class Members:
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - phone_number: (no documentation yet)
+          - mfa_enrolled: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -105,6 +118,10 @@ class Members:
             data["untrusted_metadata"] = untrusted_metadata
         if is_breakglass is not None:
             data["is_breakglass"] = is_breakglass
+        if phone_number is not None:
+            data["phone_number"] = phone_number
+        if mfa_enrolled is not None:
+            data["mfa_enrolled"] = mfa_enrolled
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -155,6 +172,40 @@ class Members:
         )
         res = await self.async_client.delete(url)
         return DeleteResponse.from_json(res.response.status, res.json)
+
+    def delete_phone_number(
+        self,
+        organization_id: str,
+        member_id: str,
+    ) -> DeletePhoneNumberResponse:
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/phone_numbers/{member_id}",
+            data,
+        )
+        res = self.sync_client.delete(url)
+        return DeletePhoneNumberResponse.from_json(res.response.status_code, res.json)
+
+    async def delete_phone_number_async(
+        self,
+        organization_id: str,
+        member_id: str,
+    ) -> DeletePhoneNumberResponse:
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/phone_numbers/{member_id}",
+            data,
+        )
+        res = await self.async_client.delete(url)
+        return DeletePhoneNumberResponse.from_json(res.response.status, res.json)
 
     def search(
         self,
@@ -273,6 +324,8 @@ class Members:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         create_member_as_pending: Optional[bool] = None,
         is_breakglass: Optional[bool] = None,
+        phone_number: Optional[str] = None,
+        mfa_enrolled: Optional[bool] = None,
     ) -> CreateResponse:
         """Creates a Member. An `organization_id` and `email_address` are required.
 
@@ -286,6 +339,8 @@ class Members:
           for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - phone_number: (no documentation yet)
+          - mfa_enrolled: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -301,6 +356,10 @@ class Members:
             data["create_member_as_pending"] = create_member_as_pending
         if is_breakglass is not None:
             data["is_breakglass"] = is_breakglass
+        if phone_number is not None:
+            data["phone_number"] = phone_number
+        if mfa_enrolled is not None:
+            data["mfa_enrolled"] = mfa_enrolled
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data
@@ -317,6 +376,8 @@ class Members:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         create_member_as_pending: Optional[bool] = None,
         is_breakglass: Optional[bool] = None,
+        phone_number: Optional[str] = None,
+        mfa_enrolled: Optional[bool] = None,
     ) -> CreateResponse:
         """Creates a Member. An `organization_id` and `email_address` are required.
 
@@ -330,6 +391,8 @@ class Members:
           for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - phone_number: (no documentation yet)
+          - mfa_enrolled: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -345,6 +408,10 @@ class Members:
             data["create_member_as_pending"] = create_member_as_pending
         if is_breakglass is not None:
             data["is_breakglass"] = is_breakglass
+        if phone_number is not None:
+            data["phone_number"] = phone_number
+        if mfa_enrolled is not None:
+            data["mfa_enrolled"] = mfa_enrolled
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data

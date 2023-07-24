@@ -45,6 +45,7 @@ class Organizations:
         email_invites: Optional[str] = None,
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
+        mfa_policy: Optional[str] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -93,6 +94,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+          - mfa_policy: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_name": organization_name,
@@ -115,6 +117,8 @@ class Organizations:
             data["auth_methods"] = auth_methods
         if allowed_auth_methods is not None:
             data["allowed_auth_methods"] = allowed_auth_methods
+        if mfa_policy is not None:
+            data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = self.sync_client.post(url, data)
@@ -132,6 +136,7 @@ class Organizations:
         email_invites: Optional[str] = None,
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
+        mfa_policy: Optional[str] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -180,6 +185,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+          - mfa_policy: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_name": organization_name,
@@ -202,6 +208,8 @@ class Organizations:
             data["auth_methods"] = auth_methods
         if allowed_auth_methods is not None:
             data["allowed_auth_methods"] = allowed_auth_methods
+        if mfa_policy is not None:
+            data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = await self.async_client.post(url, data)
@@ -256,6 +264,7 @@ class Organizations:
         email_invites: Optional[str] = None,
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
+        mfa_policy: Optional[str] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members. test
 
@@ -306,6 +315,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+          - mfa_policy: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -336,6 +346,8 @@ class Organizations:
             data["auth_methods"] = auth_methods
         if allowed_auth_methods is not None:
             data["allowed_auth_methods"] = allowed_auth_methods
+        if mfa_policy is not None:
+            data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data)
@@ -356,6 +368,7 @@ class Organizations:
         email_invites: Optional[str] = None,
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
+        mfa_policy: Optional[str] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members. test
 
@@ -406,6 +419,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+          - mfa_policy: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -436,6 +450,8 @@ class Organizations:
             data["auth_methods"] = auth_methods
         if allowed_auth_methods is not None:
             data["allowed_auth_methods"] = allowed_auth_methods
+        if mfa_policy is not None:
+            data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data)

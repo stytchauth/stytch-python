@@ -6,10 +6,11 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import pydantic
 
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 
 
@@ -26,6 +27,10 @@ class Membership(pydantic.BaseModel):
     member: Optional[Member] = None
 
 
+class PrimaryRequired(pydantic.BaseModel):
+    allowed_auth_methods: List[str]
+
+
 class DiscoveredOrganization(pydantic.BaseModel):
     """
     Fields:
@@ -33,8 +38,12 @@ class DiscoveredOrganization(pydantic.BaseModel):
       If not, the member needs to perform additional authentication before logging in - such as password or SSO auth.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - membership: Information about the membership.
+      - primary_required: (no documentation yet)
+      - mfa_required: (no documentation yet)
     """  # noqa
 
     member_authenticated: bool
     organization: Optional[Organization] = None
     membership: Optional[Membership] = None
+    primary_required: Optional[PrimaryRequired] = None
+    mfa_required: Optional[MfaRequired] = None

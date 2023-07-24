@@ -52,6 +52,7 @@ class AuthenticationFactorDeliveryMethod(enum.Enum):
     SSO_SAML = "sso_saml"
     SSO_OIDC = "sso_oidc"
     OAUTH_SALESFORCE = "oauth_salesforce"
+    OAUTH_YAHOO = "oauth_yahoo"
 
 
 class AuthenticationFactorType(enum.Enum):
@@ -260,6 +261,12 @@ class WebAuthnFactor(pydantic.BaseModel):
     user_agent: str
 
 
+class YahooOAuthFactor(pydantic.BaseModel):
+    id: str
+    email_id: str
+    provider_subject: str
+
+
 class AuthenticationFactor(pydantic.BaseModel):
     type: AuthenticationFactorType
     delivery_method: AuthenticationFactorDeliveryMethod
@@ -298,6 +305,7 @@ class AuthenticationFactor(pydantic.BaseModel):
     saml_sso_factor: Optional[SAMLSSOFactor] = None
     oidc_sso_factor: Optional[OIDCSSOFactor] = None
     salesforce_oauth_factor: Optional[SalesforceOAuthFactor] = None
+    yahoo_oauth_factor: Optional[YahooOAuthFactor] = None
 
     class Config:
         use_enum_values = True

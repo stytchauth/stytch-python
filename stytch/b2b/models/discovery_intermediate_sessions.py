@@ -6,11 +6,18 @@
 
 from __future__ import annotations
 
+import enum
 from typing import Optional
 
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
+
+
+class ExchangeRequestLocale(enum.Enum):
+    EN = "en"
+    ES = "es"
+    PTBR = "pt-br"
 
 
 class ExchangeResponse(ResponseBase):

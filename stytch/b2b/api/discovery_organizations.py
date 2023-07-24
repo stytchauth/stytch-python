@@ -39,6 +39,7 @@ class Organizations:
         email_invites: Optional[str] = None,
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
+        mfa_policy: Optional[str] = None,
     ) -> CreateResponse:
         """If an end user does not want to join any already-existing organization, or has no possible organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
@@ -103,6 +104,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+          - mfa_policy: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "intermediate_session_token": intermediate_session_token,
@@ -129,6 +131,8 @@ class Organizations:
             data["auth_methods"] = auth_methods
         if allowed_auth_methods is not None:
             data["allowed_auth_methods"] = allowed_auth_methods
+        if mfa_policy is not None:
+            data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = self.sync_client.post(url, data)
@@ -149,6 +153,7 @@ class Organizations:
         email_invites: Optional[str] = None,
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
+        mfa_policy: Optional[str] = None,
     ) -> CreateResponse:
         """If an end user does not want to join any already-existing organization, or has no possible organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
@@ -213,6 +218,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+          - mfa_policy: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "intermediate_session_token": intermediate_session_token,
@@ -239,6 +245,8 @@ class Organizations:
             data["auth_methods"] = auth_methods
         if allowed_auth_methods is not None:
             data["allowed_auth_methods"] = allowed_auth_methods
+        if mfa_policy is not None:
+            data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = await self.async_client.post(url, data)
