@@ -10,7 +10,10 @@ from typing import Any, Dict, Optional
 
 from stytch.b2b.api.magic_links_discovery import Discovery
 from stytch.b2b.api.magic_links_email import Email
-from stytch.b2b.models.magic_links import AuthenticateResponse
+from stytch.b2b.models.magic_links import (
+    AuthenticateRequestLocale,
+    AuthenticateResponse,
+)
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -36,6 +39,7 @@ class MagicLinks:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a Magic Link. This endpoint requires a Magic Link token that is not expired or previously used. If the Member’s status is `pending` or `invited`, they will be updated to `active`. Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
@@ -62,6 +66,7 @@ class MagicLinks:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "magic_links_token": magic_links_token,
@@ -76,6 +81,8 @@ class MagicLinks:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/magic_links/authenticate", data)
         res = self.sync_client.post(url, data)
@@ -89,6 +96,7 @@ class MagicLinks:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a Magic Link. This endpoint requires a Magic Link token that is not expired or previously used. If the Member’s status is `pending` or `invited`, they will be updated to `active`. Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
@@ -115,6 +123,7 @@ class MagicLinks:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "magic_links_token": magic_links_token,
@@ -129,6 +138,8 @@ class MagicLinks:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/magic_links/authenticate", data)
         res = await self.async_client.post(url, data)

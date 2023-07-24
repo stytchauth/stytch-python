@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import datetime
+import enum
 from typing import Any, Dict, List, Optional
 
 import pydantic
@@ -14,6 +15,12 @@ import pydantic
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
+
+
+class AuthenticateRequestLocale(enum.Enum):
+    EN = "en"
+    ES = "es"
+    PTBR = "pt-br"
 
 
 class OIDCConnection(pydantic.BaseModel):

@@ -7,13 +7,20 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Optional
+import enum
+from typing import Any, Dict, List
 
 import pydantic
 
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.consumer.models.sessions import JWK, AuthenticationFactor
 from stytch.core.response_base import ResponseBase
+
+
+class ExchangeRequestLocale(enum.Enum):
+    EN = "en"
+    ES = "es"
+    PTBR = "pt-br"
 
 
 class MemberSession(pydantic.BaseModel):
@@ -25,8 +32,8 @@ class MemberSession(pydantic.BaseModel):
       - last_accessed_at: The timestamp when the Session was last accessed. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - expires_at: The timestamp when the Session expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - authentication_factors: An array of different authentication factors that have initiated a Session.
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
       - custom_claims: The custom claims map for a Session. Claims can be added to a session during a Sessions authenticate call.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
     """  # noqa
 
     member_session_id: str
@@ -35,8 +42,8 @@ class MemberSession(pydantic.BaseModel):
     last_accessed_at: datetime.datetime
     expires_at: datetime.datetime
     authentication_factors: List[AuthenticationFactor]
+    custom_claims: Dict[str, Any]
     organization_id: str
-    custom_claims: Optional[Dict[str, Any]] = None
 
 
 class AuthenticateResponse(ResponseBase):

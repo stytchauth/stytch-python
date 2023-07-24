@@ -6,9 +6,17 @@
 
 from __future__ import annotations
 
+import enum
+
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
+
+
+class AuthenticateRequestLocale(enum.Enum):
+    EN = "en"
+    ES = "es"
+    PTBR = "pt-br"
 
 
 class AuthenticateResponse(ResponseBase):

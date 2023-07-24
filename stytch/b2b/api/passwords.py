@@ -12,6 +12,7 @@ from stytch.b2b.api.passwords_email import Email
 from stytch.b2b.api.passwords_existing_password import ExistingPassword
 from stytch.b2b.api.passwords_session import Sessions
 from stytch.b2b.models.passwords import (
+    AuthenticateRequestLocale,
     AuthenticateResponse,
     MigrateRequestHashType,
     MigrateResponse,
@@ -231,6 +232,7 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
         """Authenticate a member with their email address and password. This endpoint verifies that the member has a password currently set, and that the entered password is correct. There are two instances where the endpoint will return a reset_password error even if they enter their previous password:
         * The member’s credentials appeared in the HaveIBeenPwned dataset.
@@ -259,6 +261,7 @@ class Passwords:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -273,6 +276,8 @@ class Passwords:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
         res = self.sync_client.post(url, data)
@@ -287,6 +292,7 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
         """Authenticate a member with their email address and password. This endpoint verifies that the member has a password currently set, and that the entered password is correct. There are two instances where the endpoint will return a reset_password error even if they enter their previous password:
         * The member’s credentials appeared in the HaveIBeenPwned dataset.
@@ -315,6 +321,7 @@ class Passwords:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -329,6 +336,8 @@ class Passwords:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
         res = await self.async_client.post(url, data)

@@ -9,7 +9,9 @@ from typing import Optional
 
 from stytch.b2b.api.discovery import Discovery
 from stytch.b2b.api.magic_links import MagicLinks
+from stytch.b2b.api.oauth import OAuth
 from stytch.b2b.api.organizations import Organizations
+from stytch.b2b.api.otp import OTPs
 from stytch.b2b.api.passwords import Passwords
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
@@ -32,13 +34,15 @@ class Client(ClientBase):
     ):
         super().__init__(project_id, secret, environment, suppress_warnings)
 
-        self.organizations = Organizations(
-            self.api_base, self.sync_client, self.async_client
-        )
-        self.sessions = Sessions(self.api_base, self.sync_client, self.async_client)
         self.discovery = Discovery(self.api_base, self.sync_client, self.async_client)
         self.magic_links = MagicLinks(
             self.api_base, self.sync_client, self.async_client
         )
+        self.oauth = OAuth(self.api_base, self.sync_client, self.async_client)
+        self.otps = OTPs(self.api_base, self.sync_client, self.async_client)
+        self.organizations = Organizations(
+            self.api_base, self.sync_client, self.async_client
+        )
         self.passwords = Passwords(self.api_base, self.sync_client, self.async_client)
         self.sso = SSO(self.api_base, self.sync_client, self.async_client)
+        self.sessions = Sessions(self.api_base, self.sync_client, self.async_client)

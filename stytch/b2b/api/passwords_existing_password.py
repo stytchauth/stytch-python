@@ -8,7 +8,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from stytch.b2b.models.passwords_existing_password import ResetResponse
+from stytch.b2b.models.passwords_existing_password import (
+    ResetRequestLocale,
+    ResetResponse,
+)
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -34,6 +37,7 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[ResetRequestLocale] = None,
     ) -> ResetResponse:
         """Reset the member’s password using their existing password.
 
@@ -64,6 +68,7 @@ class ExistingPassword:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "email_address": email_address,
@@ -79,6 +84,8 @@ class ExistingPassword:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/passwords/existing_password/reset", data)
         res = self.sync_client.post(url, data)
@@ -94,6 +101,7 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[ResetRequestLocale] = None,
     ) -> ResetResponse:
         """Reset the member’s password using their existing password.
 
@@ -124,6 +132,7 @@ class ExistingPassword:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "email_address": email_address,
@@ -139,6 +148,8 @@ class ExistingPassword:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/passwords/existing_password/reset", data)
         res = await self.async_client.post(url, data)

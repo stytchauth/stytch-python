@@ -11,6 +11,7 @@ from typing import Any, Dict, Optional
 from stytch.b2b.api.sso_oidc import OIDC
 from stytch.b2b.api.sso_saml import SAML
 from stytch.b2b.models.sso import (
+    AuthenticateRequestLocale,
     AuthenticateResponse,
     DeleteConnectionResponse,
     GetConnectionsResponse,
@@ -118,6 +119,7 @@ class SSO:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
         """Authenticate a user given a token.
         This endpoint verifies that the user completed the SSO Authentication flow by verifying that the token is valid and hasn't expired.
@@ -144,6 +146,7 @@ class SSO:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "sso_token": sso_token,
@@ -158,6 +161,8 @@ class SSO:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/sso/authenticate", data)
         res = self.sync_client.post(url, data)
@@ -171,6 +176,7 @@ class SSO:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
         """Authenticate a user given a token.
         This endpoint verifies that the user completed the SSO Authentication flow by verifying that the token is valid and hasn't expired.
@@ -197,6 +203,7 @@ class SSO:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "sso_token": sso_token,
@@ -211,6 +218,8 @@ class SSO:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale.value
 
         url = self.api_base.url_for("/v1/b2b/sso/authenticate", data)
         res = await self.async_client.post(url, data)

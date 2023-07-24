@@ -38,6 +38,12 @@ class DeletePasswordResponse(ResponseBase):
     organization: Organization
 
 
+class DeletePhoneNumberResponse(ResponseBase):
+    member_id: str
+    member: Member
+    organization: Organization
+
+
 class DeleteResponse(ResponseBase):
     """Response type for `Members.delete`.
     Fields:
