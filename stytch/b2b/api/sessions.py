@@ -6,7 +6,10 @@
 
 from __future__ import annotations
 
+import time
 from typing import Any, Dict, Optional
+
+import jwt
 
 from stytch.b2b.models.sessions import (
     AuthenticateResponse,
@@ -14,6 +17,7 @@ from stytch.b2b.models.sessions import (
     ExchangeResponse,
     GetJWKSResponse,
     GetResponse,
+    MemberSession,
     RevokeResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -350,3 +354,162 @@ class Sessions:
         url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
         res = await self.async_client.get(url, data)
         return GetJWKSResponse.from_json(res.response.status, res.json)
+
+    # MANUAL(authenticate_jwt)(SERVICE_METHOD)
+    # ADDIMPORT: from typing import Any, Dict, Optional
+    # ADDIMPORT: import jwt
+    # ADDIMPORT: import time
+    def authenticate_jwt(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> Optional[MemberSession]:
+        """Parse a JWT and verify the signature, preferring local verification
+        over remote.
+
+        If max_token_age_seconds is set, remote verification will be forced if the
+        JWT was issued at (based on the "iat" claim) more than that many seconds ago.
+
+        To force remote validation for all tokens, set max_token_age_seconds to
+        zero or use the authenticate method instead.
+        """
+        # Return the local_result if available, otherwise call the Stytch API
+        return (
+            self.authenticate_jwt_local(
+                session_jwt=session_jwt,
+                max_token_age_seconds=max_token_age_seconds,
+            )
+            or self.authenticate(
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+            ).member_session
+        )
+
+    async def authenticate_jwt_async(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> Optional[MemberSession]:
+        """Parse a JWT and verify the signature, preferring local verification
+        over remote.
+
+        If max_token_age_seconds is set, remote verification will be forced if the
+        JWT was issued at (based on the "iat" claim) more than that many seconds ago.
+
+        To force remote validation for all tokens, set max_token_age_seconds to
+        zero or use the authenticate method instead.
+        """
+        # Return the local_result if available, otherwise call the Stytch API
+        return (
+            self.authenticate_jwt_local(
+                session_jwt=session_jwt,
+                max_token_age_seconds=max_token_age_seconds,
+            )
+            or (
+                await self.authenticate_async(
+                    session_custom_claims=session_custom_claims, session_jwt=session_jwt
+                )
+            ).member_session
+        )
+
+    # ENDMANUAL(authenticate_jwt)
+
+    # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
+    # ADDIMPORT: import jwt
+    # ADDIMPORT: import time
+    # ADDIMPORT: from stytch.b2b.models.sessions import MemberSession
+    def get_jwks_client(self) -> jwt.PyJWKClient:
+        data = {"project_id": self.sync_client.project_id}
+        jwks_url = self.api_base.url_for("v1/sessions/jwks/{project_id}", data)
+        return jwt.PyJWKClient(jwks_url)
+
+    def authenticate_jwt_local(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        leeway: int = 0,
+    ) -> Optional[MemberSession]:
+        """Parse a JWT and verify the signature locally
+        (without calling /authenticate in the API).
+
+        If max_token_age_seconds is set, this will return an error if the JWT was issued
+        (based on the "iat" claim) more than maxTokenAge seconds ago.
+
+        If max_token_age_seconds is explicitly set to zero, all tokens will be
+        considered too old, even if they are otherwise valid.
+
+        The value for leeway is the maximum allowable difference in seconds when
+        comparing timestamps. It defaults to zero.
+        """
+        project_id = self.sync_client.project_id
+        jwt_audience = project_id
+        jwt_issuer = "stytch.com/{}".format(project_id)
+        _session_claim = "https://stytch.com/session"
+        _organization_claim = "https://stytch.com/organization"
+
+        jwks_client = self.get_jwks_client()
+        now = time.time()
+
+        signing_key = jwks_client.get_signing_key_from_jwt(session_jwt)
+
+        # NOTE: The max_token_age_seconds value is applied after decoding.
+        payload = jwt.decode(
+            session_jwt,
+            signing_key.key,
+            algorithms=["RS256"],
+            options={
+                "require": ["aud", "iss", "exp", "iat", "nbf"],
+                "verify_signature": True,
+                "verify_aud": True,
+                "verify_iss": True,
+                "verify_exp": True,
+                "verify_iat": True,
+                "verify_nbf": True,
+            },
+            audience=jwt_audience,
+            issuer=jwt_issuer,
+            leeway=leeway,
+        )
+
+        if max_token_age_seconds is not None:
+            iat = payload["iat"]
+            if now - iat >= max_token_age_seconds:
+                # JWT was issued too long ago, don't verify
+                return None
+
+        # Unpack the session claim to match the detached session format.
+        claim = payload[_session_claim]
+
+        # For JWTs that include it, prefer the inner expires_at claim.
+        expires_at = claim.get("expires_at", payload["exp"])
+
+        # Claim related to unpacking organization-specific fields
+        org_claim = payload[_organization_claim]
+
+        # Parse custom claims by taking everything other than the reserved claims
+        reserved_claims = [
+            "aud",
+            "exp",
+            "iat",
+            "iss",
+            "jti",
+            "nbf",
+            "sub",
+            _session_claim,
+            _organization_claim,
+        ]
+        custom_claims = {k: v for k, v in payload.items() if k not in reserved_claims}
+
+        return MemberSession(
+            authentication_factors=claim["authentication_factors"],
+            expires_at=expires_at,
+            last_accessed_at=claim["last_accessed_at"],
+            member_session_id=claim["id"],
+            started_at=claim["started_at"],
+            organization_id=org_claim["organization_id"],
+            member_id=payload["sub"],
+            custom_claims=custom_claims,
+        )
+
+    # ENDMANUAL(authenticate_jwt_local)

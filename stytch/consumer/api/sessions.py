@@ -341,6 +341,19 @@ class Sessions:
         # For JWTs that include it, prefer the inner expires_at claim.
         expires_at = claim.get("expires_at", payload["exp"])
 
+        # Parse custom claims by taking everything other than the reserved claims
+        reserved_claims = [
+            "aud",
+            "exp",
+            "iat",
+            "iss",
+            "jti",
+            "nbf",
+            "sub",
+            _session_claim,
+        ]
+        custom_claims = {k: v for k, v in payload.items() if k not in reserved_claims}
+
         return Session(
             attributes=claim["attributes"],
             authentication_factors=claim["authentication_factors"],
@@ -349,7 +362,7 @@ class Sessions:
             session_id=claim["id"],
             started_at=claim["started_at"],
             user_id=payload["sub"],
-            custom_claims=None,
+            custom_claims=custom_claims,
         )
 
     # ENDMANUAL(authenticate_jwt_local)
