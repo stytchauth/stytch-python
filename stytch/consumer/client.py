@@ -44,7 +44,9 @@ class Client(ClientBase):
         self.oauth = OAuth(self.api_base, self.sync_client, self.async_client)
         self.otps = OTPs(self.api_base, self.sync_client, self.async_client)
         self.passwords = Passwords(self.api_base, self.sync_client, self.async_client)
-        self.sessions = Sessions(self.api_base, self.sync_client, self.async_client)
+        self.sessions = Sessions(
+            self.api_base, self.sync_client, self.async_client, self.jwks_client
+        )
         self.totps = TOTPs(self.api_base, self.sync_client, self.async_client)
         self.users = Users(self.api_base, self.sync_client, self.async_client)
         self.webauthn = WebAuthn(self.api_base, self.sync_client, self.async_client)

@@ -45,4 +45,6 @@ class Client(ClientBase):
         )
         self.passwords = Passwords(self.api_base, self.sync_client, self.async_client)
         self.sso = SSO(self.api_base, self.sync_client, self.async_client)
-        self.sessions = Sessions(self.api_base, self.sync_client, self.async_client)
+        self.sessions = Sessions(
+            self.api_base, self.sync_client, self.async_client, self.jwks_client
+        )

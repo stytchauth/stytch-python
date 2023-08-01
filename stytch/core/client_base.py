@@ -1,6 +1,8 @@
 import warnings
 from typing import Optional
 
+import jwt
+
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -17,6 +19,12 @@ class ClientBase:
         self.api_base = ApiBase(base_url)
         self.sync_client = SyncClient(project_id, secret)
         self.async_client = AsyncClient(project_id, secret)
+        self.jwks_client = self.get_jwks_client(project_id)
+
+    def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
+        data = {"project_id": project_id}
+        url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
+        return jwt.PyJWKClient(url)
 
     @classmethod
     def _env_url(
