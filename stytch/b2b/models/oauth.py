@@ -12,6 +12,7 @@ from typing import List, Optional
 
 import pydantic
 
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
@@ -52,10 +53,13 @@ class AuthenticateResponse(ResponseBase):
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - reset_sessions: (no documentation yet)
+      - member_authenticated: (no documentation yet)
+      - intermediate_session_token: (no documentation yet)
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - provider_values: The `provider_values` object lists relevant identifiers, values, and scopes for a given OAuth provider. For example this object will include a provider's `access_token` that you can use to access the provider's API for a given user.
 
       Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft.
+      - mfa_required: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -67,5 +71,8 @@ class AuthenticateResponse(ResponseBase):
     organization_id: str
     organization: Organization
     reset_sessions: bool
+    member_authenticated: bool
+    intermediate_session_token: str
     member_session: Optional[MemberSession] = None
     provider_values: Optional[ProviderValues] = None
+    mfa_required: Optional[MfaRequired] = None

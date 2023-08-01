@@ -9,6 +9,7 @@ from __future__ import annotations
 import enum
 from typing import Optional
 
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
@@ -28,7 +29,10 @@ class ExchangeResponse(ResponseBase):
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_authenticated: (no documentation yet)
+      - intermediate_session_token: (no documentation yet)
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+      - mfa_required: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -36,4 +40,7 @@ class ExchangeResponse(ResponseBase):
     session_jwt: str
     member: Member
     organization: Organization
+    member_authenticated: bool
+    intermediate_session_token: str
     member_session: Optional[MemberSession] = None
+    mfa_required: Optional[MfaRequired] = None

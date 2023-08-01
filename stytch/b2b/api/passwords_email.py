@@ -43,8 +43,8 @@ class Email:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
         This endpoint adapts to your Project's password strength configuration.
-        If you're using [zxcvbn](https://stytch.com/docs/passwords#strength-requirements), the default, your passwords are considered valid
-        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/passwords#strength-requirements), your passwords are
+        If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid
+        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are
         considered valid if they meet the requirements that you've set with Stytch.
         You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
 
@@ -105,8 +105,8 @@ class Email:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
         This endpoint adapts to your Project's password strength configuration.
-        If you're using [zxcvbn](https://stytch.com/docs/passwords#strength-requirements), the default, your passwords are considered valid
-        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/passwords#strength-requirements), your passwords are
+        If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid
+        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are
         considered valid if they meet the requirements that you've set with Stytch.
         You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
 

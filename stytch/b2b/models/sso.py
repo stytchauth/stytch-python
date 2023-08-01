@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 
 import pydantic
 
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
@@ -71,7 +72,10 @@ class AuthenticateResponse(ResponseBase):
       - reset_session: Indicates if all Sessions linked to the Member need to be reset. You should check this field if you aren't using
         Stytch's Session product. If you are using Stytch's Session product, we revoke the Member’s other Sessions for you.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - intermediate_session_token: (no documentation yet)
+      - member_authenticated: (no documentation yet)
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+      - mfa_required: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -81,7 +85,10 @@ class AuthenticateResponse(ResponseBase):
     session_jwt: str
     reset_session: bool
     organization: Organization
+    intermediate_session_token: str
+    member_authenticated: bool
     member_session: Optional[MemberSession] = None
+    mfa_required: Optional[MfaRequired] = None
 
 
 class DeleteConnectionResponse(ResponseBase):

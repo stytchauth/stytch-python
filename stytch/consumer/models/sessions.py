@@ -337,19 +337,19 @@ class Session(pydantic.BaseModel):
 class AuthenticateResponse(ResponseBase):
     """Response type for `Sessions.authenticate`.
     Fields:
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
       See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
 
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
     """  # noqa
 
+    session: Session
     session_token: str
     session_jwt: str
     user: User
-    session: Optional[Session] = None
 
 
 class GetJWKSResponse(ResponseBase):

@@ -9,6 +9,7 @@ from __future__ import annotations
 from typing import List, Optional
 
 from stytch.b2b.models.discovery import DiscoveredOrganization
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
@@ -21,16 +22,22 @@ class CreateResponse(ResponseBase):
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - member_authenticated: (no documentation yet)
+      - intermediate_session_token: (no documentation yet)
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - mfa_required: (no documentation yet)
     """  # noqa
 
     member_id: str
     session_token: str
     session_jwt: str
     member: Member
+    member_authenticated: bool
+    intermediate_session_token: str
     member_session: Optional[MemberSession] = None
     organization: Optional[Organization] = None
+    mfa_required: Optional[MfaRequired] = None
 
 
 class ListResponse(ResponseBase):
@@ -49,7 +56,9 @@ class ListResponse(ResponseBase):
           b) The Organizations' allowed domains list contains the Member's email domain.
 
           c) The Organization has at least one other Member with a verified email address with the same domain as the end user (to prevent phishing attacks).
+      - organization_id_hint: (no documentation yet)
     """  # noqa
 
     email_address: str
     discovered_organizations: List[DiscoveredOrganization]
+    organization_id_hint: Optional[str] = None
