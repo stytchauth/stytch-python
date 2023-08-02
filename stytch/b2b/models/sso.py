@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 
 import pydantic
 
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
@@ -71,7 +72,12 @@ class AuthenticateResponse(ResponseBase):
       - reset_session: Indicates if all Sessions linked to the Member need to be reset. You should check this field if you aren't using
         Stytch's Session product. If you are using Stytch's Session product, we revoke the Member’s other Sessions for you.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - intermediate_session_token: The returned Intermediate Session Token contains an SSO factor associated with the Member.
+          The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA flow and log in to the Organization.
+          SSO factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
+      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str
@@ -81,7 +87,10 @@ class AuthenticateResponse(ResponseBase):
     session_jwt: str
     reset_session: bool
     organization: Organization
+    intermediate_session_token: str
+    member_authenticated: bool
     member_session: Optional[MemberSession] = None
+    mfa_required: Optional[MfaRequired] = None
 
 
 class DeleteConnectionResponse(ResponseBase):

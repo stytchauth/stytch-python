@@ -6,7 +6,10 @@
 
 from __future__ import annotations
 
+import time
 from typing import Any, Dict, Optional
+
+import jwt
 
 from stytch.b2b.models.sessions import (
     AuthenticateResponse,
@@ -14,6 +17,7 @@ from stytch.b2b.models.sessions import (
     ExchangeResponse,
     GetJWKSResponse,
     GetResponse,
+    MemberSession,
     RevokeResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -26,10 +30,12 @@ class Sessions:
         api_base: ApiBase,
         sync_client: SyncClient,
         async_client: AsyncClient,
+        jwks_client: jwt.PyJWKClient,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
+        self.jwks_client = jwks_client
 
     def get(
         self,
@@ -228,6 +234,14 @@ class Sessions:
 
         To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
 
+        Only Email Magic Link, OAuth, and SMS OTP factors can be transferred between sessions. Other authentication factors, such as password factors, will not be transferred to the new session.
+        SMS OTP factors can be used to fulfill MFA requirements for the target Organization if both the original and target Member have the same phone number and the phone number is verified for both Members.
+
+        (Coming Soon) If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
+        The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
+        The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - session_token: The `session_token` belonging to the member that you wish to associate the email with.
@@ -246,7 +260,14 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: (no documentation yet)
+          - locale: (Coming Soon) If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+
+        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -279,6 +300,14 @@ class Sessions:
 
         To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
 
+        Only Email Magic Link, OAuth, and SMS OTP factors can be transferred between sessions. Other authentication factors, such as password factors, will not be transferred to the new session.
+        SMS OTP factors can be used to fulfill MFA requirements for the target Organization if both the original and target Member have the same phone number and the phone number is verified for both Members.
+
+        (Coming Soon) If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
+        The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
+        The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - session_token: The `session_token` belonging to the member that you wish to associate the email with.
@@ -297,7 +326,14 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: (no documentation yet)
+          - locale: (Coming Soon) If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+
+        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -350,3 +386,154 @@ class Sessions:
         url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
         res = await self.async_client.get(url, data)
         return GetJWKSResponse.from_json(res.response.status, res.json)
+
+    # MANUAL(authenticate_jwt)(SERVICE_METHOD)
+    # ADDIMPORT: from typing import Any, Dict, Optional
+    # ADDIMPORT: import time
+    def authenticate_jwt(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> Optional[MemberSession]:
+        """Parse a JWT and verify the signature, preferring local verification
+        over remote.
+
+        If max_token_age_seconds is set, remote verification will be forced if the
+        JWT was issued at (based on the "iat" claim) more than that many seconds ago.
+
+        To force remote validation for all tokens, set max_token_age_seconds to
+        zero or use the authenticate method instead.
+        """
+        # Return the local_result if available, otherwise call the Stytch API
+        return (
+            self.authenticate_jwt_local(
+                session_jwt=session_jwt,
+                max_token_age_seconds=max_token_age_seconds,
+            )
+            or self.authenticate(
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+            ).member_session
+        )
+
+    async def authenticate_jwt_async(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> Optional[MemberSession]:
+        """Parse a JWT and verify the signature, preferring local verification
+        over remote.
+
+        If max_token_age_seconds is set, remote verification will be forced if the
+        JWT was issued at (based on the "iat" claim) more than that many seconds ago.
+
+        To force remote validation for all tokens, set max_token_age_seconds to
+        zero or use the authenticate method instead.
+        """
+        # Return the local_result if available, otherwise call the Stytch API
+        return (
+            self.authenticate_jwt_local(
+                session_jwt=session_jwt,
+                max_token_age_seconds=max_token_age_seconds,
+            )
+            or (
+                await self.authenticate_async(
+                    session_custom_claims=session_custom_claims, session_jwt=session_jwt
+                )
+            ).member_session
+        )
+
+    # ENDMANUAL(authenticate_jwt)
+
+    # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
+    # ADDIMPORT: import time
+    # ADDIMPORT: from stytch.b2b.models.sessions import MemberSession
+    def authenticate_jwt_local(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        leeway: int = 0,
+    ) -> Optional[MemberSession]:
+        """Parse a JWT and verify the signature locally
+        (without calling /authenticate in the API).
+
+        If max_token_age_seconds is set, this will return an error if the JWT was issued
+        (based on the "iat" claim) more than maxTokenAge seconds ago.
+
+        If max_token_age_seconds is explicitly set to zero, all tokens will be
+        considered too old, even if they are otherwise valid.
+
+        The value for leeway is the maximum allowable difference in seconds when
+        comparing timestamps. It defaults to zero.
+        """
+        project_id = self.sync_client.project_id
+        jwt_audience = project_id
+        jwt_issuer = "stytch.com/{}".format(project_id)
+        _session_claim = "https://stytch.com/session"
+        _organization_claim = "https://stytch.com/organization"
+
+        now = time.time()
+
+        signing_key = self.jwks_client.get_signing_key_from_jwt(session_jwt)
+
+        # NOTE: The max_token_age_seconds value is applied after decoding.
+        payload = jwt.decode(
+            session_jwt,
+            signing_key.key,
+            algorithms=["RS256"],
+            options={
+                "require": ["aud", "iss", "exp", "iat", "nbf"],
+                "verify_signature": True,
+                "verify_aud": True,
+                "verify_iss": True,
+                "verify_exp": True,
+                "verify_iat": True,
+                "verify_nbf": True,
+            },
+            audience=jwt_audience,
+            issuer=jwt_issuer,
+            leeway=leeway,
+        )
+
+        if max_token_age_seconds is not None:
+            iat = payload["iat"]
+            if now - iat >= max_token_age_seconds:
+                # JWT was issued too long ago, don't verify
+                return None
+
+        # Unpack the session claim to match the detached session format.
+        claim = payload[_session_claim]
+
+        # For JWTs that include it, prefer the inner expires_at claim.
+        expires_at = claim.get("expires_at", payload["exp"])
+
+        # Claim related to unpacking organization-specific fields
+        org_claim = payload[_organization_claim]
+
+        # Parse custom claims by taking everything other than the reserved claims
+        reserved_claims = [
+            "aud",
+            "exp",
+            "iat",
+            "iss",
+            "jti",
+            "nbf",
+            "sub",
+            _session_claim,
+            _organization_claim,
+        ]
+        custom_claims = {k: v for k, v in payload.items() if k not in reserved_claims}
+
+        return MemberSession(
+            authentication_factors=claim["authentication_factors"],
+            expires_at=expires_at,
+            last_accessed_at=claim["last_accessed_at"],
+            member_session_id=claim["id"],
+            started_at=claim["started_at"],
+            organization_id=org_claim["organization_id"],
+            member_id=payload["sub"],
+            custom_claims=custom_claims,
+        )
+
+    # ENDMANUAL(authenticate_jwt_local)

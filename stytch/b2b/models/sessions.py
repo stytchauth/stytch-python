@@ -8,10 +8,11 @@ from __future__ import annotations
 
 import datetime
 import enum
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import pydantic
 
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.consumer.models.sessions import JWK, AuthenticationFactor
 from stytch.core.response_base import ResponseBase
@@ -72,6 +73,12 @@ class ExchangeResponse(ResponseBase):
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
+      - intermediate_session_token: The returned Intermediate Session Token contains any Email Magic Link or OAuth factors from the original member session that are valid for the target Organization.
+          The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA flow and log in to the target Organization.
+          It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a different existing Organization,
+          or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization.
+      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str
@@ -80,6 +87,9 @@ class ExchangeResponse(ResponseBase):
     session_jwt: str
     member: Member
     organization: Organization
+    member_authenticated: bool
+    intermediate_session_token: str
+    mfa_required: Optional[MfaRequired] = None
 
 
 class GetJWKSResponse(ResponseBase):

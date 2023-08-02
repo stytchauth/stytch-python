@@ -12,9 +12,20 @@ import pydantic
 
 
 class MemberOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - phone_number: The Member's phone number.
+    """  # noqa
+
     phone_number: str
 
 
 class MfaRequired(pydantic.BaseModel):
+    """
+    Fields:
+      - member_options: Information about the Member's options for completing MFA.
+      - secondary_auth_initiated: If null, indicates that no secondary authentication has been initiated. If equal to "sms_otp", indicates that the Member has a phone number, and a one time passcode has been sent to the Member's phone number. No secondary authentication will be initiated during calls to the discovery authenticate or list organizations endpoints, even if the Member has a phone number.
+    """  # noqa
+
     member_options: Optional[MemberOptions] = None
     secondary_auth_initiated: Optional[str] = None

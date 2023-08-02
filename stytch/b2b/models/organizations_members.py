@@ -39,6 +39,13 @@ class DeletePasswordResponse(ResponseBase):
 
 
 class DeletePhoneNumberResponse(ResponseBase):
+    """Response type for `Members.delete_phone_number`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+    """  # noqa
+
     member_id: str
     member: Member
     organization: Organization

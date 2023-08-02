@@ -28,10 +28,12 @@ class Sessions:
         api_base: ApiBase,
         sync_client: SyncClient,
         async_client: AsyncClient,
+        jwks_client: jwt.PyJWKClient,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
+        self.jwks_client = jwks_client
 
     def get(
         self,
@@ -274,14 +276,8 @@ class Sessions:
     # ENDMANUAL(authenticate_jwt)
 
     # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
-    # ADDIMPORT: import jwt
     # ADDIMPORT: import time
     # ADDIMPORT: from stytch.consumer.models.sessions import Session
-    def get_jwks_client(self) -> jwt.PyJWKClient:
-        data = {"project_id": self.sync_client.project_id}
-        jwks_url = self.api_base.url_for("v1/sessions/jwks/{project_id}", data)
-        return jwt.PyJWKClient(jwks_url)
-
     def authenticate_jwt_local(
         self,
         session_jwt: str,
@@ -305,10 +301,9 @@ class Sessions:
         jwt_issuer = "stytch.com/{}".format(project_id)
         _session_claim = "https://stytch.com/session"
 
-        jwks_client = self.get_jwks_client()
         now = time.time()
 
-        signing_key = jwks_client.get_signing_key_from_jwt(session_jwt)
+        signing_key = self.jwks_client.get_signing_key_from_jwt(session_jwt)
 
         # NOTE: The max_token_age_seconds value is applied after decoding.
         payload = jwt.decode(
@@ -341,6 +336,19 @@ class Sessions:
         # For JWTs that include it, prefer the inner expires_at claim.
         expires_at = claim.get("expires_at", payload["exp"])
 
+        # Parse custom claims by taking everything other than the reserved claims
+        reserved_claims = [
+            "aud",
+            "exp",
+            "iat",
+            "iss",
+            "jti",
+            "nbf",
+            "sub",
+            _session_claim,
+        ]
+        custom_claims = {k: v for k, v in payload.items() if k not in reserved_claims}
+
         return Session(
             attributes=claim["attributes"],
             authentication_factors=claim["authentication_factors"],
@@ -349,7 +357,7 @@ class Sessions:
             session_id=claim["id"],
             started_at=claim["started_at"],
             user_id=payload["sub"],
-            custom_claims=None,
+            custom_claims=custom_claims,
         )
 
     # ENDMANUAL(authenticate_jwt_local)

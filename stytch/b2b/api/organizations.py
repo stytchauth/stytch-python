@@ -49,7 +49,7 @@ class Organizations:
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
-        By default, `email_invites` and `sso_jit_provisioning` will be set to `ALL_ALLOWED` if no Organization authentication settings are explicitly defined in the request.
+        By default, `email_invites` and `sso_jit_provisioning` will be set to `ALL_ALLOWED`, and `mfa_policy` will be set to `OPTIONAL` if no Organization authentication settings are explicitly defined in the request.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
@@ -94,7 +94,12 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (no documentation yet)
+          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+
+          `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
+
         """  # noqa
         data: Dict[str, Any] = {
             "organization_name": organization_name,
@@ -140,7 +145,7 @@ class Organizations:
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
-        By default, `email_invites` and `sso_jit_provisioning` will be set to `ALL_ALLOWED` if no Organization authentication settings are explicitly defined in the request.
+        By default, `email_invites` and `sso_jit_provisioning` will be set to `ALL_ALLOWED`, and `mfa_policy` will be set to `OPTIONAL` if no Organization authentication settings are explicitly defined in the request.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
@@ -185,7 +190,12 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (no documentation yet)
+          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+
+          `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
+
         """  # noqa
         data: Dict[str, Any] = {
             "organization_name": organization_name,
@@ -315,7 +325,12 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (no documentation yet)
+          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+
+          `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
+
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -419,7 +434,12 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (no documentation yet)
+          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+
+          `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
+
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,

@@ -54,7 +54,7 @@ class Email:
 
         Fields:
           - email: The email address of the user to send the one-time passcode to. You may use sandbox@stytch.com to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
-          - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
@@ -116,7 +116,7 @@ class Email:
 
         Fields:
           - email: The email address of the user to send the one-time passcode to. You may use sandbox@stytch.com to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
-          - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
@@ -172,7 +172,7 @@ class Email:
 
         Fields:
           - email: The email address of the user to send the one-time passcode to. You may use sandbox@stytch.com to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
-          - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
                 If true, users will be saved with status pending in Stytch's backend until authenticated.
@@ -226,7 +226,7 @@ class Email:
 
         Fields:
           - email: The email address of the user to send the one-time passcode to. You may use sandbox@stytch.com to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
-          - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
                 If true, users will be saved with status pending in Stytch's backend until authenticated.
