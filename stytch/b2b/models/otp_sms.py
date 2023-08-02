@@ -21,6 +21,16 @@ class SendRequestLocale(enum.Enum):
 
 
 class AuthenticateResponse(ResponseBase):
+    """Response type for `Sms.authenticate`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+    """  # noqa
+
     member_id: str
     member: Member
     organization: Organization
@@ -30,6 +40,13 @@ class AuthenticateResponse(ResponseBase):
 
 
 class SendResponse(ResponseBase):
+    """Response type for `Sms.send`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+    """  # noqa
+
     member_id: str
     member: Member
     organization: Organization

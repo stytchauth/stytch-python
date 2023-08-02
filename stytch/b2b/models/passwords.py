@@ -75,10 +75,12 @@ class AuthenticateResponse(ResponseBase):
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - intermediate_session_token: (no documentation yet)
-      - member_authenticated: (no documentation yet)
+      - intermediate_session_token: The returned Intermediate Session Token contains a password factor associated with the Member.
+          The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA flow and log in to the Organization.
+          Password factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
+      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: (no documentation yet)
+      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str

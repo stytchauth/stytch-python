@@ -55,8 +55,8 @@ class Members:
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
-          - phone_number: (no documentation yet)
-          - mfa_enrolled: (no documentation yet)
+          - phone_number: (Coming Soon) Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-phone-number) to delete the Member's existing phone number first.
+          - mfa_enrolled: (Coming Soon) Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -103,8 +103,8 @@ class Members:
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
-          - phone_number: (no documentation yet)
-          - mfa_enrolled: (no documentation yet)
+          - phone_number: (Coming Soon) Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-phone-number) to delete the Member's existing phone number first.
+          - mfa_enrolled: (Coming Soon) Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -178,6 +178,12 @@ class Members:
         organization_id: str,
         member_id: str,
     ) -> DeletePhoneNumberResponse:
+        """Delete a Member's phone number.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -195,6 +201,12 @@ class Members:
         organization_id: str,
         member_id: str,
     ) -> DeletePhoneNumberResponse:
+        """Delete a Member's phone number.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -339,8 +351,8 @@ class Members:
           for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
-          - phone_number: (no documentation yet)
-          - mfa_enrolled: (no documentation yet)
+          - phone_number: (Coming Soon) Sets the Member's phone number.
+          - mfa_enrolled: (Coming Soon) Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -391,8 +403,8 @@ class Members:
           for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
-          - phone_number: (no documentation yet)
-          - mfa_enrolled: (no documentation yet)
+          - phone_number: (Coming Soon) Sets the Member's phone number.
+          - mfa_enrolled: (Coming Soon) Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,

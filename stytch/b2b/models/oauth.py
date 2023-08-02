@@ -45,21 +45,24 @@ class AuthenticateResponse(ResponseBase):
     """Response type for `OAuth.authenticate`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - provider_subject: (no documentation yet)
-      - provider_type: (no documentation yet)
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - reset_sessions: (no documentation yet)
-      - member_authenticated: (no documentation yet)
-      - intermediate_session_token: (no documentation yet)
+      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
+      - intermediate_session_token: The returned Intermediate Session Token contains an OAuth factor associated with the Member's email address.
+          The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA flow and log in to the Organization.
+          It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a different existing Organization that allows login with OAuth,
+          or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - provider_values: The `provider_values` object lists relevant identifiers, values, and scopes for a given OAuth provider. For example this object will include a provider's `access_token` that you can use to access the provider's API for a given user.
 
       Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft.
-      - mfa_required: (no documentation yet)
+      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str
