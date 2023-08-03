@@ -21,10 +21,11 @@ class ResponseBase(pydantic.BaseModel):
             # We need to be careful in case this one *also* fails
             try:
                 details = StytchErrorDetails(**json)
+                details.original_json = json
                 # Don't raise from here because then we trigger our
                 # own fallback exception handling!
             except Exception as e:
-                details = StytchErrorDetails.from_unknown(status_code)
+                details = StytchErrorDetails.from_unknown(status_code, json)
                 raise StytchError(details) from e
             raise StytchError(details) from None
 
@@ -53,15 +54,22 @@ class StytchErrorDetails(ResponseBase):
     error_type: Optional[str]
     error_message: str
     error_url: Optional[str]
+    original_json: Optional[Dict[str, Any]] = None
 
     @classmethod
-    def from_unknown(cls, status_code: int) -> StytchErrorDetails:
+    def from_unknown(
+        cls, status_code: int, original_json: Optional[Dict[str, Any]] = None
+    ) -> StytchErrorDetails:
+        message = "An unknown error occurred"
+        if 200 <= status_code < 300:
+            message = "Failed to parse JSON into target object type"
         return StytchErrorDetails(
             status_code=status_code,
             request_id="",
             error_type=None,
-            error_message="An unknown error occurred",
+            error_message=message,
             error_url=None,
+            original_json=original_json,
         )
 
 
