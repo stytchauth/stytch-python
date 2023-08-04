@@ -7,6 +7,10 @@ from typing import Any, Dict, Optional
 import pydantic
 
 
+class ResponseError(ValueError):
+    ...
+
+
 class ResponseBase(pydantic.BaseModel):
     status_code: int
     request_id: str
@@ -15,9 +19,9 @@ class ResponseBase(pydantic.BaseModel):
     def from_json(cls, status_code: int, json: Dict[str, Any]):
         try:
             if status_code >= 400:
-                raise pydantic.ValidationError([], cls)
+                raise ResponseError()
             return cls(**json)
-        except pydantic.ValidationError:
+        except ResponseError:
             # We need to be careful in case this one *also* fails
             try:
                 details = StytchErrorDetails(**json)
