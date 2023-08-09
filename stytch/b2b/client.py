@@ -15,6 +15,7 @@ from stytch.b2b.api.otp import OTPs
 from stytch.b2b.api.passwords import Passwords
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
+from stytch.consumer.api.m2m import M2M
 from stytch.core.client_base import ClientBase
 
 
@@ -35,6 +36,13 @@ class Client(ClientBase):
         super().__init__(project_id, secret, environment, suppress_warnings)
 
         self.discovery = Discovery(self.api_base, self.sync_client, self.async_client)
+        self.m2m = M2M(
+            self.api_base,
+            self.sync_client,
+            self.async_client,
+            self.jwks_client,
+            project_id,
+        )
         self.magic_links = MagicLinks(
             self.api_base, self.sync_client, self.async_client
         )
@@ -46,5 +54,9 @@ class Client(ClientBase):
         self.passwords = Passwords(self.api_base, self.sync_client, self.async_client)
         self.sso = SSO(self.api_base, self.sync_client, self.async_client)
         self.sessions = Sessions(
-            self.api_base, self.sync_client, self.async_client, self.jwks_client
+            self.api_base,
+            self.sync_client,
+            self.async_client,
+            self.jwks_client,
+            project_id,
         )

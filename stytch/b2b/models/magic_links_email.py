@@ -28,7 +28,7 @@ class InviteResponse(ResponseBase):
     """Response type for `Email.invite`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 
@@ -42,7 +42,7 @@ class LoginOrSignupResponse(ResponseBase):
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
       - member_created: A flag indicating `true` if a new Member object was created and `false` if the Member object already existed.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 

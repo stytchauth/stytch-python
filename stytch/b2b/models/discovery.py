@@ -42,8 +42,8 @@ class DiscoveredOrganization(pydantic.BaseModel):
       - member_authenticated: Indicates whether the Member has all of the factors needed to fully authenticate to this Organization. If false, the Member may need to complete an MFA step or complete a different primary authentication flow. See the `primary_required` and `mfa_required` fields for more details on each.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - membership: Information about the membership.
-      - primary_required: (Coming Soon) Information about the primary authentication requirements of the Organization.
-      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - primary_required: Information about the primary authentication requirements of the Organization.
+      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_authenticated: bool

@@ -33,7 +33,7 @@ class ResetResponse(ResponseBase):
       - member_id: Globally unique UUID that identifies a specific Member.
       - member_email_id: Globally unique UUID that identifies a member's email
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
@@ -42,7 +42,7 @@ class ResetResponse(ResponseBase):
           Password factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
       - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str
