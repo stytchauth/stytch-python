@@ -25,8 +25,8 @@ class CreateResponse(ResponseBase):
     organization: Organization
 
 
-class DeletePasswordResponse(ResponseBase):
-    """Response type for `Members.delete_password`.
+class DeleteMFAPhoneNumberResponse(ResponseBase):
+    """Response type for `Members.delete_mfa_phone_number`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
@@ -38,8 +38,8 @@ class DeletePasswordResponse(ResponseBase):
     organization: Organization
 
 
-class DeletePhoneNumberResponse(ResponseBase):
-    """Response type for `Members.delete_phone_number`.
+class DeletePasswordResponse(ResponseBase):
+    """Response type for `Members.delete_password`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).

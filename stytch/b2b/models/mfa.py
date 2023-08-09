@@ -14,10 +14,10 @@ import pydantic
 class MemberOptions(pydantic.BaseModel):
     """
     Fields:
-      - phone_number: The Member's phone number.
+      - mfa_phone_number: The Member's MFA phone number.
     """  # noqa
 
-    phone_number: str
+    mfa_phone_number: str
 
 
 class MfaRequired(pydantic.BaseModel):

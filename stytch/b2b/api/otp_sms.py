@@ -32,18 +32,20 @@ class Sms:
         self,
         organization_id: str,
         member_id: str,
-        phone_number: Optional[str] = None,
+        mfa_phone_number: Optional[str] = None,
         locale: Optional[SendRequestLocale] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a Member's phone number. If the Member already has a phone number, this will send an OTP to the number associated with their `member_id`. If not, then this will send an OTP to the `phone_number` provided and link the `phone_number` with the Member.
-        An error will be thrown if the Member already has a phone number and the provided `phone_number` does not match the existing one.
+        """Send a one-time passcode (OTP) to a Member's phone number. If the Member already has a phone number, this will send an OTP to the number associated with their `member_id`. If not, then this will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
+        An error will be thrown if the Member already has a phone number and the provided `mfa_phone_number` does not match the existing one.
 
         Note that sending another OTP code before the first has expired will invalidate the first code.
+
+        If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - phone_number: The phone number to send the OTP to. If the Member already has a phone number, this argument is not needed.
+          - mfa_phone_number: The phone number to send the OTP to. If the Member already has a phone number, this argument is not needed.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
@@ -55,8 +57,8 @@ class Sms:
             "organization_id": organization_id,
             "member_id": member_id,
         }
-        if phone_number is not None:
-            data["phone_number"] = phone_number
+        if mfa_phone_number is not None:
+            data["mfa_phone_number"] = mfa_phone_number
         if locale is not None:
             data["locale"] = locale.value
 
@@ -68,18 +70,20 @@ class Sms:
         self,
         organization_id: str,
         member_id: str,
-        phone_number: Optional[str] = None,
+        mfa_phone_number: Optional[str] = None,
         locale: Optional[SendRequestLocale] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a Member's phone number. If the Member already has a phone number, this will send an OTP to the number associated with their `member_id`. If not, then this will send an OTP to the `phone_number` provided and link the `phone_number` with the Member.
-        An error will be thrown if the Member already has a phone number and the provided `phone_number` does not match the existing one.
+        """Send a one-time passcode (OTP) to a Member's phone number. If the Member already has a phone number, this will send an OTP to the number associated with their `member_id`. If not, then this will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
+        An error will be thrown if the Member already has a phone number and the provided `mfa_phone_number` does not match the existing one.
 
         Note that sending another OTP code before the first has expired will invalidate the first code.
+
+        If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - phone_number: The phone number to send the OTP to. If the Member already has a phone number, this argument is not needed.
+          - mfa_phone_number: The phone number to send the OTP to. If the Member already has a phone number, this argument is not needed.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
@@ -91,8 +95,8 @@ class Sms:
             "organization_id": organization_id,
             "member_id": member_id,
         }
-        if phone_number is not None:
-            data["phone_number"] = phone_number
+        if mfa_phone_number is not None:
+            data["mfa_phone_number"] = mfa_phone_number
         if locale is not None:
             data["locale"] = locale.value
 

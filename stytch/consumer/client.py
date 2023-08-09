@@ -8,6 +8,7 @@
 from typing import Optional
 
 from stytch.consumer.api.crypto_wallets import CryptoWallets
+from stytch.consumer.api.m2m import M2M
 from stytch.consumer.api.magic_links import MagicLinks
 from stytch.consumer.api.oauth import OAuth
 from stytch.consumer.api.otp import OTPs
@@ -38,6 +39,13 @@ class Client(ClientBase):
         self.crypto_wallets = CryptoWallets(
             self.api_base, self.sync_client, self.async_client
         )
+        self.m2m = M2M(
+            self.api_base,
+            self.sync_client,
+            self.async_client,
+            self.jwks_client,
+            project_id,
+        )
         self.magic_links = MagicLinks(
             self.api_base, self.sync_client, self.async_client
         )
@@ -45,7 +53,11 @@ class Client(ClientBase):
         self.otps = OTPs(self.api_base, self.sync_client, self.async_client)
         self.passwords = Passwords(self.api_base, self.sync_client, self.async_client)
         self.sessions = Sessions(
-            self.api_base, self.sync_client, self.async_client, self.jwks_client
+            self.api_base,
+            self.sync_client,
+            self.async_client,
+            self.jwks_client,
+            project_id,
         )
         self.totps = TOTPs(self.api_base, self.sync_client, self.async_client)
         self.users = Users(self.api_base, self.sync_client, self.async_client)

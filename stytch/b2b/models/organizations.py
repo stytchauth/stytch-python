@@ -145,8 +145,8 @@ class Member(pydantic.BaseModel):
     """
     Fields:
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-      - email_address: The email address of the Member.
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - email_address: The email address.
       - status: The status of the Member. The possible values are: `pending`, `invited`, `active`, or `deleted`.
       - name: The name of the Member.
       - sso_registrations: An array of registered [SAML Connection](saml-connection-object) objects the Member has authenticated with.

@@ -31,6 +31,7 @@ class Sessions:
         sync_client: SyncClient,
         async_client: AsyncClient,
         jwks_client: jwt.PyJWKClient,
+        project_id: str,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
