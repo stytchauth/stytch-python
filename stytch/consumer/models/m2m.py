@@ -11,6 +11,8 @@ from typing import Any, Dict, List, Optional
 
 import pydantic
 
+from stytch.core.response_base import ResponseBase
+
 
 class M2MSearchQueryOperator(enum.Enum):
     OR = "OR"
@@ -117,3 +119,37 @@ class ResultsMetadata(pydantic.BaseModel):
 
     total: int
     next_cursor: Optional[str] = None
+
+
+# MANUAL(GetTokenResponse)(TYPES)
+# ADDIMPORT: from stytch.core.response_base import ResponseBase
+class GetTokenResponse(ResponseBase):
+    """Response type for `M2M.token`.
+    Fields:
+      - access_token: The access token granted to the client. Access tokens are JWTs signed with the project's JWKs.
+      - token_type: The type of the returned access token. Today, this value will always be equal to "bearer"
+      - expires_in: The lifetime in seconds of the access token. For example, the value 3600 denotes that the access token will expire in one hour from the time the response was generated.
+    """  # noqa
+
+    access_token: str
+    token_type: str
+    expires_in: int
+
+
+# ENDMANUAL(GetTokenResponse)
+
+# MANUAL(M2MJWTClaims)(TYPES)
+class M2MJWTClaims(pydantic.BaseModel):
+    """Response type for `Sessions.authenticate_m2m_jwt_local`.
+    Fields:
+      - client_id: The subject (client_id) that the JWT is intended for.
+      - scopes: A list of scopes granted, separated by spaces.
+      - custom_claims: A dict of custom claims of the JWT.
+    """  # noqa
+
+    client_id: str
+    scopes: List[str]
+    custom_claims: Optional[Dict[str, Any]] = None
+
+
+# ENDMANUAL(M2MJWTClaims)
