@@ -49,7 +49,7 @@ class AuthenticateResponse(ResponseBase):
       - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - reset_sessions: (no documentation yet)
@@ -62,7 +62,7 @@ class AuthenticateResponse(ResponseBase):
       - provider_values: The `provider_values` object lists relevant identifiers, values, and scopes for a given OAuth provider. For example this object will include a provider's `access_token` that you can use to access the provider's API for a given user.
 
       Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft.
-      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str

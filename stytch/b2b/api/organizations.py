@@ -94,7 +94,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+          - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
 
@@ -190,7 +190,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+          - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
 
@@ -325,7 +325,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+          - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
 
@@ -434,7 +434,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+          - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
 

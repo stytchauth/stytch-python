@@ -29,7 +29,7 @@ class AuthenticateResponse(ResponseBase):
       - reset_sessions: Indicates if all Sessions linked to the Member need to be reset. You should check this field if you aren't using
         Stytch's Session product. If you are using Stytch's Session product, we revoke the Member’s other Sessions for you.
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object).
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
@@ -39,7 +39,7 @@ class AuthenticateResponse(ResponseBase):
           It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a different existing Organization that allows login with Email Magic Links,
           or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization.
       - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
-      - mfa_required: (Coming Soon) Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str

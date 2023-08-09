@@ -48,7 +48,7 @@ class Organizations:
 
         This endpoint can also be used to start an initial session for the newly created member and organization.
 
-        (Coming Soon) If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.
+        If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.
         The `intermediate_session_token` will not be consumed and instead will be returned in the response.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
         The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
@@ -113,7 +113,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+          - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
 
@@ -176,7 +176,7 @@ class Organizations:
 
         This endpoint can also be used to start an initial session for the newly created member and organization.
 
-        (Coming Soon) If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.
+        If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.
         The `intermediate_session_token` will not be consumed and instead will be returned in the response.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
         The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
@@ -241,7 +241,7 @@ class Organizations:
           An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
-          - mfa_policy: (Coming Soon) The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+          - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
 
