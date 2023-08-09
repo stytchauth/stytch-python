@@ -7,6 +7,8 @@
 
 from typing import Optional
 
+import jwt
+
 from stytch.b2b.api.discovery import Discovery
 from stytch.b2b.api.magic_links import MagicLinks
 from stytch.b2b.api.oauth import OAuth
@@ -60,3 +62,8 @@ class Client(ClientBase):
             self.jwks_client,
             project_id,
         )
+
+    def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
+        data = {"project_id": project_id}
+        url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
+        return jwt.PyJWKClient(url)

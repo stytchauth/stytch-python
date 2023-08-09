@@ -1,3 +1,4 @@
+import abc
 import warnings
 from typing import Optional
 
@@ -7,7 +8,7 @@ from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
 
-class ClientBase:
+class ClientBase(abc.ABC):
     def __init__(
         self,
         project_id: str,
@@ -21,10 +22,9 @@ class ClientBase:
         self.async_client = AsyncClient(project_id, secret)
         self.jwks_client = self.get_jwks_client(project_id)
 
+    @abc.abstractmethod
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
-        data = {"project_id": project_id}
-        url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
-        return jwt.PyJWKClient(url)
+        pass
 
     @classmethod
     def _env_url(

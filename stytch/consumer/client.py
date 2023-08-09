@@ -7,6 +7,8 @@
 
 from typing import Optional
 
+import jwt
+
 from stytch.consumer.api.crypto_wallets import CryptoWallets
 from stytch.consumer.api.m2m import M2M
 from stytch.consumer.api.magic_links import MagicLinks
@@ -62,3 +64,8 @@ class Client(ClientBase):
         self.totps = TOTPs(self.api_base, self.sync_client, self.async_client)
         self.users = Users(self.api_base, self.sync_client, self.async_client)
         self.webauthn = WebAuthn(self.api_base, self.sync_client, self.async_client)
+
+    def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
+        data = {"project_id": project_id}
+        url = self.api_base.url_for("/v1/sessions/jwks/{project_id}", data)
+        return jwt.PyJWKClient(url)
