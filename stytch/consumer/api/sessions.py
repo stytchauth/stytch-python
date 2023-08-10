@@ -278,7 +278,6 @@ class Sessions:
     # ENDMANUAL(authenticate_jwt)
 
     # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
-    # ADDIMPORT: import time
     # ADDIMPORT: from stytch.consumer.models.sessions import Session
     # ADDIMPORT: from stytch.shared import jwt_helpers
     def authenticate_jwt_local(
@@ -294,7 +293,7 @@ class Sessions:
             jwt=session_jwt,
             max_token_age_seconds=max_token_age_seconds,
             leeway=leeway,
-        )  # Unpack the session claim to match the detached session format.
+        )
         if generic_claims is None:
             return None
 

@@ -139,6 +139,7 @@ class GetTokenResponse(ResponseBase):
 # ENDMANUAL(GetTokenResponse)
 
 # MANUAL(M2MJWTClaims)(TYPES)
+# ADDIMPORT: from typing import Any, Dict, List, Optional
 class M2MJWTClaims(pydantic.BaseModel):
     """Response type for `Sessions.authenticate_m2m_jwt_local`.
     Fields:

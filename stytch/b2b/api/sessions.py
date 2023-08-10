@@ -464,7 +464,7 @@ class Sessions:
             jwt=session_jwt,
             max_token_age_seconds=max_token_age_seconds,
             leeway=leeway,
-        )  # Unpack the session claim to match the detached session format.
+        )
         if generic_claims is None:
             return None
 

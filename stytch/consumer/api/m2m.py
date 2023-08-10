@@ -34,7 +34,7 @@ class M2M:
         self.clients = Clients(api_base, sync_client, async_client)
 
     # MANUAL(m2m.token)(SERVICE_METHOD)
-    # ADDIMPORT: from typing import Any, Dict, List
+    # ADDIMPORT: from typing import Any, Dict, List, Optional
     # ADDIMPORT: from stytch.consumer.models.m2m import GetTokenResponse
     def token(
         self,
@@ -49,7 +49,7 @@ class M2M:
         Fields:
           - client_id: The ID of the client.
           - client_secret: The secret of the client.
-          - scopes: An array scopes requested. If omitted, all scopes assigned to the client will be returned.
+          - scopes: An array of scopes requested. If omitted, all scopes assigned to the client will be returned.
         """  # noqa
 
         data: Dict[str, Any] = {
