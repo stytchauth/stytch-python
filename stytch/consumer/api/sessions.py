@@ -6,7 +6,6 @@
 
 from __future__ import annotations
 
-import time
 from typing import Any, Dict, Optional
 
 import jwt
@@ -20,6 +19,7 @@ from stytch.consumer.models.sessions import (
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
+from stytch.shared import jwt_helpers
 
 
 class Sessions:
@@ -35,6 +35,7 @@ class Sessions:
         self.sync_client = sync_client
         self.async_client = async_client
         self.jwks_client = jwks_client
+        self.project_id = project_id
 
     def get(
         self,
@@ -277,78 +278,34 @@ class Sessions:
     # ENDMANUAL(authenticate_jwt)
 
     # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
-    # ADDIMPORT: import time
     # ADDIMPORT: from stytch.consumer.models.sessions import Session
+    # ADDIMPORT: from stytch.shared import jwt_helpers
     def authenticate_jwt_local(
         self,
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
     ) -> Optional[Session]:
-        """Parse a JWT and verify the signature locally
-        (without calling /authenticate in the API).
-
-        If max_token_age_seconds is set, this will return an error if the JWT was issued
-        (based on the "iat" claim) more than maxTokenAge seconds ago.
-
-        If max_token_age_seconds is explicitly set to zero, all tokens will be
-        considered too old, even if they are otherwise valid.
-
-        The value for leeway is the maximum allowable difference in seconds when
-        comparing timestamps. It defaults to zero.
-        """
-        project_id = self.sync_client.project_id
-        jwt_audience = project_id
-        jwt_issuer = "stytch.com/{}".format(project_id)
         _session_claim = "https://stytch.com/session"
-
-        now = time.time()
-
-        signing_key = self.jwks_client.get_signing_key_from_jwt(session_jwt)
-
-        # NOTE: The max_token_age_seconds value is applied after decoding.
-        payload = jwt.decode(
-            session_jwt,
-            signing_key.key,
-            algorithms=["RS256"],
-            options={
-                "require": ["aud", "iss", "exp", "iat", "nbf"],
-                "verify_signature": True,
-                "verify_aud": True,
-                "verify_iss": True,
-                "verify_exp": True,
-                "verify_iat": True,
-                "verify_nbf": True,
-            },
-            audience=jwt_audience,
-            issuer=jwt_issuer,
+        generic_claims = jwt_helpers.authenticate_jwt_local(
+            project_id=self.project_id,
+            jwks_client=self.jwks_client,
+            jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
             leeway=leeway,
         )
+        if generic_claims is None:
+            return None
 
-        if max_token_age_seconds is not None:
-            iat = payload["iat"]
-            if now - iat >= max_token_age_seconds:
-                # JWT was issued too long ago, don't verify
-                return None
-
-        # Unpack the session claim to match the detached session format.
-        claim = payload[_session_claim]
+        claim = generic_claims.untyped_claims[_session_claim]
+        custom_claims = {
+            k: v
+            for k, v in generic_claims.untyped_claims.items()
+            if k != _session_claim
+        }
 
         # For JWTs that include it, prefer the inner expires_at claim.
-        expires_at = claim.get("expires_at", payload["exp"])
-
-        # Parse custom claims by taking everything other than the reserved claims
-        reserved_claims = [
-            "aud",
-            "exp",
-            "iat",
-            "iss",
-            "jti",
-            "nbf",
-            "sub",
-            _session_claim,
-        ]
-        custom_claims = {k: v for k, v in payload.items() if k not in reserved_claims}
+        expires_at = claim.get("expires_at", generic_claims.reserved_claims["exp"])
 
         return Session(
             attributes=claim["attributes"],
@@ -357,7 +314,7 @@ class Sessions:
             last_accessed_at=claim["last_accessed_at"],
             session_id=claim["id"],
             started_at=claim["started_at"],
-            user_id=payload["sub"],
+            user_id=generic_claims.reserved_claims["sub"],
             custom_claims=custom_claims,
         )
 
