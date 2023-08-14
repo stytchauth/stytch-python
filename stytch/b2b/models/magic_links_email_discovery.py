@@ -11,7 +11,7 @@ import enum
 from stytch.core.response_base import ResponseBase
 
 
-class SendRequestLocale(enum.Enum):
+class SendRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"

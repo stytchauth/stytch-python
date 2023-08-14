@@ -39,7 +39,7 @@ class MagicLinks:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[AuthenticateRequestLocale] = None,
+        locale: Optional[AuthenticateRequestLocale | str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a Magic Link. This endpoint requires a Magic Link token that is not expired or previously used. If the Member’s status is `pending` or `invited`, they will be updated to `active`.
         Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
@@ -97,7 +97,7 @@ class MagicLinks:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/authenticate", data)
         res = self.sync_client.post(url, data)
@@ -169,7 +169,7 @@ class MagicLinks:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/authenticate", data)
         res = await self.async_client.post(url, data)

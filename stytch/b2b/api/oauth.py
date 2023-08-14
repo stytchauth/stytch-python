@@ -34,7 +34,7 @@ class OAuth:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         pkce_code_verifier: Optional[str] = None,
-        locale: Optional[AuthenticateRequestLocale] = None,
+        locale: Optional[AuthenticateRequestLocale | str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member given a `token`. This endpoint verifies that the member completed the OAuth flow by verifying that the token is valid and hasn't expired.  Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
@@ -87,7 +87,7 @@ class OAuth:
         if pkce_code_verifier is not None:
             data["pkce_code_verifier"] = pkce_code_verifier
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/oauth/authenticate", data)
         res = self.sync_client.post(url, data)
@@ -154,7 +154,7 @@ class OAuth:
         if pkce_code_verifier is not None:
             data["pkce_code_verifier"] = pkce_code_verifier
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/oauth/authenticate", data)
         res = await self.async_client.post(url, data)

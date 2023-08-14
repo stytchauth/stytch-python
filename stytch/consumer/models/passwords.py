@@ -16,7 +16,7 @@ from stytch.consumer.models.users import User
 from stytch.core.response_base import ResponseBase
 
 
-class MigrateRequestHashType(enum.Enum):
+class MigrateRequestHashType(str, enum.Enum):
     BCRYPT = "bcrypt"
     MD_5 = "md_5"
     ARGON_2I = "argon_2i"

@@ -133,7 +133,7 @@ class Clients:
         client_id: str,
         client_name: Optional[str] = None,
         client_description: Optional[str] = None,
-        status: Optional[UpdateRequestStatus] = None,
+        status: Optional[UpdateRequestStatus | str] = None,
         scopes: Optional[List[str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
@@ -158,7 +158,7 @@ class Clients:
         if client_description is not None:
             data["client_description"] = client_description
         if status is not None:
-            data["status"] = status.value
+            data["status"] = status
         if scopes is not None:
             data["scopes"] = scopes
         if trusted_metadata is not None:
@@ -198,7 +198,7 @@ class Clients:
         if client_description is not None:
             data["client_description"] = client_description
         if status is not None:
-            data["status"] = status.value
+            data["status"] = status
         if scopes is not None:
             data["scopes"] = scopes
         if trusted_metadata is not None:

@@ -230,7 +230,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ExchangeRequestLocale] = None,
+        locale: Optional[ExchangeRequestLocale | str] = None,
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 
@@ -283,7 +283,7 @@ class Sessions:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = self.sync_client.post(url, data)
@@ -349,7 +349,7 @@ class Sessions:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = await self.async_client.post(url, data)

@@ -37,7 +37,7 @@ class Email:
         reset_password_expiration_minutes: Optional[int] = None,
         code_challenge: Optional[str] = None,
         login_redirect_url: Optional[str] = None,
-        locale: Optional[ResetStartRequestLocale] = None,
+        locale: Optional[ResetStartRequestLocale | str] = None,
         reset_password_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
@@ -83,7 +83,7 @@ class Email:
         if login_redirect_url is not None:
             data["login_redirect_url"] = login_redirect_url
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if reset_password_template_id is not None:
             data["reset_password_template_id"] = reset_password_template_id
 
@@ -145,7 +145,7 @@ class Email:
         if login_redirect_url is not None:
             data["login_redirect_url"] = login_redirect_url
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if reset_password_template_id is not None:
             data["reset_password_template_id"] = reset_password_template_id
 
@@ -162,7 +162,7 @@ class Email:
         session_jwt: Optional[str] = None,
         code_verifier: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ResetRequestLocale] = None,
+        locale: Optional[ResetRequestLocale | str] = None,
     ) -> ResetResponse:
         """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 
@@ -222,7 +222,7 @@ class Email:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/email/reset", data)
         res = self.sync_client.post(url, data)
@@ -297,7 +297,7 @@ class Email:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/email/reset", data)
         res = await self.async_client.post(url, data)

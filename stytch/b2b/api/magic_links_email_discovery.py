@@ -33,7 +33,7 @@ class Discovery:
         discovery_redirect_url: Optional[str] = None,
         pkce_code_challenge: Optional[str] = None,
         login_template_id: Optional[str] = None,
-        locale: Optional[SendRequestLocale] = None,
+        locale: Optional[SendRequestLocale | str] = None,
     ) -> SendResponse:
         """Send a discovery magic link to an email address.
 
@@ -62,7 +62,7 @@ class Discovery:
         if login_template_id is not None:
             data["login_template_id"] = login_template_id
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/discovery/send", data)
         res = self.sync_client.post(url, data)
@@ -103,7 +103,7 @@ class Discovery:
         if login_template_id is not None:
             data["login_template_id"] = login_template_id
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/discovery/send", data)
         res = await self.async_client.post(url, data)

@@ -40,7 +40,7 @@ class Email:
         pkce_code_challenge: Optional[str] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
-        locale: Optional[LoginOrSignupRequestLocale] = None,
+        locale: Optional[LoginOrSignupRequestLocale | str] = None,
     ) -> LoginOrSignupResponse:
         """Send either a login or signup magic link to a Member. A new, pending, or invited Member will receive a signup Email Magic Link. Members will have a `pending` status until they successfully authenticate. An active Member will receive a login Email Magic Link.
 
@@ -80,7 +80,7 @@ class Email:
         if signup_template_id is not None:
             data["signup_template_id"] = signup_template_id
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/login_or_signup", data)
         res = self.sync_client.post(url, data)
@@ -135,7 +135,7 @@ class Email:
         if signup_template_id is not None:
             data["signup_template_id"] = signup_template_id
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/login_or_signup", data)
         res = await self.async_client.post(url, data)
@@ -151,7 +151,7 @@ class Email:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         invite_template_id: Optional[str] = None,
-        locale: Optional[InviteRequestLocale] = None,
+        locale: Optional[InviteRequestLocale | str] = None,
     ) -> InviteResponse:
         """Send an invite email to a new Member to join an Organization. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error.
 
@@ -193,7 +193,7 @@ class Email:
         if invite_template_id is not None:
             data["invite_template_id"] = invite_template_id
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/invite", data)
         res = self.sync_client.post(url, data)
@@ -251,7 +251,7 @@ class Email:
         if invite_template_id is not None:
             data["invite_template_id"] = invite_template_id
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/invite", data)
         res = await self.async_client.post(url, data)

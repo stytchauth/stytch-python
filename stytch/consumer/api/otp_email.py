@@ -35,7 +35,7 @@ class Email:
         email: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
-        locale: Optional[SendRequestLocale] = None,
+        locale: Optional[SendRequestLocale | str] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
@@ -76,7 +76,7 @@ class Email:
         if attributes is not None:
             data["attributes"] = attributes.dict()
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if user_id is not None:
             data["user_id"] = user_id
         if session_token is not None:
@@ -138,7 +138,7 @@ class Email:
         if attributes is not None:
             data["attributes"] = attributes.dict()
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if user_id is not None:
             data["user_id"] = user_id
         if session_token is not None:
@@ -160,7 +160,7 @@ class Email:
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
         create_user_as_pending: Optional[bool] = None,
-        locale: Optional[LoginOrCreateRequestLocale] = None,
+        locale: Optional[LoginOrCreateRequestLocale | str] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
     ) -> LoginOrCreateResponse:
@@ -198,7 +198,7 @@ class Email:
         if create_user_as_pending is not None:
             data["create_user_as_pending"] = create_user_as_pending
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if login_template_id is not None:
             data["login_template_id"] = login_template_id
         if signup_template_id is not None:
@@ -252,7 +252,7 @@ class Email:
         if create_user_as_pending is not None:
             data["create_user_as_pending"] = create_user_as_pending
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if login_template_id is not None:
             data["login_template_id"] = login_template_id
         if signup_template_id is not None:

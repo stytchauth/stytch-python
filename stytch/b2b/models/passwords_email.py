@@ -15,13 +15,13 @@ from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
 
 
-class ResetRequestLocale(enum.Enum):
+class ResetRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
 
 
-class ResetStartRequestLocale(enum.Enum):
+class ResetStartRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"

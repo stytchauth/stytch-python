@@ -33,7 +33,7 @@ class IntermediateSessions:
         organization_id: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ExchangeRequestLocale] = None,
+        locale: Optional[ExchangeRequestLocale | str] = None,
     ) -> ExchangeResponse:
         """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) in a desired [Organization](https://stytch.com/docs/b2b/api/organization-object).
         This operation consumes the Intermediate Session.
@@ -84,7 +84,7 @@ class IntermediateSessions:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for(
             "/v1/b2b/discovery/intermediate_sessions/exchange", data
@@ -149,7 +149,7 @@ class IntermediateSessions:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for(
             "/v1/b2b/discovery/intermediate_sessions/exchange", data

@@ -17,7 +17,7 @@ from stytch.consumer.models.m2m import (
 from stytch.core.response_base import ResponseBase
 
 
-class UpdateRequestStatus(enum.Enum):
+class UpdateRequestStatus(str, enum.Enum):
     ACTIVE = "active"
     INACTIVE = "inactive"
 

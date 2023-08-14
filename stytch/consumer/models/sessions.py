@@ -17,7 +17,7 @@ from stytch.consumer.models.users import User
 from stytch.core.response_base import ResponseBase
 
 
-class AuthenticationFactorDeliveryMethod(enum.Enum):
+class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     EMAIL = "email"
     SMS = "sms"
     WHATSAPP = "whatsapp"
@@ -55,7 +55,7 @@ class AuthenticationFactorDeliveryMethod(enum.Enum):
     OAUTH_YAHOO = "oauth_yahoo"
 
 
-class AuthenticationFactorType(enum.Enum):
+class AuthenticationFactorType(str, enum.Enum):
     MAGIC_LINK = "magic_link"
     OTP = "otp"
     OAUTH = "oauth"
@@ -306,9 +306,6 @@ class AuthenticationFactor(pydantic.BaseModel):
     oidc_sso_factor: Optional[OIDCSSOFactor] = None
     salesforce_oauth_factor: Optional[SalesforceOAuthFactor] = None
     yahoo_oauth_factor: Optional[YahooOAuthFactor] = None
-
-    class Config:
-        use_enum_values = True
 
 
 class Session(pydantic.BaseModel):
