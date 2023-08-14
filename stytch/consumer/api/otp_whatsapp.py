@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.otp_whatsapp import (
@@ -35,7 +35,7 @@ class Whatsapp:
         phone_number: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
-        locale: Optional[SendRequestLocale | str] = None,
+        locale: Optional[Union[SendRequestLocale, str]] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
@@ -152,7 +152,7 @@ class Whatsapp:
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
         create_user_as_pending: Optional[bool] = None,
-        locale: Optional[LoginOrCreateRequestLocale | str] = None,
+        locale: Optional[Union[LoginOrCreateRequestLocale, str]] = None,
     ) -> LoginOrCreateResponse:
         """Send a one-time passcode (OTP) to a User's WhatsApp using their phone number. If the phone number is not associated with a User already, a User will be created.
 

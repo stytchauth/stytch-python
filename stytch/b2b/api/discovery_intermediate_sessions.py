@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.discovery_intermediate_sessions import (
     ExchangeRequestLocale,
@@ -33,7 +33,7 @@ class IntermediateSessions:
         organization_id: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ExchangeRequestLocale | str] = None,
+        locale: Optional[Union[ExchangeRequestLocale, str]] = None,
     ) -> ExchangeResponse:
         """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) in a desired [Organization](https://stytch.com/docs/b2b/api/organization-object).
         This operation consumes the Intermediate Session.

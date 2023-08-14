@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.passwords_existing_password import (
     ResetRequestLocale,
@@ -37,7 +37,7 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ResetRequestLocale | str] = None,
+        locale: Optional[Union[ResetRequestLocale, str]] = None,
     ) -> ResetResponse:
         """Reset the member’s password using their existing password.
 

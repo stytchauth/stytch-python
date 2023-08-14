@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.magic_links import Options
@@ -38,7 +38,7 @@ class Email:
         code_challenge: Optional[str] = None,
         attributes: Optional[Attributes] = None,
         login_redirect_url: Optional[str] = None,
-        locale: Optional[ResetStartRequestLocale | str] = None,
+        locale: Optional[Union[ResetStartRequestLocale, str]] = None,
         reset_password_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.

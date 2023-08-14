@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.magic_links_email import (
@@ -47,7 +47,7 @@ class Email:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-        locale: Optional[SendRequestLocale | str] = None,
+        locale: Optional[Union[SendRequestLocale, str]] = None,
         signup_template_id: Optional[str] = None,
     ) -> SendResponse:
         """Send a magic link to an existing Stytch user using their email address. If you'd like to create a user and send them a magic link by email with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-email).
@@ -202,7 +202,7 @@ class Email:
         attributes: Optional[Attributes] = None,
         create_user_as_pending: Optional[bool] = None,
         code_challenge: Optional[str] = None,
-        locale: Optional[LoginOrCreateRequestLocale | str] = None,
+        locale: Optional[Union[LoginOrCreateRequestLocale, str]] = None,
     ) -> LoginOrCreateResponse:
         """Send either a login or signup Magic Link to the User based on if the email is associated with a User already. A new or pending User will receive a signup Magic Link. An active User will receive a login Magic Link. For more information on how to control the status your Users are created in see the `create_user_as_pending` flag.
 
@@ -336,7 +336,7 @@ class Email:
         name: Optional[Name] = None,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
-        locale: Optional[InviteRequestLocale | str] = None,
+        locale: Optional[Union[InviteRequestLocale, str]] = None,
     ) -> InviteResponse:
         """Create a User and send an invite Magic Link to the provided `email`. The User will be created with a `pending` status until they click the Magic Link in the invite email.
 

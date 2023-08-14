@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import jwt
 
@@ -230,7 +230,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ExchangeRequestLocale | str] = None,
+        locale: Optional[Union[ExchangeRequestLocale, str]] = None,
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 

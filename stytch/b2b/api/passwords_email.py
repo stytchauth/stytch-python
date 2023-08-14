@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.passwords_email import (
     ResetRequestLocale,
@@ -37,7 +37,7 @@ class Email:
         reset_password_expiration_minutes: Optional[int] = None,
         code_challenge: Optional[str] = None,
         login_redirect_url: Optional[str] = None,
-        locale: Optional[ResetStartRequestLocale | str] = None,
+        locale: Optional[Union[ResetStartRequestLocale, str]] = None,
         reset_password_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
@@ -162,7 +162,7 @@ class Email:
         session_jwt: Optional[str] = None,
         code_verifier: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ResetRequestLocale | str] = None,
+        locale: Optional[Union[ResetRequestLocale, str]] = None,
     ) -> ResetResponse:
         """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 

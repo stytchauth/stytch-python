@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.magic_links_email_discovery import (
     SendRequestLocale,
@@ -33,7 +33,7 @@ class Discovery:
         discovery_redirect_url: Optional[str] = None,
         pkce_code_challenge: Optional[str] = None,
         login_template_id: Optional[str] = None,
-        locale: Optional[SendRequestLocale | str] = None,
+        locale: Optional[Union[SendRequestLocale, str]] = None,
     ) -> SendResponse:
         """Send a discovery magic link to an email address.
 

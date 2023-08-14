@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.otp_email import (
@@ -35,7 +35,7 @@ class Email:
         email: str,
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
-        locale: Optional[SendRequestLocale | str] = None,
+        locale: Optional[Union[SendRequestLocale, str]] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
@@ -160,7 +160,7 @@ class Email:
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
         create_user_as_pending: Optional[bool] = None,
-        locale: Optional[LoginOrCreateRequestLocale | str] = None,
+        locale: Optional[Union[LoginOrCreateRequestLocale, str]] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
     ) -> LoginOrCreateResponse:

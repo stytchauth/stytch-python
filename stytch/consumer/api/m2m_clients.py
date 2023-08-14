@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.consumer.api.m2m_clients_secrets import Secrets
 from stytch.consumer.models.m2m import M2MSearchQuery
@@ -133,7 +133,7 @@ class Clients:
         client_id: str,
         client_name: Optional[str] = None,
         client_description: Optional[str] = None,
-        status: Optional[UpdateRequestStatus | str] = None,
+        status: Optional[Union[UpdateRequestStatus, str]] = None,
         scopes: Optional[List[str]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:

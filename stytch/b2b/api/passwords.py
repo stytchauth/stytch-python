@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.api.passwords_email import Email
 from stytch.b2b.api.passwords_existing_password import ExistingPassword
@@ -107,7 +107,7 @@ class Passwords:
         self,
         email_address: str,
         hash: str,
-        hash_type: MigrateRequestHashType | str,
+        hash_type: Union[MigrateRequestHashType, str],
         organization_id: str,
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
@@ -232,7 +232,7 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[AuthenticateRequestLocale | str] = None,
+        locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a member with their email address and password. This endpoint verifies that the member has a password currently set, and that the entered password is correct. There are two instances where the endpoint will return a reset_password error even if they enter their previous password:
         * The member’s credentials appeared in the HaveIBeenPwned dataset.

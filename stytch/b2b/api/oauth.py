@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.api.oauth_discovery import Discovery
 from stytch.b2b.models.oauth import AuthenticateRequestLocale, AuthenticateResponse
@@ -34,7 +34,7 @@ class OAuth:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         pkce_code_verifier: Optional[str] = None,
-        locale: Optional[AuthenticateRequestLocale | str] = None,
+        locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member given a `token`. This endpoint verifies that the member completed the OAuth flow by verifying that the token is valid and hasn't expired.  Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 

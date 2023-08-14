@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.api.magic_links_discovery import Discovery
 from stytch.b2b.api.magic_links_email import Email
@@ -39,7 +39,7 @@ class MagicLinks:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[AuthenticateRequestLocale | str] = None,
+        locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a Magic Link. This endpoint requires a Magic Link token that is not expired or previously used. If the Member’s status is `pending` or `invited`, they will be updated to `active`.
         Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
