@@ -51,6 +51,7 @@ setup(
         include=["stytch*"],
         exclude=["*.test", "*.tests", "*.test.*", "*.tests.*"],
     ),
+    package_data={"stytch": ["py.typed"]},
     include_package_data=True,
     install_requires=[
         "aiohttp>=3.8.3",

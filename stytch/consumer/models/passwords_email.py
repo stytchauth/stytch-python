@@ -14,7 +14,7 @@ from stytch.consumer.models.users import User
 from stytch.core.response_base import ResponseBase
 
 
-class ResetStartRequestLocale(enum.Enum):
+class ResetStartRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"

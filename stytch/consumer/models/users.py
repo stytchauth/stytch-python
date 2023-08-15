@@ -15,7 +15,7 @@ import pydantic
 from stytch.core.response_base import ResponseBase
 
 
-class SearchUsersQueryOperator(enum.Enum):
+class SearchUsersQueryOperator(str, enum.Enum):
     OR = "OR"
     AND = "AND"
 
@@ -137,9 +137,6 @@ class SearchUsersQuery(pydantic.BaseModel):
 
     operator: SearchUsersQueryOperator
     operands: List[Dict[str, Any]]
-
-    class Config:
-        use_enum_values = True
 
 
 class TOTP(pydantic.BaseModel):

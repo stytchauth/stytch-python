@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.magic_links_email import (
@@ -47,7 +47,7 @@ class Email:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-        locale: Optional[SendRequestLocale] = None,
+        locale: Optional[Union[SendRequestLocale, str]] = None,
         signup_template_id: Optional[str] = None,
     ) -> SendResponse:
         """Send a magic link to an existing Stytch user using their email address. If you'd like to create a user and send them a magic link by email with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-email).
@@ -104,7 +104,7 @@ class Email:
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if signup_template_id is not None:
             data["signup_template_id"] = signup_template_id
 
@@ -182,7 +182,7 @@ class Email:
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
         if signup_template_id is not None:
             data["signup_template_id"] = signup_template_id
 
@@ -202,7 +202,7 @@ class Email:
         attributes: Optional[Attributes] = None,
         create_user_as_pending: Optional[bool] = None,
         code_challenge: Optional[str] = None,
-        locale: Optional[LoginOrCreateRequestLocale] = None,
+        locale: Optional[Union[LoginOrCreateRequestLocale, str]] = None,
     ) -> LoginOrCreateResponse:
         """Send either a login or signup Magic Link to the User based on if the email is associated with a User already. A new or pending User will receive a signup Magic Link. An active User will receive a login Magic Link. For more information on how to control the status your Users are created in see the `create_user_as_pending` flag.
 
@@ -253,7 +253,7 @@ class Email:
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/login_or_create", data)
         res = self.sync_client.post(url, data)
@@ -322,7 +322,7 @@ class Email:
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/login_or_create", data)
         res = await self.async_client.post(url, data)
@@ -336,7 +336,7 @@ class Email:
         name: Optional[Name] = None,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
-        locale: Optional[InviteRequestLocale] = None,
+        locale: Optional[Union[InviteRequestLocale, str]] = None,
     ) -> InviteResponse:
         """Create a User and send an invite Magic Link to the provided `email`. The User will be created with a `pending` status until they click the Magic Link in the invite email.
 
@@ -371,7 +371,7 @@ class Email:
         if invite_expiration_minutes is not None:
             data["invite_expiration_minutes"] = invite_expiration_minutes
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/invite", data)
         res = self.sync_client.post(url, data)
@@ -420,7 +420,7 @@ class Email:
         if invite_expiration_minutes is not None:
             data["invite_expiration_minutes"] = invite_expiration_minutes
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/invite", data)
         res = await self.async_client.post(url, data)

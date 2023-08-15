@@ -18,7 +18,7 @@ from stytch.consumer.models.sessions import JWK, AuthenticationFactor
 from stytch.core.response_base import ResponseBase
 
 
-class ExchangeRequestLocale(enum.Enum):
+class ExchangeRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"

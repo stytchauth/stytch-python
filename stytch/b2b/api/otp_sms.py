@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.otp_sms import (
     AuthenticateResponse,
@@ -33,7 +33,7 @@ class Sms:
         organization_id: str,
         member_id: str,
         mfa_phone_number: Optional[str] = None,
-        locale: Optional[SendRequestLocale] = None,
+        locale: Optional[Union[SendRequestLocale, str]] = None,
     ) -> SendResponse:
         """Send a one-time passcode (OTP) to a Member's phone number.
 
@@ -64,7 +64,7 @@ class Sms:
         if mfa_phone_number is not None:
             data["mfa_phone_number"] = mfa_phone_number
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/send", data)
         res = self.sync_client.post(url, data)
@@ -106,7 +106,7 @@ class Sms:
         if mfa_phone_number is not None:
             data["mfa_phone_number"] = mfa_phone_number
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/send", data)
         res = await self.async_client.post(url, data)

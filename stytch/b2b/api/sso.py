@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.api.sso_oidc import OIDC
 from stytch.b2b.api.sso_saml import SAML
@@ -119,7 +119,7 @@ class SSO:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[AuthenticateRequestLocale] = None,
+        locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a user given a token.
         This endpoint verifies that the user completed the SSO Authentication flow by verifying that the token is valid and hasn't expired.
@@ -175,7 +175,7 @@ class SSO:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sso/authenticate", data)
         res = self.sync_client.post(url, data)
@@ -245,7 +245,7 @@ class SSO:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sso/authenticate", data)
         res = await self.async_client.post(url, data)

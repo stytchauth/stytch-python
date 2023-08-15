@@ -12,13 +12,13 @@ from stytch.b2b.models.organizations import Member, Organization
 from stytch.core.response_base import ResponseBase
 
 
-class InviteRequestLocale(enum.Enum):
+class InviteRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
 
 
-class LoginOrSignupRequestLocale(enum.Enum):
+class LoginOrSignupRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"

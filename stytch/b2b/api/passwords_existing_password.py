@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.passwords_existing_password import (
     ResetRequestLocale,
@@ -37,7 +37,7 @@ class ExistingPassword:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        locale: Optional[ResetRequestLocale] = None,
+        locale: Optional[Union[ResetRequestLocale, str]] = None,
     ) -> ResetResponse:
         """Reset the member’s password using their existing password.
 
@@ -98,7 +98,7 @@ class ExistingPassword:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/existing_password/reset", data)
         res = self.sync_client.post(url, data)
@@ -175,7 +175,7 @@ class ExistingPassword:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
-            data["locale"] = locale.value
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/existing_password/reset", data)
         res = await self.async_client.post(url, data)

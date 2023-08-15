@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.api.passwords_email import Email
 from stytch.consumer.api.passwords_existing_password import ExistingPassword
@@ -322,7 +322,7 @@ class Passwords:
         self,
         email: str,
         hash: str,
-        hash_type: MigrateRequestHashType,
+        hash_type: Union[MigrateRequestHashType, str],
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
@@ -350,7 +350,7 @@ class Passwords:
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
-            "hash_type": hash_type.value,
+            "hash_type": hash_type,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()
@@ -405,7 +405,7 @@ class Passwords:
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
-            "hash_type": hash_type.value,
+            "hash_type": hash_type,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()

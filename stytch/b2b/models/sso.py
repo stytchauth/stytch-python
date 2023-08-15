@@ -18,7 +18,7 @@ from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
 
 
-class AuthenticateRequestLocale(enum.Enum):
+class AuthenticateRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
