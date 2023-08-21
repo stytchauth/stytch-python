@@ -316,6 +316,11 @@ class DeleteWebAuthnRegistrationResponse(ResponseBase):
     user: User
 
 
+class ExchangePrimaryFactorResponse(ResponseBase):
+    user_id: str
+    user: User
+
+
 class GetResponse(ResponseBase):
     """Response type for `Users.get`.
     Fields:

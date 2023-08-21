@@ -20,6 +20,7 @@ from stytch.consumer.models.users import (
     DeleteResponse,
     DeleteTOTPResponse,
     DeleteWebAuthnRegistrationResponse,
+    ExchangePrimaryFactorResponse,
     GetResponse,
     Name,
     SearchResponse,
@@ -284,6 +285,44 @@ class Users:
         url = self.api_base.url_for("/v1/users/{user_id}", data)
         res = await self.async_client.put(url, data)
         return UpdateResponse.from_json(res.response.status, res.json)
+
+    def exchange_primary_factor(
+        self,
+        user_id: str,
+        email_address: Optional[str] = None,
+        phone_number: Optional[str] = None,
+    ) -> ExchangePrimaryFactorResponse:
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+        if email_address is not None:
+            data["email_address"] = email_address
+        if phone_number is not None:
+            data["phone_number"] = phone_number
+
+        url = self.api_base.url_for("/v1/users/{user_id}/exchange_primary_factor", data)
+        res = self.sync_client.put(url, data)
+        return ExchangePrimaryFactorResponse.from_json(
+            res.response.status_code, res.json
+        )
+
+    async def exchange_primary_factor_async(
+        self,
+        user_id: str,
+        email_address: Optional[str] = None,
+        phone_number: Optional[str] = None,
+    ) -> ExchangePrimaryFactorResponse:
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+        if email_address is not None:
+            data["email_address"] = email_address
+        if phone_number is not None:
+            data["phone_number"] = phone_number
+
+        url = self.api_base.url_for("/v1/users/{user_id}/exchange_primary_factor", data)
+        res = await self.async_client.put(url, data)
+        return ExchangePrimaryFactorResponse.from_json(res.response.status, res.json)
 
     def delete(
         self,
