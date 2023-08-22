@@ -92,7 +92,7 @@ Structured errors from the Stytch API will raise `StytchError` exceptions. You c
 the `.details` property of the `StytchError` exception.
 
 ```python
-from stytch.core.models import StytchError
+from stytch.core.response_base import StytchError
 
 try:
     auth_resp = await client.magic_links.authenticate_async(token="token")
