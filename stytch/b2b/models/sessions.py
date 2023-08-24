@@ -53,7 +53,7 @@ class AuthenticateResponse(ResponseBase):
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 
@@ -71,7 +71,7 @@ class ExchangeResponse(ResponseBase):
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - intermediate_session_token: The returned Intermediate Session Token contains any Email Magic Link or OAuth factors from the original member session that are valid for the target Organization.

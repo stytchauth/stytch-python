@@ -40,9 +40,12 @@ class Whatsapp:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a User's WhatsApp. If you'd like to create a user and send them a passcode with one request, use our [log in or create](https://stytch.com/docs/api/whatsapp-login-or-create) endpoint.
+        """Send a One-Time Passcode (OTP) to a User's WhatsApp. If you'd like to create a user and send them a passcode with one request, use our [log in or create](https://stytch.com/docs/api/whatsapp-login-or-create) endpoint.
 
         Note that sending another OTP code before the first has expired will invalidate the first code.
+
+        ### Cost to send SMS OTP
+        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
 
         ### Add a phone number to an existing user
 
@@ -55,7 +58,7 @@ class Whatsapp:
         Collect the OTP which was delivered to the user. Call [Authenticate OTP](https://stytch.com/docs/api/authenticate-otp) using the OTP `code` along with the `phone_id` found in the response as the `method_id`.
 
         Fields:
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
           - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
@@ -98,9 +101,12 @@ class Whatsapp:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a User's WhatsApp. If you'd like to create a user and send them a passcode with one request, use our [log in or create](https://stytch.com/docs/api/whatsapp-login-or-create) endpoint.
+        """Send a One-Time Passcode (OTP) to a User's WhatsApp. If you'd like to create a user and send them a passcode with one request, use our [log in or create](https://stytch.com/docs/api/whatsapp-login-or-create) endpoint.
 
         Note that sending another OTP code before the first has expired will invalidate the first code.
+
+        ### Cost to send SMS OTP
+        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
 
         ### Add a phone number to an existing user
 
@@ -113,7 +119,7 @@ class Whatsapp:
         Collect the OTP which was delivered to the user. Call [Authenticate OTP](https://stytch.com/docs/api/authenticate-otp) using the OTP `code` along with the `phone_id` found in the response as the `method_id`.
 
         Fields:
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
           - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
@@ -156,12 +162,15 @@ class Whatsapp:
     ) -> LoginOrCreateResponse:
         """Send a one-time passcode (OTP) to a User's WhatsApp using their phone number. If the phone number is not associated with a User already, a User will be created.
 
+        ### Cost to send SMS OTP
+        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
+
         ### Next steps
 
         Collect the OTP which was delivered to the User. Call [Authenticate OTP](https://stytch.com/docs/api/authenticate-otp) using the OTP `code` along with the `phone_id` found in the response as the `method_id`.
 
         Fields:
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
           - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
@@ -202,12 +211,15 @@ class Whatsapp:
     ) -> LoginOrCreateResponse:
         """Send a one-time passcode (OTP) to a User's WhatsApp using their phone number. If the phone number is not associated with a User already, a User will be created.
 
+        ### Cost to send SMS OTP
+        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
+
         ### Next steps
 
         Collect the OTP which was delivered to the User. Call [Authenticate OTP](https://stytch.com/docs/api/authenticate-otp) using the OTP `code` along with the `phone_id` found in the response as the `method_id`.
 
         Fields:
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
           - expiration_minutes: Set the expiration for the one-time passcode, in minutes. The minimum expiration is 1 minute and the maximum is 10 minutes. The default expiration is 2 minutes.
           - attributes: Provided attributes help with fraud detection.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.

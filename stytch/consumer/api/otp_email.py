@@ -42,7 +42,7 @@ class Email:
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a User using their email. If you'd like to create a user and send them a passcode with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-email-otp).
+        """Send a One-Time Passcode (OTP) to a User using their email. If you'd like to create a user and send them a passcode with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-email-otp).
 
         ### Add an email to an existing user
         This endpoint also allows you to add a new email to an existing Stytch User. Including a `user_id`, `session_token`, or `session_jwt` in the request will add the email to the pre-existing Stytch User upon successful authentication.
@@ -104,7 +104,7 @@ class Email:
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a User using their email. If you'd like to create a user and send them a passcode with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-email-otp).
+        """Send a One-Time Passcode (OTP) to a User using their email. If you'd like to create a user and send them a passcode with one request, use our [log in or create endpoint](https://stytch.com/docs/api/log-in-or-create-user-by-email-otp).
 
         ### Add an email to an existing user
         This endpoint also allows you to add a new email to an existing Stytch User. Including a `user_id`, `session_token`, or `session_jwt` in the request will add the email to the pre-existing Stytch User upon successful authentication.

@@ -58,7 +58,7 @@ class Users:
           - email: The email address of the end user.
           - name: The name of the user. Each field in the name object is optional.
           - attributes: Provided attributes help with fraud detection.
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
                 If true, users will be saved with status pending in Stytch's backend until authenticated.
                 If false, users will be created as active. An example usage of
@@ -103,7 +103,7 @@ class Users:
           - email: The email address of the end user.
           - name: The name of the user. Each field in the name object is optional.
           - attributes: Provided attributes help with fraud detection.
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
                 If true, users will be saved with status pending in Stytch's backend until authenticated.
                 If false, users will be created as active. An example usage of
@@ -292,6 +292,19 @@ class Users:
         email_address: Optional[str] = None,
         phone_number: Optional[str] = None,
     ) -> ExchangePrimaryFactorResponse:
+        """Exchange a user's email address or phone number for another.
+
+        Must pass either an `email_address` or a `phone_number`.
+
+        This endpoint only works if the user has exactly one factor. You are able to exchange the type of factor for another as well, i.e. exchange an `email_address` for a `phone_number`.
+
+        Use this endpoint with caution as it performs an admin level action.
+
+        Fields:
+          - user_id: The unique ID of a specific User.
+          - email_address: The email address to exchange to.
+          - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
+        """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -312,6 +325,19 @@ class Users:
         email_address: Optional[str] = None,
         phone_number: Optional[str] = None,
     ) -> ExchangePrimaryFactorResponse:
+        """Exchange a user's email address or phone number for another.
+
+        Must pass either an `email_address` or a `phone_number`.
+
+        This endpoint only works if the user has exactly one factor. You are able to exchange the type of factor for another as well, i.e. exchange an `email_address` for a `phone_number`.
+
+        Use this endpoint with caution as it performs an admin level action.
+
+        Fields:
+          - user_id: The unique ID of a specific User.
+          - email_address: The email address to exchange to.
+          - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
+        """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
