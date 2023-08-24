@@ -15,6 +15,7 @@ from stytch.b2b.models.organizations_members import (
     DeletePasswordResponse,
     DeleteResponse,
     GetResponse,
+    ReactivateResponse,
     SearchResponse,
     UpdateResponse,
 )
@@ -173,6 +174,52 @@ class Members:
         res = await self.async_client.delete(url)
         return DeleteResponse.from_json(res.response.status, res.json)
 
+    def reactivate(
+        self,
+        organization_id: str,
+        member_id: str,
+    ) -> ReactivateResponse:
+        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/reactivate",
+            data,
+        )
+        res = self.sync_client.put(url, data)
+        return ReactivateResponse.from_json(res.response.status_code, res.json)
+
+    async def reactivate_async(
+        self,
+        organization_id: str,
+        member_id: str,
+    ) -> ReactivateResponse:
+        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/reactivate",
+            data,
+        )
+        res = await self.async_client.put(url, data)
+        return ReactivateResponse.from_json(res.response.status, res.json)
+
     def delete_mfa_phone_number(
         self,
         organization_id: str,
@@ -240,7 +287,7 @@ class Members:
         limit: Optional[int] = None,
         query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
-        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all Members within the specified Organizations.
+        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
         *All fuzzy search filters require a minimum of three characters.
 
@@ -271,7 +318,7 @@ class Members:
         limit: Optional[int] = None,
         query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
-        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all Members within the specified Organizations.
+        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
         *All fuzzy search filters require a minimum of three characters.
 

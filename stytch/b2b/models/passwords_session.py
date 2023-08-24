@@ -17,7 +17,7 @@ class ResetResponse(ResponseBase):
     """Response type for `Sessions.reset`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
     """  # noqa

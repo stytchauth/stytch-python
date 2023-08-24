@@ -27,7 +27,7 @@ class ExchangeResponse(ResponseBase):
       - member_id: Globally unique UUID that identifies a specific Member.
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - intermediate_session_token: The returned Intermediate Session Token is identical to the one that was originally passed in to the request.

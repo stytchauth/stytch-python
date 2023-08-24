@@ -71,7 +71,7 @@ class AuthenticateResponse(ResponseBase):
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
@@ -100,7 +100,7 @@ class MigrateResponse(ResponseBase):
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
       - member_created: A flag indicating `true` if a new Member object was created and `false` if the Member object already existed.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 

@@ -35,7 +35,7 @@ class Sms:
         mfa_phone_number: Optional[str] = None,
         locale: Optional[Union[SendRequestLocale, str]] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a Member's phone number.
+        """Send a One-Time Passcode (OTP) to a Member's phone number.
 
         If the Member already has a phone number, the `mfa_phone_number` field is not needed; the endpoint will send an OTP to the number associated with the Member.
         If the Member does not have a phone number, the endpoint will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
@@ -45,6 +45,9 @@ class Sms:
         Note that sending another OTP code before the first has expired will invalidate the first code.
 
         If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
+
+        ### Cost to send SMS OTP
+        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -77,7 +80,7 @@ class Sms:
         mfa_phone_number: Optional[str] = None,
         locale: Optional[SendRequestLocale] = None,
     ) -> SendResponse:
-        """Send a one-time passcode (OTP) to a Member's phone number.
+        """Send a One-Time Passcode (OTP) to a Member's phone number.
 
         If the Member already has a phone number, the `mfa_phone_number` field is not needed; the endpoint will send an OTP to the number associated with the Member.
         If the Member does not have a phone number, the endpoint will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
@@ -87,6 +90,9 @@ class Sms:
         Note that sending another OTP code before the first has expired will invalidate the first code.
 
         If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
+
+        ### Cost to send SMS OTP
+        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.

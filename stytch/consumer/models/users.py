@@ -317,6 +317,12 @@ class DeleteWebAuthnRegistrationResponse(ResponseBase):
 
 
 class ExchangePrimaryFactorResponse(ResponseBase):
+    """Response type for `Users.exchange_primary_factor`.
+    Fields:
+      - user_id: The unique ID of the affected User.
+      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+    """  # noqa
+
     user_id: str
     user: User
 

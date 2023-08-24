@@ -16,7 +16,7 @@ class CreateResponse(ResponseBase):
     """Response type for `Members.create`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 
@@ -29,7 +29,7 @@ class DeleteMFAPhoneNumberResponse(ResponseBase):
     """Response type for `Members.delete_mfa_phone_number`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 
@@ -42,7 +42,7 @@ class DeletePasswordResponse(ResponseBase):
     """Response type for `Members.delete_password`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 
@@ -64,7 +64,20 @@ class GetResponse(ResponseBase):
     """Response type for `Members.get`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+    """  # noqa
+
+    member_id: str
+    member: Member
+    organization: Organization
+
+
+class ReactivateResponse(ResponseBase):
+    """Response type for `Members.reactivate`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 
@@ -90,7 +103,7 @@ class UpdateResponse(ResponseBase):
     """Response type for `Members.update`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 

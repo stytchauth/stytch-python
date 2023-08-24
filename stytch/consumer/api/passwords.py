@@ -52,11 +52,13 @@ class Passwords:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         name: Optional[Name] = None,
     ) -> CreateResponse:
-        """Create a new user with a password and an authenticated session for the user if requested. If a user with this email already exists in the project, this API will return an error.
+        """Create a new user with a password. If `session_duration_minutes` is specified, a new session will be started as well.
 
-        Existing passwordless users who wish to create a password need to go through the reset password flow.
+        If a user with this email already exists in your Stytch project, this endpoint will return a `duplicate_email` error. To add a password to an existing passwordless user, you'll need to either call the [Migrate password endpoint](https://stytch.com/docs/api/password-migrate) or prompt the user to complete one of our password reset flows.
 
-        This endpoint will return an error if the password provided does not meet our strength requirements, which you can check beforehand with the password strength endpoint.
+        This endpoint will return an error if the password provided does not meet our strength requirements, which you can check beforehand via the [Password strength check endpoint](https://stytch.com/docs/api/password-strength-check).
+
+        When creating new Passwords users, it's good practice to enforce an email verification flow. We'd recommend checking out our [Email verification guide](https://stytch.com/docs/guides/passwords/email-verification/overview) for more information.
 
         Fields:
           - email: The email address of the end user.
@@ -106,11 +108,13 @@ class Passwords:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         name: Optional[Name] = None,
     ) -> CreateResponse:
-        """Create a new user with a password and an authenticated session for the user if requested. If a user with this email already exists in the project, this API will return an error.
+        """Create a new user with a password. If `session_duration_minutes` is specified, a new session will be started as well.
 
-        Existing passwordless users who wish to create a password need to go through the reset password flow.
+        If a user with this email already exists in your Stytch project, this endpoint will return a `duplicate_email` error. To add a password to an existing passwordless user, you'll need to either call the [Migrate password endpoint](https://stytch.com/docs/api/password-migrate) or prompt the user to complete one of our password reset flows.
 
-        This endpoint will return an error if the password provided does not meet our strength requirements, which you can check beforehand with the password strength endpoint.
+        This endpoint will return an error if the password provided does not meet our strength requirements, which you can check beforehand via the [Password strength check endpoint](https://stytch.com/docs/api/password-strength-check).
+
+        When creating new Passwords users, it's good practice to enforce an email verification flow. We'd recommend checking out our [Email verification guide](https://stytch.com/docs/guides/passwords/email-verification/overview) for more information.
 
         Fields:
           - email: The email address of the end user.
