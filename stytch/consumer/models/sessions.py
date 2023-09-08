@@ -112,6 +112,12 @@ class DiscordOAuthFactor(pydantic.BaseModel):
 
 
 class EmailFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - email_id: The globally unique UUID of the Member's email.
+      - email_address: The email address of the Member.
+    """  # noqa
+
     email_id: str
     email_address: str
 
@@ -145,6 +151,13 @@ class GithubOAuthFactor(pydantic.BaseModel):
 
 
 class GoogleOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique ID of an OAuth registration.
+      - email_id: The globally unique UUID of the Member's email.
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+    """  # noqa
+
     id: str
     email_id: str
     provider_subject: str
@@ -175,18 +188,38 @@ class LinkedInOAuthFactor(pydantic.BaseModel):
 
 
 class MicrosoftOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique ID of an OAuth registration.
+      - email_id: The globally unique UUID of the Member's email.
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+    """  # noqa
+
     id: str
     email_id: str
     provider_subject: str
 
 
 class OIDCSSOFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique ID of an SSO Registration.
+      - provider_id: Globally unique UUID that identifies a specific OIDC Connection.
+      - external_id: The ID of the member given by the identity provider.
+    """  # noqa
+
     id: str
     provider_id: str
     external_id: str
 
 
 class PhoneNumberFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - phone_id: The globally unique UUID of the Member's phone number.
+      - phone_number: The phone number of the Member.
+    """  # noqa
+
     phone_id: str
     phone_number: str
 
@@ -196,6 +229,13 @@ class RecoveryCodeFactor(pydantic.BaseModel):
 
 
 class SAMLSSOFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique ID of an SSO Registration.
+      - provider_id: Globally unique UUID that identifies a specific SAML Connection.
+      - external_id: The ID of the member given by the identity provider.
+    """  # noqa
+
     id: str
     provider_id: str
     external_id: str
@@ -268,6 +308,60 @@ class YahooOAuthFactor(pydantic.BaseModel):
 
 
 class AuthenticationFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - type: The type of authentication factor. The possible values are: `magic_link`, `otp`,
+           `oauth`, `password`, or `sso`.
+      - delivery_method: The method that was used to deliver the authentication factor. The possible values depend on the `type`:
+
+          `magic_link` – Only `email`.
+
+          `otp` – Only `sms`.
+
+          `oauth` – Either `oauth_google` or `oauth_microsoft`.
+
+          `password` – Only `knowledge`.
+
+          `sso` – Either `sso_saml` or `sso_oidc`.
+
+      - last_authenticated_at: The timestamp when the factor was last authenticated.
+      - created_at: The timestamp when the factor was initially authenticated.
+      - updated_at: The timestamp when the factor was last updated.
+      - email_factor: Information about the email factor, if one is present.
+      - phone_number_factor: Information about the phone number factor, if one is present.
+      - google_oauth_factor: Information about the Google OAuth factor, if one is present.
+      - microsoft_oauth_factor: Information about the Microsoft OAuth factor, if one is present.
+      - apple_oauth_factor: (no documentation yet)
+      - webauthn_factor: (no documentation yet)
+      - authenticator_app_factor: (no documentation yet)
+      - github_oauth_factor: (no documentation yet)
+      - recovery_code_factor: (no documentation yet)
+      - facebook_oauth_factor: (no documentation yet)
+      - crypto_wallet_factor: (no documentation yet)
+      - amazon_oauth_factor: (no documentation yet)
+      - bitbucket_oauth_factor: (no documentation yet)
+      - coinbase_oauth_factor: (no documentation yet)
+      - discord_oauth_factor: (no documentation yet)
+      - figma_oauth_factor: (no documentation yet)
+      - git_lab_oauth_factor: (no documentation yet)
+      - instagram_oauth_factor: (no documentation yet)
+      - linked_in_oauth_factor: (no documentation yet)
+      - shopify_oauth_factor: (no documentation yet)
+      - slack_oauth_factor: (no documentation yet)
+      - snapchat_oauth_factor: (no documentation yet)
+      - spotify_oauth_factor: (no documentation yet)
+      - steam_oauth_factor: (no documentation yet)
+      - tik_tok_oauth_factor: (no documentation yet)
+      - twitch_oauth_factor: (no documentation yet)
+      - twitter_oauth_factor: (no documentation yet)
+      - embeddable_magic_link_factor: (no documentation yet)
+      - biometric_factor: (no documentation yet)
+      - saml_sso_factor: Information about the SAML SSO factor, if one is present.
+      - oidc_sso_factor: Information about the OIDC SSO factor, if one is present.
+      - salesforce_oauth_factor: (no documentation yet)
+      - yahoo_oauth_factor: (no documentation yet)
+    """  # noqa
+
     type: AuthenticationFactorType
     delivery_method: AuthenticationFactorDeliveryMethod
     last_authenticated_at: Optional[datetime.datetime] = None
