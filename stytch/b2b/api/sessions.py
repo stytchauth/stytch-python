@@ -479,7 +479,7 @@ class Sessions:
         expires_at = claim.get("expires_at", generic_claims.reserved_claims["exp"])
 
         # Claim related to unpacking organization-specific fields
-        org_claim = generic_claims.reserved_claims[_organization_claim]
+        org_claim = generic_claims.untyped_claims[_organization_claim]
 
         return MemberSession(
             authentication_factors=claim["authentication_factors"],
