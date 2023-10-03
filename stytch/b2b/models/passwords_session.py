@@ -6,11 +6,19 @@
 
 from __future__ import annotations
 
+import enum
 from typing import Optional
 
+from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
+
+
+class ResetRequestLocale(str, enum.Enum):
+    EN = "en"
+    ES = "es"
+    PTBR = "pt-br"
 
 
 class ResetResponse(ResponseBase):
@@ -19,10 +27,20 @@ class ResetResponse(ResponseBase):
       - member_id: Globally unique UUID that identifies a specific Member.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - session_token: (no documentation yet)
+      - session_jwt: (no documentation yet)
+      - intermediate_session_token: (no documentation yet)
+      - member_authenticated: (no documentation yet)
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+      - mfa_required: (no documentation yet)
     """  # noqa
 
     member_id: str
     member: Member
     organization: Organization
+    session_token: str
+    session_jwt: str
+    intermediate_session_token: str
+    member_authenticated: bool
     member_session: Optional[MemberSession] = None
+    mfa_required: Optional[MfaRequired] = None

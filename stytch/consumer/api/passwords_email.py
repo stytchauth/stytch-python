@@ -166,8 +166,14 @@ class Email:
 
         The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
 
+        Note that a successful password reset by email will revoke all active sessions for the `user_id`.
+
         Fields:
-          - token: The token to authenticate.
+          - token: The Passwords `token` from the `?token=` query parameter in the URL.
+
+              In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
+
+              See examples and read more about redirect URLs [here](https://stytch.com/docs/guides/dashboard/redirect-urls).
           - password: The password of the user
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -226,8 +232,14 @@ class Email:
 
         The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
 
+        Note that a successful password reset by email will revoke all active sessions for the `user_id`.
+
         Fields:
-          - token: The token to authenticate.
+          - token: The Passwords `token` from the `?token=` query parameter in the URL.
+
+              In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
+
+              See examples and read more about redirect URLs [here](https://stytch.com/docs/guides/dashboard/redirect-urls).
           - password: The password of the user
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,

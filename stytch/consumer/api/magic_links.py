@@ -45,7 +45,11 @@ class MagicLinks:
         """Authenticate a User given a Magic Link. This endpoint verifies that the Magic Link token is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied.
 
         Fields:
-          - token: The token to authenticate.
+          - token: The Magic Link `token` from the `?token=` query parameter in the URL.
+
+              The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7`
+
+              In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/guides/dashboard/redirect-urls) for more detail.
           - attributes: Provided attributes help with fraud detection.
           - options: Specify optional security settings.
           - session_token: The `session_token` associated with a User's existing Session.
@@ -100,7 +104,11 @@ class MagicLinks:
         """Authenticate a User given a Magic Link. This endpoint verifies that the Magic Link token is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied.
 
         Fields:
-          - token: The token to authenticate.
+          - token: The Magic Link `token` from the `?token=` query parameter in the URL.
+
+              The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7`
+
+              In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/guides/dashboard/redirect-urls) for more detail.
           - attributes: Provided attributes help with fraud detection.
           - options: Specify optional security settings.
           - session_token: The `session_token` associated with a User's existing Session.
