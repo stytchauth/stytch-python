@@ -153,11 +153,11 @@ class TOTP(pydantic.BaseModel):
 class WebAuthnRegistration(pydantic.BaseModel):
     """
     Fields:
-      - webauthn_registration_id: The unique ID for the WebAuthn registration.
+      - webauthn_registration_id: (no documentation yet)
       - domain: The `domain` on which a WebAuthn registration was started. This will be the domain of your app.
       - user_agent: The user agent of the User.
-      - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
-      - authenticator_type: The `authenticator_type` string displays the requested authenticator type of the WebAuthn device. The two valid types are "platform" and "cross-platform". If no value is present, the WebAuthn device was created without an authenticator type preference.
+      - verified: (no documentation yet)
+      - authenticator_type: (no documentation yet)
     """  # noqa
 
     webauthn_registration_id: str

@@ -36,6 +36,8 @@ class ExistingPassword:
     ) -> ResetResponse:
         """Reset the User’s password using their existing password.
 
+        Note that a successful password reset via an existing password will revoke all active sessions for the `user_id`.
+
         Fields:
           - email: The email address of the end user.
           - existing_password: The user's existing password.
@@ -84,6 +86,8 @@ class ExistingPassword:
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
         """Reset the User’s password using their existing password.
+
+        Note that a successful password reset via an existing password will revoke all active sessions for the `user_id`.
 
         Fields:
           - email: The email address of the end user.

@@ -34,6 +34,8 @@ class Sessions:
     ) -> ResetResponse:
         """Reset the user’s password using their existing session. The endpoint will error if the session does not have a password, email magic link, or email OTP authentication factor that has been issued within the last 5 minutes. This endpoint requires either a `session_jwt` or `session_token` be included in the request.
 
+        Note that a successful password reset via an existing session will revoke all active sessions for the `user_id`, except for the one used during the reset flow.
+
         Fields:
           - password: The password of the user
           - session_token: The `session_token` associated with a User's existing Session.
@@ -76,6 +78,8 @@ class Sessions:
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ResetResponse:
         """Reset the user’s password using their existing session. The endpoint will error if the session does not have a password, email magic link, or email OTP authentication factor that has been issued within the last 5 minutes. This endpoint requires either a `session_jwt` or `session_token` be included in the request.
+
+        Note that a successful password reset via an existing session will revoke all active sessions for the `user_id`, except for the one used during the reset flow.
 
         Fields:
           - password: The password of the user

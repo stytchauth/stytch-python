@@ -6,9 +6,9 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
-from stytch.b2b.models.passwords_session import ResetResponse
+from stytch.b2b.models.passwords_session import ResetRequestLocale, ResetResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -30,6 +30,9 @@ class Sessions:
         password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[Union[ResetRequestLocale, str]] = None,
     ) -> ResetResponse:
         """Reset the Member's password using their existing session. The endpoint will error if the session does not contain an authentication factor that has been issued within the last 5 minutes. Either `session_token` or `session_jwt` should be provided.
 
@@ -38,6 +41,9 @@ class Sessions:
           - password: The password to authenticate.
           - session_token: A secret token for a given Stytch Session.
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - session_duration_minutes: (no documentation yet)
+          - session_custom_claims: (no documentation yet)
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -47,6 +53,12 @@ class Sessions:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/session/reset", data)
         res = self.sync_client.post(url, data)
@@ -58,6 +70,9 @@ class Sessions:
         password: str,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        locale: Optional[ResetRequestLocale] = None,
     ) -> ResetResponse:
         """Reset the Member's password using their existing session. The endpoint will error if the session does not contain an authentication factor that has been issued within the last 5 minutes. Either `session_token` or `session_jwt` should be provided.
 
@@ -66,6 +81,9 @@ class Sessions:
           - password: The password to authenticate.
           - session_token: A secret token for a given Stytch Session.
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - session_duration_minutes: (no documentation yet)
+          - session_custom_claims: (no documentation yet)
+          - locale: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -75,6 +93,12 @@ class Sessions:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if locale is not None:
+            data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/session/reset", data)
         res = await self.async_client.post(url, data)
