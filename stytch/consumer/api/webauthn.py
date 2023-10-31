@@ -13,6 +13,7 @@ from stytch.consumer.models.webauthn import (
     AuthenticateStartResponse,
     RegisterResponse,
     RegisterStartResponse,
+    UpdateResponse,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -35,6 +36,7 @@ class WebAuthn:
         domain: str,
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
+        return_passkey_credential_options: Optional[bool] = None,
     ) -> RegisterStartResponse:
         """Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
 
@@ -45,6 +47,7 @@ class WebAuthn:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
           - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -54,6 +57,10 @@ class WebAuthn:
             data["user_agent"] = user_agent
         if authenticator_type is not None:
             data["authenticator_type"] = authenticator_type
+        if return_passkey_credential_options is not None:
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
         res = self.sync_client.post(url, data)
@@ -65,6 +72,7 @@ class WebAuthn:
         domain: str,
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
+        return_passkey_credential_options: Optional[bool] = None,
     ) -> RegisterStartResponse:
         """Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
 
@@ -75,6 +83,7 @@ class WebAuthn:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
           - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -84,6 +93,10 @@ class WebAuthn:
             data["user_agent"] = user_agent
         if authenticator_type is not None:
             data["authenticator_type"] = authenticator_type
+        if return_passkey_credential_options is not None:
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
         res = await self.async_client.post(url, data)
@@ -93,6 +106,10 @@ class WebAuthn:
         self,
         user_id: str,
         public_key_credential: str,
+        session_token: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RegisterResponse:
         """Complete the creation of a WebAuthn registration by passing the response from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter.
 
@@ -101,11 +118,23 @@ class WebAuthn:
         Fields:
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
+          - session_token: (no documentation yet)
+          - session_duration_minutes: (no documentation yet)
+          - session_jwt: (no documentation yet)
+          - session_custom_claims: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
         }
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/webauthn/register", data)
         res = self.sync_client.post(url, data)
@@ -115,6 +144,10 @@ class WebAuthn:
         self,
         user_id: str,
         public_key_credential: str,
+        session_token: Optional[str] = None,
+        session_duration_minutes: Optional[int] = None,
+        session_jwt: Optional[str] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RegisterResponse:
         """Complete the creation of a WebAuthn registration by passing the response from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter.
 
@@ -123,11 +156,23 @@ class WebAuthn:
         Fields:
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
+          - session_token: (no documentation yet)
+          - session_duration_minutes: (no documentation yet)
+          - session_jwt: (no documentation yet)
+          - session_custom_claims: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
         }
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/webauthn/register", data)
         res = await self.async_client.post(url, data)
@@ -135,21 +180,28 @@ class WebAuthn:
 
     def authenticate_start(
         self,
-        user_id: str,
         domain: str,
+        user_id: Optional[str] = None,
+        return_passkey_credential_options: Optional[bool] = None,
     ) -> AuthenticateStartResponse:
         """Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
 
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, `the public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
 
         Fields:
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
+          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
-            "user_id": user_id,
             "domain": domain,
         }
+        if user_id is not None:
+            data["user_id"] = user_id
+        if return_passkey_credential_options is not None:
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
         res = self.sync_client.post(url, data)
@@ -157,21 +209,28 @@ class WebAuthn:
 
     async def authenticate_start_async(
         self,
-        user_id: str,
         domain: str,
+        user_id: Optional[str] = None,
+        return_passkey_credential_options: Optional[bool] = None,
     ) -> AuthenticateStartResponse:
         """Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
 
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, `the public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
 
         Fields:
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
+          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
-            "user_id": user_id,
             "domain": domain,
         }
+        if user_id is not None:
+            data["user_id"] = user_id
+        if return_passkey_credential_options is not None:
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
         res = await self.async_client.post(url, data)
@@ -266,3 +325,31 @@ class WebAuthn:
         url = self.api_base.url_for("/v1/webauthn/authenticate", data)
         res = await self.async_client.post(url, data)
         return AuthenticateResponse.from_json(res.response.status, res.json)
+
+    def update(
+        self,
+        webauthn_registration_id: str,
+        name: str,
+    ) -> UpdateResponse:
+        data: Dict[str, Any] = {
+            "webauthn_registration_id": webauthn_registration_id,
+            "name": name,
+        }
+
+        url = self.api_base.url_for("/v1/webauthn/{webauthn_registration_id}", data)
+        res = self.sync_client.put(url, data)
+        return UpdateResponse.from_json(res.response.status_code, res.json)
+
+    async def update_async(
+        self,
+        webauthn_registration_id: str,
+        name: str,
+    ) -> UpdateResponse:
+        data: Dict[str, Any] = {
+            "webauthn_registration_id": webauthn_registration_id,
+            "name": name,
+        }
+
+        url = self.api_base.url_for("/v1/webauthn/{webauthn_registration_id}", data)
+        res = await self.async_client.put(url, data)
+        return UpdateResponse.from_json(res.response.status, res.json)
