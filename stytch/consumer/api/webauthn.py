@@ -47,7 +47,7 @@ class WebAuthn:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
           - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: (no documentation yet)
+          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -83,7 +83,7 @@ class WebAuthn:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
           - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: (no documentation yet)
+          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -118,10 +118,20 @@ class WebAuthn:
         Fields:
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
-          - session_token: (no documentation yet)
-          - session_duration_minutes: (no documentation yet)
-          - session_jwt: (no documentation yet)
-          - session_custom_claims: (no documentation yet)
+          - session_token: The `session_token` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+
+          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -156,10 +166,20 @@ class WebAuthn:
         Fields:
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
-          - session_token: (no documentation yet)
-          - session_duration_minutes: (no documentation yet)
-          - session_jwt: (no documentation yet)
-          - session_custom_claims: (no documentation yet)
+          - session_token: The `session_token` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+
+          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -191,7 +211,7 @@ class WebAuthn:
         Fields:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: (no documentation yet)
+          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
         """  # noqa
         data: Dict[str, Any] = {
             "domain": domain,
@@ -220,7 +240,7 @@ class WebAuthn:
         Fields:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: (no documentation yet)
+          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
         """  # noqa
         data: Dict[str, Any] = {
             "domain": domain,
