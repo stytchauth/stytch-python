@@ -158,6 +158,7 @@ class WebAuthnRegistration(pydantic.BaseModel):
       - user_agent: The user agent of the User.
       - verified: (no documentation yet)
       - authenticator_type: (no documentation yet)
+      - name: (no documentation yet)
     """  # noqa
 
     webauthn_registration_id: str
@@ -165,6 +166,7 @@ class WebAuthnRegistration(pydantic.BaseModel):
     user_agent: str
     verified: bool
     authenticator_type: str
+    name: str
 
 
 class User(pydantic.BaseModel):
