@@ -47,7 +47,7 @@ class WebAuthn:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
           - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -83,7 +83,7 @@ class WebAuthn:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
           - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -211,7 +211,7 @@ class WebAuthn:
         Fields:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "domain": domain,
@@ -240,7 +240,7 @@ class WebAuthn:
         Fields:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - return_passkey_credential_options: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "domain": domain,
