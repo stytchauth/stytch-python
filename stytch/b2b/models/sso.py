@@ -58,6 +58,7 @@ class SAMLConnection(pydantic.BaseModel):
     audience_uri: str
     signing_certificates: List[X509Certificate]
     verification_certificates: List[X509Certificate]
+    alternative_audience_uri: str
     attribute_mapping: Optional[Dict[str, Any]] = None
 
 
