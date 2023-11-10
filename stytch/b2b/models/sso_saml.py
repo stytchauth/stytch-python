@@ -30,8 +30,8 @@ class DeleteVerificationCertificateResponse(ResponseBase):
     certificate_id: str
 
 
-class UpdateConnectionResponse(ResponseBase):
-    """Response type for `SAML.update_connection`.
+class UpdateByURLResponse(ResponseBase):
+    """Response type for `SAML.update_by_url`.
     Fields:
       - connection: The `SAML Connection` object affected by this API call. See the [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object) for complete response field details.
     """  # noqa
