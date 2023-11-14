@@ -16,12 +16,14 @@ from stytch.b2b.models.sessions import (
     ExchangeResponse,
     GetJWKSResponse,
     GetResponse,
+    LocalJWTResponse,
     MemberSession,
     RevokeResponse,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.shared import jwt_helpers
+from stytch.shared import jwt_helpers, rbac_local
+from stytch.shared.policy_cache import PolicyCache
 
 
 class Sessions:
@@ -38,6 +40,16 @@ class Sessions:
         self.async_client = async_client
         self.jwks_client = jwks_client
         self.project_id = project_id
+        self._policy_cache = None
+
+    @property
+    def policy_cache(self) -> PolicyCache:
+        assert self._policy_cache is not None
+        return self._policy_cache
+
+    @policy_cache.setter
+    def policy_cache(self, policy_cache: PolicyCache) -> None:
+        self._policy_cache = policy_cache
 
     def get(
         self,
@@ -391,11 +403,13 @@ class Sessions:
 
     # MANUAL(authenticate_jwt)(SERVICE_METHOD)
     # ADDIMPORT: from typing import Any, Dict, Optional
+    # ADDIMPORT: from stytch.b2b.models.rbac import AuthorizationCheck
     def authenticate_jwt(
         self,
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[MemberSession]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -411,6 +425,7 @@ class Sessions:
             self.authenticate_jwt_local(
                 session_jwt=session_jwt,
                 max_token_age_seconds=max_token_age_seconds,
+                authorization_check=authorization_check,
             )
             or self.authenticate(
                 session_custom_claims=session_custom_claims, session_jwt=session_jwt
@@ -422,6 +437,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[MemberSession]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -434,9 +450,10 @@ class Sessions:
         """
         # Return the local_result if available, otherwise call the Stytch API
         return (
-            self.authenticate_jwt_local(
+            await self.authenticate_jwt_local_async(
                 session_jwt=session_jwt,
                 max_token_age_seconds=max_token_age_seconds,
+                authorization_check=authorization_check,
             )
             or (
                 await self.authenticate_async(
@@ -448,16 +465,19 @@ class Sessions:
     # ENDMANUAL(authenticate_jwt)
 
     # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
-    # ADDIMPORT: from stytch.b2b.models.sessions import MemberSession
+    # ADDIMPORT: from typing import Optional
+    # ADDIMPORT: from stytch.b2b.models.rbac import AuthorizationCheck
+    # ADDIMPORT: from stytch.b2b.models.sessions import MemberSession, LocalJWTResponse
     # ADDIMPORT: from stytch.shared import jwt_helpers
-    def authenticate_jwt_local(
+    def _authenticate_jwt_local_common(
         self,
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
-    ) -> Optional[MemberSession]:
+    ) -> Optional[LocalJWTResponse]:
         _session_claim = "https://stytch.com/session"
         _organization_claim = "https://stytch.com/organization"
+        _roles_claim = "https://stytch.com/roles"
         generic_claims = jwt_helpers.authenticate_jwt_local(
             project_id=self.project_id,
             jwks_client=self.jwks_client,
@@ -472,7 +492,7 @@ class Sessions:
         custom_claims = {
             k: v
             for k, v in generic_claims.untyped_claims.items()
-            if k not in [_session_claim, _organization_claim]
+            if k not in [_session_claim, _organization_claim, _roles_claim]
         }
 
         # For JWTs that include it, prefer the inner expires_at claim.
@@ -481,15 +501,84 @@ class Sessions:
         # Claim related to unpacking organization-specific fields
         org_claim = generic_claims.untyped_claims[_organization_claim]
 
-        return MemberSession(
-            authentication_factors=claim["authentication_factors"],
-            expires_at=expires_at,
-            last_accessed_at=claim["last_accessed_at"],
-            member_session_id=claim["id"],
-            started_at=claim["started_at"],
-            organization_id=org_claim["organization_id"],
-            member_id=generic_claims.reserved_claims["sub"],
-            custom_claims=custom_claims,
+        # Claim related to RBAC roles
+        roles_claim = generic_claims.untyped_claims.get(_roles_claim)
+        if roles_claim is not None:
+            if not isinstance(roles_claim, list) or not all(
+                isinstance(x, str) for x in roles_claim
+            ):
+                raise ValueError("Invalid roles claim. Expected a list of strings.")
+
+        return LocalJWTResponse(
+            member_session=MemberSession(
+                authentication_factors=claim["authentication_factors"],
+                expires_at=expires_at,
+                last_accessed_at=claim["last_accessed_at"],
+                member_session_id=claim["id"],
+                started_at=claim["started_at"],
+                organization_id=org_claim["organization_id"],
+                member_id=generic_claims.reserved_claims["sub"],
+                custom_claims=custom_claims,
+            ),
+            roles_claim=roles_claim,
         )
+
+    def authenticate_jwt_local(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        leeway: int = 0,
+        authorization_check: Optional[AuthorizationCheck] = None,
+    ) -> Optional[MemberSession]:
+        local_resp = self._authenticate_jwt_local_common(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
+            leeway=leeway,
+        )
+        if local_resp is None:
+            return None
+
+        if authorization_check is not None:
+            if local_resp.roles_claim is None:
+                raise ValueError("Invalid roles claim. Expected a list of strings.")
+
+            rbac_local.perform_authorization_check(
+                policy=self.policy_cache.get(),
+                subject_roles=local_resp.roles_claim,
+                subject_org_id=local_resp.member_session.organization_id,
+                authz_request=authorization_check,
+            )
+
+        # Auth check passes (or wasn't provided), we can return the session now
+        return local_resp.member_session
+
+    async def authenticate_jwt_local_async(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        leeway: int = 0,
+        authorization_check: Optional[AuthorizationCheck] = None,
+    ) -> Optional[MemberSession]:
+        local_resp = self._authenticate_jwt_local_common(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
+            leeway=leeway,
+        )
+        if local_resp is None:
+            return None
+
+        if authorization_check is not None:
+            if local_resp.roles_claim is None:
+                raise ValueError("Invalid roles claim. Expected a list of strings.")
+
+            rbac_local.perform_authorization_check(
+                policy=await self.policy_cache.get_async(),
+                subject_roles=local_resp.roles_claim,
+                subject_org_id=local_resp.member_session.organization_id,
+                authz_request=authorization_check,
+            )
+
+        # Auth check passes (or wasn't provided), we can return the session now
+        return local_resp.member_session
 
     # ENDMANUAL(authenticate_jwt_local)

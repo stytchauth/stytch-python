@@ -114,3 +114,12 @@ class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:
     """  # noqa
+
+
+# MANUAL(LocalJWTResponse)(Types)
+class LocalJWTResponse(pydantic.BaseModel):
+    member_session: MemberSession
+    roles_claim: Optional[List[str]]
+
+
+# ENDMANUAL(LocalJWTResponse)

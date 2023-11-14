@@ -19,6 +19,7 @@ from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.consumer.api.m2m import M2M
 from stytch.core.client_base import ClientBase
+from stytch.shared.policy_cache import PolicyCache
 
 
 class Client(ClientBase):
@@ -62,6 +63,9 @@ class Client(ClientBase):
             self.jwks_client,
             project_id,
         )
+        # Set up the policy cache for local RBAC
+        policy_cache = PolicyCache(self.rbac)
+        self.sessions.policy_cache = policy_cache
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
         data = {"project_id": project_id}
