@@ -388,6 +388,44 @@ class Members:
         res = await self.async_client.delete(url)
         return DeletePasswordResponse.from_json(res.response.status, res.json)
 
+    def dangerously_get(
+        self,
+        member_id: str,
+    ) -> GetResponse:
+        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, so you can use it to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
+
+        Fields:
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/members/dangerously_get/{member_id}", data
+        )
+        res = self.sync_client.get(url, data)
+        return GetResponse.from_json(res.response.status_code, res.json)
+
+    async def dangerously_get_async(
+        self,
+        member_id: str,
+    ) -> GetResponse:
+        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, so you can use it to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
+
+        Fields:
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/members/dangerously_get/{member_id}", data
+        )
+        res = await self.async_client.get(url, data)
+        return GetResponse.from_json(res.response.status, res.json)
+
     def create(
         self,
         organization_id: str,

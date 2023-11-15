@@ -54,8 +54,8 @@ class Organizations:
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Fields:
-          - organization_name: The name of the Organization.
-          - organization_slug: The unique URL slug of the Organization. A minimum of two characters is required. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`.
+          - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+          - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
@@ -150,8 +150,8 @@ class Organizations:
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Fields:
-          - organization_name: The name of the Organization.
-          - organization_slug: The unique URL slug of the Organization. A minimum of two characters is required. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`.
+          - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+          - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
@@ -276,14 +276,14 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
     ) -> UpdateResponse:
-        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members. test
+        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - organization_name: The name of the Organization.
-          - organization_slug: The unique URL slug of the Organization. A minimum of two characters is required. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`.
+          - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+          - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
@@ -385,14 +385,14 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
     ) -> UpdateResponse:
-        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members. test
+        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - organization_name: The name of the Organization.
-          - organization_slug: The unique URL slug of the Organization. A minimum of two characters is required. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`.
+          - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+          - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.

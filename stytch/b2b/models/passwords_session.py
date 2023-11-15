@@ -27,12 +27,15 @@ class ResetResponse(ResponseBase):
       - member_id: Globally unique UUID that identifies a specific Member.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - session_token: (no documentation yet)
-      - session_jwt: (no documentation yet)
-      - intermediate_session_token: (no documentation yet)
-      - member_authenticated: (no documentation yet)
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session.
+        The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete an MFA flow;
+        the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token;
+        or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member.
+      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: (no documentation yet)
+      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
     """  # noqa
 
     member_id: str

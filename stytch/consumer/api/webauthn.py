@@ -46,8 +46,8 @@ class WebAuthn:
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
-          - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `residentKey` required, `userVerification` preferred, and ignoring the `authenticator_type` passed.
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -82,8 +82,8 @@ class WebAuthn:
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
-          - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid value are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `residentKey` required, `userVerification` preferred, and ignoring the `authenticator_type` passed.
         """  # noqa
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -211,7 +211,7 @@ class WebAuthn:
         Fields:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `userVerification` preferred.
         """  # noqa
         data: Dict[str, Any] = {
             "domain": domain,
@@ -240,7 +240,7 @@ class WebAuthn:
         Fields:
           - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: If true, the public_key_credential_creation_options returned will be optimized for Passkeys.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `userVerification` preferred.
         """  # noqa
         data: Dict[str, Any] = {
             "domain": domain,
@@ -351,6 +351,12 @@ class WebAuthn:
         webauthn_registration_id: str,
         name: str,
     ) -> UpdateResponse:
+        """Updates a WebAuthn registration.
+
+        Fields:
+          - webauthn_registration_id: Globally unique UUID that identifies a WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
+          - name: The `name` of the WebAuthn registration.
+        """  # noqa
         data: Dict[str, Any] = {
             "webauthn_registration_id": webauthn_registration_id,
             "name": name,
@@ -365,6 +371,12 @@ class WebAuthn:
         webauthn_registration_id: str,
         name: str,
     ) -> UpdateResponse:
+        """Updates a WebAuthn registration.
+
+        Fields:
+          - webauthn_registration_id: Globally unique UUID that identifies a WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
+          - name: The `name` of the WebAuthn registration.
+        """  # noqa
         data: Dict[str, Any] = {
             "webauthn_registration_id": webauthn_registration_id,
             "name": name,

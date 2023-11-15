@@ -51,10 +51,13 @@ class RegisterResponse(ResponseBase):
     Fields:
       - user_id: The unique ID of the affected User.
       - webauthn_registration_id: The unique ID for the WebAuthn registration.
-      - session_token: (no documentation yet)
-      - session_jwt: (no documentation yet)
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - user: (no documentation yet)
-      - session: (no documentation yet)
+      - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
+
+      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+
     """  # noqa
 
     user_id: str
@@ -77,4 +80,9 @@ class RegisterStartResponse(ResponseBase):
 
 
 class UpdateResponse(ResponseBase):
+    """Response type for `WebAuthn.update`.
+    Fields:
+      - webauthn_registration: A WebAuthn registration.
+    """  # noqa
+
     webauthn_registration: Optional[WebAuthnRegistration] = None
