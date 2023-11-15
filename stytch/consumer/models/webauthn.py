@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Optional
 
 from stytch.consumer.models.sessions import Session
-from stytch.consumer.models.users import User
+from stytch.consumer.models.users import User, WebAuthnRegistration
 from stytch.core.response_base import ResponseBase
 
 
@@ -51,10 +51,21 @@ class RegisterResponse(ResponseBase):
     Fields:
       - user_id: The unique ID of the affected User.
       - webauthn_registration_id: The unique ID for the WebAuthn registration.
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - user: (no documentation yet)
+      - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
+
+      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+
     """  # noqa
 
     user_id: str
     webauthn_registration_id: str
+    session_token: str
+    session_jwt: str
+    user: User
+    session: Optional[Session] = None
 
 
 class RegisterStartResponse(ResponseBase):
@@ -66,3 +77,7 @@ class RegisterStartResponse(ResponseBase):
 
     user_id: str
     public_key_credential_creation_options: str
+
+
+class UpdateResponse(ResponseBase):
+    webauthn_registration: Optional[WebAuthnRegistration] = None

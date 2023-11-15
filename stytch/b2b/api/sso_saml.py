@@ -11,6 +11,7 @@ from typing import Any, Dict, Optional
 from stytch.b2b.models.sso_saml import (
     CreateConnectionResponse,
     DeleteVerificationCertificateResponse,
+    UpdateByURLResponse,
     UpdateConnectionResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -79,6 +80,7 @@ class SAML:
         attribute_mapping: Optional[Dict[str, Any]] = None,
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
+        alternative_audience_uri: Optional[str] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
 
@@ -96,6 +98,7 @@ class SAML:
           - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
+          - alternative_audience_uri: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -111,6 +114,8 @@ class SAML:
             data["x509_certificate"] = x509_certificate
         if idp_sso_url is not None:
             data["idp_sso_url"] = idp_sso_url
+        if alternative_audience_uri is not None:
+            data["alternative_audience_uri"] = alternative_audience_uri
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
@@ -127,6 +132,7 @@ class SAML:
         attribute_mapping: Optional[Dict[str, Any]] = None,
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
+        alternative_audience_uri: Optional[str] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
 
@@ -144,6 +150,7 @@ class SAML:
           - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
+          - alternative_audience_uri: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -159,12 +166,76 @@ class SAML:
             data["x509_certificate"] = x509_certificate
         if idp_sso_url is not None:
             data["idp_sso_url"] = idp_sso_url
+        if alternative_audience_uri is not None:
+            data["alternative_audience_uri"] = alternative_audience_uri
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
         )
         res = await self.async_client.put(url, data)
         return UpdateConnectionResponse.from_json(res.response.status, res.json)
+
+    def update_by_url(
+        self,
+        organization_id: str,
+        connection_id: str,
+        metadata_url: str,
+    ) -> UpdateByURLResponse:
+        """Used to update an existing SAML connection using an IDP metadata URL.
+
+        A newly created connection will not become active until all the following are provided:
+        * `idp_sso_url`
+        * `idp_entity_id`
+        * `x509_certificate`
+        * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+            "metadata_url": metadata_url,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/url", data
+        )
+        res = self.sync_client.put(url, data)
+        return UpdateByURLResponse.from_json(res.response.status_code, res.json)
+
+    async def update_by_url_async(
+        self,
+        organization_id: str,
+        connection_id: str,
+        metadata_url: str,
+    ) -> UpdateByURLResponse:
+        """Used to update an existing SAML connection using an IDP metadata URL.
+
+        A newly created connection will not become active until all the following are provided:
+        * `idp_sso_url`
+        * `idp_entity_id`
+        * `x509_certificate`
+        * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
+        """  # noqa
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+            "metadata_url": metadata_url,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/url", data
+        )
+        res = await self.async_client.put(url, data)
+        return UpdateByURLResponse.from_json(res.response.status, res.json)
 
     def delete_verification_certificate(
         self,
