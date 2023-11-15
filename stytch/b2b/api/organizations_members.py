@@ -392,6 +392,11 @@ class Members:
         self,
         member_id: str,
     ) -> GetResponse:
+        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, so you can use it to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
+
+        Fields:
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         data: Dict[str, Any] = {
             "member_id": member_id,
         }
@@ -406,6 +411,11 @@ class Members:
         self,
         member_id: str,
     ) -> GetResponse:
+        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, so you can use it to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
+
+        Fields:
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         data: Dict[str, Any] = {
             "member_id": member_id,
         }
