@@ -47,7 +47,7 @@ class SyncClient(ClientBase):
         self,
         url: str,
         params: Optional[Dict[str, Any]],
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
@@ -58,7 +58,7 @@ class SyncClient(ClientBase):
         self,
         url: str,
         json: Optional[Dict[str, Any]],
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
@@ -69,7 +69,7 @@ class SyncClient(ClientBase):
         self,
         url: str,
         json: Optional[Dict[str, Any]],
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
@@ -77,7 +77,7 @@ class SyncClient(ClientBase):
         return self._response_from_request(resp)
 
     def delete(
-        self, url: str, headers: Optional[Dict[str, Any]] = None
+        self, url: str, headers: Optional[Dict[str, str]] = None
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
@@ -104,7 +104,7 @@ class AsyncClient(ClientBase):
         self,
         url: str,
         params: Optional[Dict[str, Any]],
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
@@ -118,7 +118,7 @@ class AsyncClient(ClientBase):
         self,
         url: str,
         json: Optional[Dict[str, Any]],
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
@@ -132,7 +132,7 @@ class AsyncClient(ClientBase):
         self,
         url: str,
         json: Optional[Dict[str, Any]],
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
@@ -143,7 +143,7 @@ class AsyncClient(ClientBase):
             return await self._response_from_request(resp)
 
     async def delete(
-        self, url: str, headers: Optional[Dict[str, Any]] = None
+        self, url: str, headers: Optional[Dict[str, str]] = None
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
