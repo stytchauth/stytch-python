@@ -19,7 +19,7 @@ class TenancyError(ValueError):
         )
 
 
-class PermissionError(ValueError):
+class RBACPermissionError(ValueError):
     def __init__(self, authz_request: AuthZRequest) -> None:
         self.authz_request = authz_request
 
