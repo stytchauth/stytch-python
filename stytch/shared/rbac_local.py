@@ -51,7 +51,7 @@ def perform_authorization_check(
         if role.role_id in subject_roles:
             for permission in role.permissions:
                 has_matching_action = (
-                    permission.actions == "*"
+                    "*" in permission.actions
                     or authz_request.action in permission.actions
                 )
                 has_matching_resource = (
