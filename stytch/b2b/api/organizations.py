@@ -31,7 +31,11 @@ class Organizations:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.members = Members(api_base, sync_client, async_client)
+        self.members = Members(
+            api_base=api_base,
+            sync_client=sync_client,
+            async_client=async_client,
+        )
 
     def create(
         self,
@@ -276,7 +280,7 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
     ) -> UpdateResponse:
-        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members. test
+        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
@@ -385,7 +389,7 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
     ) -> UpdateResponse:
-        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members. test
+        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 

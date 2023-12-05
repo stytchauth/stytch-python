@@ -32,7 +32,11 @@ class Clients:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.secrets = Secrets(api_base, sync_client, async_client)
+        self.secrets = Secrets(
+            api_base=api_base,
+            sync_client=sync_client,
+            async_client=async_client,
+        )
 
     def get(
         self,

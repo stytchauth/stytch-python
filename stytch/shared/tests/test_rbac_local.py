@@ -1,7 +1,6 @@
 import unittest
 
-import pydantic
-
+from stytch.b2b.models.rbac import Policy, PolicyRole, PolicyRolePermission
 from stytch.shared.rbac_local import (
     AuthZRequest,
     RBACPermissionError,
@@ -10,42 +9,42 @@ from stytch.shared.rbac_local import (
 )
 
 
-class Permission(pydantic.BaseModel):
-    actions: list[str]
-    resources: list[str]
-
-
-class Role(pydantic.BaseModel):
-    role_id: str
-    permissions: list[Permission]
-
-
-class Policy(pydantic.BaseModel):
-    roles: list[Role]
-
-
 class TestRbacLocal(unittest.TestCase):
     def setUp(self) -> None:
-        self.admin = Role(
+        self.admin = PolicyRole(
             role_id="admin",
-            permissions=[Permission(actions=["*"], resources=["foo", "bar"])],
-        )
-        self.global_writer = Role(
-            role_id="global_writer",
+            description="Admin role",
             permissions=[
-                Permission(actions=["write", "read"], resources=["foo", "bar"])
+                PolicyRolePermission(actions=["*"], resource_id="foo"),
+                PolicyRolePermission(actions=["*"], resource_id="bar"),
             ],
         )
-        self.global_reader = Role(
-            role_id="global_reader",
-            permissions=[Permission(actions=["read"], resources=["foo", "bar"])],
+        self.global_writer = PolicyRole(
+            role_id="global_writer",
+            description="Global writer role",
+            permissions=[
+                PolicyRolePermission(actions=["write", "read"], resource_id="foo"),
+                PolicyRolePermission(actions=["write", "read"], resource_id="bar"),
+            ],
         )
-        self.bar_writer = Role(
+        self.global_reader = PolicyRole(
+            role_id="global_reader",
+            description="Global reader role",
+            permissions=[
+                PolicyRolePermission(actions=["read"], resource_id="foo"),
+                PolicyRolePermission(actions=["read"], resource_id="bar"),
+            ],
+        )
+        self.bar_writer = PolicyRole(
             role_id="bar_writer",
-            permissions=[Permission(actions=["write", "read"], resources=["bar"])],
+            description="Bar writer role",
+            permissions=[
+                PolicyRolePermission(actions=["write", "read"], resource_id="bar")
+            ],
         )
         self.policy = Policy(
-            roles=[self.admin, self.global_writer, self.global_reader, self.bar_writer]
+            resources=[],
+            roles=[self.admin, self.global_writer, self.global_reader, self.bar_writer],
         )
 
     def test_perform_authorization_check(self) -> None:

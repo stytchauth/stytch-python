@@ -30,8 +30,16 @@ class SSO:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.oidc = OIDC(api_base, sync_client, async_client)
-        self.saml = SAML(api_base, sync_client, async_client)
+        self.oidc = OIDC(
+            api_base=api_base,
+            sync_client=sync_client,
+            async_client=async_client,
+        )
+        self.saml = SAML(
+            api_base=api_base,
+            sync_client=sync_client,
+            async_client=async_client,
+        )
 
     def get_connections(
         self,

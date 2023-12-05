@@ -15,6 +15,7 @@ from stytch.b2b.api.oauth import OAuth
 from stytch.b2b.api.organizations import Organizations
 from stytch.b2b.api.otp import OTPs
 from stytch.b2b.api.passwords import Passwords
+from stytch.b2b.api.rbac import RBAC
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.consumer.api.m2m import M2M
@@ -38,30 +39,59 @@ class Client(ClientBase):
     ):
         super().__init__(project_id, secret, environment, suppress_warnings)
 
-        self.discovery = Discovery(self.api_base, self.sync_client, self.async_client)
+        self.discovery = Discovery(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.m2m = M2M(
-            self.api_base,
-            self.sync_client,
-            self.async_client,
-            self.jwks_client,
-            project_id,
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+            jwks_client=self.jwks_client,
+            project_id=project_id,
         )
         self.magic_links = MagicLinks(
-            self.api_base, self.sync_client, self.async_client
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
         )
-        self.oauth = OAuth(self.api_base, self.sync_client, self.async_client)
-        self.otps = OTPs(self.api_base, self.sync_client, self.async_client)
+        self.oauth = OAuth(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.otps = OTPs(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.organizations = Organizations(
-            self.api_base, self.sync_client, self.async_client
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
         )
-        self.passwords = Passwords(self.api_base, self.sync_client, self.async_client)
-        self.sso = SSO(self.api_base, self.sync_client, self.async_client)
+        self.passwords = Passwords(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.rbac = RBAC(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.sso = SSO(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.sessions = Sessions(
-            self.api_base,
-            self.sync_client,
-            self.async_client,
-            self.jwks_client,
-            project_id,
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+            jwks_client=self.jwks_client,
+            project_id=project_id,
         )
         # Set up the policy cache for local RBAC
         policy_cache = PolicyCache(self.rbac)

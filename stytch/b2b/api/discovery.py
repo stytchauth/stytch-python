@@ -23,6 +23,12 @@ class Discovery:
         self.sync_client = sync_client
         self.async_client = async_client
         self.intermediate_sessions = IntermediateSessions(
-            api_base, sync_client, async_client
+            api_base=api_base,
+            sync_client=sync_client,
+            async_client=async_client,
         )
-        self.organizations = Organizations(api_base, sync_client, async_client)
+        self.organizations = Organizations(
+            api_base=api_base,
+            sync_client=sync_client,
+            async_client=async_client,
+        )

@@ -55,7 +55,7 @@ def perform_authorization_check(
                     or authz_request.action in permission.actions
                 )
                 has_matching_resource = (
-                    authz_request.resource_id in permission.resources
+                    authz_request.resource_id == permission.resource_id
                 )
                 if has_matching_action and has_matching_resource:
                     # All good, we found a matching permission

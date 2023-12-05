@@ -40,7 +40,7 @@ class Sessions:
         self.async_client = async_client
         self.jwks_client = jwks_client
         self.project_id = project_id
-        self._policy_cache = None
+        self._policy_cache: Optional[PolicyCache] = None
 
     @property
     def policy_cache(self) -> PolicyCache:
@@ -373,6 +373,14 @@ class Sessions:
     ) -> GetJWKSResponse:
         """Get the JSON Web Key Set (JWKS) for a project.
 
+        JWKS are rotated every ~6 months. Upon rotation, new JWTs will be signed using the new key set, and both key sets will be returned by this endpoint for a period of 1 month.
+
+        JWTs have a set lifetime of 5 minutes, so there will be a 5 minute period where some JWTs will be signed by the old JWKS, and some JWTs will be signed by the new JWKS. The correct JWKS to use for validation is determined by matching the `kid` value of the JWT and JWKS.
+
+        If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JWKS roll will be handled for you.
+
+        If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
+
         Fields:
           - project_id: The `project_id` to get the JWKS for.
         """  # noqa
@@ -390,6 +398,14 @@ class Sessions:
     ) -> GetJWKSResponse:
         """Get the JSON Web Key Set (JWKS) for a project.
 
+        JWKS are rotated every ~6 months. Upon rotation, new JWTs will be signed using the new key set, and both key sets will be returned by this endpoint for a period of 1 month.
+
+        JWTs have a set lifetime of 5 minutes, so there will be a 5 minute period where some JWTs will be signed by the old JWKS, and some JWTs will be signed by the new JWKS. The correct JWKS to use for validation is determined by matching the `kid` value of the JWT and JWKS.
+
+        If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JWKS roll will be handled for you.
+
+        If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
+
         Fields:
           - project_id: The `project_id` to get the JWKS for.
         """  # noqa
@@ -403,13 +419,13 @@ class Sessions:
 
     # MANUAL(authenticate_jwt)(SERVICE_METHOD)
     # ADDIMPORT: from typing import Any, Dict, Optional
-    # ADDIMPORT: from stytch.b2b.models.rbac import AuthorizationCheck
+    # ADDIMPORT: from stytch.shared import rbac_local
     def authenticate_jwt(
         self,
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        authorization_check: Optional[AuthorizationCheck] = None,
+        authorization_check: Optional[rbac_local.AuthZRequest] = None,
     ) -> Optional[MemberSession]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -437,7 +453,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        authorization_check: Optional[AuthorizationCheck] = None,
+        authorization_check: Optional[rbac_local.AuthZRequest] = None,
     ) -> Optional[MemberSession]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -466,9 +482,9 @@ class Sessions:
 
     # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
     # ADDIMPORT: from typing import Optional
-    # ADDIMPORT: from stytch.b2b.models.rbac import AuthorizationCheck
     # ADDIMPORT: from stytch.b2b.models.sessions import MemberSession, LocalJWTResponse
     # ADDIMPORT: from stytch.shared import jwt_helpers
+    # ADDIMPORT: from stytch.shared import rbac_local
     def _authenticate_jwt_local_common(
         self,
         session_jwt: str,
@@ -528,7 +544,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
-        authorization_check: Optional[AuthorizationCheck] = None,
+        authorization_check: Optional[rbac_local.AuthZRequest] = None,
     ) -> Optional[MemberSession]:
         local_resp = self._authenticate_jwt_local_common(
             session_jwt=session_jwt,
@@ -557,7 +573,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
-        authorization_check: Optional[AuthorizationCheck] = None,
+        authorization_check: Optional[rbac_local.AuthZRequest] = None,
     ) -> Optional[MemberSession]:
         local_resp = self._authenticate_jwt_local_common(
             session_jwt=session_jwt,
