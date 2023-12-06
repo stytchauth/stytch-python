@@ -12,6 +12,7 @@ import jwt
 
 from stytch.b2b.models.sessions import (
     AuthenticateResponse,
+    AuthorizationCheck,
     ExchangeRequestLocale,
     ExchangeResponse,
     GetJWKSResponse,
@@ -97,6 +98,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> AuthenticateResponse:
         """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
@@ -119,6 +121,7 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - authorization_check: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {}
         if session_token is not None:
@@ -129,6 +132,8 @@ class Sessions:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if authorization_check is not None:
+            data["authorization_check"] = authorization_check.dict()
 
         url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
         res = self.sync_client.post(url, data)
@@ -140,6 +145,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> AuthenticateResponse:
         """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
@@ -162,6 +168,7 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - authorization_check: (no documentation yet)
         """  # noqa
         data: Dict[str, Any] = {}
         if session_token is not None:
@@ -172,6 +179,8 @@ class Sessions:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if authorization_check is not None:
+            data["authorization_check"] = authorization_check.dict()
 
         url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
         res = await self.async_client.post(url, data)
@@ -425,7 +434,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        authorization_check: Optional[rbac_local.AuthZRequest] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[MemberSession]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -444,7 +453,9 @@ class Sessions:
                 authorization_check=authorization_check,
             )
             or self.authenticate(
-                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+                session_custom_claims=session_custom_claims,
+                session_jwt=session_jwt,
+                authorization_check=authorization_check,
             ).member_session
         )
 
@@ -453,7 +464,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        authorization_check: Optional[rbac_local.AuthZRequest] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[MemberSession]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -473,7 +484,9 @@ class Sessions:
             )
             or (
                 await self.authenticate_async(
-                    session_custom_claims=session_custom_claims, session_jwt=session_jwt
+                    session_custom_claims=session_custom_claims,
+                    session_jwt=session_jwt,
+                    authorization_check=authorization_check,
                 )
             ).member_session
         )
@@ -544,7 +557,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
-        authorization_check: Optional[rbac_local.AuthZRequest] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[MemberSession]:
         local_resp = self._authenticate_jwt_local_common(
             session_jwt=session_jwt,
@@ -562,7 +575,7 @@ class Sessions:
                 policy=self.policy_cache.get(),
                 subject_roles=local_resp.roles_claim,
                 subject_org_id=local_resp.member_session.organization_id,
-                authz_request=authorization_check,
+                authorization_check=authorization_check,
             )
 
         # Auth check passes (or wasn't provided), we can return the session now
@@ -573,7 +586,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
-        authorization_check: Optional[rbac_local.AuthZRequest] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[MemberSession]:
         local_resp = self._authenticate_jwt_local_common(
             session_jwt=session_jwt,
@@ -591,7 +604,7 @@ class Sessions:
                 policy=await self.policy_cache.get_async(),
                 subject_roles=local_resp.roles_claim,
                 subject_org_id=local_resp.member_session.organization_id,
-                authz_request=authorization_check,
+                authorization_check=authorization_check,
             )
 
         # Auth check passes (or wasn't provided), we can return the session now

@@ -1,8 +1,8 @@
 import unittest
 
 from stytch.b2b.models.rbac import Policy, PolicyRole, PolicyRolePermission
+from stytch.b2b.models.sessions import AuthorizationCheck
 from stytch.shared.rbac_local import (
-    AuthZRequest,
     RBACPermissionError,
     TenancyError,
     perform_authorization_check,
@@ -53,7 +53,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 roles = [self.admin.role_id]
                 org_id = "my_org"
-                req = AuthZRequest(
+                req = AuthorizationCheck(
                     organization_id="other_org",
                     resource_id="foo",
                     action="write",
@@ -66,7 +66,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 roles = [self.global_writer.role_id]
                 org_id = "my_org"
-                req = AuthZRequest(
+                req = AuthorizationCheck(
                     organization_id=org_id,
                     resource_id="baz",
                     action="write",
@@ -79,7 +79,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 roles = [self.global_reader.role_id]
                 org_id = "my_org"
-                req = AuthZRequest(
+                req = AuthorizationCheck(
                     organization_id=org_id,
                     resource_id="foo",
                     action="write",
@@ -91,7 +91,7 @@ class TestRbacLocal(unittest.TestCase):
             # Arrange
             roles = [self.global_writer.role_id]
             org_id = "my_org"
-            req = AuthZRequest(
+            req = AuthorizationCheck(
                 organization_id=org_id,
                 resource_id="foo",
                 action="write",
@@ -104,7 +104,7 @@ class TestRbacLocal(unittest.TestCase):
             # Arrange
             roles = [self.admin.role_id]
             org_id = "my_org"
-            req = AuthZRequest(
+            req = AuthorizationCheck(
                 organization_id=org_id,
                 resource_id="foo",
                 action="write",

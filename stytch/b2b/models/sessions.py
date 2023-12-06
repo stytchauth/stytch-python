@@ -24,6 +24,12 @@ class ExchangeRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
+class AuthorizationCheck(pydantic.BaseModel):
+    organization_id: str
+    resource_id: str
+    action: str
+
+
 class MemberSession(pydantic.BaseModel):
     """
     Fields:
