@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import sys
 import unittest
 from test.constants import (
     TEST_CRYPTO_SIGNATURE,
@@ -22,14 +21,8 @@ from test.constants import (
 )
 from test.integration_base import CreatedTestUser, IntegrationTestBase
 
-if sys.version_info < (3, 8):
-    # When running 3.7, we unfortunately can't test async properly
-    IsolatedAsyncioTestCase = unittest.TestCase
-else:
-    from unittest import IsolatedAsyncioTestCase
 
-
-class AsyncIntegrationTest(IntegrationTestBase, IsolatedAsyncioTestCase):
+class AsyncIntegrationTest(IntegrationTestBase, unittest.IsolatedAsyncioTestCase):
     async def test_crypto_wallets_async(self) -> None:
         api = self.b2c_client.crypto_wallets
 

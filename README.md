@@ -6,7 +6,7 @@ It pairs well with the Stytch [Web SDK](https://www.npmjs.com/package/@stytch/st
 
 ## Requirements
 
-The Stytch Python library supports Python 3.7+
+The Stytch Python library supports Python 3.8+
 
 ## Installation
 
