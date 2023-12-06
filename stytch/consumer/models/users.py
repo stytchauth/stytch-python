@@ -158,7 +158,7 @@ class WebAuthnRegistration(pydantic.BaseModel):
       - user_agent: The user agent of the User.
       - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
       - authenticator_type: The `authenticator_type` string displays the requested authenticator type of the WebAuthn device. The two valid types are "platform" and "cross-platform". If no value is present, the WebAuthn device was created without an authenticator type preference.
-      - name: (no documentation yet)
+      - name: The `name` of the WebAuthn registration.
     """  # noqa
 
     webauthn_registration_id: str

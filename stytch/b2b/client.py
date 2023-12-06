@@ -39,6 +39,14 @@ class Client(ClientBase):
     ):
         super().__init__(project_id, secret, environment, suppress_warnings)
 
+        policy_cache = PolicyCache(
+            RBAC(
+                api_base=self.api_base,
+                sync_client=self.sync_client,
+                async_client=self.async_client,
+            )
+        )
+
         self.discovery = Discovery(
             api_base=self.api_base,
             sync_client=self.sync_client,
@@ -92,10 +100,8 @@ class Client(ClientBase):
             async_client=self.async_client,
             jwks_client=self.jwks_client,
             project_id=project_id,
+            policy_cache=policy_cache,
         )
-        # Set up the policy cache for local RBAC
-        policy_cache = PolicyCache(self.rbac)
-        self.sessions.policy_cache = policy_cache
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
         data = {"project_id": project_id}

@@ -31,11 +31,7 @@ class M2M:
         self.async_client = async_client
         self.jwks_client = jwks_client
         self.project_id = project_id
-        self.clients = Clients(
-            api_base=api_base,
-            sync_client=sync_client,
-            async_client=async_client,
-        )
+        self.clients = Clients(api_base, sync_client, async_client)
 
     # MANUAL(m2m.token)(SERVICE_METHOD)
     # ADDIMPORT: from typing import Any, Dict, List, Optional

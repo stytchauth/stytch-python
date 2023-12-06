@@ -21,8 +21,4 @@ class OTPs:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.sms = Sms(
-            api_base=api_base,
-            sync_client=sync_client,
-            async_client=async_client,
-        )
+        self.sms = Sms(api_base, sync_client, async_client)

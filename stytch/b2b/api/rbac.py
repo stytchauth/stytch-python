@@ -15,10 +15,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class RBAC:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client

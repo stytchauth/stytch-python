@@ -35,22 +35,14 @@ class Sessions:
         async_client: AsyncClient,
         jwks_client: jwt.PyJWKClient,
         project_id: str,
+        policy_cache: PolicyCache,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
+        self.policy_cache = policy_cache
         self.jwks_client = jwks_client
         self.project_id = project_id
-        self._policy_cache: Optional[PolicyCache] = None
-
-    @property
-    def policy_cache(self) -> PolicyCache:
-        assert self._policy_cache is not None
-        return self._policy_cache
-
-    @policy_cache.setter
-    def policy_cache(self, policy_cache: PolicyCache) -> None:
-        self._policy_cache = policy_cache
 
     def get(
         self,

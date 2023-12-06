@@ -24,11 +24,7 @@ class OAuth:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.discovery = Discovery(
-            api_base=api_base,
-            sync_client=sync_client,
-            async_client=async_client,
-        )
+        self.discovery = Discovery(api_base, sync_client, async_client)
 
     def authenticate(
         self,

@@ -80,4 +80,9 @@ class RegisterStartResponse(ResponseBase):
 
 
 class UpdateResponse(ResponseBase):
+    """Response type for `WebAuthn.update`.
+    Fields:
+      - webauthn_registration: A WebAuthn registration.
+    """  # noqa
+
     webauthn_registration: Optional[WebAuthnRegistration] = None
