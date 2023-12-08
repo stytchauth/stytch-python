@@ -43,20 +43,45 @@ class SyncClient(ClientBase):
             resp_json = {}
         return ResponseWithJson(response=r, json=resp_json)
 
-    def get(self, url: str, params: Optional[Dict[str, Any]]) -> ResponseWithJson:
-        resp = requests.get(url, params=params, headers=self.headers, auth=self.auth)
+    def get(
+        self,
+        url: str,
+        params: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        resp = requests.get(url, params=params, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
-    def post(self, url: str, json: Optional[Dict[str, Any]]) -> ResponseWithJson:
-        resp = requests.post(url, json=json, headers=self.headers, auth=self.auth)
+    def post(
+        self,
+        url: str,
+        json: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        resp = requests.post(url, json=json, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
-    def put(self, url: str, json: Optional[Dict[str, Any]]) -> ResponseWithJson:
-        resp = requests.put(url, json=json, headers=self.headers, auth=self.auth)
+    def put(
+        self,
+        url: str,
+        json: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        resp = requests.put(url, json=json, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
-    def delete(self, url: str) -> ResponseWithJson:
-        resp = requests.delete(url, headers=self.headers, auth=self.auth)
+    def delete(
+        self, url: str, headers: Optional[Dict[str, str]] = None
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        resp = requests.delete(url, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
 
@@ -75,28 +100,53 @@ class AsyncClient(ClientBase):
             resp_json = {}
         return ResponseWithJson(response=r, json=resp_json)
 
-    async def get(self, url: str, params: Optional[Dict[str, Any]]) -> ResponseWithJson:
+    async def get(
+        self,
+        url: str,
+        params: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
         async with aiohttp.ClientSession() as session:
             resp = await session.get(
-                url, params=params, headers=self.headers, auth=self.auth
+                url, params=params, headers=final_headers, auth=self.auth
             )
             return await self._response_from_request(resp)
 
-    async def post(self, url: str, json: Optional[Dict[str, Any]]) -> ResponseWithJson:
+    async def post(
+        self,
+        url: str,
+        json: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
         async with aiohttp.ClientSession() as session:
             resp = await session.post(
-                url, json=json, headers=self.headers, auth=self.auth
+                url, json=json, headers=final_headers, auth=self.auth
             )
             return await self._response_from_request(resp)
 
-    async def put(self, url: str, json: Optional[Dict[str, Any]]) -> ResponseWithJson:
+    async def put(
+        self,
+        url: str,
+        json: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
         async with aiohttp.ClientSession() as session:
             resp = await session.put(
-                url, json=json, headers=self.headers, auth=self.auth
+                url, json=json, headers=final_headers, auth=self.auth
             )
             return await self._response_from_request(resp)
 
-    async def delete(self, url: str) -> ResponseWithJson:
+    async def delete(
+        self, url: str, headers: Optional[Dict[str, str]] = None
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
         async with aiohttp.ClientSession() as session:
-            resp = await session.delete(url, headers=self.headers, auth=self.auth)
+            resp = await session.delete(url, headers=final_headers, auth=self.auth)
             return await self._response_from_request(resp)
