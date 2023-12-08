@@ -24,6 +24,12 @@ class ExchangeRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
+class AuthorizationCheck(pydantic.BaseModel):
+    organization_id: str
+    resource_id: str
+    action: str
+
+
 class MemberSession(pydantic.BaseModel):
     """
     Fields:
@@ -114,3 +120,12 @@ class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:
     """  # noqa
+
+
+# MANUAL(LocalJWTResponse)(Types)
+class LocalJWTResponse(pydantic.BaseModel):
+    member_session: MemberSession
+    roles_claim: Optional[List[str]]
+
+
+# ENDMANUAL(LocalJWTResponse)
