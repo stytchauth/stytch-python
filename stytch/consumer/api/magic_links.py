@@ -21,15 +21,16 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class MagicLinks:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.email = Email(api_base, sync_client, async_client)
+        self.email = Email(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def authenticate(
         self,
@@ -68,6 +69,7 @@ class MagicLinks:
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "token": token,
         }
@@ -87,7 +89,7 @@ class MagicLinks:
             data["code_verifier"] = code_verifier
 
         url = self.api_base.url_for("/v1/magic_links/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -127,6 +129,7 @@ class MagicLinks:
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "token": token,
         }
@@ -146,7 +149,7 @@ class MagicLinks:
             data["code_verifier"] = code_verifier
 
         url = self.api_base.url_for("/v1/magic_links/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def create(
@@ -165,6 +168,7 @@ class MagicLinks:
           - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - attributes: Provided attributes help with fraud detection.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -174,7 +178,7 @@ class MagicLinks:
             data["attributes"] = attributes.dict()
 
         url = self.api_base.url_for("/v1/magic_links", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
@@ -193,6 +197,7 @@ class MagicLinks:
           - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - attributes: Provided attributes help with fraud detection.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -202,5 +207,5 @@ class MagicLinks:
             data["attributes"] = attributes.dict()
 
         url = self.api_base.url_for("/v1/magic_links", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)

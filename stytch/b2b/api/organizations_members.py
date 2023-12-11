@@ -10,13 +10,20 @@ from typing import Any, Dict, List, Optional
 
 from stytch.b2b.models.organizations import SearchQuery
 from stytch.b2b.models.organizations_members import (
+    CreateRequestOptions,
     CreateResponse,
+    DeleteMFAPhoneNumberRequestOptions,
     DeleteMFAPhoneNumberResponse,
+    DeletePasswordRequestOptions,
     DeletePasswordResponse,
+    DeleteRequestOptions,
     DeleteResponse,
     GetResponse,
+    ReactivateRequestOptions,
     ReactivateResponse,
+    SearchRequestOptions,
     SearchResponse,
+    UpdateRequestOptions,
     UpdateResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -25,10 +32,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Members:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -44,6 +48,8 @@ class Members:
         is_breakglass: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
+        roles: Optional[List[str]] = None,
+        method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
 
@@ -58,7 +64,11 @@ class Members:
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-mfa-phone-number) to delete the Member's existing phone number first.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
+          - roles: Directly assigns role to Member being updated. Will completely replace any existing roles.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -75,11 +85,13 @@ class Members:
             data["mfa_phone_number"] = mfa_phone_number
         if mfa_enrolled is not None:
             data["mfa_enrolled"] = mfa_enrolled
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
         )
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status_code, res.json)
 
     async def update_async(
@@ -92,6 +104,8 @@ class Members:
         is_breakglass: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
+        roles: Optional[List[str]] = None,
+        method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
 
@@ -106,7 +120,11 @@ class Members:
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-mfa-phone-number) to delete the Member's existing phone number first.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
+          - roles: Directly assigns role to Member being updated. Will completely replace any existing roles.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -123,17 +141,20 @@ class Members:
             data["mfa_phone_number"] = mfa_phone_number
         if mfa_enrolled is not None:
             data["mfa_enrolled"] = mfa_enrolled
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
         )
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status, res.json)
 
     def delete(
         self,
         organization_id: str,
         member_id: str,
+        method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
         """Deletes a Member specified by `organization_id` and `member_id`.
 
@@ -141,6 +162,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -149,13 +173,14 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status_code, res.json)
 
     async def delete_async(
         self,
         organization_id: str,
         member_id: str,
+        method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
         """Deletes a Member specified by `organization_id` and `member_id`.
 
@@ -163,6 +188,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -171,13 +199,14 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status, res.json)
 
     def reactivate(
         self,
         organization_id: str,
         member_id: str,
+        method_options: Optional[ReactivateRequestOptions] = None,
     ) -> ReactivateResponse:
         """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
 
@@ -185,6 +214,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -194,13 +226,14 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/{member_id}/reactivate",
             data,
         )
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return ReactivateResponse.from_json(res.response.status_code, res.json)
 
     async def reactivate_async(
         self,
         organization_id: str,
         member_id: str,
+        method_options: Optional[ReactivateRequestOptions] = None,
     ) -> ReactivateResponse:
         """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
 
@@ -208,6 +241,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -217,13 +253,14 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/{member_id}/reactivate",
             data,
         )
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return ReactivateResponse.from_json(res.response.status, res.json)
 
     def delete_mfa_phone_number(
         self,
         organization_id: str,
         member_id: str,
+        method_options: Optional[DeleteMFAPhoneNumberRequestOptions] = None,
     ) -> DeleteMFAPhoneNumberResponse:
         """Delete a Member's MFA phone number.
 
@@ -237,6 +274,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -246,7 +286,7 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/mfa_phone_numbers/{member_id}",
             data,
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteMFAPhoneNumberResponse.from_json(
             res.response.status_code, res.json
         )
@@ -255,6 +295,7 @@ class Members:
         self,
         organization_id: str,
         member_id: str,
+        method_options: Optional[DeleteMFAPhoneNumberRequestOptions] = None,
     ) -> DeleteMFAPhoneNumberResponse:
         """Delete a Member's MFA phone number.
 
@@ -268,6 +309,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -277,7 +321,7 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/mfa_phone_numbers/{member_id}",
             data,
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteMFAPhoneNumberResponse.from_json(res.response.status, res.json)
 
     def search(
@@ -286,6 +330,7 @@ class Members:
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         query: Optional[SearchQuery] = None,
+        method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
         """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
@@ -297,6 +342,9 @@ class Members:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all Members with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_ids": organization_ids,
         }
@@ -308,7 +356,7 @@ class Members:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/members/search", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status_code, res.json)
 
     async def search_async(
@@ -317,6 +365,7 @@ class Members:
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         query: Optional[SearchQuery] = None,
+        method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
         """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
@@ -328,6 +377,9 @@ class Members:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all Members with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_ids": organization_ids,
         }
@@ -339,13 +391,14 @@ class Members:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/members/search", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status, res.json)
 
     def delete_password(
         self,
         organization_id: str,
         member_password_id: str,
+        method_options: Optional[DeletePasswordRequestOptions] = None,
     ) -> DeletePasswordResponse:
         """Delete a Member's password.
 
@@ -353,6 +406,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_password_id: Globally unique UUID that identifies a Member's password.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_password_id": member_password_id,
@@ -362,13 +418,14 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/passwords/{member_password_id}",
             data,
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeletePasswordResponse.from_json(res.response.status_code, res.json)
 
     async def delete_password_async(
         self,
         organization_id: str,
         member_password_id: str,
+        method_options: Optional[DeletePasswordRequestOptions] = None,
     ) -> DeletePasswordResponse:
         """Delete a Member's password.
 
@@ -376,6 +433,9 @@ class Members:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_password_id: Globally unique UUID that identifies a Member's password.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_password_id": member_password_id,
@@ -385,18 +445,19 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/passwords/{member_password_id}",
             data,
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeletePasswordResponse.from_json(res.response.status, res.json)
 
     def dangerously_get(
         self,
         member_id: str,
     ) -> GetResponse:
-        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, so you can use it to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
+        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, enabling you to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
 
         Fields:
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "member_id": member_id,
         }
@@ -404,18 +465,19 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/members/dangerously_get/{member_id}", data
         )
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def dangerously_get_async(
         self,
         member_id: str,
     ) -> GetResponse:
-        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, so you can use it to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
+        """Get a Member by `member_id`. This endpoint does not require an `organization_id`, enabling you to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
 
         Fields:
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "member_id": member_id,
         }
@@ -423,13 +485,14 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/members/dangerously_get/{member_id}", data
         )
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
 
     def create(
         self,
         organization_id: str,
         email_address: str,
+        roles: List[str],
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -437,12 +500,14 @@ class Members:
         is_breakglass: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
+        method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
+          - roles: Directly assigns role to Member being created
           - name: The name of the Member.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
@@ -453,9 +518,13 @@ class Members:
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
+            "roles": roles,
         }
         if name is not None:
             data["name"] = name
@@ -475,13 +544,14 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data
         )
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
         self,
         organization_id: str,
         email_address: str,
+        roles: List[str],
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -489,12 +559,14 @@ class Members:
         is_breakglass: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
+        method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
+          - roles: Directly assigns role to Member being created
           - name: The name of the Member.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
@@ -505,9 +577,13 @@ class Members:
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
+            "roles": roles,
         }
         if name is not None:
             data["name"] = name
@@ -527,7 +603,7 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data
         )
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)
 
     def get(
@@ -543,6 +619,7 @@ class Members:
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
           - email_address: The email address of the Member.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -554,7 +631,7 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/member", data
         )
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
@@ -570,6 +647,7 @@ class Members:
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
           - email_address: The email address of the Member.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -581,5 +659,5 @@ class Members:
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/member", data
         )
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)

@@ -11,10 +11,12 @@ from typing import Any, Dict, List, Optional
 from stytch.b2b.api.organizations_members import Members
 from stytch.b2b.models.organizations import (
     CreateResponse,
+    DeleteRequestOptions,
     DeleteResponse,
     GetResponse,
     SearchQuery,
     SearchResponse,
+    UpdateRequestOptions,
     UpdateResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -23,15 +25,16 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Organizations:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.members = Members(api_base, sync_client, async_client)
+        self.members = Members(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def create(
         self,
@@ -70,11 +73,11 @@ class Organizations:
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -96,11 +99,12 @@ class Organizations:
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
-          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_name": organization_name,
         }
@@ -126,7 +130,7 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
@@ -166,11 +170,11 @@ class Organizations:
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -192,11 +196,12 @@ class Organizations:
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
-          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_name": organization_name,
         }
@@ -222,7 +227,7 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)
 
     def get(
@@ -234,12 +239,13 @@ class Organizations:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
@@ -251,12 +257,13 @@ class Organizations:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
 
     def update(
@@ -275,6 +282,7 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
@@ -301,11 +309,11 @@ class Organizations:
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -327,11 +335,14 @@ class Organizations:
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
-          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -365,7 +376,7 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status_code, res.json)
 
     async def update_async(
@@ -384,6 +395,7 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
@@ -410,11 +422,11 @@ class Organizations:
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -436,11 +448,14 @@ class Organizations:
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
-          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -474,41 +489,49 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status, res.json)
 
     def delete(
         self,
         organization_id: str,
+        method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
         """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status_code, res.json)
 
     async def delete_async(
         self,
         organization_id: str,
+        method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
         """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status, res.json)
 
     def search(
@@ -524,6 +547,7 @@ class Organizations:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all Organizations with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if cursor is not None:
             data["cursor"] = cursor
@@ -533,7 +557,7 @@ class Organizations:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/search", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status_code, res.json)
 
     async def search_async(
@@ -549,6 +573,7 @@ class Organizations:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all Organizations with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if cursor is not None:
             data["cursor"] = cursor
@@ -558,5 +583,5 @@ class Organizations:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/search", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status, res.json)

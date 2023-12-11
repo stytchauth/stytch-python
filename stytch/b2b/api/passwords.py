@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.api.passwords_email import Email
 from stytch.b2b.api.passwords_existing_password import ExistingPassword
@@ -31,17 +31,26 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Passwords:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.email = Email(api_base, sync_client, async_client)
-        self.sessions = Sessions(api_base, sync_client, async_client)
-        self.existing_password = ExistingPassword(api_base, sync_client, async_client)
+        self.email = Email(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.sessions = Sessions(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.existing_password = ExistingPassword(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def strength_check(
         self,
@@ -63,6 +72,7 @@ class Passwords:
           - password: The password to authenticate.
           - email_address: The email address of the Member.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -70,7 +80,7 @@ class Passwords:
             data["email_address"] = email_address
 
         url = self.api_base.url_for("/v1/b2b/passwords/strength_check", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return StrengthCheckResponse.from_json(res.response.status_code, res.json)
 
     async def strength_check_async(
@@ -93,6 +103,7 @@ class Passwords:
           - password: The password to authenticate.
           - email_address: The email address of the Member.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -100,7 +111,7 @@ class Passwords:
             data["email_address"] = email_address
 
         url = self.api_base.url_for("/v1/b2b/passwords/strength_check", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return StrengthCheckResponse.from_json(res.response.status, res.json)
 
     def migrate(
@@ -117,6 +128,7 @@ class Passwords:
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
+        roles: Optional[List[str]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -135,7 +147,9 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
+          - roles: Directly assigns role to Member being updated. Will completely replace any existing roles.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
             "hash": hash,
@@ -158,9 +172,11 @@ class Passwords:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return MigrateResponse.from_json(res.response.status_code, res.json)
 
     async def migrate_async(
@@ -177,6 +193,7 @@ class Passwords:
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
+        roles: Optional[List[str]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -195,7 +212,9 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
+          - roles: Directly assigns role to Member being updated. Will completely replace any existing roles.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
             "hash": hash,
@@ -218,9 +237,11 @@ class Passwords:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return MigrateResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -273,6 +294,7 @@ class Passwords:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
@@ -290,7 +312,7 @@ class Passwords:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -343,6 +365,7 @@ class Passwords:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
@@ -360,5 +383,5 @@ class Passwords:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

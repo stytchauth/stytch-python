@@ -20,10 +20,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class TOTPs:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -40,6 +37,7 @@ class TOTPs:
           - user_id: The `user_id` of an active user the TOTP registration should be tied to.
           - expiration_minutes: The expiration for the TOTP instance. If the newly created TOTP is not authenticated within this time frame the TOTP will be unusable. Defaults to 1440 (1 day) with a minimum of 5 and a maximum of 1440.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -47,7 +45,7 @@ class TOTPs:
             data["expiration_minutes"] = expiration_minutes
 
         url = self.api_base.url_for("/v1/totps", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
@@ -61,6 +59,7 @@ class TOTPs:
           - user_id: The `user_id` of an active user the TOTP registration should be tied to.
           - expiration_minutes: The expiration for the TOTP instance. If the newly created TOTP is not authenticated within this time frame the TOTP will be unusable. Defaults to 1440 (1 day) with a minimum of 5 and a maximum of 1440.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -68,7 +67,7 @@ class TOTPs:
             data["expiration_minutes"] = expiration_minutes
 
         url = self.api_base.url_for("/v1/totps", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -100,6 +99,7 @@ class TOTPs:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
@@ -114,7 +114,7 @@ class TOTPs:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/totps/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -146,6 +146,7 @@ class TOTPs:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "totp_code": totp_code,
@@ -160,7 +161,7 @@ class TOTPs:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/totps/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def recovery_codes(
@@ -172,12 +173,13 @@ class TOTPs:
         Fields:
           - user_id: The `user_id` of an active user the TOTP registration should be tied to.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/totps/recovery_codes", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RecoveryCodesResponse.from_json(res.response.status_code, res.json)
 
     async def recovery_codes_async(
@@ -189,12 +191,13 @@ class TOTPs:
         Fields:
           - user_id: The `user_id` of an active user the TOTP registration should be tied to.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/totps/recovery_codes", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RecoveryCodesResponse.from_json(res.response.status, res.json)
 
     def recover(
@@ -226,6 +229,7 @@ class TOTPs:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
@@ -240,7 +244,7 @@ class TOTPs:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/totps/recover", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RecoverResponse.from_json(res.response.status_code, res.json)
 
     async def recover_async(
@@ -272,6 +276,7 @@ class TOTPs:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "recovery_code": recovery_code,
@@ -286,5 +291,5 @@ class TOTPs:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/totps/recover", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RecoverResponse.from_json(res.response.status, res.json)

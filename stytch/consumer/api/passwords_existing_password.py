@@ -15,10 +15,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class ExistingPassword:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -57,6 +54,7 @@ class ExistingPassword:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "existing_password": existing_password,
@@ -72,7 +70,7 @@ class ExistingPassword:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/passwords/existing_password/reset", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status_code, res.json)
 
     async def reset_async(
@@ -108,6 +106,7 @@ class ExistingPassword:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "existing_password": existing_password,
@@ -123,5 +122,5 @@ class ExistingPassword:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/passwords/existing_password/reset", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status, res.json)

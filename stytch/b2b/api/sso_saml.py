@@ -9,9 +9,13 @@ from __future__ import annotations
 from typing import Any, Dict, Optional
 
 from stytch.b2b.models.sso_saml import (
+    CreateConnectionRequestOptions,
     CreateConnectionResponse,
+    DeleteVerificationCertificateRequestOptions,
     DeleteVerificationCertificateResponse,
+    UpdateByURLRequestOptions,
     UpdateByURLResponse,
+    UpdateConnectionRequestOptions,
     UpdateConnectionResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -20,10 +24,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class SAML:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -33,6 +34,7 @@ class SAML:
         self,
         organization_id: str,
         display_name: Optional[str] = None,
+        method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
         """Create a new SAML Connection.
 
@@ -40,6 +42,9 @@ class SAML:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -47,13 +52,14 @@ class SAML:
             data["display_name"] = display_name
 
         url = self.api_base.url_for("/v1/b2b/sso/saml/{organization_id}", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateConnectionResponse.from_json(res.response.status_code, res.json)
 
     async def create_connection_async(
         self,
         organization_id: str,
         display_name: Optional[str] = None,
+        method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
         """Create a new SAML Connection.
 
@@ -61,6 +67,9 @@ class SAML:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -68,7 +77,7 @@ class SAML:
             data["display_name"] = display_name
 
         url = self.api_base.url_for("/v1/b2b/sso/saml/{organization_id}", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateConnectionResponse.from_json(res.response.status, res.json)
 
     def update_connection(
@@ -81,6 +90,7 @@ class SAML:
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
         alternative_audience_uri: Optional[str] = None,
+        method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
 
@@ -100,6 +110,9 @@ class SAML:
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -120,7 +133,7 @@ class SAML:
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
         )
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return UpdateConnectionResponse.from_json(res.response.status_code, res.json)
 
     async def update_connection_async(
@@ -133,6 +146,7 @@ class SAML:
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
         alternative_audience_uri: Optional[str] = None,
+        method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
 
@@ -152,6 +166,9 @@ class SAML:
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -172,7 +189,7 @@ class SAML:
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
         )
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return UpdateConnectionResponse.from_json(res.response.status, res.json)
 
     def update_by_url(
@@ -180,6 +197,7 @@ class SAML:
         organization_id: str,
         connection_id: str,
         metadata_url: str,
+        method_options: Optional[UpdateByURLRequestOptions] = None,
     ) -> UpdateByURLResponse:
         """Used to update an existing SAML connection using an IDP metadata URL.
 
@@ -194,6 +212,9 @@ class SAML:
           - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
           - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -203,7 +224,7 @@ class SAML:
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/url", data
         )
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return UpdateByURLResponse.from_json(res.response.status_code, res.json)
 
     async def update_by_url_async(
@@ -211,6 +232,7 @@ class SAML:
         organization_id: str,
         connection_id: str,
         metadata_url: str,
+        method_options: Optional[UpdateByURLRequestOptions] = None,
     ) -> UpdateByURLResponse:
         """Used to update an existing SAML connection using an IDP metadata URL.
 
@@ -225,6 +247,9 @@ class SAML:
           - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
           - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -234,7 +259,7 @@ class SAML:
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/url", data
         )
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return UpdateByURLResponse.from_json(res.response.status, res.json)
 
     def delete_verification_certificate(
@@ -242,6 +267,7 @@ class SAML:
         organization_id: str,
         connection_id: str,
         certificate_id: str,
+        method_options: Optional[DeleteVerificationCertificateRequestOptions] = None,
     ) -> DeleteVerificationCertificateResponse:
         """Delete a SAML verification certificate.
 
@@ -252,6 +278,9 @@ class SAML:
           - connection_id: The ID of the SAML connection.
           - certificate_id: The ID of the certificate to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -262,7 +291,7 @@ class SAML:
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/verification_certificates/{certificate_id}",
             data,
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteVerificationCertificateResponse.from_json(
             res.response.status_code, res.json
         )
@@ -272,6 +301,7 @@ class SAML:
         organization_id: str,
         connection_id: str,
         certificate_id: str,
+        method_options: Optional[DeleteVerificationCertificateRequestOptions] = None,
     ) -> DeleteVerificationCertificateResponse:
         """Delete a SAML verification certificate.
 
@@ -282,6 +312,9 @@ class SAML:
           - connection_id: The ID of the SAML connection.
           - certificate_id: The ID of the certificate to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -292,7 +325,7 @@ class SAML:
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/verification_certificates/{certificate_id}",
             data,
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteVerificationCertificateResponse.from_json(
             res.response.status, res.json
         )

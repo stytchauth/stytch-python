@@ -18,10 +18,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class CryptoWallets:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -44,6 +41,7 @@ class CryptoWallets:
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "crypto_wallet_type": crypto_wallet_type,
             "crypto_wallet_address": crypto_wallet_address,
@@ -56,7 +54,7 @@ class CryptoWallets:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/crypto_wallets/authenticate/start", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateStartResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_start_async(
@@ -76,6 +74,7 @@ class CryptoWallets:
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "crypto_wallet_type": crypto_wallet_type,
             "crypto_wallet_address": crypto_wallet_address,
@@ -88,7 +87,7 @@ class CryptoWallets:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/crypto_wallets/authenticate/start", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateStartResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -122,6 +121,7 @@ class CryptoWallets:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "crypto_wallet_type": crypto_wallet_type,
             "crypto_wallet_address": crypto_wallet_address,
@@ -137,7 +137,7 @@ class CryptoWallets:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/crypto_wallets/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -171,6 +171,7 @@ class CryptoWallets:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "crypto_wallet_type": crypto_wallet_type,
             "crypto_wallet_address": crypto_wallet_address,
@@ -186,5 +187,5 @@ class CryptoWallets:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/crypto_wallets/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

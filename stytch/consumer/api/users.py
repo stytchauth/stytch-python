@@ -33,10 +33,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Users:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -67,6 +64,7 @@ class Users:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if email is not None:
             data["email"] = email
@@ -84,7 +82,7 @@ class Users:
             data["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.url_for("/v1/users", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
@@ -112,6 +110,7 @@ class Users:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if email is not None:
             data["email"] = email
@@ -129,7 +128,7 @@ class Users:
             data["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.url_for("/v1/users", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)
 
     def get(
@@ -141,12 +140,13 @@ class Users:
         Fields:
           - user_id: The unique ID of a specific User.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
@@ -158,12 +158,13 @@ class Users:
         Fields:
           - user_id: The unique ID of a specific User.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
 
     def search(
@@ -179,6 +180,7 @@ class Users:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if cursor is not None:
             data["cursor"] = cursor
@@ -188,7 +190,7 @@ class Users:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/users/search", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status_code, res.json)
 
     async def search_async(
@@ -204,6 +206,7 @@ class Users:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if cursor is not None:
             data["cursor"] = cursor
@@ -213,7 +216,7 @@ class Users:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/users/search", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status, res.json)
 
     def update(
@@ -235,6 +238,7 @@ class Users:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -248,7 +252,7 @@ class Users:
             data["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status_code, res.json)
 
     async def update_async(
@@ -270,6 +274,7 @@ class Users:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -283,7 +288,7 @@ class Users:
             data["untrusted_metadata"] = untrusted_metadata
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status, res.json)
 
     def exchange_primary_factor(
@@ -305,6 +310,7 @@ class Users:
           - email_address: The email address to exchange to.
           - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -314,7 +320,7 @@ class Users:
             data["phone_number"] = phone_number
 
         url = self.api_base.url_for("/v1/users/{user_id}/exchange_primary_factor", data)
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return ExchangePrimaryFactorResponse.from_json(
             res.response.status_code, res.json
         )
@@ -338,6 +344,7 @@ class Users:
           - email_address: The email address to exchange to.
           - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
@@ -347,7 +354,7 @@ class Users:
             data["phone_number"] = phone_number
 
         url = self.api_base.url_for("/v1/users/{user_id}/exchange_primary_factor", data)
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return ExchangePrimaryFactorResponse.from_json(res.response.status, res.json)
 
     def delete(
@@ -359,12 +366,13 @@ class Users:
         Fields:
           - user_id: The unique ID of a specific User.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status_code, res.json)
 
     async def delete_async(
@@ -376,12 +384,13 @@ class Users:
         Fields:
           - user_id: The unique ID of a specific User.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status, res.json)
 
     def delete_email(
@@ -393,12 +402,13 @@ class Users:
         Fields:
           - email_id: The `email_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_id": email_id,
         }
 
         url = self.api_base.url_for("/v1/users/emails/{email_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteEmailResponse.from_json(res.response.status_code, res.json)
 
     async def delete_email_async(
@@ -410,12 +420,13 @@ class Users:
         Fields:
           - email_id: The `email_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_id": email_id,
         }
 
         url = self.api_base.url_for("/v1/users/emails/{email_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteEmailResponse.from_json(res.response.status, res.json)
 
     def delete_phone_number(
@@ -427,12 +438,13 @@ class Users:
         Fields:
           - phone_id: The `phone_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "phone_id": phone_id,
         }
 
         url = self.api_base.url_for("/v1/users/phone_numbers/{phone_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeletePhoneNumberResponse.from_json(res.response.status_code, res.json)
 
     async def delete_phone_number_async(
@@ -444,12 +456,13 @@ class Users:
         Fields:
           - phone_id: The `phone_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "phone_id": phone_id,
         }
 
         url = self.api_base.url_for("/v1/users/phone_numbers/{phone_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeletePhoneNumberResponse.from_json(res.response.status, res.json)
 
     def delete_webauthn_registration(
@@ -461,6 +474,7 @@ class Users:
         Fields:
           - webauthn_registration_id: The `webauthn_registration_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "webauthn_registration_id": webauthn_registration_id,
         }
@@ -468,7 +482,7 @@ class Users:
         url = self.api_base.url_for(
             "/v1/users/webauthn_registrations/{webauthn_registration_id}", data
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteWebAuthnRegistrationResponse.from_json(
             res.response.status_code, res.json
         )
@@ -482,6 +496,7 @@ class Users:
         Fields:
           - webauthn_registration_id: The `webauthn_registration_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "webauthn_registration_id": webauthn_registration_id,
         }
@@ -489,7 +504,7 @@ class Users:
         url = self.api_base.url_for(
             "/v1/users/webauthn_registrations/{webauthn_registration_id}", data
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteWebAuthnRegistrationResponse.from_json(
             res.response.status, res.json
         )
@@ -503,6 +518,7 @@ class Users:
         Fields:
           - biometric_registration_id: The `biometric_registration_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "biometric_registration_id": biometric_registration_id,
         }
@@ -510,7 +526,7 @@ class Users:
         url = self.api_base.url_for(
             "/v1/users/biometric_registrations/{biometric_registration_id}", data
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteBiometricRegistrationResponse.from_json(
             res.response.status_code, res.json
         )
@@ -524,6 +540,7 @@ class Users:
         Fields:
           - biometric_registration_id: The `biometric_registration_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "biometric_registration_id": biometric_registration_id,
         }
@@ -531,7 +548,7 @@ class Users:
         url = self.api_base.url_for(
             "/v1/users/biometric_registrations/{biometric_registration_id}", data
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteBiometricRegistrationResponse.from_json(
             res.response.status, res.json
         )
@@ -545,12 +562,13 @@ class Users:
         Fields:
           - totp_id: The `totp_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "totp_id": totp_id,
         }
 
         url = self.api_base.url_for("/v1/users/totps/{totp_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteTOTPResponse.from_json(res.response.status_code, res.json)
 
     async def delete_totp_async(
@@ -562,12 +580,13 @@ class Users:
         Fields:
           - totp_id: The `totp_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "totp_id": totp_id,
         }
 
         url = self.api_base.url_for("/v1/users/totps/{totp_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteTOTPResponse.from_json(res.response.status, res.json)
 
     def delete_crypto_wallet(
@@ -579,12 +598,13 @@ class Users:
         Fields:
           - crypto_wallet_id: The `crypto_wallet_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "crypto_wallet_id": crypto_wallet_id,
         }
 
         url = self.api_base.url_for("/v1/users/crypto_wallets/{crypto_wallet_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteCryptoWalletResponse.from_json(res.response.status_code, res.json)
 
     async def delete_crypto_wallet_async(
@@ -596,12 +616,13 @@ class Users:
         Fields:
           - crypto_wallet_id: The `crypto_wallet_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "crypto_wallet_id": crypto_wallet_id,
         }
 
         url = self.api_base.url_for("/v1/users/crypto_wallets/{crypto_wallet_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteCryptoWalletResponse.from_json(res.response.status, res.json)
 
     def delete_password(
@@ -613,12 +634,13 @@ class Users:
         Fields:
           - password_id: The `password_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password_id": password_id,
         }
 
         url = self.api_base.url_for("/v1/users/passwords/{password_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeletePasswordResponse.from_json(res.response.status_code, res.json)
 
     async def delete_password_async(
@@ -630,12 +652,13 @@ class Users:
         Fields:
           - password_id: The `password_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password_id": password_id,
         }
 
         url = self.api_base.url_for("/v1/users/passwords/{password_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeletePasswordResponse.from_json(res.response.status, res.json)
 
     def delete_oauth_registration(
@@ -647,6 +670,7 @@ class Users:
         Fields:
           - oauth_user_registration_id: The `oauth_user_registration_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "oauth_user_registration_id": oauth_user_registration_id,
         }
@@ -654,7 +678,7 @@ class Users:
         url = self.api_base.url_for(
             "/v1/users/oauth/{oauth_user_registration_id}", data
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteOAuthRegistrationResponse.from_json(
             res.response.status_code, res.json
         )
@@ -668,6 +692,7 @@ class Users:
         Fields:
           - oauth_user_registration_id: The `oauth_user_registration_id` to be deleted.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "oauth_user_registration_id": oauth_user_registration_id,
         }
@@ -675,7 +700,7 @@ class Users:
         url = self.api_base.url_for(
             "/v1/users/oauth/{oauth_user_registration_id}", data
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteOAuthRegistrationResponse.from_json(res.response.status, res.json)
 
     # MANUAL(search_all)(SERVICE_METHOD)

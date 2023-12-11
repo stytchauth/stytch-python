@@ -20,17 +20,26 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class OTPs:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.sms = Sms(api_base, sync_client, async_client)
-        self.whatsapp = Whatsapp(api_base, sync_client, async_client)
-        self.email = Email(api_base, sync_client, async_client)
+        self.sms = Sms(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.whatsapp = Whatsapp(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.email = Email(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def authenticate(
         self,
@@ -65,6 +74,7 @@ class OTPs:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "method_id": method_id,
             "code": code,
@@ -83,7 +93,7 @@ class OTPs:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/otps/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -119,6 +129,7 @@ class OTPs:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "method_id": method_id,
             "code": code,
@@ -137,5 +148,5 @@ class OTPs:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/otps/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

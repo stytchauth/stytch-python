@@ -25,10 +25,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Email:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -78,6 +75,7 @@ class Email:
 
           - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -107,7 +105,7 @@ class Email:
             data["signup_template_id"] = signup_template_id
 
         url = self.api_base.url_for("/v1/magic_links/email/send", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return SendResponse.from_json(res.response.status_code, res.json)
 
     async def send_async(
@@ -154,6 +152,7 @@ class Email:
 
           - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -183,7 +182,7 @@ class Email:
             data["signup_template_id"] = signup_template_id
 
         url = self.api_base.url_for("/v1/magic_links/email/send", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return SendResponse.from_json(res.response.status, res.json)
 
     def login_or_create(
@@ -227,6 +226,7 @@ class Email:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -252,7 +252,7 @@ class Email:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/login_or_create", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return LoginOrCreateResponse.from_json(res.response.status_code, res.json)
 
     async def login_or_create_async(
@@ -296,6 +296,7 @@ class Email:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -321,7 +322,7 @@ class Email:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/login_or_create", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return LoginOrCreateResponse.from_json(res.response.status, res.json)
 
     def invite(
@@ -353,6 +354,7 @@ class Email:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -370,7 +372,7 @@ class Email:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/invite", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return InviteResponse.from_json(res.response.status_code, res.json)
 
     async def invite_async(
@@ -402,6 +404,7 @@ class Email:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -419,7 +422,7 @@ class Email:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/magic_links/email/invite", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return InviteResponse.from_json(res.response.status, res.json)
 
     def revoke_invite(
@@ -431,12 +434,13 @@ class Email:
         Fields:
           - email: The email of the user.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
 
         url = self.api_base.url_for("/v1/magic_links/email/revoke_invite", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RevokeInviteResponse.from_json(res.response.status_code, res.json)
 
     async def revoke_invite_async(
@@ -448,10 +452,11 @@ class Email:
         Fields:
           - email: The email of the user.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
 
         url = self.api_base.url_for("/v1/magic_links/email/revoke_invite", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RevokeInviteResponse.from_json(res.response.status, res.json)

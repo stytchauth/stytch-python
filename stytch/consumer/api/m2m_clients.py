@@ -24,15 +24,16 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Clients:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.secrets = Secrets(api_base, sync_client, async_client)
+        self.secrets = Secrets(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def get(
         self,
@@ -43,12 +44,13 @@ class Clients:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
@@ -60,12 +62,13 @@ class Clients:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
 
     def search(
@@ -86,6 +89,7 @@ class Clients:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if cursor is not None:
             data["cursor"] = cursor
@@ -95,7 +99,7 @@ class Clients:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/m2m/clients/search", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status_code, res.json)
 
     async def search_async(
@@ -116,6 +120,7 @@ class Clients:
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if cursor is not None:
             data["cursor"] = cursor
@@ -125,7 +130,7 @@ class Clients:
             data["query"] = query.dict()
 
         url = self.api_base.url_for("/v1/m2m/clients/search", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status, res.json)
 
     def update(
@@ -150,6 +155,7 @@ class Clients:
           - scopes: An array of scopes assigned to the client.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
@@ -165,7 +171,7 @@ class Clients:
             data["trusted_metadata"] = trusted_metadata
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}", data)
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status_code, res.json)
 
     async def update_async(
@@ -190,6 +196,7 @@ class Clients:
           - scopes: An array of scopes assigned to the client.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
@@ -205,7 +212,7 @@ class Clients:
             data["trusted_metadata"] = trusted_metadata
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}", data)
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status, res.json)
 
     def delete(
@@ -220,12 +227,13 @@ class Clients:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}", data)
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status_code, res.json)
 
     async def delete_async(
@@ -240,12 +248,13 @@ class Clients:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}", data)
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status, res.json)
 
     def create(
@@ -269,6 +278,7 @@ class Clients:
           - client_description: A human-readable description for the client.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "scopes": scopes,
         }
@@ -284,7 +294,7 @@ class Clients:
             data["trusted_metadata"] = trusted_metadata
 
         url = self.api_base.url_for("/v1/m2m/clients", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
@@ -308,6 +318,7 @@ class Clients:
           - client_description: A human-readable description for the client.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "scopes": scopes,
         }
@@ -323,5 +334,5 @@ class Clients:
             data["trusted_metadata"] = trusted_metadata
 
         url = self.api_base.url_for("/v1/m2m/clients", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)

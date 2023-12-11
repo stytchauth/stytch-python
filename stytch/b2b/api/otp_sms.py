@@ -19,10 +19,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Sms:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -62,6 +59,7 @@ class Sms:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -72,7 +70,7 @@ class Sms:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/send", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return SendResponse.from_json(res.response.status_code, res.json)
 
     async def send_async(
@@ -109,6 +107,7 @@ class Sms:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -119,7 +118,7 @@ class Sms:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/send", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return SendResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -182,6 +181,7 @@ class Sms:
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -201,7 +201,7 @@ class Sms:
             data["set_mfa_enrollment"] = set_mfa_enrollment
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -264,6 +264,7 @@ class Sms:
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
@@ -283,5 +284,5 @@ class Sms:
             data["set_mfa_enrollment"] = set_mfa_enrollment
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

@@ -153,12 +153,12 @@ class TOTP(pydantic.BaseModel):
 class WebAuthnRegistration(pydantic.BaseModel):
     """
     Fields:
-      - webauthn_registration_id: The unique ID for the WebAuthn registration.
-      - domain: The `domain` on which a WebAuthn registration was started. This will be the domain of your app.
+      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
+      - domain: The `domain` on which Passkey or WebAuthn registration was started. This will be the domain of your app.
       - user_agent: The user agent of the User.
       - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
-      - authenticator_type: The `authenticator_type` string displays the requested authenticator type of the WebAuthn device. The two valid types are "platform" and "cross-platform". If no value is present, the WebAuthn device was created without an authenticator type preference.
-      - name: The `name` of the WebAuthn registration.
+      - authenticator_type: The `authenticator_type` string displays the requested authenticator type of the Passkey or WebAuthn device. The two valid types are "platform" and "cross-platform". If no value is present, the Passkey or WebAuthn device was created without an authenticator type preference.
+      - name: The `name` of the Passkey or WebAuthn registration.
     """  # noqa
 
     webauthn_registration_id: str
@@ -176,7 +176,7 @@ class User(pydantic.BaseModel):
       - emails: An array of email objects for the User.
       - status: The status of the User. The possible values are `pending` and `active`.
       - phone_numbers: An array of phone number objects linked to the User.
-      - webauthn_registrations: An array that contains a list of all WebAuthn registrations for a given User in the Stytch API.
+      - webauthn_registrations: An array that contains a list of all Passkey or WebAuthn registrations for a given User in the Stytch API.
       - providers: An array of OAuth `provider` objects linked to the User.
       - totps: An array containing a list of all TOTP instances for a given User in the Stytch API.
       - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
@@ -336,7 +336,7 @@ class GetResponse(ResponseBase):
       - emails: An array of email objects for the User.
       - status: The status of the User. The possible values are `pending` and `active`.
       - phone_numbers: An array of phone number objects linked to the User.
-      - webauthn_registrations: An array that contains a list of all WebAuthn registrations for a given User in the Stytch API.
+      - webauthn_registrations: An array that contains a list of all Passkey or WebAuthn registrations for a given User in the Stytch API.
       - providers: An array of OAuth `provider` objects linked to the User.
       - totps: An array containing a list of all TOTP instances for a given User in the Stytch API.
       - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.

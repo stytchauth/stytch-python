@@ -31,9 +31,20 @@ class PolicyRole(pydantic.BaseModel):
 
 
 class Policy(pydantic.BaseModel):
+    """
+    Fields:
+      - roles: An array of [Role objects](https://stytch.com/docs/b2b/api/rbac-role-object).
+      - resources: An array of [Resource objects](https://stytch.com/docs/b2b/api/rbac-resource-object).
+    """  # noqa
+
     roles: List[PolicyRole]
     resources: List[PolicyResource]
 
 
 class PolicyResponse(ResponseBase):
+    """Response type for `RBAC.policy`.
+    Fields:
+      - policy: The RBAC Policy document that contains all defined Roles and Resources – which are managed in the [Dashboard](/dashboard). Read more about these entities and how they work in our [RBAC overview](https://stytch.com/docs/b2b/guides/rbac/overview).
+    """  # noqa
+
     policy: Optional[Policy] = None

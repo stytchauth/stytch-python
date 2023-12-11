@@ -55,13 +55,14 @@ class Sessions:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
@@ -75,13 +76,14 @@ class Sessions:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -96,6 +98,8 @@ class Sessions:
 
         You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
+        If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource. A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
+
         Fields:
           - session_token: A secret token for a given Stytch Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -113,8 +117,10 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - authorization_check: (no documentation yet)
+          - authorization_check: If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource.
+        A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if session_token is not None:
             data["session_token"] = session_token
@@ -128,7 +134,7 @@ class Sessions:
             data["authorization_check"] = authorization_check.dict()
 
         url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -143,6 +149,8 @@ class Sessions:
 
         You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
+        If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource. A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
+
         Fields:
           - session_token: A secret token for a given Stytch Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -160,8 +168,10 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - authorization_check: (no documentation yet)
+          - authorization_check: If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource.
+        A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if session_token is not None:
             data["session_token"] = session_token
@@ -175,7 +185,7 @@ class Sessions:
             data["authorization_check"] = authorization_check.dict()
 
         url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def revoke(
@@ -193,6 +203,7 @@ class Sessions:
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if member_session_id is not None:
             data["member_session_id"] = member_session_id
@@ -204,7 +215,7 @@ class Sessions:
             data["member_id"] = member_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/revoke", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RevokeResponse.from_json(res.response.status_code, res.json)
 
     async def revoke_async(
@@ -222,6 +233,7 @@ class Sessions:
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if member_session_id is not None:
             data["member_session_id"] = member_session_id
@@ -233,7 +245,7 @@ class Sessions:
             data["member_id"] = member_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/revoke", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RevokeResponse.from_json(res.response.status, res.json)
 
     def exchange(
@@ -284,6 +296,7 @@ class Sessions:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -299,7 +312,7 @@ class Sessions:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return ExchangeResponse.from_json(res.response.status_code, res.json)
 
     async def exchange_async(
@@ -350,6 +363,7 @@ class Sessions:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -365,7 +379,7 @@ class Sessions:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return ExchangeResponse.from_json(res.response.status, res.json)
 
     def get_jwks(
@@ -385,12 +399,13 @@ class Sessions:
         Fields:
           - project_id: The `project_id` to get the JWKS for.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "project_id": project_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetJWKSResponse.from_json(res.response.status_code, res.json)
 
     async def get_jwks_async(
@@ -410,12 +425,13 @@ class Sessions:
         Fields:
           - project_id: The `project_id` to get the JWKS for.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "project_id": project_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetJWKSResponse.from_json(res.response.status, res.json)
 
     # MANUAL(authenticate_jwt)(SERVICE_METHOD)
@@ -498,7 +514,6 @@ class Sessions:
     ) -> Optional[LocalJWTResponse]:
         _session_claim = "https://stytch.com/session"
         _organization_claim = "https://stytch.com/organization"
-        _roles_claim = "https://stytch.com/roles"
         generic_claims = jwt_helpers.authenticate_jwt_local(
             project_id=self.project_id,
             jwks_client=self.jwks_client,
@@ -513,7 +528,7 @@ class Sessions:
         custom_claims = {
             k: v
             for k, v in generic_claims.untyped_claims.items()
-            if k not in [_session_claim, _organization_claim, _roles_claim]
+            if k not in [_session_claim, _organization_claim]
         }
 
         # For JWTs that include it, prefer the inner expires_at claim.
@@ -523,7 +538,7 @@ class Sessions:
         org_claim = generic_claims.untyped_claims[_organization_claim]
 
         # Claim related to RBAC roles
-        roles_claim = generic_claims.untyped_claims.get(_roles_claim)
+        roles_claim = claim.get("roles")
         if roles_claim is not None:
             if not isinstance(roles_claim, list) or not all(
                 isinstance(x, str) for x in roles_claim

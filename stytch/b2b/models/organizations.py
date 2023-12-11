@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 import pydantic
 
 from stytch.core.response_base import ResponseBase
+from stytch.shared.method_options import Authorization
 
 
 class SearchQueryOperator(str, enum.Enum):
@@ -28,6 +29,22 @@ class ActiveSSOConnection(pydantic.BaseModel):
 
     connection_id: str
     display_name: str
+
+
+class DeleteRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
 
 
 class OAuthRegistration(pydantic.BaseModel):
@@ -69,11 +86,11 @@ class Organization(pydantic.BaseModel):
 
 
         Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-      - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+      - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-      `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+      `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-      `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+      `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
       - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -193,6 +210,22 @@ class SearchQuery(pydantic.BaseModel):
 
     operator: SearchQueryOperator
     operands: List[Dict[str, Any]]
+
+
+class UpdateRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
 
 
 class CreateResponse(ResponseBase):

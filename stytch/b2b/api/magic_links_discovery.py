@@ -15,10 +15,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Discovery:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -35,6 +32,7 @@ class Discovery:
           - discovery_magic_links_token: The Discovery Email Magic Link token to authenticate.
           - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "discovery_magic_links_token": discovery_magic_links_token,
         }
@@ -42,7 +40,7 @@ class Discovery:
             data["pkce_code_verifier"] = pkce_code_verifier
 
         url = self.api_base.url_for("/v1/b2b/magic_links/discovery/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -56,6 +54,7 @@ class Discovery:
           - discovery_magic_links_token: The Discovery Email Magic Link token to authenticate.
           - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "discovery_magic_links_token": discovery_magic_links_token,
         }
@@ -63,5 +62,5 @@ class Discovery:
             data["pkce_code_verifier"] = pkce_code_verifier
 
         url = self.api_base.url_for("/v1/b2b/magic_links/discovery/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

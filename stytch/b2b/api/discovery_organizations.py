@@ -15,10 +15,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Organizations:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -89,11 +86,11 @@ class Organizations:
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -115,11 +112,12 @@ class Organizations:
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
-          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "intermediate_session_token": intermediate_session_token,
             "organization_name": organization_name,
@@ -149,7 +147,7 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
@@ -217,11 +215,11 @@ class Organizations:
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+          - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+          `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+          `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -243,11 +241,12 @@ class Organizations:
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
-          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in.
+          `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "intermediate_session_token": intermediate_session_token,
             "organization_name": organization_name,
@@ -277,7 +276,7 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)
 
     def list(
@@ -308,6 +307,7 @@ class Organizations:
           - session_token: A secret token for a given Stytch Session.
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if intermediate_session_token is not None:
             data["intermediate_session_token"] = intermediate_session_token
@@ -317,7 +317,7 @@ class Organizations:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return ListResponse.from_json(res.response.status_code, res.json)
 
     async def list_async(
@@ -348,6 +348,7 @@ class Organizations:
           - session_token: A secret token for a given Stytch Session.
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if intermediate_session_token is not None:
             data["intermediate_session_token"] = intermediate_session_token
@@ -357,5 +358,5 @@ class Organizations:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return ListResponse.from_json(res.response.status, res.json)

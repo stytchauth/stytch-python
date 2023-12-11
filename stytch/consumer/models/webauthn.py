@@ -17,7 +17,7 @@ class AuthenticateResponse(ResponseBase):
     """Response type for `WebAuthn.authenticate`.
     Fields:
       - user_id: The unique ID of the affected User.
-      - webauthn_registration_id: The unique ID for the WebAuthn registration.
+      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
@@ -39,7 +39,7 @@ class AuthenticateStartResponse(ResponseBase):
     """Response type for `WebAuthn.authenticate_start`.
     Fields:
       - user_id: The unique ID of the affected User.
-      - public_key_credential_request_options: Options used for WebAuthn authentication.
+      - public_key_credential_request_options: Options used for Passkey or WebAuthn authentication.
     """  # noqa
 
     user_id: str
@@ -50,7 +50,7 @@ class RegisterResponse(ResponseBase):
     """Response type for `WebAuthn.register`.
     Fields:
       - user_id: The unique ID of the affected User.
-      - webauthn_registration_id: The unique ID for the WebAuthn registration.
+      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - user: (no documentation yet)
@@ -72,7 +72,7 @@ class RegisterStartResponse(ResponseBase):
     """Response type for `WebAuthn.register_start`.
     Fields:
       - user_id: The unique ID of the affected User.
-      - public_key_credential_creation_options: Options used for WebAuthn registration.
+      - public_key_credential_creation_options: Options used for Passkey or WebAuthn registration.
     """  # noqa
 
     user_id: str
@@ -82,7 +82,7 @@ class RegisterStartResponse(ResponseBase):
 class UpdateResponse(ResponseBase):
     """Response type for `WebAuthn.update`.
     Fields:
-      - webauthn_registration: A WebAuthn registration.
+      - webauthn_registration: A Passkey or WebAuthn registration.
     """  # noqa
 
     webauthn_registration: Optional[WebAuthnRegistration] = None
