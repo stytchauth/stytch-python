@@ -47,6 +47,16 @@ class DeleteRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class MemberRoleSource(pydantic.BaseModel):
+    type: str
+    details: Optional[Dict[str, Any]] = None
+
+
+class MemberRole(pydantic.BaseModel):
+    role_id: str
+    sources: List[MemberRoleSource]
+
+
 class OAuthRegistration(pydantic.BaseModel):
     """
     Fields:
@@ -174,6 +184,7 @@ class Member(pydantic.BaseModel):
       - mfa_phone_number_verified: Whether or not the Member's phone number is verified.
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
+      - roles: (no documentation yet)
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
       frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
@@ -193,6 +204,7 @@ class Member(pydantic.BaseModel):
     mfa_phone_number_verified: bool
     mfa_enrolled: bool
     mfa_phone_number: str
+    roles: List[MemberRole]
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None
 

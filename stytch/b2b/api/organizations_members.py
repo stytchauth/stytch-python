@@ -492,7 +492,6 @@ class Members:
         self,
         organization_id: str,
         email_address: str,
-        roles: List[str],
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -500,6 +499,7 @@ class Members:
         is_breakglass: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
+        roles: Optional[List[str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Creates a Member. An `organization_id` and `email_address` are required.
@@ -507,7 +507,6 @@ class Members:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
-          - roles: Directly assigns role to Member being created
           - name: The name of the Member.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
@@ -517,6 +516,7 @@ class Members:
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
+          - roles: Directly assigns role to Member being created
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -524,7 +524,6 @@ class Members:
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
-            "roles": roles,
         }
         if name is not None:
             data["name"] = name
@@ -540,6 +539,8 @@ class Members:
             data["mfa_phone_number"] = mfa_phone_number
         if mfa_enrolled is not None:
             data["mfa_enrolled"] = mfa_enrolled
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data
@@ -551,7 +552,6 @@ class Members:
         self,
         organization_id: str,
         email_address: str,
-        roles: List[str],
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -559,6 +559,7 @@ class Members:
         is_breakglass: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
+        roles: Optional[List[str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Creates a Member. An `organization_id` and `email_address` are required.
@@ -566,7 +567,6 @@ class Members:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
-          - roles: Directly assigns role to Member being created
           - name: The name of the Member.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
@@ -576,6 +576,7 @@ class Members:
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
+          - roles: Directly assigns role to Member being created
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -583,7 +584,6 @@ class Members:
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
-            "roles": roles,
         }
         if name is not None:
             data["name"] = name
@@ -599,6 +599,8 @@ class Members:
             data["mfa_phone_number"] = mfa_phone_number
         if mfa_enrolled is not None:
             data["mfa_enrolled"] = mfa_enrolled
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data

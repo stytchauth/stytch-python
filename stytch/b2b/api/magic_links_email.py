@@ -149,7 +149,6 @@ class Email:
         self,
         organization_id: str,
         email_address: str,
-        roles: List[str],
         invite_redirect_url: Optional[str] = None,
         invited_by_member_id: Optional[str] = None,
         name: Optional[str] = None,
@@ -157,6 +156,7 @@ class Email:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         invite_template_id: Optional[str] = None,
         locale: Optional[Union[InviteRequestLocale, str]] = None,
+        roles: Optional[List[str]] = None,
         method_options: Optional[InviteRequestOptions] = None,
     ) -> InviteResponse:
         """Send an invite email to a new Member to join an Organization. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error.
@@ -164,7 +164,6 @@ class Email:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
-          - roles: (no documentation yet)
           - invite_redirect_url: The URL that the Member clicks from the invite Email Magic Link. This URL should be an endpoint in the backend server that verifies
           the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
           that you set in your Dashboard is used. If you have not set a default `invite_redirect_url`, an error is returned.
@@ -182,6 +181,7 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - roles: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -189,7 +189,6 @@ class Email:
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
-            "roles": roles,
         }
         if invite_redirect_url is not None:
             data["invite_redirect_url"] = invite_redirect_url
@@ -205,6 +204,8 @@ class Email:
             data["invite_template_id"] = invite_template_id
         if locale is not None:
             data["locale"] = locale
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/invite", data)
         res = self.sync_client.post(url, data, headers)
@@ -214,7 +215,6 @@ class Email:
         self,
         organization_id: str,
         email_address: str,
-        roles: List[str],
         invite_redirect_url: Optional[str] = None,
         invited_by_member_id: Optional[str] = None,
         name: Optional[str] = None,
@@ -222,6 +222,7 @@ class Email:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         invite_template_id: Optional[str] = None,
         locale: Optional[InviteRequestLocale] = None,
+        roles: Optional[List[str]] = None,
         method_options: Optional[InviteRequestOptions] = None,
     ) -> InviteResponse:
         """Send an invite email to a new Member to join an Organization. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error.
@@ -229,7 +230,6 @@ class Email:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
-          - roles: (no documentation yet)
           - invite_redirect_url: The URL that the Member clicks from the invite Email Magic Link. This URL should be an endpoint in the backend server that verifies
           the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
           that you set in your Dashboard is used. If you have not set a default `invite_redirect_url`, an error is returned.
@@ -247,6 +247,7 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - roles: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -254,7 +255,6 @@ class Email:
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
-            "roles": roles,
         }
         if invite_redirect_url is not None:
             data["invite_redirect_url"] = invite_redirect_url
@@ -270,6 +270,8 @@ class Email:
             data["invite_template_id"] = invite_template_id
         if locale is not None:
             data["locale"] = locale
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/invite", data)
         res = await self.async_client.post(url, data, headers)

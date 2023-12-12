@@ -58,6 +58,7 @@ class MemberSession(pydantic.BaseModel):
       - expires_at: The timestamp when the Session expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - authentication_factors: An array of different authentication factors that comprise a Session.
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - roles: (no documentation yet)
       - custom_claims: The custom claims map for a Session. Claims can be added to a session during a Sessions authenticate call.
     """  # noqa
 
@@ -68,6 +69,7 @@ class MemberSession(pydantic.BaseModel):
     expires_at: datetime.datetime
     authentication_factors: List[AuthenticationFactor]
     organization_id: str
+    roles: List[str]
     custom_claims: Optional[Dict[str, Any]] = None
 
 
