@@ -53,6 +53,7 @@ class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     SSO_OIDC = "sso_oidc"
     OAUTH_SALESFORCE = "oauth_salesforce"
     OAUTH_YAHOO = "oauth_yahoo"
+    OAUTH_HUBSPOT = "oauth_hubspot"
 
 
 class AuthenticationFactorType(str, enum.Enum):
@@ -158,6 +159,12 @@ class GoogleOAuthFactor(pydantic.BaseModel):
       - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
     """  # noqa
 
+    id: str
+    email_id: str
+    provider_subject: str
+
+
+class HubspotOAuthFactor(pydantic.BaseModel):
     id: str
     email_id: str
     provider_subject: str
@@ -360,6 +367,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - oidc_sso_factor: Information about the OIDC SSO factor, if one is present.
       - salesforce_oauth_factor: (no documentation yet)
       - yahoo_oauth_factor: (no documentation yet)
+      - hubspot_oauth_factor: (no documentation yet)
     """  # noqa
 
     type: AuthenticationFactorType
@@ -400,6 +408,7 @@ class AuthenticationFactor(pydantic.BaseModel):
     oidc_sso_factor: Optional[OIDCSSOFactor] = None
     salesforce_oauth_factor: Optional[SalesforceOAuthFactor] = None
     yahoo_oauth_factor: Optional[YahooOAuthFactor] = None
+    hubspot_oauth_factor: Optional[HubspotOAuthFactor] = None
 
 
 class Session(pydantic.BaseModel):

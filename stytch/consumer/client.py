@@ -39,31 +39,59 @@ class Client(ClientBase):
         super().__init__(project_id, secret, environment, suppress_warnings)
 
         self.crypto_wallets = CryptoWallets(
-            self.api_base, self.sync_client, self.async_client
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
         )
         self.m2m = M2M(
-            self.api_base,
-            self.sync_client,
-            self.async_client,
-            self.jwks_client,
-            project_id,
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+            jwks_client=self.jwks_client,
+            project_id=project_id,
         )
         self.magic_links = MagicLinks(
-            self.api_base, self.sync_client, self.async_client
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
         )
-        self.oauth = OAuth(self.api_base, self.sync_client, self.async_client)
-        self.otps = OTPs(self.api_base, self.sync_client, self.async_client)
-        self.passwords = Passwords(self.api_base, self.sync_client, self.async_client)
+        self.oauth = OAuth(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.otps = OTPs(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.passwords = Passwords(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.sessions = Sessions(
-            self.api_base,
-            self.sync_client,
-            self.async_client,
-            self.jwks_client,
-            project_id,
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+            jwks_client=self.jwks_client,
+            project_id=project_id,
         )
-        self.totps = TOTPs(self.api_base, self.sync_client, self.async_client)
-        self.users = Users(self.api_base, self.sync_client, self.async_client)
-        self.webauthn = WebAuthn(self.api_base, self.sync_client, self.async_client)
+        self.totps = TOTPs(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.users = Users(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.webauthn = WebAuthn(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
         data = {"project_id": project_id}

@@ -16,15 +16,16 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class OAuth:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.discovery = Discovery(api_base, sync_client, async_client)
+        self.discovery = Discovery(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def authenticate(
         self,
@@ -44,6 +45,8 @@ class OAuth:
         The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
 
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
+
+        We’re actively accepting requests for new OAuth providers! Please [email us](mailto:support@stytch.com) or [post in our community](https://stytch.com/docs/b2b/resources) if you are looking for an OAuth provider that is not currently supported.
 
         Fields:
           - oauth_token: The token to authenticate.
@@ -73,6 +76,7 @@ class OAuth:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "oauth_token": oauth_token,
         }
@@ -90,7 +94,7 @@ class OAuth:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/oauth/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -112,6 +116,8 @@ class OAuth:
 
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
+        We’re actively accepting requests for new OAuth providers! Please [email us](mailto:support@stytch.com) or [post in our community](https://stytch.com/docs/b2b/resources) if you are looking for an OAuth provider that is not currently supported.
+
         Fields:
           - oauth_token: The token to authenticate.
           - session_token: A secret token for a given Stytch Session.
@@ -140,6 +146,7 @@ class OAuth:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "oauth_token": oauth_token,
         }
@@ -157,5 +164,5 @@ class OAuth:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/oauth/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

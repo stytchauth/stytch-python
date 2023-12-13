@@ -21,10 +21,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class WebAuthn:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -38,17 +35,23 @@ class WebAuthn:
         authenticator_type: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
     ) -> RegisterStartResponse:
-        """Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
+        """Initiate the process of creating a new Passkey or WebAuthn registration.
+
+        To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
+
+        After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
 
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
 
         Fields:
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
-          - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `residentKey` required, `userVerification` preferred, and ignoring the `authenticator_type` passed.
+          - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
+
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -63,7 +66,7 @@ class WebAuthn:
             ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RegisterStartResponse.from_json(res.response.status_code, res.json)
 
     async def register_start_async(
@@ -74,17 +77,23 @@ class WebAuthn:
         authenticator_type: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
     ) -> RegisterStartResponse:
-        """Initiate the process of creating a new WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
+        """Initiate the process of creating a new Passkey or WebAuthn registration.
+
+        To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
+
+        After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
 
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
 
         Fields:
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the User.
-          - authenticator_type: The requested authenticator type of the WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `residentKey` required, `userVerification` preferred, and ignoring the `authenticator_type` passed.
+          - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
+
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "domain": domain,
@@ -99,7 +108,7 @@ class WebAuthn:
             ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RegisterStartResponse.from_json(res.response.status, res.json)
 
     def register(
@@ -116,7 +125,7 @@ class WebAuthn:
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
 
         Fields:
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -133,6 +142,7 @@ class WebAuthn:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
@@ -147,7 +157,7 @@ class WebAuthn:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/webauthn/register", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RegisterResponse.from_json(res.response.status_code, res.json)
 
     async def register_async(
@@ -164,7 +174,7 @@ class WebAuthn:
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
 
         Fields:
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -181,6 +191,7 @@ class WebAuthn:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
             "public_key_credential": public_key_credential,
@@ -195,7 +206,7 @@ class WebAuthn:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/webauthn/register", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RegisterResponse.from_json(res.response.status, res.json)
 
     def authenticate_start(
@@ -204,15 +215,21 @@ class WebAuthn:
         user_id: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
     ) -> AuthenticateStartResponse:
-        """Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
+        """Initiate the authentication of a Passkey or WebAuthn registration.
+
+        To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
+
+        After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
 
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, `the public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
 
         Fields:
-          - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `userVerification` preferred.
+          - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
+
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "domain": domain,
         }
@@ -224,7 +241,7 @@ class WebAuthn:
             ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateStartResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_start_async(
@@ -233,15 +250,21 @@ class WebAuthn:
         user_id: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
     ) -> AuthenticateStartResponse:
-        """Initiate the authentication of a WebAuthn registration. After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
+        """Initiate the authentication of a Passkey or WebAuthn registration.
+
+        To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
+
+        After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
 
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, `the public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
 
         Fields:
-          - domain: The domain for WebAuthn. Defaults to `window.location.hostname`.
-          - user_id: The `user_id` of an active user the WebAuthn registration should be tied to.
-          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys. This includes making `userVerification` preferred.
+          - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
+
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "domain": domain,
         }
@@ -253,7 +276,7 @@ class WebAuthn:
             ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateStartResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -264,7 +287,7 @@ class WebAuthn:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Complete the authentication of a WebAuthn registration by passing the response from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint.
+        """Complete the authentication of a Passkey or WebAuthn registration by passing the response from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint.
 
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
 
@@ -285,6 +308,7 @@ class WebAuthn:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
@@ -298,7 +322,7 @@ class WebAuthn:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/webauthn/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -309,7 +333,7 @@ class WebAuthn:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
-        """Complete the authentication of a WebAuthn registration by passing the response from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint.
+        """Complete the authentication of a Passkey or WebAuthn registration by passing the response from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint.
 
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
 
@@ -330,6 +354,7 @@ class WebAuthn:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "public_key_credential": public_key_credential,
         }
@@ -343,7 +368,7 @@ class WebAuthn:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/webauthn/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def update(
@@ -351,19 +376,20 @@ class WebAuthn:
         webauthn_registration_id: str,
         name: str,
     ) -> UpdateResponse:
-        """Updates a WebAuthn registration.
+        """Updates a Passkey or WebAuthn registration.
 
         Fields:
-          - webauthn_registration_id: Globally unique UUID that identifies a WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
-          - name: The `name` of the WebAuthn registration.
+          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
+          - name: The `name` of the WebAuthn registration or Passkey.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "webauthn_registration_id": webauthn_registration_id,
             "name": name,
         }
 
         url = self.api_base.url_for("/v1/webauthn/{webauthn_registration_id}", data)
-        res = self.sync_client.put(url, data)
+        res = self.sync_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status_code, res.json)
 
     async def update_async(
@@ -371,17 +397,18 @@ class WebAuthn:
         webauthn_registration_id: str,
         name: str,
     ) -> UpdateResponse:
-        """Updates a WebAuthn registration.
+        """Updates a Passkey or WebAuthn registration.
 
         Fields:
-          - webauthn_registration_id: Globally unique UUID that identifies a WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
-          - name: The `name` of the WebAuthn registration.
+          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
+          - name: The `name` of the WebAuthn registration or Passkey.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "webauthn_registration_id": webauthn_registration_id,
             "name": name,
         }
 
         url = self.api_base.url_for("/v1/webauthn/{webauthn_registration_id}", data)
-        res = await self.async_client.put(url, data)
+        res = await self.async_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status, res.json)

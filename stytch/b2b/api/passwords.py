@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.api.passwords_email import Email
 from stytch.b2b.api.passwords_existing_password import ExistingPassword
@@ -31,17 +31,26 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Passwords:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.email = Email(api_base, sync_client, async_client)
-        self.sessions = Sessions(api_base, sync_client, async_client)
-        self.existing_password = ExistingPassword(api_base, sync_client, async_client)
+        self.email = Email(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.sessions = Sessions(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.existing_password = ExistingPassword(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def strength_check(
         self,
@@ -63,6 +72,7 @@ class Passwords:
           - password: The password to authenticate.
           - email_address: The email address of the Member.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -70,7 +80,7 @@ class Passwords:
             data["email_address"] = email_address
 
         url = self.api_base.url_for("/v1/b2b/passwords/strength_check", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return StrengthCheckResponse.from_json(res.response.status_code, res.json)
 
     async def strength_check_async(
@@ -93,6 +103,7 @@ class Passwords:
           - password: The password to authenticate.
           - email_address: The email address of the Member.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -100,7 +111,7 @@ class Passwords:
             data["email_address"] = email_address
 
         url = self.api_base.url_for("/v1/b2b/passwords/strength_check", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return StrengthCheckResponse.from_json(res.response.status, res.json)
 
     def migrate(
@@ -109,6 +120,7 @@ class Passwords:
         hash: str,
         hash_type: Union[MigrateRequestHashType, str],
         organization_id: str,
+        preserve_existing_sessions: bool,
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
@@ -117,6 +129,7 @@ class Passwords:
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
+        roles: Optional[List[str]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -125,6 +138,9 @@ class Passwords:
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
@@ -135,12 +151,22 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
+          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+         Will completely replace any existing explicitly assigned roles. See the
+         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+
+           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
+           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
+           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
+           `preserve_existing_sessions` parameter with a value of `true`.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
             "hash": hash,
             "hash_type": hash_type,
             "organization_id": organization_id,
+            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()
@@ -158,9 +184,11 @@ class Passwords:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return MigrateResponse.from_json(res.response.status_code, res.json)
 
     async def migrate_async(
@@ -169,6 +197,7 @@ class Passwords:
         hash: str,
         hash_type: MigrateRequestHashType,
         organization_id: str,
+        preserve_existing_sessions: bool,
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
@@ -177,6 +206,7 @@ class Passwords:
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
+        roles: Optional[List[str]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -185,6 +215,9 @@ class Passwords:
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
@@ -195,12 +228,22 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
+          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+         Will completely replace any existing explicitly assigned roles. See the
+         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+
+           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
+           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
+           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
+           `preserve_existing_sessions` parameter with a value of `true`.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
             "hash": hash,
             "hash_type": hash_type,
             "organization_id": organization_id,
+            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()
@@ -218,9 +261,11 @@ class Passwords:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return MigrateResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -273,6 +318,7 @@ class Passwords:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
@@ -290,7 +336,7 @@ class Passwords:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -343,6 +389,7 @@ class Passwords:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "email_address": email_address,
@@ -360,5 +407,5 @@ class Passwords:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

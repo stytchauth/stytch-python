@@ -21,10 +21,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Sms:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -71,6 +68,7 @@ class Sms:
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "phone_number": phone_number,
         }
@@ -88,7 +86,7 @@ class Sms:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/otps/sms/send", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return SendResponse.from_json(res.response.status_code, res.json)
 
     async def send_async(
@@ -132,6 +130,7 @@ class Sms:
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "phone_number": phone_number,
         }
@@ -149,7 +148,7 @@ class Sms:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/otps/sms/send", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return SendResponse.from_json(res.response.status, res.json)
 
     def login_or_create(
@@ -187,6 +186,7 @@ class Sms:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "phone_number": phone_number,
         }
@@ -200,7 +200,7 @@ class Sms:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/otps/sms/login_or_create", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return LoginOrCreateResponse.from_json(res.response.status_code, res.json)
 
     async def login_or_create_async(
@@ -238,6 +238,7 @@ class Sms:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "phone_number": phone_number,
         }
@@ -251,5 +252,5 @@ class Sms:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/otps/sms/login_or_create", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return LoginOrCreateResponse.from_json(res.response.status, res.json)

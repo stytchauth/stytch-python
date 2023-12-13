@@ -18,10 +18,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class ExistingPassword:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -83,6 +80,7 @@ class ExistingPassword:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
             "existing_password": existing_password,
@@ -101,7 +99,7 @@ class ExistingPassword:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/existing_password/reset", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status_code, res.json)
 
     async def reset_async(
@@ -160,6 +158,7 @@ class ExistingPassword:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
             "existing_password": existing_password,
@@ -178,5 +177,5 @@ class ExistingPassword:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/passwords/existing_password/reset", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status, res.json)

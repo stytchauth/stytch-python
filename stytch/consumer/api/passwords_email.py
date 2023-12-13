@@ -21,10 +21,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Email:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -66,6 +63,7 @@ class Email:
           - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
           The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -87,7 +85,7 @@ class Email:
             data["reset_password_template_id"] = reset_password_template_id
 
         url = self.api_base.url_for("/v1/passwords/email/reset/start", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return ResetStartResponse.from_json(res.response.status_code, res.json)
 
     async def reset_start_async(
@@ -126,6 +124,7 @@ class Email:
           - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
           The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
         }
@@ -147,7 +146,7 @@ class Email:
             data["reset_password_template_id"] = reset_password_template_id
 
         url = self.api_base.url_for("/v1/passwords/email/reset/start", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return ResetStartResponse.from_json(res.response.status, res.json)
 
     def reset(
@@ -193,6 +192,7 @@ class Email:
           - attributes: Provided attributes help with fraud detection.
           - options: Specify optional security settings.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "token": token,
             "password": password,
@@ -213,7 +213,7 @@ class Email:
             data["options"] = options.dict()
 
         url = self.api_base.url_for("/v1/passwords/email/reset", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status_code, res.json)
 
     async def reset_async(
@@ -259,6 +259,7 @@ class Email:
           - attributes: Provided attributes help with fraud detection.
           - options: Specify optional security settings.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "token": token,
             "password": password,
@@ -279,5 +280,5 @@ class Email:
             data["options"] = options.dict()
 
         url = self.api_base.url_for("/v1/passwords/email/reset", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status, res.json)

@@ -13,7 +13,9 @@ from stytch.b2b.api.sso_saml import SAML
 from stytch.b2b.models.sso import (
     AuthenticateRequestLocale,
     AuthenticateResponse,
+    DeleteConnectionRequestOptions,
     DeleteConnectionResponse,
+    GetConnectionsRequestOptions,
     GetConnectionsResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -22,62 +24,79 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class SSO:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.oidc = OIDC(api_base, sync_client, async_client)
-        self.saml = SAML(api_base, sync_client, async_client)
+        self.oidc = OIDC(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.saml = SAML(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def get_connections(
         self,
         organization_id: str,
+        method_options: Optional[GetConnectionsRequestOptions] = None,
     ) -> GetConnectionsResponse:
-        """Get all SSO Connections owned by the organization.
+        """Get all SSO Connections owned by the organization. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sso/{organization_id}", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetConnectionsResponse.from_json(res.response.status_code, res.json)
 
     async def get_connections_async(
         self,
         organization_id: str,
+        method_options: Optional[GetConnectionsRequestOptions] = None,
     ) -> GetConnectionsResponse:
-        """Get all SSO Connections owned by the organization.
+        """Get all SSO Connections owned by the organization. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sso/{organization_id}", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetConnectionsResponse.from_json(res.response.status, res.json)
 
     def delete_connection(
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[DeleteConnectionRequestOptions] = None,
     ) -> DeleteConnectionResponse:
-        """Delete an existing SSO connection.
+        """Delete an existing SSO connection. /%}
 
         Fields:
           - organization_id: The organization ID that the SSO connection belongs to.
           - connection_id: The ID of the SSO connection. Both SAML and OIDC connection IDs can be provided.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -86,20 +105,24 @@ class SSO:
         url = self.api_base.url_for(
             "/v1/b2b/sso/{organization_id}/connections/{connection_id}", data
         )
-        res = self.sync_client.delete(url)
+        res = self.sync_client.delete(url, headers)
         return DeleteConnectionResponse.from_json(res.response.status_code, res.json)
 
     async def delete_connection_async(
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[DeleteConnectionRequestOptions] = None,
     ) -> DeleteConnectionResponse:
-        """Delete an existing SSO connection.
+        """Delete an existing SSO connection. /%}
 
         Fields:
           - organization_id: The organization ID that the SSO connection belongs to.
           - connection_id: The ID of the SSO connection. Both SAML and OIDC connection IDs can be provided.
         """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -108,7 +131,7 @@ class SSO:
         url = self.api_base.url_for(
             "/v1/b2b/sso/{organization_id}/connections/{connection_id}", data
         )
-        res = await self.async_client.delete(url)
+        res = await self.async_client.delete(url, headers)
         return DeleteConnectionResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -161,6 +184,7 @@ class SSO:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "sso_token": sso_token,
         }
@@ -178,7 +202,7 @@ class SSO:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sso/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -231,6 +255,7 @@ class SSO:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "sso_token": sso_token,
         }
@@ -248,5 +273,5 @@ class SSO:
             data["locale"] = locale
 
         url = self.api_base.url_for("/v1/b2b/sso/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)

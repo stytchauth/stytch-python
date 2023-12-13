@@ -24,6 +24,35 @@ class ExchangeRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
+class AuthorizationCheck(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
+
+      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved  `resource_id`s. These include:
+
+      * `stytch.organization`
+      * `stytch.member`
+      * `stytch.sso`
+      * `stytch.self`
+
+      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+
+
+      - action: An action to take on a Resource.
+    """  # noqa
+
+    organization_id: str
+    resource_id: str
+    action: str
+
+
+class AuthorizationVerdict(pydantic.BaseModel):
+    authorized: bool
+    granting_roles: List[str]
+
+
 class MemberSession(pydantic.BaseModel):
     """
     Fields:
@@ -34,6 +63,7 @@ class MemberSession(pydantic.BaseModel):
       - expires_at: The timestamp when the Session expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - authentication_factors: An array of different authentication factors that comprise a Session.
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - roles: (no documentation yet)
       - custom_claims: The custom claims map for a Session. Claims can be added to a session during a Sessions authenticate call.
     """  # noqa
 
@@ -44,6 +74,7 @@ class MemberSession(pydantic.BaseModel):
     expires_at: datetime.datetime
     authentication_factors: List[AuthenticationFactor]
     organization_id: str
+    roles: List[str]
     custom_claims: Optional[Dict[str, Any]] = None
 
 
@@ -55,6 +86,8 @@ class AuthenticateResponse(ResponseBase):
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - verdict: (Coming Soon) If an `authorization_check` is provided in the request and the check succeeds, this field will return
+      the complete list of Roles that gave the Member permission to perform the specified action on the specified Resource.
     """  # noqa
 
     member_session: MemberSession
@@ -62,6 +95,7 @@ class AuthenticateResponse(ResponseBase):
     session_jwt: str
     member: Member
     organization: Organization
+    verdict: Optional[AuthorizationVerdict] = None
 
 
 class ExchangeResponse(ResponseBase):
@@ -114,3 +148,12 @@ class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:
     """  # noqa
+
+
+# MANUAL(LocalJWTResponse)(Types)
+class LocalJWTResponse(pydantic.BaseModel):
+    member_session: MemberSession
+    roles_claim: Optional[List[str]]
+
+
+# ENDMANUAL(LocalJWTResponse)

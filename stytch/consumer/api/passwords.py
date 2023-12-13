@@ -30,17 +30,26 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Passwords:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.email = Email(api_base, sync_client, async_client)
-        self.existing_password = ExistingPassword(api_base, sync_client, async_client)
-        self.sessions = Sessions(api_base, sync_client, async_client)
+        self.email = Email(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.existing_password = ExistingPassword(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.sessions = Sessions(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def create(
         self,
@@ -79,6 +88,7 @@ class Passwords:
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - name: The name of the user. Each field in the name object is optional.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -95,7 +105,7 @@ class Passwords:
             data["name"] = name.dict()
 
         url = self.api_base.url_for("/v1/passwords", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
     async def create_async(
@@ -135,6 +145,7 @@ class Passwords:
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - name: The name of the user. Each field in the name object is optional.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -151,7 +162,7 @@ class Passwords:
             data["name"] = name.dict()
 
         url = self.api_base.url_for("/v1/passwords", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -189,6 +200,7 @@ class Passwords:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -203,7 +215,7 @@ class Passwords:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/passwords/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -241,6 +253,7 @@ class Passwords:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "password": password,
@@ -255,7 +268,7 @@ class Passwords:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/passwords/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def strength_check(
@@ -280,6 +293,7 @@ class Passwords:
           - password: The password of the user
           - email: The email address of the end user.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -287,7 +301,7 @@ class Passwords:
             data["email"] = email
 
         url = self.api_base.url_for("/v1/passwords/strength_check", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return StrengthCheckResponse.from_json(res.response.status_code, res.json)
 
     async def strength_check_async(
@@ -312,6 +326,7 @@ class Passwords:
           - password: The password of the user
           - email: The email address of the end user.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password": password,
         }
@@ -319,7 +334,7 @@ class Passwords:
             data["email"] = email
 
         url = self.api_base.url_for("/v1/passwords/strength_check", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return StrengthCheckResponse.from_json(res.response.status, res.json)
 
     def migrate(
@@ -351,6 +366,7 @@ class Passwords:
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - name: The name of the user. Each field in the name object is optional.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
@@ -374,7 +390,7 @@ class Passwords:
             data["name"] = name.dict()
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return MigrateResponse.from_json(res.response.status_code, res.json)
 
     async def migrate_async(
@@ -406,6 +422,7 @@ class Passwords:
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - name: The name of the user. Each field in the name object is optional.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email": email,
             "hash": hash,
@@ -429,5 +446,5 @@ class Passwords:
             data["name"] = name.dict()
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return MigrateResponse.from_json(res.response.status, res.json)

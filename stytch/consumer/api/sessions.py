@@ -46,12 +46,13 @@ class Sessions:
         Fields:
           - user_id: The `user_id` to get active Sessions for.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/sessions", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
@@ -63,12 +64,13 @@ class Sessions:
         Fields:
           - user_id: The `user_id` to get active Sessions for.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
         }
 
         url = self.api_base.url_for("/v1/sessions", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
 
     def authenticate(
@@ -88,6 +90,7 @@ class Sessions:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if session_token is not None:
             data["session_token"] = session_token
@@ -99,7 +102,7 @@ class Sessions:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/sessions/authenticate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
@@ -119,6 +122,7 @@ class Sessions:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if session_token is not None:
             data["session_token"] = session_token
@@ -130,7 +134,7 @@ class Sessions:
             data["session_custom_claims"] = session_custom_claims
 
         url = self.api_base.url_for("/v1/sessions/authenticate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def revoke(
@@ -146,6 +150,7 @@ class Sessions:
           - session_token: The session token to revoke.
           - session_jwt: A JWT for the session to revoke.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if session_id is not None:
             data["session_id"] = session_id
@@ -155,7 +160,7 @@ class Sessions:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/sessions/revoke", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RevokeResponse.from_json(res.response.status_code, res.json)
 
     async def revoke_async(
@@ -171,6 +176,7 @@ class Sessions:
           - session_token: The session token to revoke.
           - session_jwt: A JWT for the session to revoke.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
         if session_id is not None:
             data["session_id"] = session_id
@@ -180,7 +186,7 @@ class Sessions:
             data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/sessions/revoke", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RevokeResponse.from_json(res.response.status, res.json)
 
     def get_jwks(
@@ -200,12 +206,13 @@ class Sessions:
         Fields:
           - project_id: The `project_id` to get the JWKS for.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "project_id": project_id,
         }
 
         url = self.api_base.url_for("/v1/sessions/jwks/{project_id}", data)
-        res = self.sync_client.get(url, data)
+        res = self.sync_client.get(url, data, headers)
         return GetJWKSResponse.from_json(res.response.status_code, res.json)
 
     async def get_jwks_async(
@@ -225,12 +232,13 @@ class Sessions:
         Fields:
           - project_id: The `project_id` to get the JWKS for.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "project_id": project_id,
         }
 
         url = self.api_base.url_for("/v1/sessions/jwks/{project_id}", data)
-        res = await self.async_client.get(url, data)
+        res = await self.async_client.get(url, data, headers)
         return GetJWKSResponse.from_json(res.response.status, res.json)
 
     # MANUAL(authenticate_jwt)(SERVICE_METHOD)

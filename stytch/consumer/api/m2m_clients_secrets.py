@@ -19,10 +19,7 @@ from stytch.core.http.client import AsyncClient, SyncClient
 
 class Secrets:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
+        self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -40,6 +37,7 @@ class Secrets:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
@@ -47,7 +45,7 @@ class Secrets:
         url = self.api_base.url_for(
             "/v1/m2m/clients/{client_id}/secrets/rotate/start", data
         )
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RotateStartResponse.from_json(res.response.status_code, res.json)
 
     async def rotate_start_async(
@@ -62,6 +60,7 @@ class Secrets:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
@@ -69,7 +68,7 @@ class Secrets:
         url = self.api_base.url_for(
             "/v1/m2m/clients/{client_id}/secrets/rotate/start", data
         )
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RotateStartResponse.from_json(res.response.status, res.json)
 
     def rotate_cancel(
@@ -82,6 +81,7 @@ class Secrets:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
@@ -89,7 +89,7 @@ class Secrets:
         url = self.api_base.url_for(
             "/v1/m2m/clients/{client_id}/secrets/rotate/cancel", data
         )
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RotateCancelResponse.from_json(res.response.status_code, res.json)
 
     async def rotate_cancel_async(
@@ -102,6 +102,7 @@ class Secrets:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
@@ -109,7 +110,7 @@ class Secrets:
         url = self.api_base.url_for(
             "/v1/m2m/clients/{client_id}/secrets/rotate/cancel", data
         )
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RotateCancelResponse.from_json(res.response.status, res.json)
 
     def rotate(
@@ -122,12 +123,13 @@ class Secrets:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}/secrets/rotate", data)
-        res = self.sync_client.post(url, data)
+        res = self.sync_client.post(url, data, headers)
         return RotateResponse.from_json(res.response.status_code, res.json)
 
     async def rotate_async(
@@ -140,10 +142,11 @@ class Secrets:
         Fields:
           - client_id: The ID of the client.
         """  # noqa
+        headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_id": client_id,
         }
 
         url = self.api_base.url_for("/v1/m2m/clients/{client_id}/secrets/rotate", data)
-        res = await self.async_client.post(url, data)
+        res = await self.async_client.post(url, data, headers)
         return RotateResponse.from_json(res.response.status, res.json)

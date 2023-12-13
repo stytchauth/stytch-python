@@ -16,12 +16,45 @@ from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
+from stytch.shared.method_options import Authorization
 
 
 class AuthenticateRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+
+
+class DeleteConnectionRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
+class GetConnectionsRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
 
 
 class OIDCConnection(pydantic.BaseModel):
@@ -37,6 +70,15 @@ class OIDCConnection(pydantic.BaseModel):
     token_url: str
     userinfo_url: str
     jwks_url: str
+
+
+class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
+    role_id: str
+
+
+class SAMLGroupImplicitRoleAssignment(pydantic.BaseModel):
+    role_id: str
+    group: str
 
 
 class X509Certificate(pydantic.BaseModel):
@@ -58,6 +100,10 @@ class SAMLConnection(pydantic.BaseModel):
     audience_uri: str
     signing_certificates: List[X509Certificate]
     verification_certificates: List[X509Certificate]
+    saml_connection_implicit_role_assignments: List[
+        SAMLConnectionImplicitRoleAssignment
+    ]
+    saml_group_implicit_role_assignments: List[SAMLGroupImplicitRoleAssignment]
     alternative_audience_uri: str
     attribute_mapping: Optional[Dict[str, Any]] = None
 

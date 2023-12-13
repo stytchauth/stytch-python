@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 import pydantic
 
 from stytch.core.response_base import ResponseBase
+from stytch.shared.method_options import Authorization
 
 
 class SearchQueryOperator(str, enum.Enum):
@@ -28,6 +29,116 @@ class ActiveSSOConnection(pydantic.BaseModel):
 
     connection_id: str
     display_name: str
+
+
+class DeleteRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
+class EmailImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - domain: Email domain that grants the specified Role.
+      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
+
+      Reserved `role_id`s that are predefined by Stytch include:
+
+      * `stytch_member`
+      * `stytch_admin`
+
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+
+
+    """  # noqa
+
+    domain: str
+    role_id: str
+
+
+class MemberRoleSource(pydantic.BaseModel):
+    """
+    Fields:
+      - type: The type of role assignment. The possible values are:
+
+      `direct_assignment` – an explicitly assigned Role.
+
+      Directly assigned roles can be updated by passing in the `roles` argument to the
+      [Update Member](https://stytch.com/docs/b2b/api/update-member) endpoint.
+
+      `email_assignment` – an implicit Role granted by the Member's email domain, regardless of their login method.
+
+      Email implicit role assignments can be updated by passing in the `rbac_email_implicit_role_assignments` argument to
+      the [Update Organization](https://stytch.com/docs/b2b/api/update-organization) endpoint.
+
+      `sso_connection` – an implicit Role granted by the Member's SSO connection. This is currently only available
+      for SAML connections and not for OIDC. If the Member has a SAML Member registration with the given connection, this
+      role assignment will appear in the list. However, for authorization check purposes (in
+      [sessions authenticate](https://stytch.com/docs/b2b/api/authenticate-session) or in any endpoint that enforces RBAC with session
+      headers), the Member will only be granted the Role if their session contains an authentication factor with the
+      specified SAML connection.
+
+      SAML connection implicit role assignments can be updated by passing in the
+      `saml_connection_implicit_role_assignments` argument to the
+      [Update SAML connection](https://stytch.com/docs/b2b/api/update-saml-connection) endpoint.
+
+      `sso_connection_group` – an implicit Role granted by the Member's SSO connection and group. This is currently only
+      available for SAML connections and not for OIDC. If the Member has a SAML Member registration with the given
+      connection, and belongs to a specific group within the IdP, this role assignment will appear in the list. However,
+      for authorization check purposes (in [sessions authenticate](https://stytch.com/docs/b2b/api/authenticate-session) or in any endpoint
+      that enforces RBAC with session headers), the Member will only be granted the role if their session contains an
+      authentication factor with the specified SAML connection.
+
+      SAML group implicit role assignments can be updated by passing in the `saml_group_implicit_role_assignments`
+      argument to the [Update SAML connection](https://stytch.com/docs/b2b/api/update-saml-connection) endpoint.
+
+      - details: An object containing additional metadata about the source assignment. The fields will vary depending
+      on the role assignment type as follows:
+
+      `direct_assignment` – no additional details.
+
+      `email_assignment` – will contain the email domain that granted the assignment.
+
+      `sso_connection` – will contain the `connection_id` of the SAML connection that granted the assignment.
+
+      `sso_connection_group` – will contain the `connection_id` of the SAML connection and the name of the `group`
+      that granted the assignment.
+
+    """  # noqa
+
+    type: str
+    details: Optional[Dict[str, Any]] = None
+
+
+class MemberRole(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
+
+      Reserved `role_id`s that are predefined by Stytch include:
+
+      * `stytch_member`
+      * `stytch_admin`
+
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+
+
+      - sources: A list of sources for this role assignment. A role assignment can come from multiple sources - for example, the Role could be both explicitly assigned and implicitly granted from the Member's email domain.
+    """  # noqa
+
+    role_id: str
+    sources: List[MemberRoleSource]
 
 
 class OAuthRegistration(pydantic.BaseModel):
@@ -69,11 +180,11 @@ class Organization(pydantic.BaseModel):
 
 
         Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
-      - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link. The accepted values are:
+      - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
-      `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link.
+      `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-      `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link.
+      `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
       - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -89,11 +200,14 @@ class Organization(pydantic.BaseModel):
 
       `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-      - allowed_auth_methods:
-      An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+      - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
       The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
       - mfa_policy: (no documentation yet)
+      - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+      For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+      associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+      for more information about role assignment.
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
     """  # noqa
@@ -111,6 +225,7 @@ class Organization(pydantic.BaseModel):
     auth_methods: str
     allowed_auth_methods: List[str]
     mfa_policy: str
+    rbac_email_implicit_role_assignments: List[EmailImplicitRoleAssignment]
     trusted_metadata: Optional[Dict[str, Any]] = None
     sso_default_connection_id: Optional[str] = None
 
@@ -155,8 +270,13 @@ class Member(pydantic.BaseModel):
       - oauth_registrations: A list of OAuth registrations for this member.
       - email_address_verified: Whether or not the Member's email address is verified.
       - mfa_phone_number_verified: Whether or not the Member's phone number is verified.
+      - is_admin: (Coming Soon) Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
+      who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
+      [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
+      - roles: (Coming Soon) Explicit or implicit Roles assigned to this Member, along with details about the role assignment source.
+       See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
       frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
@@ -174,8 +294,10 @@ class Member(pydantic.BaseModel):
     oauth_registrations: List[OAuthRegistration]
     email_address_verified: bool
     mfa_phone_number_verified: bool
+    is_admin: bool
     mfa_enrolled: bool
     mfa_phone_number: str
+    roles: List[MemberRole]
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None
 
@@ -193,6 +315,22 @@ class SearchQuery(pydantic.BaseModel):
 
     operator: SearchQueryOperator
     operands: List[Dict[str, Any]]
+
+
+class UpdateRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
 
 
 class CreateResponse(ResponseBase):
