@@ -159,7 +159,7 @@ class Email:
         roles: Optional[List[str]] = None,
         method_options: Optional[InviteRequestOptions] = None,
     ) -> InviteResponse:
-        """Send an invite email to a new Member to join an Organization. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error.
+        """Send an invite email to a new Member to join an Organization. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -181,7 +181,8 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - roles: (no documentation yet)
+          - roles: (Coming Soon) Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+           for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -225,7 +226,7 @@ class Email:
         roles: Optional[List[str]] = None,
         method_options: Optional[InviteRequestOptions] = None,
     ) -> InviteResponse:
-        """Send an invite email to a new Member to join an Organization. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error.
+        """Send an invite email to a new Member to join an Organization. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -247,7 +248,8 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - roles: (no documentation yet)
+          - roles: (Coming Soon) Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+           for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

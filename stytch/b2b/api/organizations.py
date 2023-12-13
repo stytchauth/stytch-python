@@ -13,6 +13,7 @@ from stytch.b2b.models.organizations import (
     CreateResponse,
     DeleteRequestOptions,
     DeleteResponse,
+    EmailImplicitRoleAssignment,
     GetResponse,
     SearchQuery,
     SearchResponse,
@@ -49,6 +50,9 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        rbac_email_implicit_role_assignments: Optional[
+            List[EmailImplicitRoleAssignment]
+        ] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -93,8 +97,7 @@ class Organizations:
 
           `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_auth_methods:
-          An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+          - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
@@ -103,6 +106,10 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
+          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+          associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -128,6 +135,10 @@ class Organizations:
             data["allowed_auth_methods"] = allowed_auth_methods
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
+        if rbac_email_implicit_role_assignments is not None:
+            data["rbac_email_implicit_role_assignments"] = [
+                item.dict() for item in rbac_email_implicit_role_assignments
+            ]
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = self.sync_client.post(url, data, headers)
@@ -146,6 +157,9 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        rbac_email_implicit_role_assignments: Optional[
+            List[EmailImplicitRoleAssignment]
+        ] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -190,8 +204,7 @@ class Organizations:
 
           `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_auth_methods:
-          An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+          - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
@@ -200,6 +213,10 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
+          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+          associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -225,6 +242,10 @@ class Organizations:
             data["allowed_auth_methods"] = allowed_auth_methods
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
+        if rbac_email_implicit_role_assignments is not None:
+            data["rbac_email_implicit_role_assignments"] = [
+                item.dict() for item in rbac_email_implicit_role_assignments
+            ]
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = await self.async_client.post(url, data, headers)
@@ -282,19 +303,42 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        rbac_email_implicit_role_assignments: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
+        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
+        Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
+        are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
+        permission to perform the `update.info.name` action on the `stytch.organization` Resource.
+
+        If the Member Session does not contain a Role that satisfies the requested permissions, or if the Member's Organization
+        does not match the `organization_id` passed in the request, a 403 error will be thrown. Otherwise, the request will
+        proceed as normal.
+
+        To learn more about our RBAC implementation, see our [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/overview).
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.organization` Resource.
           - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.slug` action on the `stytch.organization` Resource.
           - organization_logo_url: The image URL of the Organization logo.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.logo-url` action on the `stytch.organization` Resource.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
+                  If a session header is passed into the request, this field may **not** be passed into the request. You cannot
+                  update trusted metadata when acting as a Member.
           - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-sso-connection` action on the `stytch.organization` Resource.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
 
           `ALL_ALLOWED` – new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
@@ -303,18 +347,26 @@ class Organizations:
 
           `NOT_ALLOWED` – disable JIT provisioning via SSO.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.sso-jit-provisioning` action on the `stytch.organization` Resource.
           - sso_jit_provisioning_allowed_connections: An array of `connection_id`s that reference [SAML Connection objects](https://stytch.com/docs/b2b/api/saml-connection-object).
           Only these connections will be allowed to JIT provision Members via SSO when `sso_jit_provisioning` is set to `RESTRICTED`.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.sso-jit-provisioning` action on the `stytch.organization` Resource.
           - email_allowed_domains: An array of email domains that allow invites or JIT provisioning for new Members. This list is enforced when either `email_invites` or `email_jit_provisioning` is set to `RESTRICTED`.
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-domains` action on the `stytch.organization` Resource.
           - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
           `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
           `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.email-jit-provisioning` action on the `stytch.organization` Resource.
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
           `ALL_ALLOWED` – any new Member can be invited to join via email.
@@ -323,22 +375,35 @@ class Organizations:
 
           `NOT_ALLOWED` – disable email invites.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.email-invites` action on the `stytch.organization` Resource.
           - auth_methods: The setting that controls which authentication methods can be used by Members of an Organization. The accepted values are:
 
           `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
 
           `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_auth_methods:
-          An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
+          - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-policy` action on the `stytch.organization` Resource.
+          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+          associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          for more information about role assignment.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.implicit-roles` action on the `stytch.organization` Resource.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -374,6 +439,10 @@ class Organizations:
             data["allowed_auth_methods"] = allowed_auth_methods
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
+        if rbac_email_implicit_role_assignments is not None:
+            data[
+                "rbac_email_implicit_role_assignments"
+            ] = rbac_email_implicit_role_assignments
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -395,19 +464,42 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        rbac_email_implicit_role_assignments: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
+        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
+        Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
+        are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
+        permission to perform the `update.info.name` action on the `stytch.organization` Resource.
+
+        If the Member Session does not contain a Role that satisfies the requested permissions, or if the Member's Organization
+        does not match the `organization_id` passed in the request, a 403 error will be thrown. Otherwise, the request will
+        proceed as normal.
+
+        To learn more about our RBAC implementation, see our [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/overview).
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.organization` Resource.
           - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.slug` action on the `stytch.organization` Resource.
           - organization_logo_url: The image URL of the Organization logo.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.logo-url` action on the `stytch.organization` Resource.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
+                  If a session header is passed into the request, this field may **not** be passed into the request. You cannot
+                  update trusted metadata when acting as a Member.
           - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-sso-connection` action on the `stytch.organization` Resource.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
 
           `ALL_ALLOWED` – new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
@@ -416,18 +508,26 @@ class Organizations:
 
           `NOT_ALLOWED` – disable JIT provisioning via SSO.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.sso-jit-provisioning` action on the `stytch.organization` Resource.
           - sso_jit_provisioning_allowed_connections: An array of `connection_id`s that reference [SAML Connection objects](https://stytch.com/docs/b2b/api/saml-connection-object).
           Only these connections will be allowed to JIT provision Members via SSO when `sso_jit_provisioning` is set to `RESTRICTED`.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.sso-jit-provisioning` action on the `stytch.organization` Resource.
           - email_allowed_domains: An array of email domains that allow invites or JIT provisioning for new Members. This list is enforced when either `email_invites` or `email_jit_provisioning` is set to `RESTRICTED`.
 
 
             Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-domains` action on the `stytch.organization` Resource.
           - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
 
           `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
           `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.email-jit-provisioning` action on the `stytch.organization` Resource.
           - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
           `ALL_ALLOWED` – any new Member can be invited to join via email.
@@ -436,22 +536,35 @@ class Organizations:
 
           `NOT_ALLOWED` – disable email invites.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.email-invites` action on the `stytch.organization` Resource.
           - auth_methods: The setting that controls which authentication methods can be used by Members of an Organization. The accepted values are:
 
           `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
 
           `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_auth_methods:
-          An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
+          - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
 
           `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-policy` action on the `stytch.organization` Resource.
+          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+          associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          for more information about role assignment.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.implicit-roles` action on the `stytch.organization` Resource.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -487,6 +600,10 @@ class Organizations:
             data["allowed_auth_methods"] = allowed_auth_methods
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
+        if rbac_email_implicit_role_assignments is not None:
+            data[
+                "rbac_email_implicit_role_assignments"
+            ] = rbac_email_implicit_role_assignments
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data, headers)
@@ -497,7 +614,7 @@ class Organizations:
         organization_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
+        """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -518,7 +635,7 @@ class Organizations:
         organization_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
+        """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.

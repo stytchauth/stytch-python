@@ -120,6 +120,7 @@ class Passwords:
         hash: str,
         hash_type: Union[MigrateRequestHashType, str],
         organization_id: str,
+        preserve_existing_sessions: bool,
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
@@ -137,6 +138,9 @@ class Passwords:
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
@@ -147,7 +151,14 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
-          - roles: Directly assigns role to Member being updated. Will completely replace any existing roles.
+          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+         Will completely replace any existing explicitly assigned roles. See the
+         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+
+           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
+           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
+           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
+           `preserve_existing_sessions` parameter with a value of `true`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -155,6 +166,7 @@ class Passwords:
             "hash": hash,
             "hash_type": hash_type,
             "organization_id": organization_id,
+            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()
@@ -185,6 +197,7 @@ class Passwords:
         hash: str,
         hash_type: MigrateRequestHashType,
         organization_id: str,
+        preserve_existing_sessions: bool,
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
@@ -202,6 +215,9 @@ class Passwords:
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
@@ -212,7 +228,14 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
-          - roles: Directly assigns role to Member being updated. Will completely replace any existing roles.
+          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+         Will completely replace any existing explicitly assigned roles. See the
+         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+
+           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
+           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
+           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
+           `preserve_existing_sessions` parameter with a value of `true`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -220,6 +243,7 @@ class Passwords:
             "hash": hash,
             "hash_type": hash_type,
             "organization_id": organization_id,
+            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()

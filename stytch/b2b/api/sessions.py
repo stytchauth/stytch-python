@@ -98,7 +98,12 @@ class Sessions:
 
         You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-        If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource. A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
+        If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+        In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+
+        If the Member is not authorized to perform the specified action on the specified Resource, or if the
+        `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+        Otherwise, the response will contain a list of Roles that satisfied the authorization check.
 
         Fields:
           - session_token: A secret token for a given Stytch Session.
@@ -117,8 +122,19 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - authorization_check: If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource.
-        A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
+          - authorization_check: (Coming Soon) If an `authorization_check` object is passed in, this endpoint will also check if the Member is
+          authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if
+          their Member Session contains a Role, assigned
+          [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+          In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+
+          The Roles on the Member Session may differ from the Roles you see on the Member object - Roles that are implicitly
+          assigned by SSO connection or SSO group will only be valid for a Member Session if there is at least one authentication
+          factor on the Member Session from the specified SSO connection.
+
+          If the Member is not authorized to perform the specified action on the specified Resource, or if the
+          `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+          Otherwise, the response will contain a list of Roles that satisfied the authorization check.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -149,7 +165,12 @@ class Sessions:
 
         You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-        If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource. A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
+        If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+        In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+
+        If the Member is not authorized to perform the specified action on the specified Resource, or if the
+        `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+        Otherwise, the response will contain a list of Roles that satisfied the authorization check.
 
         Fields:
           - session_token: A secret token for a given Stytch Session.
@@ -168,8 +189,19 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - authorization_check: If an authorization_check object is passed in, this method will also check if the Member who holds the Session being authenticated is authorized to perform the given Action on the given Resource.
-        A Member is authorized if they are assigned to a Role, [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with the adequate permissions.
+          - authorization_check: (Coming Soon) If an `authorization_check` object is passed in, this endpoint will also check if the Member is
+          authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if
+          their Member Session contains a Role, assigned
+          [explicitly or implicitly](https://github.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+          In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+
+          The Roles on the Member Session may differ from the Roles you see on the Member object - Roles that are implicitly
+          assigned by SSO connection or SSO group will only be valid for a Member Session if there is at least one authentication
+          factor on the Member Session from the specified SSO connection.
+
+          If the Member is not authorized to perform the specified action on the specified Resource, or if the
+          `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+          Otherwise, the response will contain a list of Roles that satisfied the authorization check.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}

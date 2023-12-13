@@ -72,6 +72,15 @@ class OIDCConnection(pydantic.BaseModel):
     jwks_url: str
 
 
+class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
+    role_id: str
+
+
+class SAMLGroupImplicitRoleAssignment(pydantic.BaseModel):
+    role_id: str
+    group: str
+
+
 class X509Certificate(pydantic.BaseModel):
     certificate_id: str
     certificate: str
@@ -91,6 +100,10 @@ class SAMLConnection(pydantic.BaseModel):
     audience_uri: str
     signing_certificates: List[X509Certificate]
     verification_certificates: List[X509Certificate]
+    saml_connection_implicit_role_assignments: List[
+        SAMLConnectionImplicitRoleAssignment
+    ]
+    saml_group_implicit_role_assignments: List[SAMLGroupImplicitRoleAssignment]
     alternative_audience_uri: str
     attribute_mapping: Optional[Dict[str, Any]] = None
 

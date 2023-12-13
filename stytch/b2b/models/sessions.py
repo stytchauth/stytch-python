@@ -40,12 +40,17 @@ class AuthorizationCheck(pydantic.BaseModel):
       Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
 
 
-      - action: An action to take on a Resource
+      - action: An action to take on a Resource.
     """  # noqa
 
     organization_id: str
     resource_id: str
     action: str
+
+
+class AuthorizationVerdict(pydantic.BaseModel):
+    authorized: bool
+    granting_roles: List[str]
 
 
 class MemberSession(pydantic.BaseModel):
@@ -81,6 +86,8 @@ class AuthenticateResponse(ResponseBase):
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - verdict: (Coming Soon) If an `authorization_check` is provided in the request and the check succeeds, this field will return
+      the complete list of Roles that gave the Member permission to perform the specified action on the specified Resource.
     """  # noqa
 
     member_session: MemberSession
@@ -88,6 +95,7 @@ class AuthenticateResponse(ResponseBase):
     session_jwt: str
     member: Member
     organization: Organization
+    verdict: Optional[AuthorizationVerdict] = None
 
 
 class ExchangeResponse(ResponseBase):

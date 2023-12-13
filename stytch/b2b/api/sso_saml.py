@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from stytch.b2b.models.sso_saml import (
     CreateConnectionRequestOptions,
@@ -36,7 +36,7 @@ class SAML:
         display_name: Optional[str] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
-        """Create a new SAML Connection.
+        """Create a new SAML Connection. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -61,7 +61,7 @@ class SAML:
         display_name: Optional[str] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
-        """Create a new SAML Connection.
+        """Create a new SAML Connection. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -89,6 +89,8 @@ class SAML:
         attribute_mapping: Optional[Dict[str, Any]] = None,
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
+        saml_connection_implicit_role_assignments: Optional[List[str]] = None,
+        saml_group_implicit_role_assignments: Optional[List[str]] = None,
         alternative_audience_uri: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
@@ -99,6 +101,7 @@ class SAML:
         * `attribute_mapping`
         * `idp_entity_id`
         * `x509_certificate`
+         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -108,6 +111,13 @@ class SAML:
           - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
+          - saml_connection_implicit_role_assignments: (Coming Soon) All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+          - saml_group_implicit_role_assignments: (Coming Soon) Defines the names of the SAML groups
+         that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
+         belongs to the specified SAML group, they will be granted the associated Role. See the
+         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+                 Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
+                 `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -127,6 +137,14 @@ class SAML:
             data["x509_certificate"] = x509_certificate
         if idp_sso_url is not None:
             data["idp_sso_url"] = idp_sso_url
+        if saml_connection_implicit_role_assignments is not None:
+            data[
+                "saml_connection_implicit_role_assignments"
+            ] = saml_connection_implicit_role_assignments
+        if saml_group_implicit_role_assignments is not None:
+            data[
+                "saml_group_implicit_role_assignments"
+            ] = saml_group_implicit_role_assignments
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri
 
@@ -145,6 +163,8 @@ class SAML:
         attribute_mapping: Optional[Dict[str, Any]] = None,
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
+        saml_connection_implicit_role_assignments: Optional[List[str]] = None,
+        saml_group_implicit_role_assignments: Optional[List[str]] = None,
         alternative_audience_uri: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
@@ -155,6 +175,7 @@ class SAML:
         * `attribute_mapping`
         * `idp_entity_id`
         * `x509_certificate`
+         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -164,6 +185,13 @@ class SAML:
           - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
+          - saml_connection_implicit_role_assignments: (Coming Soon) All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+          - saml_group_implicit_role_assignments: (Coming Soon) Defines the names of the SAML groups
+         that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
+         belongs to the specified SAML group, they will be granted the associated Role. See the
+         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+                 Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
+                 `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -183,6 +211,14 @@ class SAML:
             data["x509_certificate"] = x509_certificate
         if idp_sso_url is not None:
             data["idp_sso_url"] = idp_sso_url
+        if saml_connection_implicit_role_assignments is not None:
+            data[
+                "saml_connection_implicit_role_assignments"
+            ] = saml_connection_implicit_role_assignments
+        if saml_group_implicit_role_assignments is not None:
+            data[
+                "saml_group_implicit_role_assignments"
+            ] = saml_group_implicit_role_assignments
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri
 
@@ -206,6 +242,7 @@ class SAML:
         * `idp_entity_id`
         * `x509_certificate`
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
+         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -241,6 +278,7 @@ class SAML:
         * `idp_entity_id`
         * `x509_certificate`
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
+         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -272,6 +310,7 @@ class SAML:
         """Delete a SAML verification certificate.
 
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
+         /%}
 
         Fields:
           - organization_id: The organization ID that the SAML connection belongs to.
@@ -306,6 +345,7 @@ class SAML:
         """Delete a SAML verification certificate.
 
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
+         /%}
 
         Fields:
           - organization_id: The organization ID that the SAML connection belongs to.

@@ -9,6 +9,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
 from stytch.b2b.models.discovery_organizations import CreateResponse, ListResponse
+from stytch.b2b.models.organizations import EmailImplicitRoleAssignment
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -37,13 +38,19 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        rbac_email_implicit_role_assignments: Optional[
+            List[EmailImplicitRoleAssignment]
+        ] = None,
     ) -> CreateResponse:
-        """If an end user does not want to join any already-existing organization, or has no possible organizations to join, this endpoint can be used to create a new
+        """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
 
         This operation consumes the Intermediate Session.
 
-        This endpoint can also be used to start an initial session for the newly created member and organization.
+        This endpoint will also create an initial Member Session for the newly created Member.
+
+        The Member created by this endpoint will automatically be granted the `stytch_admin` Role. See the
+        [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
 
         If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.
         The `intermediate_session_token` will not be consumed and instead will be returned in the response.
@@ -106,8 +113,7 @@ class Organizations:
 
           `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_auth_methods:
-          An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+          - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
@@ -116,6 +122,10 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
+          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+          associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -145,6 +155,10 @@ class Organizations:
             data["allowed_auth_methods"] = allowed_auth_methods
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
+        if rbac_email_implicit_role_assignments is not None:
+            data["rbac_email_implicit_role_assignments"] = [
+                item.dict() for item in rbac_email_implicit_role_assignments
+            ]
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = self.sync_client.post(url, data, headers)
@@ -166,13 +180,19 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
+        rbac_email_implicit_role_assignments: Optional[
+            List[EmailImplicitRoleAssignment]
+        ] = None,
     ) -> CreateResponse:
-        """If an end user does not want to join any already-existing organization, or has no possible organizations to join, this endpoint can be used to create a new
+        """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
 
         This operation consumes the Intermediate Session.
 
-        This endpoint can also be used to start an initial session for the newly created member and organization.
+        This endpoint will also create an initial Member Session for the newly created Member.
+
+        The Member created by this endpoint will automatically be granted the `stytch_admin` Role. See the
+        [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
 
         If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.
         The `intermediate_session_token` will not be consumed and instead will be returned in the response.
@@ -235,8 +255,7 @@ class Organizations:
 
           `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_auth_methods:
-          An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+          - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
           - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
@@ -245,6 +264,10 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
+          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+          associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -274,6 +297,10 @@ class Organizations:
             data["allowed_auth_methods"] = allowed_auth_methods
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
+        if rbac_email_implicit_role_assignments is not None:
+            data["rbac_email_implicit_role_assignments"] = [
+                item.dict() for item in rbac_email_implicit_role_assignments
+            ]
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = await self.async_client.post(url, data, headers)
