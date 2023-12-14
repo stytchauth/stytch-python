@@ -42,7 +42,6 @@ class Members:
         self,
         organization_id: str,
         member_id: str,
-        preserve_existing_sessions: bool,
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -50,6 +49,7 @@ class Members:
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
         roles: Optional[List[str]] = None,
+        preserve_existing_sessions: Optional[bool] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -69,9 +69,6 @@ class Members:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
           - name: The name of the Member.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.member` Resource.
@@ -106,6 +103,9 @@ class Members:
            `preserve_existing_sessions` parameter with a value of `true`.
 
         If this field is provided, the logged-in Member must have permission to perform the `update.settings.roles` action on the `stytch.member` Resource.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -113,7 +113,6 @@ class Members:
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
-            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if name is not None:
             data["name"] = name
@@ -129,6 +128,8 @@ class Members:
             data["mfa_enrolled"] = mfa_enrolled
         if roles is not None:
             data["roles"] = roles
+        if preserve_existing_sessions is not None:
+            data["preserve_existing_sessions"] = preserve_existing_sessions
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -140,7 +141,6 @@ class Members:
         self,
         organization_id: str,
         member_id: str,
-        preserve_existing_sessions: bool,
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -148,6 +148,7 @@ class Members:
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
         roles: Optional[List[str]] = None,
+        preserve_existing_sessions: Optional[bool] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -167,9 +168,6 @@ class Members:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
           - name: The name of the Member.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.member` Resource.
@@ -204,6 +202,9 @@ class Members:
            `preserve_existing_sessions` parameter with a value of `true`.
 
         If this field is provided, the logged-in Member must have permission to perform the `update.settings.roles` action on the `stytch.member` Resource.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -211,7 +212,6 @@ class Members:
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "member_id": member_id,
-            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if name is not None:
             data["name"] = name
@@ -227,6 +227,8 @@ class Members:
             data["mfa_enrolled"] = mfa_enrolled
         if roles is not None:
             data["roles"] = roles
+        if preserve_existing_sessions is not None:
+            data["preserve_existing_sessions"] = preserve_existing_sessions
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
