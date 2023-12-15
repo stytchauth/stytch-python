@@ -120,7 +120,6 @@ class Passwords:
         hash: str,
         hash_type: Union[MigrateRequestHashType, str],
         organization_id: str,
-        preserve_existing_sessions: bool,
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
@@ -130,6 +129,7 @@ class Passwords:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         roles: Optional[List[str]] = None,
+        preserve_existing_sessions: Optional[bool] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -138,9 +138,6 @@ class Passwords:
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
@@ -159,6 +156,9 @@ class Passwords:
            or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
            authentication factors with the affected connection ID. You can preserve these sessions by passing in the
            `preserve_existing_sessions` parameter with a value of `true`.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -166,7 +166,6 @@ class Passwords:
             "hash": hash,
             "hash_type": hash_type,
             "organization_id": organization_id,
-            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()
@@ -186,6 +185,8 @@ class Passwords:
             data["untrusted_metadata"] = untrusted_metadata
         if roles is not None:
             data["roles"] = roles
+        if preserve_existing_sessions is not None:
+            data["preserve_existing_sessions"] = preserve_existing_sessions
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
         res = self.sync_client.post(url, data, headers)
@@ -197,7 +198,6 @@ class Passwords:
         hash: str,
         hash_type: MigrateRequestHashType,
         organization_id: str,
-        preserve_existing_sessions: bool,
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
@@ -207,6 +207,7 @@ class Passwords:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         roles: Optional[List[str]] = None,
+        preserve_existing_sessions: Optional[bool] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -215,9 +216,6 @@ class Passwords:
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
@@ -236,6 +234,9 @@ class Passwords:
            or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
            authentication factors with the affected connection ID. You can preserve these sessions by passing in the
            `preserve_existing_sessions` parameter with a value of `true`.
+          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+          authentication factors with the affected SSO connection IDs will be revoked.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -243,7 +244,6 @@ class Passwords:
             "hash": hash,
             "hash_type": hash_type,
             "organization_id": organization_id,
-            "preserve_existing_sessions": preserve_existing_sessions,
         }
         if md_5_config is not None:
             data["md_5_config"] = md_5_config.dict()
@@ -263,6 +263,8 @@ class Passwords:
             data["untrusted_metadata"] = untrusted_metadata
         if roles is not None:
             data["roles"] = roles
+        if preserve_existing_sessions is not None:
+            data["preserve_existing_sessions"] = preserve_existing_sessions
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
         res = await self.async_client.post(url, data, headers)
