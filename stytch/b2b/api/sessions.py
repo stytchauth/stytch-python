@@ -587,6 +587,7 @@ class Sessions:
                 organization_id=org_claim["organization_id"],
                 member_id=generic_claims.reserved_claims["sub"],
                 custom_claims=custom_claims,
+                roles=roles_claim or [],
             ),
             roles_claim=roles_claim,
         )
