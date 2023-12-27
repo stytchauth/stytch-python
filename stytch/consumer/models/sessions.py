@@ -301,11 +301,12 @@ class TwitterOAuthFactor(pydantic.BaseModel):
     email_id: str
     provider_subject: str
 
-
+# MANUAL(WebAuthnFactor)(Types)
 class WebAuthnFactor(pydantic.BaseModel):
     webauthn_registration_id: str
     domain: str
-    user_agent: str
+    user_agent: Optional[str]
+# ENDMANUAL(WebAuthnFactor)
 
 
 class YahooOAuthFactor(pydantic.BaseModel):
