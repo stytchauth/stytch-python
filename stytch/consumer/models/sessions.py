@@ -305,7 +305,7 @@ class TwitterOAuthFactor(pydantic.BaseModel):
 class WebAuthnFactor(pydantic.BaseModel):
     webauthn_registration_id: str
     domain: str
-    user_agent: Optional[str]
+    user_agent: Optional[str] = None
 # ENDMANUAL(WebAuthnFactor)
 
 
