@@ -148,7 +148,7 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
-          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+          - roles: Roles to explicitly assign to this Member.
          Will completely replace any existing explicitly assigned roles. See the
          [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
 
@@ -156,7 +156,7 @@ class Passwords:
            or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
            authentication factors with the affected connection ID. You can preserve these sessions by passing in the
            `preserve_existing_sessions` parameter with a value of `true`.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
         """  # noqa
@@ -226,7 +226,7 @@ class Passwords:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
-          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+          - roles: Roles to explicitly assign to this Member.
          Will completely replace any existing explicitly assigned roles. See the
          [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
 
@@ -234,7 +234,7 @@ class Passwords:
            or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
            authentication factors with the affected connection ID. You can preserve these sessions by passing in the
            `preserve_existing_sessions` parameter with a value of `true`.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
         """  # noqa

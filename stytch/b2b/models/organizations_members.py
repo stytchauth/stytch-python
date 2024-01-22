@@ -111,6 +111,22 @@ class SearchRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class TOTPRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
 class UpdateRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -212,6 +228,12 @@ class SearchResponse(ResponseBase):
     members: List[Member]
     results_metadata: ResultsMetadata
     organizations: Dict[str, Organization]
+
+
+class TOTPResponse(ResponseBase):
+    member_id: str
+    member: Member
+    organization: Organization
 
 
 class UpdateResponse(ResponseBase):

@@ -41,6 +41,8 @@ class Organizations:
         rbac_email_implicit_role_assignments: Optional[
             List[EmailImplicitRoleAssignment]
         ] = None,
+        mfa_methods: Optional[str] = None,
+        allowed_mfa_methods: Optional[List[str]] = None,
     ) -> CreateResponse:
         """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
@@ -122,10 +124,19 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
-          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
+          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+
+          `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+
+          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          The list's accepted values are: `sms_otp` and `totp`.
+
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -159,6 +170,10 @@ class Organizations:
             data["rbac_email_implicit_role_assignments"] = [
                 item.dict() for item in rbac_email_implicit_role_assignments
             ]
+        if mfa_methods is not None:
+            data["mfa_methods"] = mfa_methods
+        if allowed_mfa_methods is not None:
+            data["allowed_mfa_methods"] = allowed_mfa_methods
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = self.sync_client.post(url, data, headers)
@@ -183,6 +198,8 @@ class Organizations:
         rbac_email_implicit_role_assignments: Optional[
             List[EmailImplicitRoleAssignment]
         ] = None,
+        mfa_methods: Optional[str] = None,
+        allowed_mfa_methods: Optional[List[str]] = None,
     ) -> CreateResponse:
         """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
@@ -264,10 +281,19 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
-          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
+          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+
+          `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+
+          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          The list's accepted values are: `sms_otp` and `totp`.
+
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -301,6 +327,10 @@ class Organizations:
             data["rbac_email_implicit_role_assignments"] = [
                 item.dict() for item in rbac_email_implicit_role_assignments
             ]
+        if mfa_methods is not None:
+            data["mfa_methods"] = mfa_methods
+        if allowed_mfa_methods is not None:
+            data["allowed_mfa_methods"] = allowed_mfa_methods
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = await self.async_client.post(url, data, headers)

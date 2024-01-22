@@ -53,6 +53,8 @@ class Organizations:
         rbac_email_implicit_role_assignments: Optional[
             List[EmailImplicitRoleAssignment]
         ] = None,
+        mfa_methods: Optional[str] = None,
+        allowed_mfa_methods: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -106,10 +108,19 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
-          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
+          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+
+          `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+
+          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          The list's accepted values are: `sms_otp` and `totp`.
+
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -139,6 +150,10 @@ class Organizations:
             data["rbac_email_implicit_role_assignments"] = [
                 item.dict() for item in rbac_email_implicit_role_assignments
             ]
+        if mfa_methods is not None:
+            data["mfa_methods"] = mfa_methods
+        if allowed_mfa_methods is not None:
+            data["allowed_mfa_methods"] = allowed_mfa_methods
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = self.sync_client.post(url, data, headers)
@@ -160,6 +175,8 @@ class Organizations:
         rbac_email_implicit_role_assignments: Optional[
             List[EmailImplicitRoleAssignment]
         ] = None,
+        mfa_methods: Optional[str] = None,
+        allowed_mfa_methods: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -213,10 +230,19 @@ class Organizations:
 
           `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
 
-          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
+          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+
+          `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+
+          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          The list's accepted values are: `sms_otp` and `totp`.
+
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -246,6 +272,10 @@ class Organizations:
             data["rbac_email_implicit_role_assignments"] = [
                 item.dict() for item in rbac_email_implicit_role_assignments
             ]
+        if mfa_methods is not None:
+            data["mfa_methods"] = mfa_methods
+        if allowed_mfa_methods is not None:
+            data["allowed_mfa_methods"] = allowed_mfa_methods
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = await self.async_client.post(url, data, headers)
@@ -304,13 +334,15 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
         rbac_email_implicit_role_assignments: Optional[List[str]] = None,
+        mfa_methods: Optional[str] = None,
+        allowed_mfa_methods: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
-        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
         a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
         Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
         are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
@@ -398,12 +430,25 @@ class Organizations:
 
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-policy` action on the `stytch.organization` Resource.
-          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.implicit-roles` action on the `stytch.organization` Resource.
+          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+
+          `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+
+          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
+          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          The list's accepted values are: `sms_otp` and `totp`.
+
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -443,6 +488,10 @@ class Organizations:
             data[
                 "rbac_email_implicit_role_assignments"
             ] = rbac_email_implicit_role_assignments
+        if mfa_methods is not None:
+            data["mfa_methods"] = mfa_methods
+        if allowed_mfa_methods is not None:
+            data["allowed_mfa_methods"] = allowed_mfa_methods
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -465,13 +514,15 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
         rbac_email_implicit_role_assignments: Optional[List[str]] = None,
+        mfa_methods: Optional[str] = None,
+        allowed_mfa_methods: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
-        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
         a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
         Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
         are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
@@ -559,12 +610,25 @@ class Organizations:
 
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-policy` action on the `stytch.organization` Resource.
-          - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+          - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.implicit-roles` action on the `stytch.organization` Resource.
+          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+
+          `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+
+          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
+          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          The list's accepted values are: `sms_otp` and `totp`.
+
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -604,6 +668,10 @@ class Organizations:
             data[
                 "rbac_email_implicit_role_assignments"
             ] = rbac_email_implicit_role_assignments
+        if mfa_methods is not None:
+            data["mfa_methods"] = mfa_methods
+        if allowed_mfa_methods is not None:
+            data["allowed_mfa_methods"] = allowed_mfa_methods
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data, headers)

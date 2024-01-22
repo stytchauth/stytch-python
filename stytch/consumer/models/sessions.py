@@ -54,6 +54,7 @@ class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     OAUTH_SALESFORCE = "oauth_salesforce"
     OAUTH_YAHOO = "oauth_yahoo"
     OAUTH_HUBSPOT = "oauth_hubspot"
+    IMPORTED_AUTH0 = "imported_auth0"
 
 
 class AuthenticationFactorType(str, enum.Enum):
@@ -66,6 +67,8 @@ class AuthenticationFactorType(str, enum.Enum):
     PASSWORD = "password"
     SIGNATURE_CHALLENGE = "signature_challenge"
     SSO = "sso"
+    IMPORTED = "imported"
+    RECOVERY_CODES = "recovery_codes"
 
 
 class AmazonOAuthFactor(pydantic.BaseModel):
@@ -301,12 +304,11 @@ class TwitterOAuthFactor(pydantic.BaseModel):
     email_id: str
     provider_subject: str
 
-# MANUAL(WebAuthnFactor)(Types)
+
 class WebAuthnFactor(pydantic.BaseModel):
     webauthn_registration_id: str
     domain: str
-    user_agent: Optional[str]
-# ENDMANUAL(WebAuthnFactor)
+    user_agent: str
 
 
 class YahooOAuthFactor(pydantic.BaseModel):
@@ -475,3 +477,13 @@ class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:
     """  # noqa
+
+
+# MANUAL(WebAuthnFactor)(Types)
+class WebAuthnFactor(pydantic.BaseModel):
+    webauthn_registration_id: str
+    domain: str
+    user_agent: Optional[str]
+
+
+# ENDMANUAL(WebAuthnFactor)

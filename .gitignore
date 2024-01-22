@@ -5,3 +5,4 @@ stytch.egg-info/
 .env*
 .coverage
 dist/
+.idea/

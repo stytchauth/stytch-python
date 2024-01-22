@@ -52,7 +52,7 @@ class AuthenticateResponse(ResponseBase):
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - provider_values: The `provider_values` object lists relevant identifiers, values, and scopes for a given OAuth provider. For example this object will include a provider's `access_token` that you can use to access the provider's API for a given user.
 
-      Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by OIDC complaint identity providers.
+      Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by OIDC compliant identity providers.
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
       - reset_sessions: Indicates if all other of the User's Sessions need to be reset. You should check this field if you aren't using Stytch's Session product. If you are using Stytch's Session product, we revoke the User's other sessions for you.
       - oauth_user_registration_id: The unique ID for an OAuth registration.
