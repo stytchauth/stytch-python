@@ -123,7 +123,7 @@ If you've found a security vulnerability, please follow our [responsible disclos
 
 ## Development
 
-See DEVELOPMENT.md
+See [DEVELOPMENT.md](DEVELOPMENT.md)
 
 ## Code of Conduct
 
