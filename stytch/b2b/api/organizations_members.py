@@ -18,13 +18,13 @@ from stytch.b2b.models.organizations_members import (
     DeletePasswordResponse,
     DeleteRequestOptions,
     DeleteResponse,
+    DeleteTOTPRequestOptions,
+    DeleteTOTPResponse,
     GetResponse,
     ReactivateRequestOptions,
     ReactivateResponse,
     SearchRequestOptions,
     SearchResponse,
-    TOTPRequestOptions,
-    TOTPResponse,
     UpdateRequestOptions,
     UpdateResponse,
 )
@@ -422,12 +422,12 @@ class Members:
         res = await self.async_client.delete(url, headers)
         return DeleteMFAPhoneNumberResponse.from_json(res.response.status, res.json)
 
-    def totp(
+    def delete_totp(
         self,
         organization_id: str,
         member_id: str,
-        method_options: Optional[TOTPRequestOptions] = None,
-    ) -> TOTPResponse:
+        method_options: Optional[DeleteTOTPRequestOptions] = None,
+    ) -> DeleteTOTPResponse:
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)
@@ -440,14 +440,14 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/{member_id}/totp", data
         )
         res = self.sync_client.delete(url, headers)
-        return TOTPResponse.from_json(res.response.status_code, res.json)
+        return DeleteTOTPResponse.from_json(res.response.status_code, res.json)
 
-    async def totp_async(
+    async def delete_totp_async(
         self,
         organization_id: str,
         member_id: str,
-        method_options: Optional[TOTPRequestOptions] = None,
-    ) -> TOTPResponse:
+        method_options: Optional[DeleteTOTPRequestOptions] = None,
+    ) -> DeleteTOTPResponse:
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)
@@ -460,7 +460,7 @@ class Members:
             "/v1/b2b/organizations/{organization_id}/members/{member_id}/totp", data
         )
         res = await self.async_client.delete(url, headers)
-        return TOTPResponse.from_json(res.response.status, res.json)
+        return DeleteTOTPResponse.from_json(res.response.status, res.json)
 
     def search(
         self,
