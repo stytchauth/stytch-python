@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Any, Dict, Optional
 
 from stytch.b2b.models.recovery_codes import (
-    B2BGetResponse,
+    GetResponse,
     RecoverResponse,
     RotateResponse,
 )
@@ -143,11 +143,11 @@ class RecoveryCodes:
         res = await self.async_client.post(url, data, headers)
         return RecoverResponse.from_json(res.response.status, res.json)
 
-    def b2_b_get(
+    def get(
         self,
         organization_id: str,
         member_id: str,
-    ) -> B2BGetResponse:
+    ) -> GetResponse:
         """Returns a Member's full set of active recovery codes.
 
         Fields:
@@ -164,13 +164,13 @@ class RecoveryCodes:
             "/v1/b2b/recovery_codes/{organization_id}/{member_id}", data
         )
         res = self.sync_client.get(url, data, headers)
-        return B2BGetResponse.from_json(res.response.status_code, res.json)
+        return GetResponse.from_json(res.response.status_code, res.json)
 
-    async def b2_b_get_async(
+    async def get_async(
         self,
         organization_id: str,
         member_id: str,
-    ) -> B2BGetResponse:
+    ) -> GetResponse:
         """Returns a Member's full set of active recovery codes.
 
         Fields:
@@ -187,7 +187,7 @@ class RecoveryCodes:
             "/v1/b2b/recovery_codes/{organization_id}/{member_id}", data
         )
         res = await self.async_client.get(url, data, headers)
-        return B2BGetResponse.from_json(res.response.status, res.json)
+        return GetResponse.from_json(res.response.status, res.json)
 
     def rotate(
         self,

@@ -13,8 +13,8 @@ from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
 
 
-class B2BGetResponse(ResponseBase):
-    """Response type for `RecoveryCodes.b2_b_get`.
+class GetResponse(ResponseBase):
+    """Response type for `RecoveryCodes.get`.
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
