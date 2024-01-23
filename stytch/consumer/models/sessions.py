@@ -478,12 +478,3 @@ class RevokeResponse(ResponseBase):
     Fields:
     """  # noqa
 
-
-# MANUAL(WebAuthnFactor)(Types)
-class WebAuthnFactor(pydantic.BaseModel):
-    webauthn_registration_id: str
-    domain: str
-    user_agent: Optional[str]
-
-
-# ENDMANUAL(WebAuthnFactor)
