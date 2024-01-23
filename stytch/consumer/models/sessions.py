@@ -308,7 +308,7 @@ class TwitterOAuthFactor(pydantic.BaseModel):
 class WebAuthnFactor(pydantic.BaseModel):
     webauthn_registration_id: str
     domain: str
-    user_agent: str
+    user_agent: Optional[str] = None
 
 
 class YahooOAuthFactor(pydantic.BaseModel):
@@ -477,4 +477,3 @@ class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:
     """  # noqa
-
