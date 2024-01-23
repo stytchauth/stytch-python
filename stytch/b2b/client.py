@@ -16,8 +16,10 @@ from stytch.b2b.api.organizations import Organizations
 from stytch.b2b.api.otp import OTPs
 from stytch.b2b.api.passwords import Passwords
 from stytch.b2b.api.rbac import RBAC
+from stytch.b2b.api.recovery_codes import RecoveryCodes
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
+from stytch.b2b.api.totps import TOTPs
 from stytch.consumer.api.m2m import M2M
 from stytch.core.client_base import ClientBase
 from stytch.shared.policy_cache import PolicyCache
@@ -89,6 +91,11 @@ class Client(ClientBase):
             sync_client=self.sync_client,
             async_client=self.async_client,
         )
+        self.recovery_codes = RecoveryCodes(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.sso = SSO(
             api_base=self.api_base,
             sync_client=self.sync_client,
@@ -101,6 +108,11 @@ class Client(ClientBase):
             jwks_client=self.jwks_client,
             project_id=project_id,
             policy_cache=policy_cache,
+        )
+        self.totps = TOTPs(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
         )
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:

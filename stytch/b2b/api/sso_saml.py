@@ -111,8 +111,8 @@ class SAML:
           - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
-          - saml_connection_implicit_role_assignments: (Coming Soon) All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
-          - saml_group_implicit_role_assignments: (Coming Soon) Defines the names of the SAML groups
+          - saml_connection_implicit_role_assignments: All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+          - saml_group_implicit_role_assignments: Defines the names of the SAML groups
          that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
          belongs to the specified SAML group, they will be granted the associated Role. See the
          [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
@@ -185,8 +185,8 @@ class SAML:
           - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
-          - saml_connection_implicit_role_assignments: (Coming Soon) All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
-          - saml_group_implicit_role_assignments: (Coming Soon) Defines the names of the SAML groups
+          - saml_connection_implicit_role_assignments: All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+          - saml_group_implicit_role_assignments: Defines the names of the SAML groups
          that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
          belongs to the specified SAML group, they will be granted the associated Role. See the
          [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.

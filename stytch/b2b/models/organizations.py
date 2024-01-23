@@ -204,10 +204,19 @@ class Organization(pydantic.BaseModel):
       The list's accepted values are: `sso`, `magic_link`, `password`, `google_oauth`, and `microsoft_oauth`.
 
       - mfa_policy: (no documentation yet)
-      - rbac_email_implicit_role_assignments: (Coming Soon) Implicit role assignments based off of email domains.
+      - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
       For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
       associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
       for more information about role assignment.
+      - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+
+      `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+
+      `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+
+      - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+      The list's accepted values are: `sms_otp` and `totp`.
+
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
     """  # noqa
@@ -226,6 +235,8 @@ class Organization(pydantic.BaseModel):
     allowed_auth_methods: List[str]
     mfa_policy: str
     rbac_email_implicit_role_assignments: List[EmailImplicitRoleAssignment]
+    mfa_methods: str
+    allowed_mfa_methods: List[str]
     trusted_metadata: Optional[Dict[str, Any]] = None
     sso_default_connection_id: Optional[str] = None
 
@@ -270,12 +281,14 @@ class Member(pydantic.BaseModel):
       - oauth_registrations: A list of OAuth registrations for this member.
       - email_address_verified: Whether or not the Member's email address is verified.
       - mfa_phone_number_verified: Whether or not the Member's phone number is verified.
-      - is_admin: (Coming Soon) Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
+      - is_admin: Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
+      - totp_registration_id: (no documentation yet)
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
-      - roles: (Coming Soon) Explicit or implicit Roles assigned to this Member, along with details about the role assignment source.
+      - default_mfa_method: (no documentation yet)
+      - roles: Explicit or implicit Roles assigned to this Member, along with details about the role assignment source.
        See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
@@ -295,8 +308,10 @@ class Member(pydantic.BaseModel):
     email_address_verified: bool
     mfa_phone_number_verified: bool
     is_admin: bool
+    totp_registration_id: str
     mfa_enrolled: bool
     mfa_phone_number: str
+    default_mfa_method: str
     roles: List[MemberRole]
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None

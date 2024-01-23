@@ -18,6 +18,8 @@ from stytch.b2b.models.organizations_members import (
     DeletePasswordResponse,
     DeleteRequestOptions,
     DeleteResponse,
+    DeleteTOTPRequestOptions,
+    DeleteTOTPResponse,
     GetResponse,
     ReactivateRequestOptions,
     ReactivateResponse,
@@ -50,11 +52,12 @@ class Members:
         mfa_enrolled: Optional[bool] = None,
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
+        default_mfa_method: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
 
-        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
         a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
         Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
         are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
@@ -93,7 +96,7 @@ class Members:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-enrolled` action on the `stytch.member` Resource.
           Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.mfa-enrolled` action on the `stytch.self` Resource.
-          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+          - roles: Roles to explicitly assign to this Member.
          Will completely replace any existing explicitly assigned roles. See the
          [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
 
@@ -103,9 +106,10 @@ class Members:
            `preserve_existing_sessions` parameter with a value of `true`.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.roles` action on the `stytch.member` Resource.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
+          - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -130,6 +134,8 @@ class Members:
             data["roles"] = roles
         if preserve_existing_sessions is not None:
             data["preserve_existing_sessions"] = preserve_existing_sessions
+        if default_mfa_method is not None:
+            data["default_mfa_method"] = default_mfa_method
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -149,11 +155,12 @@ class Members:
         mfa_enrolled: Optional[bool] = None,
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
+        default_mfa_method: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
 
-        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
         a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
         Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
         are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
@@ -192,7 +199,7 @@ class Members:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-enrolled` action on the `stytch.member` Resource.
           Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.mfa-enrolled` action on the `stytch.self` Resource.
-          - roles: (Coming Soon) Roles to explicitly assign to this Member.
+          - roles: Roles to explicitly assign to this Member.
          Will completely replace any existing explicitly assigned roles. See the
          [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
 
@@ -202,9 +209,10 @@ class Members:
            `preserve_existing_sessions` parameter with a value of `true`.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.roles` action on the `stytch.member` Resource.
-          - preserve_existing_sessions: (Coming Soon) Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
+          - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
+          - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -229,6 +237,8 @@ class Members:
             data["roles"] = roles
         if preserve_existing_sessions is not None:
             data["preserve_existing_sessions"] = preserve_existing_sessions
+        if default_mfa_method is not None:
+            data["default_mfa_method"] = default_mfa_method
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -412,6 +422,46 @@ class Members:
         res = await self.async_client.delete(url, headers)
         return DeleteMFAPhoneNumberResponse.from_json(res.response.status, res.json)
 
+    def delete_totp(
+        self,
+        organization_id: str,
+        member_id: str,
+        method_options: Optional[DeleteTOTPRequestOptions] = None,
+    ) -> DeleteTOTPResponse:
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/totp", data
+        )
+        res = self.sync_client.delete(url, headers)
+        return DeleteTOTPResponse.from_json(res.response.status_code, res.json)
+
+    async def delete_totp_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        method_options: Optional[DeleteTOTPRequestOptions] = None,
+    ) -> DeleteTOTPResponse:
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/totp", data
+        )
+        res = await self.async_client.delete(url, headers)
+        return DeleteTOTPResponse.from_json(res.response.status, res.json)
+
     def search(
         self,
         organization_ids: List[str],
@@ -424,7 +474,7 @@ class Members:
 
         *All fuzzy search filters require a minimum of three characters.
 
-        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
         a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
         Member Session has permission to perform the `search` action on the `stytch.member` Resource. In addition, enforcing
         RBAC on this endpoint means that you may only search for Members within the calling Member's Organization, so the
@@ -471,7 +521,7 @@ class Members:
 
         *All fuzzy search filters require a minimum of three characters.
 
-        (Coming Soon) Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
+        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
         a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
         Member Session has permission to perform the `search` action on the `stytch.member` Resource. In addition, enforcing
         RBAC on this endpoint means that you may only search for Members within the calling Member's Organization, so the
@@ -628,7 +678,7 @@ class Members:
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
-          - roles: (Coming Soon) Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -689,7 +739,7 @@ class Members:
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
-          - roles: (Coming Soon) Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+          - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}

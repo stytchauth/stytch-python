@@ -6,18 +6,18 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional
 
-from stytch.b2b.models.otp_sms import (
+from stytch.b2b.models.totps import (
     AuthenticateResponse,
-    SendRequestLocale,
-    SendResponse,
+    CreateResponse,
+    MigrateResponse,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
 
-class Sms:
+class TOTPs:
     def __init__(
         self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
@@ -25,46 +25,23 @@ class Sms:
         self.sync_client = sync_client
         self.async_client = async_client
 
-    def send(
+    def create(
         self,
         organization_id: str,
         member_id: str,
-        mfa_phone_number: Optional[str] = None,
-        locale: Optional[Union[SendRequestLocale, str]] = None,
+        expiration_minutes: Optional[int] = None,
         intermediate_session_token: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> SendResponse:
-        """Send a One-Time Passcode (OTP) to a Member's phone number.
-
-        If the Member already has a phone number, the `mfa_phone_number` field is not needed; the endpoint will send an OTP to the number associated with the Member.
-        If the Member does not have a phone number, the endpoint will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
-
-        An error will be thrown if the Member already has a phone number and the provided `mfa_phone_number` does not match the existing one.
-
-        Note that sending another OTP code before the first has expired will invalidate the first code.
-
-        If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
+    ) -> CreateResponse:
+        """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
         Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
-
-        ### Cost to send SMS OTP
-        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
-
-        Even when international SMS is enabled, we do not support sending SMS to countries on our [Unsupported countries list](https://stytch.com/docs/guides/passcodes/unsupported-countries).
-
-        __Note:__ SMS to phone numbers outside of the US and Canada is disabled by default for customers who did not use SMS prior to October 2023. If you're interested in sending international SMS, please reach out to [support@stytch.com](mailto:support@stytch.com?subject=Enable%20international%20SMS).
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - mfa_phone_number: The phone number to send the OTP to. If the Member already has a phone number, this argument is not needed.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
-        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
+          - expiration_minutes: The expiration for the TOTP registration. If the newly created TOTP registration is not authenticated within this time frame the member will have to restart the registration flow. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 1440.
           - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session.
             The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete an MFA flow;
             the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token;
@@ -77,10 +54,8 @@ class Sms:
             "organization_id": organization_id,
             "member_id": member_id,
         }
-        if mfa_phone_number is not None:
-            data["mfa_phone_number"] = mfa_phone_number
-        if locale is not None:
-            data["locale"] = locale
+        if expiration_minutes is not None:
+            data["expiration_minutes"] = expiration_minutes
         if intermediate_session_token is not None:
             data["intermediate_session_token"] = intermediate_session_token
         if session_token is not None:
@@ -88,50 +63,27 @@ class Sms:
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
 
-        url = self.api_base.url_for("/v1/b2b/otps/sms/send", data)
+        url = self.api_base.url_for("/v1/b2b/totp", data)
         res = self.sync_client.post(url, data, headers)
-        return SendResponse.from_json(res.response.status_code, res.json)
+        return CreateResponse.from_json(res.response.status_code, res.json)
 
-    async def send_async(
+    async def create_async(
         self,
         organization_id: str,
         member_id: str,
-        mfa_phone_number: Optional[str] = None,
-        locale: Optional[SendRequestLocale] = None,
+        expiration_minutes: Optional[int] = None,
         intermediate_session_token: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
-    ) -> SendResponse:
-        """Send a One-Time Passcode (OTP) to a Member's phone number.
-
-        If the Member already has a phone number, the `mfa_phone_number` field is not needed; the endpoint will send an OTP to the number associated with the Member.
-        If the Member does not have a phone number, the endpoint will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
-
-        An error will be thrown if the Member already has a phone number and the provided `mfa_phone_number` does not match the existing one.
-
-        Note that sending another OTP code before the first has expired will invalidate the first code.
-
-        If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
+    ) -> CreateResponse:
+        """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
         Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
-
-        ### Cost to send SMS OTP
-        Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
-
-        Even when international SMS is enabled, we do not support sending SMS to countries on our [Unsupported countries list](https://stytch.com/docs/guides/passcodes/unsupported-countries).
-
-        __Note:__ SMS to phone numbers outside of the US and Canada is disabled by default for customers who did not use SMS prior to October 2023. If you're interested in sending international SMS, please reach out to [support@stytch.com](mailto:support@stytch.com?subject=Enable%20international%20SMS).
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - mfa_phone_number: The phone number to send the OTP to. If the Member already has a phone number, this argument is not needed.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
-        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
+          - expiration_minutes: The expiration for the TOTP registration. If the newly created TOTP registration is not authenticated within this time frame the member will have to restart the registration flow. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 1440.
           - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session.
             The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete an MFA flow;
             the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token;
@@ -144,10 +96,8 @@ class Sms:
             "organization_id": organization_id,
             "member_id": member_id,
         }
-        if mfa_phone_number is not None:
-            data["mfa_phone_number"] = mfa_phone_number
-        if locale is not None:
-            data["locale"] = locale
+        if expiration_minutes is not None:
+            data["expiration_minutes"] = expiration_minutes
         if intermediate_session_token is not None:
             data["intermediate_session_token"] = intermediate_session_token
         if session_token is not None:
@@ -155,9 +105,9 @@ class Sms:
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
 
-        url = self.api_base.url_for("/v1/b2b/otps/sms/send", data)
+        url = self.api_base.url_for("/v1/b2b/totp", data)
         res = await self.async_client.post(url, data, headers)
-        return SendResponse.from_json(res.response.status, res.json)
+        return CreateResponse.from_json(res.response.status, res.json)
 
     def authenticate(
         self,
@@ -172,22 +122,7 @@ class Sms:
         set_mfa_enrollment: Optional[str] = None,
         set_default_mfa: Optional[bool] = None,
     ) -> AuthenticateResponse:
-        """SMS OTPs may not be used as a primary authentication mechanism. They can be used to complete an MFA requirement, or they can be used as a step-up factor to be added to an existing session.
-
-        This endpoint verifies that the one-time passcode (OTP) is valid and hasn't expired or been previously used. A given Member may only have a single active OTP code at any given time. If a Member requests another OTP code before the first one has expired, the first one will be invalidated.
-
-        Exactly one of `intermediate_session_token`, `session_token`, or `session_jwt` must be provided in the request.
-        If an intermediate session token is provided, this operation will consume it.
-
-        Intermediate session tokens are generated upon successful calls to primary authenticate methods in the case where MFA is required,
-        such as [email magic link authenticate](https://stytch.com/docs/b2b/api/authenticate-magic-link),
-        or upon successful calls to discovery authenticate methods, such as [email magic link discovery authenticate](https://stytch.com/docs/b2b/api/authenticate-discovery-magic-link).
-
-        If the Organization's MFA policy is `REQUIRED_FOR_ALL`, a successful OTP authentication will change the Member's `mfa_enrolled` status to `true` if it is not already `true`.
-        If the Organization's MFA policy is `OPTIONAL`, the Member's MFA enrollment can be toggled by passing in a value for the `set_mfa_enrollment` field.
-        The Member's MFA enrollment can also be toggled through the [Update Member](https://stytch.com/docs/b2b/api/update-member) endpoint.
-
-        Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a duration of 60 minutes.
+        """Authenticate a Member provided TOTP.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -219,7 +154,7 @@ class Sms:
 
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
-          - set_default_mfa: (no documentation yet)
+          - set_default_mfa: If passed will set the authenticated method to the default MFA method. Completing an MFA authentication flow for the first time for a Member will implicitly set the method to the default MFA method. This option can be used to update the default MFA method if multiple are being used.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -242,7 +177,7 @@ class Sms:
         if set_default_mfa is not None:
             data["set_default_mfa"] = set_default_mfa
 
-        url = self.api_base.url_for("/v1/b2b/otps/sms/authenticate", data)
+        url = self.api_base.url_for("/v1/b2b/totp/authenticate", data)
         res = self.sync_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
@@ -259,22 +194,7 @@ class Sms:
         set_mfa_enrollment: Optional[str] = None,
         set_default_mfa: Optional[bool] = None,
     ) -> AuthenticateResponse:
-        """SMS OTPs may not be used as a primary authentication mechanism. They can be used to complete an MFA requirement, or they can be used as a step-up factor to be added to an existing session.
-
-        This endpoint verifies that the one-time passcode (OTP) is valid and hasn't expired or been previously used. A given Member may only have a single active OTP code at any given time. If a Member requests another OTP code before the first one has expired, the first one will be invalidated.
-
-        Exactly one of `intermediate_session_token`, `session_token`, or `session_jwt` must be provided in the request.
-        If an intermediate session token is provided, this operation will consume it.
-
-        Intermediate session tokens are generated upon successful calls to primary authenticate methods in the case where MFA is required,
-        such as [email magic link authenticate](https://stytch.com/docs/b2b/api/authenticate-magic-link),
-        or upon successful calls to discovery authenticate methods, such as [email magic link discovery authenticate](https://stytch.com/docs/b2b/api/authenticate-discovery-magic-link).
-
-        If the Organization's MFA policy is `REQUIRED_FOR_ALL`, a successful OTP authentication will change the Member's `mfa_enrolled` status to `true` if it is not already `true`.
-        If the Organization's MFA policy is `OPTIONAL`, the Member's MFA enrollment can be toggled by passing in a value for the `set_mfa_enrollment` field.
-        The Member's MFA enrollment can also be toggled through the [Update Member](https://stytch.com/docs/b2b/api/update-member) endpoint.
-
-        Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a duration of 60 minutes.
+        """Authenticate a Member provided TOTP.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -306,7 +226,7 @@ class Sms:
 
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
-          - set_default_mfa: (no documentation yet)
+          - set_default_mfa: If passed will set the authenticated method to the default MFA method. Completing an MFA authentication flow for the first time for a Member will implicitly set the method to the default MFA method. This option can be used to update the default MFA method if multiple are being used.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -329,6 +249,60 @@ class Sms:
         if set_default_mfa is not None:
             data["set_default_mfa"] = set_default_mfa
 
-        url = self.api_base.url_for("/v1/b2b/otps/sms/authenticate", data)
+        url = self.api_base.url_for("/v1/b2b/totp/authenticate", data)
         res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
+
+    def migrate(
+        self,
+        organization_id: str,
+        member_id: str,
+        secret: str,
+        recovery_codes: List[str],
+    ) -> MigrateResponse:
+        """Migrate an existing TOTP instance for a Member. Recovery codes are not required and will be minted for the Member if not provided.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - secret: The TOTP secret key shared between the authenticator app and the server used to generate TOTP codes.
+          - recovery_codes: An existing set of recovery codes to be imported into Stytch to be used to authenticate in place of the secondary MFA method.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+            "secret": secret,
+            "recovery_codes": recovery_codes,
+        }
+
+        url = self.api_base.url_for("/v1/b2b/totp/migrate", data)
+        res = self.sync_client.post(url, data, headers)
+        return MigrateResponse.from_json(res.response.status_code, res.json)
+
+    async def migrate_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        secret: str,
+        recovery_codes: List[str],
+    ) -> MigrateResponse:
+        """Migrate an existing TOTP instance for a Member. Recovery codes are not required and will be minted for the Member if not provided.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - secret: The TOTP secret key shared between the authenticator app and the server used to generate TOTP codes.
+          - recovery_codes: An existing set of recovery codes to be imported into Stytch to be used to authenticate in place of the secondary MFA method.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+            "secret": secret,
+            "recovery_codes": recovery_codes,
+        }
+
+        url = self.api_base.url_for("/v1/b2b/totp/migrate", data)
+        res = await self.async_client.post(url, data, headers)
+        return MigrateResponse.from_json(res.response.status, res.json)

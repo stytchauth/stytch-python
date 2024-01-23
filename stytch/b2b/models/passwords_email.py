@@ -63,7 +63,9 @@ class ResetStartResponse(ResponseBase):
     Fields:
       - member_id: Globally unique UUID that identifies a specific Member.
       - member_email_id: Globally unique UUID that identifies a member's email
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
     """  # noqa
 
     member_id: str
     member_email_id: str
+    member: Member
