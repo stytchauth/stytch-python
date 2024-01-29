@@ -128,13 +128,13 @@ class Organizations:
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
-          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+          - mfa_methods: The setting that controls which MFA methods can be used by Members of an Organization. The accepted values are:
 
           `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
 
-          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+          `RESTRICTED` – only methods that comply with `allowed_mfa_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sms_otp` and `totp`.
 
         """  # noqa
@@ -285,13 +285,13 @@ class Organizations:
           For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
           associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
           for more information about role assignment.
-          - mfa_methods: The setting that controls which mfa methods can be used by Members of an Organization. The accepted values are:
+          - mfa_methods: The setting that controls which MFA methods can be used by Members of an Organization. The accepted values are:
 
           `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
 
-          `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+          `RESTRICTED` – only methods that comply with `allowed_mfa_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
 
-          - allowed_mfa_methods: An array of allowed mfa authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
+          - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sms_otp` and `totp`.
 
         """  # noqa
