@@ -84,6 +84,11 @@ class AppleOAuthFactor(pydantic.BaseModel):
 
 
 class AuthenticatorAppFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - totp_id: Globally unique UUID that identifies a TOTP instance.
+    """  # noqa
+
     totp_id: str
 
 
@@ -343,7 +348,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - microsoft_oauth_factor: Information about the Microsoft OAuth factor, if one is present.
       - apple_oauth_factor: (no documentation yet)
       - webauthn_factor: (no documentation yet)
-      - authenticator_app_factor: (no documentation yet)
+      - authenticator_app_factor: Information about the TOTP-backed Authenticator App factor, if one is present.
       - github_oauth_factor: (no documentation yet)
       - recovery_code_factor: (no documentation yet)
       - facebook_oauth_factor: (no documentation yet)
