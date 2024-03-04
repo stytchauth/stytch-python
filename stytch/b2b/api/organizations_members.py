@@ -53,6 +53,7 @@ class Members:
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
         default_mfa_method: Optional[str] = None,
+        email_address: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -110,6 +111,7 @@ class Members:
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
+          - email_address: Updates the Member's `email_address`, if provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -136,6 +138,8 @@ class Members:
             data["preserve_existing_sessions"] = preserve_existing_sessions
         if default_mfa_method is not None:
             data["default_mfa_method"] = default_mfa_method
+        if email_address is not None:
+            data["email_address"] = email_address
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -156,6 +160,7 @@ class Members:
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
         default_mfa_method: Optional[str] = None,
+        email_address: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -213,6 +218,7 @@ class Members:
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
+          - email_address: Updates the Member's `email_address`, if provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -239,6 +245,8 @@ class Members:
             data["preserve_existing_sessions"] = preserve_existing_sessions
         if default_mfa_method is not None:
             data["default_mfa_method"] = default_mfa_method
+        if email_address is not None:
+            data["email_address"] = email_address
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
