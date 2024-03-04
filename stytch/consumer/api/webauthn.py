@@ -379,7 +379,7 @@ class WebAuthn:
         """Updates a Passkey or WebAuthn registration.
 
         Fields:
-          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
+          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
           - name: The `name` of the WebAuthn registration or Passkey.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -400,7 +400,7 @@ class WebAuthn:
         """Updates a Passkey or WebAuthn registration.
 
         Fields:
-          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webautn_registration_id` is used when you need to operate on a specific User's WebAuthn registartion.
+          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
           - name: The `name` of the WebAuthn registration or Passkey.
         """  # noqa
         headers: Dict[str, str] = {}
