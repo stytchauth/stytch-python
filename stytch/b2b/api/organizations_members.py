@@ -226,15 +226,11 @@ class Members:
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
-<<<<<<< HEAD
-          - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
-          - email_address: Updates the Member's `email_address`, if provided.
-=======
           - default_mfa_method: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource.
           Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
->>>>>>> 8dfa5670cd5d03097f5ea9d1e76b4aa01c910a62
+        - email_address: Updates the Member's `email_address`, if provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
