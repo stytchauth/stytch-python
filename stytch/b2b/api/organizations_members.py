@@ -59,6 +59,7 @@ class Members:
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
         default_mfa_method: Optional[str] = None,
+        email_address: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -119,6 +120,7 @@ class Members:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource.
           Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
+        - email_address: Updates the Member's `email_address`, if provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -145,6 +147,8 @@ class Members:
             data["preserve_existing_sessions"] = preserve_existing_sessions
         if default_mfa_method is not None:
             data["default_mfa_method"] = default_mfa_method
+        if email_address is not None:
+            data["email_address"] = email_address
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -165,6 +169,7 @@ class Members:
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
         default_mfa_method: Optional[str] = None,
+        email_address: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -225,6 +230,7 @@ class Members:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource.
           Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
+        - email_address: Updates the Member's `email_address`, if provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -251,6 +257,8 @@ class Members:
             data["preserve_existing_sessions"] = preserve_existing_sessions
         if default_mfa_method is not None:
             data["default_mfa_method"] = default_mfa_method
+        if email_address is not None:
+            data["email_address"] = email_address
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
