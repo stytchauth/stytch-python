@@ -46,15 +46,6 @@ jobs:
           done
           echo "diff=$FOUND" >> $GITHUB_OUTPUT
 
-      - name: Publish distribution to Test PyPI
-        env:
-          api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        if: steps.diff.outputs.diff != 0 && env.api_token != ''
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-
       - name: Publish distribution to PyPI
         env:
           api_token: ${{ secrets.PYPI_API_TOKEN }}
