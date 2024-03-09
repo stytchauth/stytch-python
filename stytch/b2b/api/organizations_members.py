@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
+from stytch.b2b.api.organizations_members_oauth_providers import OAuthProviders
 from stytch.b2b.models.organizations import SearchQuery
 from stytch.b2b.models.organizations_members import (
     CreateRequestOptions,
@@ -39,6 +40,11 @@ class Members:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
+        self.oauth_providers = OAuthProviders(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def update(
         self,
@@ -53,6 +59,7 @@ class Members:
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
         default_mfa_method: Optional[str] = None,
+        email_address: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -109,7 +116,11 @@ class Members:
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
-          - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
+          - default_mfa_method: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource.
+          Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
+        - email_address: Updates the Member's `email_address`, if provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -136,6 +147,8 @@ class Members:
             data["preserve_existing_sessions"] = preserve_existing_sessions
         if default_mfa_method is not None:
             data["default_mfa_method"] = default_mfa_method
+        if email_address is not None:
+            data["email_address"] = email_address
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -156,6 +169,7 @@ class Members:
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
         default_mfa_method: Optional[str] = None,
+        email_address: Optional[str] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
@@ -212,7 +226,11 @@ class Members:
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
-          - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
+          - default_mfa_method: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource.
+          Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
+        - email_address: Updates the Member's `email_address`, if provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -239,6 +257,8 @@ class Members:
             data["preserve_existing_sessions"] = preserve_existing_sessions
         if default_mfa_method is not None:
             data["default_mfa_method"] = default_mfa_method
+        if email_address is not None:
+            data["email_address"] = email_address
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
