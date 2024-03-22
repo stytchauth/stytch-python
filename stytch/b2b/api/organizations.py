@@ -333,7 +333,9 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
-        rbac_email_implicit_role_assignments: Optional[List[str]] = None,
+        rbac_email_implicit_role_assignments: Optional[
+            List[EmailImplicitRoleAssignment]
+        ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
@@ -485,9 +487,9 @@ class Organizations:
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
-            data[
-                "rbac_email_implicit_role_assignments"
-            ] = rbac_email_implicit_role_assignments
+            data["rbac_email_implicit_role_assignments"] = [
+                item.dict() for item in rbac_email_implicit_role_assignments
+            ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
@@ -513,7 +515,9 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
-        rbac_email_implicit_role_assignments: Optional[List[str]] = None,
+        rbac_email_implicit_role_assignments: Optional[
+            List[EmailImplicitRoleAssignment]
+        ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
@@ -665,9 +669,9 @@ class Organizations:
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
-            data[
-                "rbac_email_implicit_role_assignments"
-            ] = rbac_email_implicit_role_assignments
+            data["rbac_email_implicit_role_assignments"] = [
+                item.dict() for item in rbac_email_implicit_role_assignments
+            ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:

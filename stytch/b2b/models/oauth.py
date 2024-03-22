@@ -14,7 +14,7 @@ import pydantic
 
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
-from stytch.b2b.models.sessions import MemberSession
+from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
 from stytch.core.response_base import ResponseBase
 
 
@@ -29,7 +29,7 @@ class ProviderValues(pydantic.BaseModel):
     Fields:
       - access_token: The `access_token` that you may use to access the User's data in the provider's API.
       - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
-      - refresh_token: The `refresh_token` that you may use to refresh a User's session within the provider's API.
+      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
       - expires_at: (no documentation yet)
       - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
     """  # noqa
@@ -64,6 +64,7 @@ class AuthenticateResponse(ResponseBase):
 
       Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft.
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - primary_required: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -80,3 +81,4 @@ class AuthenticateResponse(ResponseBase):
     member_session: Optional[MemberSession] = None
     provider_values: Optional[ProviderValues] = None
     mfa_required: Optional[MfaRequired] = None
+    primary_required: Optional[PrimaryRequired] = None

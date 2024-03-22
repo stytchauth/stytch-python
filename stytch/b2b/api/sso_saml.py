@@ -8,6 +8,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
+from stytch.b2b.models.sso import (
+    SAMLConnectionImplicitRoleAssignment,
+    SAMLGroupImplicitRoleAssignment,
+)
 from stytch.b2b.models.sso_saml import (
     CreateConnectionRequestOptions,
     CreateConnectionResponse,
@@ -89,8 +93,12 @@ class SAML:
         attribute_mapping: Optional[Dict[str, Any]] = None,
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
-        saml_connection_implicit_role_assignments: Optional[List[str]] = None,
-        saml_group_implicit_role_assignments: Optional[List[str]] = None,
+        saml_connection_implicit_role_assignments: Optional[
+            List[SAMLConnectionImplicitRoleAssignment]
+        ] = None,
+        saml_group_implicit_role_assignments: Optional[
+            List[SAMLGroupImplicitRoleAssignment]
+        ] = None,
         alternative_audience_uri: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
@@ -138,13 +146,13 @@ class SAML:
         if idp_sso_url is not None:
             data["idp_sso_url"] = idp_sso_url
         if saml_connection_implicit_role_assignments is not None:
-            data[
-                "saml_connection_implicit_role_assignments"
-            ] = saml_connection_implicit_role_assignments
+            data["saml_connection_implicit_role_assignments"] = [
+                item.dict() for item in saml_connection_implicit_role_assignments
+            ]
         if saml_group_implicit_role_assignments is not None:
-            data[
-                "saml_group_implicit_role_assignments"
-            ] = saml_group_implicit_role_assignments
+            data["saml_group_implicit_role_assignments"] = [
+                item.dict() for item in saml_group_implicit_role_assignments
+            ]
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri
 
@@ -163,8 +171,12 @@ class SAML:
         attribute_mapping: Optional[Dict[str, Any]] = None,
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
-        saml_connection_implicit_role_assignments: Optional[List[str]] = None,
-        saml_group_implicit_role_assignments: Optional[List[str]] = None,
+        saml_connection_implicit_role_assignments: Optional[
+            List[SAMLConnectionImplicitRoleAssignment]
+        ] = None,
+        saml_group_implicit_role_assignments: Optional[
+            List[SAMLGroupImplicitRoleAssignment]
+        ] = None,
         alternative_audience_uri: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
@@ -212,13 +224,13 @@ class SAML:
         if idp_sso_url is not None:
             data["idp_sso_url"] = idp_sso_url
         if saml_connection_implicit_role_assignments is not None:
-            data[
-                "saml_connection_implicit_role_assignments"
-            ] = saml_connection_implicit_role_assignments
+            data["saml_connection_implicit_role_assignments"] = [
+                item.dict() for item in saml_connection_implicit_role_assignments
+            ]
         if saml_group_implicit_role_assignments is not None:
-            data[
-                "saml_group_implicit_role_assignments"
-            ] = saml_group_implicit_role_assignments
+            data["saml_group_implicit_role_assignments"] = [
+                item.dict() for item in saml_group_implicit_role_assignments
+            ]
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri
 
