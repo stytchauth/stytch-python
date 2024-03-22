@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 
 from stytch.core.response_base import ResponseBase
 
@@ -20,6 +20,7 @@ class GoogleResponse(ResponseBase):
       - access_token_expires_in: The number of seconds until the access token expires.
       - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
       - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
+      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
     """  # noqa
 
     provider_type: str
@@ -28,6 +29,7 @@ class GoogleResponse(ResponseBase):
     access_token_expires_in: int
     id_token: str
     scopes: List[str]
+    refresh_token: Optional[str] = None
 
 
 class MicrosoftResponse(ResponseBase):
@@ -39,6 +41,7 @@ class MicrosoftResponse(ResponseBase):
       - access_token_expires_in: The number of seconds until the access token expires.
       - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
       - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
+      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
     """  # noqa
 
     provider_type: str
@@ -47,3 +50,4 @@ class MicrosoftResponse(ResponseBase):
     access_token_expires_in: int
     id_token: str
     scopes: List[str]
+    refresh_token: Optional[str] = None

@@ -78,6 +78,15 @@ class MemberSession(pydantic.BaseModel):
     custom_claims: Optional[Dict[str, Any]] = None
 
 
+class PrimaryRequired(pydantic.BaseModel):
+    """
+    Fields:
+      - allowed_auth_methods: If non-empty, indicates that the Organization restricts the authentication methods it allows for login (such as `sso` or `password`), and the end user must complete one of those authentication methods to log in. If empty, indicates that the Organization does not restrict the authentication method it allows for login, but the end user does not have any transferrable primary factors. Only email magic link and OAuth factors can be transferred between Organizations.
+    """  # noqa
+
+    allowed_auth_methods: List[str]
+
+
 class AuthenticateResponse(ResponseBase):
     """Response type for `Sessions.authenticate`.
     Fields:
@@ -114,6 +123,7 @@ class ExchangeResponse(ResponseBase):
           It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a different existing Organization,
           or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization.
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - primary_required: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -125,6 +135,7 @@ class ExchangeResponse(ResponseBase):
     member_authenticated: bool
     intermediate_session_token: str
     mfa_required: Optional[MfaRequired] = None
+    primary_required: Optional[PrimaryRequired] = None
 
 
 class GetJWKSResponse(ResponseBase):

@@ -11,7 +11,7 @@ from typing import Optional
 
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
-from stytch.b2b.models.sessions import MemberSession
+from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
 from stytch.core.response_base import ResponseBase
 
 
@@ -37,6 +37,7 @@ class ExchangeResponse(ResponseBase):
           or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - primary_required: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -48,3 +49,4 @@ class ExchangeResponse(ResponseBase):
     intermediate_session_token: str
     member_session: Optional[MemberSession] = None
     mfa_required: Optional[MfaRequired] = None
+    primary_required: Optional[PrimaryRequired] = None

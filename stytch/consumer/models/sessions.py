@@ -55,6 +55,8 @@ class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     OAUTH_YAHOO = "oauth_yahoo"
     OAUTH_HUBSPOT = "oauth_hubspot"
     IMPORTED_AUTH0 = "imported_auth0"
+    OAUTH_EXCHANGE_SLACK = "oauth_exchange_slack"
+    OAUTH_EXCHANGE_HUBSPOT = "oauth_exchange_hubspot"
 
 
 class AuthenticationFactorType(str, enum.Enum):
@@ -73,14 +75,14 @@ class AuthenticationFactorType(str, enum.Enum):
 
 class AmazonOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class AppleOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class AuthenticatorAppFactor(pydantic.BaseModel):
@@ -98,14 +100,14 @@ class BiometricFactor(pydantic.BaseModel):
 
 class BitbucketOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class CoinbaseOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class CryptoWalletFactor(pydantic.BaseModel):
@@ -116,8 +118,8 @@ class CryptoWalletFactor(pydantic.BaseModel):
 
 class DiscordOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class EmailFactor(pydantic.BaseModel):
@@ -137,51 +139,55 @@ class EmbeddableMagicLinkFactor(pydantic.BaseModel):
 
 class FacebookOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class FigmaOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class GitLabOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class GithubOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class GoogleOAuthFactor(pydantic.BaseModel):
     """
     Fields:
       - id: The unique ID of an OAuth registration.
-      - email_id: The globally unique UUID of the Member's email.
       - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - email_id: The globally unique UUID of the Member's email.
     """  # noqa
 
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
+
+
+class HubspotOAuthExchangeFactor(pydantic.BaseModel):
+    email_id: str
 
 
 class HubspotOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class InstagramOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class JWK(pydantic.BaseModel):
@@ -198,21 +204,21 @@ class JWK(pydantic.BaseModel):
 
 class LinkedInOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class MicrosoftOAuthFactor(pydantic.BaseModel):
     """
     Fields:
       - id: The unique ID of an OAuth registration.
-      - email_id: The globally unique UUID of the Member's email.
       - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - email_id: The globally unique UUID of the Member's email.
     """  # noqa
 
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class OIDCSSOFactor(pydantic.BaseModel):
@@ -258,56 +264,60 @@ class SAMLSSOFactor(pydantic.BaseModel):
 
 class SalesforceOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class ShopifyOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
+
+
+class SlackOAuthExchangeFactor(pydantic.BaseModel):
+    email_id: str
 
 
 class SlackOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class SnapchatOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class SpotifyOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class SteamOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class TikTokOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class TwitchOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class TwitterOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class WebAuthnFactor(pydantic.BaseModel):
@@ -318,8 +328,8 @@ class WebAuthnFactor(pydantic.BaseModel):
 
 class YahooOAuthFactor(pydantic.BaseModel):
     id: str
-    email_id: str
     provider_subject: str
+    email_id: Optional[str] = None
 
 
 class AuthenticationFactor(pydantic.BaseModel):
@@ -376,6 +386,8 @@ class AuthenticationFactor(pydantic.BaseModel):
       - salesforce_oauth_factor: (no documentation yet)
       - yahoo_oauth_factor: (no documentation yet)
       - hubspot_oauth_factor: (no documentation yet)
+      - slack_oauth_exchange_factor: (no documentation yet)
+      - hubspot_oauth_exchange_factor: (no documentation yet)
     """  # noqa
 
     type: AuthenticationFactorType
@@ -417,6 +429,8 @@ class AuthenticationFactor(pydantic.BaseModel):
     salesforce_oauth_factor: Optional[SalesforceOAuthFactor] = None
     yahoo_oauth_factor: Optional[YahooOAuthFactor] = None
     hubspot_oauth_factor: Optional[HubspotOAuthFactor] = None
+    slack_oauth_exchange_factor: Optional[SlackOAuthExchangeFactor] = None
+    hubspot_oauth_exchange_factor: Optional[HubspotOAuthExchangeFactor] = None
 
 
 class Session(pydantic.BaseModel):
