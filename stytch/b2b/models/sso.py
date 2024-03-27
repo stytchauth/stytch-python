@@ -148,10 +148,7 @@ class AuthenticateResponse(ResponseBase):
       - reset_session: Indicates if all Sessions linked to the Member need to be reset. You should check this field if you aren't using
         Stytch's Session product. If you are using Stytch's Session product, we revoke the Member’s other Sessions for you.
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - intermediate_session_token: The returned Intermediate Session Token contains an SSO factor associated with the Member.
-          The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp),
-          or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete the MFA flow and log in to the Organization.
-          SSO factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
+      - intermediate_session_token: The returned Intermediate Session Token contains an SSO factor associated with the Member. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. SSO factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
       - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
