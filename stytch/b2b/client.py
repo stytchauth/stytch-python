@@ -17,6 +17,7 @@ from stytch.b2b.api.otp import OTPs
 from stytch.b2b.api.passwords import Passwords
 from stytch.b2b.api.rbac import RBAC
 from stytch.b2b.api.recovery_codes import RecoveryCodes
+from stytch.b2b.api.scim import SCIM
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.b2b.api.totps import TOTPs
@@ -92,6 +93,11 @@ class Client(ClientBase):
             async_client=self.async_client,
         )
         self.recovery_codes = RecoveryCodes(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.scim = SCIM(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
