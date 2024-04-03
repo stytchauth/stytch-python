@@ -15,6 +15,7 @@ from stytch.consumer.api.magic_links import MagicLinks
 from stytch.consumer.api.oauth import OAuth
 from stytch.consumer.api.otp import OTPs
 from stytch.consumer.api.passwords import Passwords
+from stytch.consumer.api.project import Project
 from stytch.consumer.api.sessions import Sessions
 from stytch.consumer.api.totps import TOTPs
 from stytch.consumer.api.users import Users
@@ -66,6 +67,11 @@ class Client(ClientBase):
             async_client=self.async_client,
         )
         self.passwords = Passwords(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.project = Project(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
