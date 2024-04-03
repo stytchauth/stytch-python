@@ -19,17 +19,18 @@ pip install stytch
 You can find your API credentials in the [Stytch Dashboard](https://stytch.com/dashboard/api-keys).
 
 This client library supports all Stytch's live products:
-  - [x] [Email Magic Links](https://stytch.com/docs/api/send-by-email)
-  - [x] [Embeddable Magic Links](https://stytch.com/docs/guides/magic-links/embeddable-magic-links/api)
-  - [x] [OAuth logins](https://stytch.com/docs/guides/oauth/idp-overview)
-  - [x] [SMS passcodes](https://stytch.com/docs/api/send-otp-by-sms)
-  - [x] [WhatsApp passcodes](https://stytch.com/docs/api/whatsapp-send)
-  - [x] [Email passcodes](https://stytch.com/docs/api/send-otp-by-email)
-  - [x] [Session Management](https://stytch.com/docs/guides/sessions/using-sessions)
-  - [x] [WebAuthn](https://stytch.com/docs/guides/webauthn/api)
-  - [x] [Time-based one-time passcodes (TOTPs)](https://stytch.com/docs/guides/totp/api)
-  - [x] [Crypto wallets](https://stytch.com/docs/guides/web3/api)
-  - [x] [Passwords](https://stytch.com/docs/guides/passwords/api)
+
+- [x] [Email Magic Links](https://stytch.com/docs/api/send-by-email)
+- [x] [Embeddable Magic Links](https://stytch.com/docs/guides/magic-links/embeddable-magic-links/api)
+- [x] [OAuth logins](https://stytch.com/docs/guides/oauth/idp-overview)
+- [x] [SMS passcodes](https://stytch.com/docs/api/send-otp-by-sms)
+- [x] [WhatsApp passcodes](https://stytch.com/docs/api/whatsapp-send)
+- [x] [Email passcodes](https://stytch.com/docs/api/send-otp-by-email)
+- [x] [Session Management](https://stytch.com/docs/guides/sessions/using-sessions)
+- [x] [WebAuthn](https://stytch.com/docs/guides/webauthn/api)
+- [x] [Time-based one-time passcodes (TOTPs)](https://stytch.com/docs/guides/totp/api)
+- [x] [Crypto wallets](https://stytch.com/docs/guides/web3/api)
+- [x] [Passwords](https://stytch.com/docs/guides/passwords/api)
 
 ### Example usage
 
@@ -41,7 +42,6 @@ import stytch
 client = stytch.Client(
     project_id="project-live-c60c0abe-c25a-4472-a9ed-320c6667d317",
     secret="secret-live-80JASucyk7z_G8Z-7dVwZVGXL5NT_qGAQ2I=",
-    environment="test",
 )
 ```
 
