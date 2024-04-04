@@ -375,6 +375,10 @@ class GetResponse(ResponseBase):
     organization: Organization
 
 
+class MetricsResponse(ResponseBase):
+    member_count: int
+
+
 class SearchResponse(ResponseBase):
     """Response type for `Organizations.search`.
     Fields:

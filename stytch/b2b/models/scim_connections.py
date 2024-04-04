@@ -21,6 +21,11 @@ class CreateRequestIdp(str, enum.Enum):
     UNKNOWN = "unknown"
     OKTA = "okta"
     MICROSOFTENTRA = "microsoft-entra"
+    CYBERARK = "cyberark"
+    JUMPCLOUD = "jumpcloud"
+    ONELOGIN = "onelogin"
+    PINGFEDERATE = "pingfederate"
+    RIPPLING = "rippling"
 
 
 class UpdateRequestIdp(str, enum.Enum):

@@ -15,6 +15,7 @@ from stytch.b2b.models.organizations import (
     DeleteResponse,
     EmailImplicitRoleAssignment,
     GetResponse,
+    MetricsResponse,
     SearchQuery,
     SearchResponse,
     UpdateRequestOptions,
@@ -774,3 +775,33 @@ class Organizations:
         url = self.api_base.url_for("/v1/b2b/organizations/search", data)
         res = await self.async_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status, res.json)
+
+    def metrics(
+        self,
+        organization_id: str,
+    ) -> MetricsResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/metrics", data
+        )
+        res = self.sync_client.get(url, data, headers)
+        return MetricsResponse.from_json(res.response.status_code, res.json)
+
+    async def metrics_async(
+        self,
+        organization_id: str,
+    ) -> MetricsResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/metrics", data
+        )
+        res = await self.async_client.get(url, data, headers)
+        return MetricsResponse.from_json(res.response.status, res.json)
