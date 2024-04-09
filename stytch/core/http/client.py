@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import asyncio
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Optional, TypeVar
 
@@ -86,9 +87,30 @@ class SyncClient(ClientBase):
 
 
 class AsyncClient(ClientBase):
-    def __init__(self, project_id: str, secret: str) -> None:
+    def __init__(
+        self,
+        project_id: str,
+        secret: str,
+        session: Optional[aiohttp.ClientSession] = None,
+    ) -> None:
         super().__init__(project_id, secret)
         self.auth = aiohttp.BasicAuth(project_id, secret)
+        self._external_session = session is not None
+        self._session = session or aiohttp.ClientSession()
+
+    def __del__(self) -> None:
+        if self._external_session:
+            return
+
+        # If we're responsible for the session, close it now
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                loop.create_task(self._session.close())
+            else:
+                loop.run_until_complete(self._session.close())
+        except Exception:
+            pass
 
     @classmethod
     async def _response_from_request(
@@ -108,11 +130,10 @@ class AsyncClient(ClientBase):
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        async with aiohttp.ClientSession() as session:
-            resp = await session.get(
-                url, params=params, headers=final_headers, auth=self.auth
-            )
-            return await self._response_from_request(resp)
+        resp = await self._session.get(
+            url, params=params, headers=final_headers, auth=self.auth
+        )
+        return await self._response_from_request(resp)
 
     async def post(
         self,
@@ -122,11 +143,10 @@ class AsyncClient(ClientBase):
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        async with aiohttp.ClientSession() as session:
-            resp = await session.post(
-                url, json=json, headers=final_headers, auth=self.auth
-            )
-            return await self._response_from_request(resp)
+        resp = await self._session.post(
+            url, json=json, headers=final_headers, auth=self.auth
+        )
+        return await self._response_from_request(resp)
 
     async def put(
         self,
@@ -136,17 +156,15 @@ class AsyncClient(ClientBase):
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        async with aiohttp.ClientSession() as session:
-            resp = await session.put(
-                url, json=json, headers=final_headers, auth=self.auth
-            )
-            return await self._response_from_request(resp)
+        resp = await self._session.put(
+            url, json=json, headers=final_headers, auth=self.auth
+        )
+        return await self._response_from_request(resp)
 
     async def delete(
         self, url: str, headers: Optional[Dict[str, str]] = None
     ) -> ResponseWithJson:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        async with aiohttp.ClientSession() as session:
-            resp = await session.delete(url, headers=final_headers, auth=self.auth)
-            return await self._response_from_request(resp)
+        resp = await self._session.delete(url, headers=final_headers, auth=self.auth)
+        return await self._response_from_request(resp)

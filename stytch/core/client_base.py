@@ -2,6 +2,7 @@ import abc
 import warnings
 from typing import Optional
 
+import aiohttp
 import jwt
 
 from stytch.core.api_base import ApiBase
@@ -15,11 +16,12 @@ class ClientBase(abc.ABC):
         secret: str,
         environment: Optional[str] = None,
         suppress_warnings: bool = False,
+        async_session: Optional[aiohttp.ClientSession] = None,
     ):
         base_url = self._env_url(project_id, environment, suppress_warnings)
         self.api_base = ApiBase(base_url)
         self.sync_client = SyncClient(project_id, secret)
-        self.async_client = AsyncClient(project_id, secret)
+        self.async_client = AsyncClient(project_id, secret, session=async_session)
         self.jwks_client = self.get_jwks_client(project_id)
 
     @abc.abstractmethod

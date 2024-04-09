@@ -7,6 +7,7 @@
 
 from typing import Optional
 
+import aiohttp
 import jwt
 
 from stytch.b2b.api.discovery import Discovery
@@ -40,8 +41,15 @@ class Client(ClientBase):
         secret: str,
         environment: Optional[str] = None,
         suppress_warnings: bool = False,
+        async_session: Optional[aiohttp.ClientSession] = None,
     ):
-        super().__init__(project_id, secret, environment, suppress_warnings)
+        super().__init__(
+            project_id=project_id,
+            secret=secret,
+            environment=environment,
+            suppress_warnings=suppress_warnings,
+            async_session=async_session,
+        )
 
         policy_cache = PolicyCache(
             RBAC(

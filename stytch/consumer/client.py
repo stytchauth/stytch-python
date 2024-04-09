@@ -7,6 +7,7 @@
 
 from typing import Optional
 
+import aiohttp
 import jwt
 
 from stytch.consumer.api.crypto_wallets import CryptoWallets
@@ -36,8 +37,15 @@ class Client(ClientBase):
         secret: str,
         environment: Optional[str] = None,
         suppress_warnings: bool = False,
+        async_session: Optional[aiohttp.ClientSession] = None,
     ):
-        super().__init__(project_id, secret, environment, suppress_warnings)
+        super().__init__(
+            project_id=project_id,
+            secret=secret,
+            environment=environment,
+            suppress_warnings=suppress_warnings,
+            async_session=async_session,
+        )
 
         self.crypto_wallets = CryptoWallets(
             api_base=self.api_base,
