@@ -99,16 +99,18 @@ class AsyncClient(ClientBase):
         self._session = session or aiohttp.ClientSession()
 
     def __del__(self) -> None:
+        if self._external_session:
+            return
+
         # If we're responsible for the session, close it now
-        if not self._external_session:
-            try:
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    loop.create_task(self._session.close())
-                else:
-                    loop.run_until_complete(self._session.close())
-            except Exception:
-                pass
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                loop.create_task(self._session.close())
+            else:
+                loop.run_until_complete(self._session.close())
+        except Exception:
+            pass
 
     @classmethod
     async def _response_from_request(
