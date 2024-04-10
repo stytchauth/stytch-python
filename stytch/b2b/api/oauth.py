@@ -36,7 +36,6 @@ class OAuth:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         pkce_code_verifier: Optional[str] = None,
         locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
-        intermediate_session_token: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member given a `token`. This endpoint verifies that the member completed the OAuth flow by verifying that the token is valid and hasn't expired.  Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
@@ -76,7 +75,6 @@ class OAuth:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -94,8 +92,6 @@ class OAuth:
             data["pkce_code_verifier"] = pkce_code_verifier
         if locale is not None:
             data["locale"] = locale
-        if intermediate_session_token is not None:
-            data["intermediate_session_token"] = intermediate_session_token
 
         url = self.api_base.url_for("/v1/b2b/oauth/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -110,7 +106,6 @@ class OAuth:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         pkce_code_verifier: Optional[str] = None,
         locale: Optional[AuthenticateRequestLocale] = None,
-        intermediate_session_token: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member given a `token`. This endpoint verifies that the member completed the OAuth flow by verifying that the token is valid and hasn't expired.  Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
@@ -150,7 +145,6 @@ class OAuth:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -168,8 +162,6 @@ class OAuth:
             data["pkce_code_verifier"] = pkce_code_verifier
         if locale is not None:
             data["locale"] = locale
-        if intermediate_session_token is not None:
-            data["intermediate_session_token"] = intermediate_session_token
 
         url = self.api_base.url_for("/v1/b2b/oauth/authenticate", data)
         res = await self.async_client.post(url, data, headers)

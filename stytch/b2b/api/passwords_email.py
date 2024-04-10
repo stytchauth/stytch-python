@@ -162,7 +162,6 @@ class Email:
         code_verifier: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[Union[ResetRequestLocale, str]] = None,
-        intermediate_session_token: Optional[str] = None,
     ) -> ResetResponse:
         """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 
@@ -206,7 +205,6 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -225,8 +223,6 @@ class Email:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
-        if intermediate_session_token is not None:
-            data["intermediate_session_token"] = intermediate_session_token
 
         url = self.api_base.url_for("/v1/b2b/passwords/email/reset", data)
         res = self.sync_client.post(url, data, headers)
@@ -242,7 +238,6 @@ class Email:
         code_verifier: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[ResetRequestLocale] = None,
-        intermediate_session_token: Optional[str] = None,
     ) -> ResetResponse:
         """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 
@@ -286,7 +281,6 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -305,8 +299,6 @@ class Email:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
-        if intermediate_session_token is not None:
-            data["intermediate_session_token"] = intermediate_session_token
 
         url = self.api_base.url_for("/v1/b2b/passwords/email/reset", data)
         res = await self.async_client.post(url, data, headers)

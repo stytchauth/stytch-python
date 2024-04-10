@@ -284,7 +284,6 @@ class Member(pydantic.BaseModel):
       - is_admin: Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
-      - totp_registration_id: (no documentation yet)
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
       - default_mfa_method: (no documentation yet)
@@ -308,7 +307,6 @@ class Member(pydantic.BaseModel):
     email_address_verified: bool
     mfa_phone_number_verified: bool
     is_admin: bool
-    totp_registration_id: str
     mfa_enrolled: bool
     mfa_phone_number: str
     default_mfa_method: str
@@ -373,10 +371,6 @@ class GetResponse(ResponseBase):
     """  # noqa
 
     organization: Organization
-
-
-class MetricsResponse(ResponseBase):
-    member_count: int
 
 
 class SearchResponse(ResponseBase):

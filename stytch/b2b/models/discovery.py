@@ -6,13 +6,12 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import pydantic
 
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
-from stytch.b2b.models.sessions import PrimaryRequired
 
 
 class Membership(pydantic.BaseModel):
@@ -26,6 +25,15 @@ class Membership(pydantic.BaseModel):
     type: str
     details: Optional[Dict[str, Any]] = None
     member: Optional[Member] = None
+
+
+class PrimaryRequired(pydantic.BaseModel):
+    """
+    Fields:
+      - allowed_auth_methods: If non-empty, indicates that the Organization restricts the authentication methods it allows for login (such as `sso` or `password`), and the end user must complete one of those authentication methods to log in. If empty, indicates that the Organization does not restrict the authentication method it allows for login, but the end user does not have any transferrable primary factors. Only email magic link and OAuth factors can be transferred between Organizations.
+    """  # noqa
+
+    allowed_auth_methods: List[str]
 
 
 class DiscoveredOrganization(pydantic.BaseModel):

@@ -17,13 +17,10 @@ from stytch.b2b.api.organizations import Organizations
 from stytch.b2b.api.otp import OTPs
 from stytch.b2b.api.passwords import Passwords
 from stytch.b2b.api.rbac import RBAC
-from stytch.b2b.api.recovery_codes import RecoveryCodes
-from stytch.b2b.api.scim import SCIM
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.b2b.api.totps import TOTPs
 from stytch.consumer.api.m2m import M2M
-from stytch.consumer.api.project import Project
 from stytch.core.client_base import ClientBase
 from stytch.shared.policy_cache import PolicyCache
 
@@ -96,22 +93,7 @@ class Client(ClientBase):
             sync_client=self.sync_client,
             async_client=self.async_client,
         )
-        self.project = Project(
-            api_base=self.api_base,
-            sync_client=self.sync_client,
-            async_client=self.async_client,
-        )
         self.rbac = RBAC(
-            api_base=self.api_base,
-            sync_client=self.sync_client,
-            async_client=self.async_client,
-        )
-        self.recovery_codes = RecoveryCodes(
-            api_base=self.api_base,
-            sync_client=self.sync_client,
-            async_client=self.async_client,
-        )
-        self.scim = SCIM(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,

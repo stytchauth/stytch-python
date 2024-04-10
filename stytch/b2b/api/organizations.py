@@ -15,7 +15,6 @@ from stytch.b2b.models.organizations import (
     DeleteResponse,
     EmailImplicitRoleAssignment,
     GetResponse,
-    MetricsResponse,
     SearchQuery,
     SearchResponse,
     UpdateRequestOptions,
@@ -334,9 +333,7 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
-        rbac_email_implicit_role_assignments: Optional[
-            List[EmailImplicitRoleAssignment]
-        ] = None,
+        rbac_email_implicit_role_assignments: Optional[List[str]] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
@@ -488,9 +485,9 @@ class Organizations:
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
-            data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
-            ]
+            data[
+                "rbac_email_implicit_role_assignments"
+            ] = rbac_email_implicit_role_assignments
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
@@ -516,9 +513,7 @@ class Organizations:
         auth_methods: Optional[str] = None,
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
-        rbac_email_implicit_role_assignments: Optional[
-            List[EmailImplicitRoleAssignment]
-        ] = None,
+        rbac_email_implicit_role_assignments: Optional[List[str]] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
@@ -670,9 +665,9 @@ class Organizations:
         if mfa_policy is not None:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
-            data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
-            ]
+            data[
+                "rbac_email_implicit_role_assignments"
+            ] = rbac_email_implicit_role_assignments
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
@@ -775,33 +770,3 @@ class Organizations:
         url = self.api_base.url_for("/v1/b2b/organizations/search", data)
         res = await self.async_client.post(url, data, headers)
         return SearchResponse.from_json(res.response.status, res.json)
-
-    def metrics(
-        self,
-        organization_id: str,
-    ) -> MetricsResponse:
-        headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-            "organization_id": organization_id,
-        }
-
-        url = self.api_base.url_for(
-            "/v1/b2b/organizations/{organization_id}/metrics", data
-        )
-        res = self.sync_client.get(url, data, headers)
-        return MetricsResponse.from_json(res.response.status_code, res.json)
-
-    async def metrics_async(
-        self,
-        organization_id: str,
-    ) -> MetricsResponse:
-        headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-            "organization_id": organization_id,
-        }
-
-        url = self.api_base.url_for(
-            "/v1/b2b/organizations/{organization_id}/metrics", data
-        )
-        res = await self.async_client.get(url, data, headers)
-        return MetricsResponse.from_json(res.response.status, res.json)

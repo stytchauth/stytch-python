@@ -15,11 +15,9 @@ class MemberOptions(pydantic.BaseModel):
     """
     Fields:
       - mfa_phone_number: The Member's MFA phone number.
-      - totp_registration_id: The Member's MFA TOTP registration ID.
     """  # noqa
 
     mfa_phone_number: str
-    totp_registration_id: str
 
 
 class MfaRequired(pydantic.BaseModel):

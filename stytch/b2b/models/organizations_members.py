@@ -79,22 +79,6 @@ class DeleteRequestOptions(pydantic.BaseModel):
         return headers
 
 
-class DeleteTOTPRequestOptions(pydantic.BaseModel):
-    """
-    Fields:
-      - authorization: Optional authorization object.
-    Pass in an active Stytch Member session token or session JWT and the request
-    will be run using that member's permissions.
-    """  # noqa
-
-    authorization: Optional[Authorization] = None
-
-    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
-        if self.authorization is not None:
-            headers = self.authorization.add_headers(headers)
-        return headers
-
-
 class ReactivateRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -189,12 +173,6 @@ class DeleteResponse(ResponseBase):
     """  # noqa
 
     member_id: str
-
-
-class DeleteTOTPResponse(ResponseBase):
-    member_id: str
-    member: Member
-    organization: Organization
 
 
 class GetResponse(ResponseBase):
