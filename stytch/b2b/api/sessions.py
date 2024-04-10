@@ -6,26 +6,19 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 import jwt
 
 from stytch.b2b.models.sessions import (
-    AuthenticateRequestOptions,
     AuthenticateResponse,
     AuthorizationCheck,
     ExchangeRequestLocale,
-    ExchangeRequestOptions,
     ExchangeResponse,
-    GetJWKSRequestOptions,
     GetJWKSResponse,
-    GetRequestOptions,
     GetResponse,
-    ImportRequestOptions,
-    ImportResponse,
     LocalJWTResponse,
     MemberSession,
-    RevokeRequestOptions,
     RevokeResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -35,7 +28,15 @@ from stytch.shared.policy_cache import PolicyCache
 
 
 class Sessions:
-    def __init__(self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient, jwks_client: jwt.PyJWKClient, project_id: str, policy_cache: PolicyCache) -> None:
+    def __init__(
+        self,
+        api_base: ApiBase,
+        sync_client: SyncClient,
+        async_client: AsyncClient,
+        jwks_client: jwt.PyJWKClient,
+        project_id: str,
+        policy_cache: PolicyCache,
+    ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
@@ -50,14 +51,14 @@ class Sessions:
     ) -> GetResponse:
         """Retrieves all active Sessions for a Member.
 
-    Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-        """ # noqa
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-          "organization_id": organization_id,
-          "member_id": member_id,
+            "organization_id": organization_id,
+            "member_id": member_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions", data)
@@ -71,19 +72,20 @@ class Sessions:
     ) -> GetResponse:
         """Retrieves all active Sessions for a Member.
 
-    Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-        """ # noqa
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-          "organization_id": organization_id,
-          "member_id": member_id,
+            "organization_id": organization_id,
+            "member_id": member_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions", data)
         res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
+
     def authenticate(
         self,
         session_token: Optional[str] = None,
@@ -94,49 +96,48 @@ class Sessions:
     ) -> AuthenticateResponse:
         """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
-    You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
+        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-    If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
-    In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+        If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+        In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
 
-    If the Member is not authorized to perform the specified action on the specified Resource, or if the
-    `organization_id` does not match the Member's Organization, a 403 error will be thrown.
-    Otherwise, the response will contain a list of Roles that satisfied the authorization check.
+        If the Member is not authorized to perform the specified action on the specified Resource, or if the
+        `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+        Otherwise, the response will contain a list of Roles that satisfied the authorization check.
 
-    Fields:
-      - session_token: A secret token for a given Stytch Session.
-      - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, 
-      returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-      five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+        Fields:
+          - session_token: A secret token for a given Stytch Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-      This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-      
-      If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-      
-      If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-      to use the Stytch session product, you can ignore the session fields in the response.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-      `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-      delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-      Total custom claims size cannot exceed four kilobytes.
-      - authorization_check: If an `authorization_check` object is passed in, this endpoint will also check if the Member is
-      authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if
-      their Member Session contains a Role, assigned
-      [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
-      In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
-      
-      The Roles on the Member Session may differ from the Roles you see on the Member object - Roles that are implicitly
-      assigned by SSO connection or SSO group will only be valid for a Member Session if there is at least one authentication
-      factor on the Member Session from the specified SSO connection.
-      
-      If the Member is not authorized to perform the specified action on the specified Resource, or if the
-      `organization_id` does not match the Member's Organization, a 403 error will be thrown.
-      Otherwise, the response will contain a list of Roles that satisfied the authorization check.
-        """ # noqa
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+          - authorization_check: If an `authorization_check` object is passed in, this endpoint will also check if the Member is
+          authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if
+          their Member Session contains a Role, assigned
+          [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+          In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+
+          The Roles on the Member Session may differ from the Roles you see on the Member object - Roles that are implicitly
+          assigned by SSO connection or SSO group will only be valid for a Member Session if there is at least one authentication
+          factor on the Member Session from the specified SSO connection.
+
+          If the Member is not authorized to perform the specified action on the specified Resource, or if the
+          `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+          Otherwise, the response will contain a list of Roles that satisfied the authorization check.
+        """  # noqa
         headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-        }
+        data: Dict[str, Any] = {}
         if session_token is not None:
             data["session_token"] = session_token
         if session_duration_minutes is not None:
@@ -162,49 +163,48 @@ class Sessions:
     ) -> AuthenticateResponse:
         """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
-    You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
+        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
 
-    If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
-    In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+        If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+        In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
 
-    If the Member is not authorized to perform the specified action on the specified Resource, or if the
-    `organization_id` does not match the Member's Organization, a 403 error will be thrown.
-    Otherwise, the response will contain a list of Roles that satisfied the authorization check.
+        If the Member is not authorized to perform the specified action on the specified Resource, or if the
+        `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+        Otherwise, the response will contain a list of Roles that satisfied the authorization check.
 
-    Fields:
-      - session_token: A secret token for a given Stytch Session.
-      - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, 
-      returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-      five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+        Fields:
+          - session_token: A secret token for a given Stytch Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-      This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-      
-      If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-      
-      If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-      to use the Stytch session product, you can ignore the session fields in the response.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-      `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-      delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-      Total custom claims size cannot exceed four kilobytes.
-      - authorization_check: If an `authorization_check` object is passed in, this endpoint will also check if the Member is
-      authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if
-      their Member Session contains a Role, assigned
-      [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
-      In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
-      
-      The Roles on the Member Session may differ from the Roles you see on the Member object - Roles that are implicitly
-      assigned by SSO connection or SSO group will only be valid for a Member Session if there is at least one authentication
-      factor on the Member Session from the specified SSO connection.
-      
-      If the Member is not authorized to perform the specified action on the specified Resource, or if the
-      `organization_id` does not match the Member's Organization, a 403 error will be thrown.
-      Otherwise, the response will contain a list of Roles that satisfied the authorization check.
-        """ # noqa
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+          - authorization_check: If an `authorization_check` object is passed in, this endpoint will also check if the Member is
+          authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if
+          their Member Session contains a Role, assigned
+          [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
+          In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
+
+          The Roles on the Member Session may differ from the Roles you see on the Member object - Roles that are implicitly
+          assigned by SSO connection or SSO group will only be valid for a Member Session if there is at least one authentication
+          factor on the Member Session from the specified SSO connection.
+
+          If the Member is not authorized to perform the specified action on the specified Resource, or if the
+          `organization_id` does not match the Member's Organization, a 403 error will be thrown.
+          Otherwise, the response will contain a list of Roles that satisfied the authorization check.
+        """  # noqa
         headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-        }
+        data: Dict[str, Any] = {}
         if session_token is not None:
             data["session_token"] = session_token
         if session_duration_minutes is not None:
@@ -219,6 +219,7 @@ class Sessions:
         url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
         res = await self.async_client.post(url, data, headers)
         return AuthenticateResponse.from_json(res.response.status, res.json)
+
     def revoke(
         self,
         member_session_id: Optional[str] = None,
@@ -228,15 +229,14 @@ class Sessions:
     ) -> RevokeResponse:
         """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`.
 
-    Fields:
-      - member_session_id: Globally unique UUID that identifies a specific Session in the Stytch API. The `member_session_id` is critical to perform operations on an Session, so be sure to preserve this value.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-        """ # noqa
+        Fields:
+          - member_session_id: Globally unique UUID that identifies a specific Session in the Stytch API. The `member_session_id` is critical to perform operations on an Session, so be sure to preserve this value.
+          - session_token: A secret token for a given Stytch Session.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-        }
+        data: Dict[str, Any] = {}
         if member_session_id is not None:
             data["member_session_id"] = member_session_id
         if session_token is not None:
@@ -259,15 +259,14 @@ class Sessions:
     ) -> RevokeResponse:
         """Revoke a Session and immediately invalidate all its tokens. To revoke a specific Session, pass either the `member_session_id`, `session_token`, or `session_jwt`. To revoke all Sessions for a Member, pass the `member_id`.
 
-    Fields:
-      - member_session_id: Globally unique UUID that identifies a specific Session in the Stytch API. The `member_session_id` is critical to perform operations on an Session, so be sure to preserve this value.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-        """ # noqa
+        Fields:
+          - member_session_id: Globally unique UUID that identifies a specific Session in the Stytch API. The `member_session_id` is critical to perform operations on an Session, so be sure to preserve this value.
+          - session_token: A secret token for a given Stytch Session.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-        }
+        data: Dict[str, Any] = {}
         if member_session_id is not None:
             data["member_session_id"] = member_session_id
         if session_token is not None:
@@ -280,6 +279,7 @@ class Sessions:
         url = self.api_base.url_for("/v1/b2b/sessions/revoke", data)
         res = await self.async_client.post(url, data, headers)
         return RevokeResponse.from_json(res.response.status, res.json)
+
     def exchange(
         self,
         organization_id: str,
@@ -291,47 +291,47 @@ class Sessions:
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 
-    To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
+        To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
 
-    Only Email Magic Link, OAuth, and SMS OTP factors can be transferred between sessions. Other authentication factors, such as password factors, will not be transferred to the new session.
-    Any OAuth Tokens owned by the Member will not be transferred to the new Organization.
-    SMS OTP factors can be used to fulfill MFA requirements for the target Organization if both the original and target Member have the same phone number and the phone number is verified for both Members.
+        Only Email Magic Link, OAuth, and SMS OTP factors can be transferred between sessions. Other authentication factors, such as password factors, will not be transferred to the new session.
+        Any OAuth Tokens owned by the Member will not be transferred to the new Organization.
+        SMS OTP factors can be used to fulfill MFA requirements for the target Organization if both the original and target Member have the same phone number and the phone number is verified for both Members.
 
-    If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
-    The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
-    The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
-    The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
+        If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
+        The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
+        The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
 
-    Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - session_token: The `session_token` belonging to the member that you wish to associate the email with.
-      - session_jwt: The `session_jwt` belonging to the member that you wish to associate the email with.
-      - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, 
-      returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-      five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_token: The `session_token` belonging to the member that you wish to associate the email with.
+          - session_jwt: The `session_jwt` belonging to the member that you wish to associate the email with.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-      This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-      
-      If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-      
-      If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-      to use the Stytch session product, you can ignore the session fields in the response.
-      - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-      `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-      delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-      Total custom claims size cannot exceed four kilobytes.
-      - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-    Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-    Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
-    Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        """ # noqa
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-          "organization_id": organization_id,
+            "organization_id": organization_id,
         }
         if session_token is not None:
             data["session_token"] = session_token
@@ -359,47 +359,47 @@ class Sessions:
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 
-    To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
+        To create a new member via domain matching, use the [Exchange Intermediate Session](https://stytch.com/docs/b2b/api/exchange-intermediate-session) flow instead.
 
-    Only Email Magic Link, OAuth, and SMS OTP factors can be transferred between sessions. Other authentication factors, such as password factors, will not be transferred to the new session.
-    Any OAuth Tokens owned by the Member will not be transferred to the new Organization.
-    SMS OTP factors can be used to fulfill MFA requirements for the target Organization if both the original and target Member have the same phone number and the phone number is verified for both Members.
+        Only Email Magic Link, OAuth, and SMS OTP factors can be transferred between sessions. Other authentication factors, such as password factors, will not be transferred to the new session.
+        Any OAuth Tokens owned by the Member will not be transferred to the new Organization.
+        SMS OTP factors can be used to fulfill MFA requirements for the target Organization if both the original and target Member have the same phone number and the phone number is verified for both Members.
 
-    If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
-    The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
-    The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
-    The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
+        If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
+        The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
+        The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
 
-    Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - session_token: The `session_token` belonging to the member that you wish to associate the email with.
-      - session_jwt: The `session_jwt` belonging to the member that you wish to associate the email with.
-      - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, 
-      returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-      five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_token: The `session_token` belonging to the member that you wish to associate the email with.
+          - session_jwt: The `session_jwt` belonging to the member that you wish to associate the email with.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
 
-      This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-      
-      If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-      
-      If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-      to use the Stytch session product, you can ignore the session fields in the response.
-      - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-      `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-      delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-      Total custom claims size cannot exceed four kilobytes.
-      - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
 
-    Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
 
-    Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
-    Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        """ # noqa
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-          "organization_id": organization_id,
+            "organization_id": organization_id,
         }
         if session_token is not None:
             data["session_token"] = session_token
@@ -415,67 +415,27 @@ class Sessions:
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = await self.async_client.post(url, data, headers)
         return ExchangeResponse.from_json(res.response.status, res.json)
-    def import(
-        self,
-        session_token: str,
-        organization_id: str,
-        session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> ImportResponse:
-        headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-          "session_token": session_token,
-          "organization_id": organization_id,
-        }
-        if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
-        if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
 
-        url = self.api_base.url_for("/v1/b2b/sessions/import", data)
-        res = self.sync_client.post(url, data, headers)
-        return ImportResponse.from_json(res.response.status_code, res.json)
-
-    async def import_async(
-        self,
-        session_token: str,
-        organization_id: str,
-        session_duration_minutes: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> ImportResponse:
-        headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-          "session_token": session_token,
-          "organization_id": organization_id,
-        }
-        if session_duration_minutes is not None:
-            data["session_duration_minutes"] = session_duration_minutes
-        if session_custom_claims is not None:
-            data["session_custom_claims"] = session_custom_claims
-
-        url = self.api_base.url_for("/v1/b2b/sessions/import", data)
-        res = await self.async_client.post(url, data, headers)
-        return ImportResponse.from_json(res.response.status, res.json)
     def get_jwks(
         self,
         project_id: str,
     ) -> GetJWKSResponse:
         """Get the JSON Web Key Set (JWKS) for a project.
 
-    JWKS are rotated every ~6 months. Upon rotation, new JWTs will be signed using the new key set, and both key sets will be returned by this endpoint for a period of 1 month. 
+        JWKS are rotated every ~6 months. Upon rotation, new JWTs will be signed using the new key set, and both key sets will be returned by this endpoint for a period of 1 month.
 
-    JWTs have a set lifetime of 5 minutes, so there will be a 5 minute period where some JWTs will be signed by the old JWKS, and some JWTs will be signed by the new JWKS. The correct JWKS to use for validation is determined by matching the `kid` value of the JWT and JWKS.  
+        JWTs have a set lifetime of 5 minutes, so there will be a 5 minute period where some JWTs will be signed by the old JWKS, and some JWTs will be signed by the new JWKS. The correct JWKS to use for validation is determined by matching the `kid` value of the JWT and JWKS.
 
-    If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JWKS roll will be handled for you.
+        If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JWKS roll will be handled for you.
 
-    If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
+        If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
 
-    Fields:
-      - project_id: The `project_id` to get the JWKS for.
-        """ # noqa
+        Fields:
+          - project_id: The `project_id` to get the JWKS for.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-          "project_id": project_id,
+            "project_id": project_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
@@ -488,20 +448,20 @@ class Sessions:
     ) -> GetJWKSResponse:
         """Get the JSON Web Key Set (JWKS) for a project.
 
-    JWKS are rotated every ~6 months. Upon rotation, new JWTs will be signed using the new key set, and both key sets will be returned by this endpoint for a period of 1 month. 
+        JWKS are rotated every ~6 months. Upon rotation, new JWTs will be signed using the new key set, and both key sets will be returned by this endpoint for a period of 1 month.
 
-    JWTs have a set lifetime of 5 minutes, so there will be a 5 minute period where some JWTs will be signed by the old JWKS, and some JWTs will be signed by the new JWKS. The correct JWKS to use for validation is determined by matching the `kid` value of the JWT and JWKS.  
+        JWTs have a set lifetime of 5 minutes, so there will be a 5 minute period where some JWTs will be signed by the old JWKS, and some JWTs will be signed by the new JWKS. The correct JWKS to use for validation is determined by matching the `kid` value of the JWT and JWKS.
 
-    If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JWKS roll will be handled for you.
+        If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JWKS roll will be handled for you.
 
-    If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
+        If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
 
-    Fields:
-      - project_id: The `project_id` to get the JWKS for.
-        """ # noqa
+        Fields:
+          - project_id: The `project_id` to get the JWKS for.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-          "project_id": project_id,
+            "project_id": project_id,
         }
 
         url = self.api_base.url_for("/v1/b2b/sessions/jwks/{project_id}", data)
@@ -693,5 +653,3 @@ class Sessions:
         return local_resp.member_session
 
     # ENDMANUAL(authenticate_jwt_local)
-
-
