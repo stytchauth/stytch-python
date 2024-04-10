@@ -14,7 +14,7 @@ import pydantic
 
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
-from stytch.b2b.models.sessions import MemberSession
+from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
 from stytch.core.response_base import ResponseBase
 
 
@@ -60,6 +60,7 @@ class AuthenticateResponse(ResponseBase):
 
       Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft.
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - primary_required: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -76,3 +77,4 @@ class AuthenticateResponse(ResponseBase):
     member_session: Optional[MemberSession] = None
     provider_values: Optional[ProviderValues] = None
     mfa_required: Optional[MfaRequired] = None
+    primary_required: Optional[PrimaryRequired] = None

@@ -11,13 +11,20 @@ from typing import Any, Dict, List, Optional, Union
 from stytch.b2b.models.scim import SCIMGroupImplicitRoleAssignments
 from stytch.b2b.models.scim_connections import (
     CreateRequestIdp,
+    CreateRequestOptions,
     CreateResponse,
+    DeleteRequestOptions,
     DeleteResponse,
+    GetRequestOptions,
     GetResponse,
+    RotateCancelRequestOptions,
     RotateCancelResponse,
+    RotateCompleteRequestOptions,
     RotateCompleteResponse,
+    RotateStartRequestOptions,
     RotateStartResponse,
     UpdateRequestIdp,
+    UpdateRequestOptions,
     UpdateResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -41,6 +48,7 @@ class Connections:
         scim_group_implicit_role_assignments: Optional[
             List[SCIMGroupImplicitRoleAssignments]
         ] = None,
+        method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Update a SCIM Connection. /%}
 
@@ -52,6 +60,8 @@ class Connections:
           - scim_group_implicit_role_assignments: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -80,6 +90,7 @@ class Connections:
         scim_group_implicit_role_assignments: Optional[
             List[SCIMGroupImplicitRoleAssignments]
         ] = None,
+        method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Update a SCIM Connection. /%}
 
@@ -91,6 +102,8 @@ class Connections:
           - scim_group_implicit_role_assignments: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -114,14 +127,17 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
         """Deletes a SCIM Connection. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -137,14 +153,17 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
         """Deletes a SCIM Connection. /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -160,6 +179,7 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[RotateStartRequestOptions] = None,
     ) -> RotateStartResponse:
         """Start a SCIM token rotation. /%}
 
@@ -168,6 +188,8 @@ class Connections:
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -184,6 +206,7 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[RotateStartRequestOptions] = None,
     ) -> RotateStartResponse:
         """Start a SCIM token rotation. /%}
 
@@ -192,6 +215,8 @@ class Connections:
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -208,6 +233,7 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[RotateCompleteRequestOptions] = None,
     ) -> RotateCompleteResponse:
         """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response. /%}
 
@@ -216,6 +242,8 @@ class Connections:
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -232,6 +260,7 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[RotateCompleteRequestOptions] = None,
     ) -> RotateCompleteResponse:
         """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response. /%}
 
@@ -240,6 +269,8 @@ class Connections:
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -256,6 +287,7 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[RotateCancelRequestOptions] = None,
     ) -> RotateCancelResponse:
         """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active. /%}
 
@@ -264,6 +296,8 @@ class Connections:
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -280,6 +314,7 @@ class Connections:
         self,
         organization_id: str,
         connection_id: str,
+        method_options: Optional[RotateCancelRequestOptions] = None,
     ) -> RotateCancelResponse:
         """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active. /%}
 
@@ -288,6 +323,8 @@ class Connections:
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
             "connection_id": connection_id,
@@ -305,6 +342,7 @@ class Connections:
         organization_id: str,
         display_name: Optional[str] = None,
         identity_provider: Optional[Union[CreateRequestIdp, str]] = None,
+        method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Create a new SCIM Connection. /%}
 
@@ -314,6 +352,8 @@ class Connections:
           - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -331,6 +371,7 @@ class Connections:
         organization_id: str,
         display_name: Optional[str] = None,
         identity_provider: Optional[CreateRequestIdp] = None,
+        method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Create a new SCIM Connection. /%}
 
@@ -340,6 +381,8 @@ class Connections:
           - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -355,6 +398,7 @@ class Connections:
     def get(
         self,
         organization_id: str,
+        method_options: Optional[GetRequestOptions] = None,
     ) -> GetResponse:
         """Get SCIM Connections. /%}
 
@@ -362,6 +406,8 @@ class Connections:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }
@@ -373,6 +419,7 @@ class Connections:
     async def get_async(
         self,
         organization_id: str,
+        method_options: Optional[GetRequestOptions] = None,
     ) -> GetResponse:
         """Get SCIM Connections. /%}
 
@@ -380,6 +427,8 @@ class Connections:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
         """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "organization_id": organization_id,
         }

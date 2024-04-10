@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import datetime
 import enum
 from typing import Any, Dict, List, Optional
 
@@ -18,6 +19,13 @@ from stytch.shared.method_options import Authorization
 class SearchQueryOperator(str, enum.Enum):
     OR = "OR"
     AND = "AND"
+
+
+class ActiveSCIMConnection(pydantic.BaseModel):
+    connection_id: str
+    display_name: str
+    bearer_token_last_four: str
+    bearer_token_expires_at: Optional[datetime.datetime] = None
 
 
 class ActiveSSOConnection(pydantic.BaseModel):
@@ -217,6 +225,7 @@ class Organization(pydantic.BaseModel):
       - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
       The list's accepted values are: `sms_otp` and `totp`.
 
+      - scim_active_connections: (no documentation yet)
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
     """  # noqa
@@ -237,6 +246,7 @@ class Organization(pydantic.BaseModel):
     rbac_email_implicit_role_assignments: List[EmailImplicitRoleAssignment]
     mfa_methods: str
     allowed_mfa_methods: List[str]
+    scim_active_connections: List[ActiveSCIMConnection]
     trusted_metadata: Optional[Dict[str, Any]] = None
     sso_default_connection_id: Optional[str] = None
 
@@ -284,6 +294,7 @@ class Member(pydantic.BaseModel):
       - is_admin: Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
+      - totp_registration_id: (no documentation yet)
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
       - default_mfa_method: (no documentation yet)
@@ -307,6 +318,7 @@ class Member(pydantic.BaseModel):
     email_address_verified: bool
     mfa_phone_number_verified: bool
     is_admin: bool
+    totp_registration_id: str
     mfa_enrolled: bool
     mfa_phone_number: str
     default_mfa_method: str
@@ -371,6 +383,10 @@ class GetResponse(ResponseBase):
     """  # noqa
 
     organization: Organization
+
+
+class MetricsResponse(ResponseBase):
+    member_count: int
 
 
 class SearchResponse(ResponseBase):

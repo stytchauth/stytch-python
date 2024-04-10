@@ -349,6 +349,7 @@ class Passwords:
         pbkdf_2_config: Optional[PBKDF2Config] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
+        set_email_verified: Optional[bool] = None,
         name: Optional[Name] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a User's email that doesn't have a password yet. We support migrating users from passwords stored with `bcrypt`, `scrypt`, `argon2`, `MD-5`, `SHA-1`, or `PBKDF2`. This endpoint has a rate limit of 100 requests per second.
@@ -364,6 +365,9 @@ class Passwords:
           - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - set_email_verified: Whether to set the user's email as verified. This is a dangerous field. Incorrect use may lead to users getting erroneously
+                        deduplicated into one user object. This flag should only be set if you can attest that the user owns the email address in question.
+                        Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
           - name: The name of the user. Each field in the name object is optional.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -386,6 +390,8 @@ class Passwords:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
+        if set_email_verified is not None:
+            data["set_email_verified"] = set_email_verified
         if name is not None:
             data["name"] = name.dict()
 
@@ -405,6 +411,7 @@ class Passwords:
         pbkdf_2_config: Optional[PBKDF2Config] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
+        set_email_verified: Optional[bool] = None,
         name: Optional[Name] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a User's email that doesn't have a password yet. We support migrating users from passwords stored with `bcrypt`, `scrypt`, `argon2`, `MD-5`, `SHA-1`, or `PBKDF2`. This endpoint has a rate limit of 100 requests per second.
@@ -420,6 +427,9 @@ class Passwords:
           - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - set_email_verified: Whether to set the user's email as verified. This is a dangerous field. Incorrect use may lead to users getting erroneously
+                        deduplicated into one user object. This flag should only be set if you can attest that the user owns the email address in question.
+                        Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
           - name: The name of the user. Each field in the name object is optional.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -442,6 +452,8 @@ class Passwords:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
+        if set_email_verified is not None:
+            data["set_email_verified"] = set_email_verified
         if name is not None:
             data["name"] = name.dict()
 

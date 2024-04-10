@@ -30,6 +30,9 @@ class TOTPs:
         organization_id: str,
         member_id: str,
         expiration_minutes: Optional[int] = None,
+        intermediate_session_token: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ) -> CreateResponse:
         """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
@@ -39,6 +42,9 @@ class TOTPs:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
           - expiration_minutes: The expiration for the TOTP registration. If the newly created TOTP registration is not authenticated within this time frame the member will have to restart the registration flow. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 1440.
+          - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member.
+          - session_token: A secret token for a given Stytch Session.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -47,6 +53,12 @@ class TOTPs:
         }
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
+        if intermediate_session_token is not None:
+            data["intermediate_session_token"] = intermediate_session_token
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/b2b/totp", data)
         res = self.sync_client.post(url, data, headers)
@@ -57,6 +69,9 @@ class TOTPs:
         organization_id: str,
         member_id: str,
         expiration_minutes: Optional[int] = None,
+        intermediate_session_token: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
     ) -> CreateResponse:
         """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
@@ -66,6 +81,9 @@ class TOTPs:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
           - expiration_minutes: The expiration for the TOTP registration. If the newly created TOTP registration is not authenticated within this time frame the member will have to restart the registration flow. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 1440.
+          - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member.
+          - session_token: A secret token for a given Stytch Session.
+          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -74,6 +92,12 @@ class TOTPs:
         }
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
+        if intermediate_session_token is not None:
+            data["intermediate_session_token"] = intermediate_session_token
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
 
         url = self.api_base.url_for("/v1/b2b/totp", data)
         res = await self.async_client.post(url, data, headers)
