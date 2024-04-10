@@ -152,6 +152,15 @@ class GetResponse(ResponseBase):
     member_sessions: List[MemberSession]
 
 
+class MigrateResponse(ResponseBase):
+    member_id: str
+    session_token: str
+    session_jwt: str
+    member: Member
+    organization: Organization
+    member_session: Optional[MemberSession] = None
+
+
 class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:

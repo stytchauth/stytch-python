@@ -19,6 +19,7 @@ from stytch.b2b.models.sessions import (
     GetResponse,
     LocalJWTResponse,
     MemberSession,
+    MigrateResponse,
     RevokeResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -415,6 +416,48 @@ class Sessions:
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = await self.async_client.post(url, data, headers)
         return ExchangeResponse.from_json(res.response.status, res.json)
+
+    def migrate(
+        self,
+        session_token: str,
+        organization_id: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> MigrateResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "session_token": session_token,
+            "organization_id": organization_id,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+
+        url = self.api_base.url_for("/v1/b2b/sessions/migrate", data)
+        res = self.sync_client.post(url, data, headers)
+        return MigrateResponse.from_json(res.response.status_code, res.json)
+
+    async def migrate_async(
+        self,
+        session_token: str,
+        organization_id: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> MigrateResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "session_token": session_token,
+            "organization_id": organization_id,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+
+        url = self.api_base.url_for("/v1/b2b/sessions/migrate", data)
+        res = await self.async_client.post(url, data, headers)
+        return MigrateResponse.from_json(res.response.status, res.json)
 
     def get_jwks(
         self,
