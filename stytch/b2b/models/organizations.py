@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import datetime
 import enum
 from typing import Any, Dict, List, Optional
 
@@ -18,6 +19,13 @@ from stytch.shared.method_options import Authorization
 class SearchQueryOperator(str, enum.Enum):
     OR = "OR"
     AND = "AND"
+
+
+class ActiveSCIMConnection(pydantic.BaseModel):
+    connection_id: str
+    display_name: str
+    bearer_token_last_four: str
+    bearer_token_expires_at: Optional[datetime.datetime] = None
 
 
 class ActiveSSOConnection(pydantic.BaseModel):
@@ -217,6 +225,7 @@ class Organization(pydantic.BaseModel):
       - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
       The list's accepted values are: `sms_otp` and `totp`.
 
+      - scim_active_connections: (no documentation yet)
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
     """  # noqa
@@ -237,6 +246,7 @@ class Organization(pydantic.BaseModel):
     rbac_email_implicit_role_assignments: List[EmailImplicitRoleAssignment]
     mfa_methods: str
     allowed_mfa_methods: List[str]
+    scim_active_connections: List[ActiveSCIMConnection]
     trusted_metadata: Optional[Dict[str, Any]] = None
     sso_default_connection_id: Optional[str] = None
 

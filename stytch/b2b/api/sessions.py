@@ -19,6 +19,7 @@ from stytch.b2b.models.sessions import (
     GetResponse,
     LocalJWTResponse,
     MemberSession,
+    MigrateResponse,
     RevokeResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -415,6 +416,88 @@ class Sessions:
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = await self.async_client.post(url, data, headers)
         return ExchangeResponse.from_json(res.response.status, res.json)
+
+    def migrate(
+        self,
+        session_token: str,
+        organization_id: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> MigrateResponse:
+        """Migrate a session from an external endpoint. Stytch will call the UserInfo endpoint specified in your project settings, performing a lookup using the session token passed in. If the endpoint repsonds and the response contains a valid email, Stytch will attempt to match that email with a member in your organization, and create a Stytch Session for you.
+
+        Fields:
+          - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "session_token": session_token,
+            "organization_id": organization_id,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+
+        url = self.api_base.url_for("/v1/b2b/sessions/migrate", data)
+        res = self.sync_client.post(url, data, headers)
+        return MigrateResponse.from_json(res.response.status_code, res.json)
+
+    async def migrate_async(
+        self,
+        session_token: str,
+        organization_id: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> MigrateResponse:
+        """Migrate a session from an external endpoint. Stytch will call the UserInfo endpoint specified in your project settings, performing a lookup using the session token passed in. If the endpoint repsonds and the response contains a valid email, Stytch will attempt to match that email with a member in your organization, and create a Stytch Session for you.
+
+        Fields:
+          - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "session_token": session_token,
+            "organization_id": organization_id,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+
+        url = self.api_base.url_for("/v1/b2b/sessions/migrate", data)
+        res = await self.async_client.post(url, data, headers)
+        return MigrateResponse.from_json(res.response.status, res.json)
 
     def get_jwks(
         self,
