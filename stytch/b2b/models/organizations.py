@@ -22,6 +22,14 @@ class SearchQueryOperator(str, enum.Enum):
 
 
 class ActiveSCIMConnection(pydantic.BaseModel):
+    """
+    Fields:
+      - connection_id: The ID of the SCIM connection.
+      - display_name: A human-readable display name for the connection.
+      - bearer_token_last_four: (no documentation yet)
+      - bearer_token_expires_at: (no documentation yet)
+    """  # noqa
+
     connection_id: str
     display_name: str
     bearer_token_last_four: str
@@ -183,7 +191,7 @@ class Organization(pydantic.BaseModel):
 
       - sso_jit_provisioning_allowed_connections: An array of `connection_id`s that reference [SAML Connection objects](https://stytch.com/docs/b2b/api/saml-connection-object).
       Only these connections will be allowed to JIT provision Members via SSO when `sso_jit_provisioning` is set to `RESTRICTED`.
-      - sso_active_connections: An array of active [SAML Connection references](https://stytch.com/docs/b2b/api/saml-connection-object).
+      - sso_active_connections: An array of active [SAML Connection references](https://stytch.com/docs/b2b/api/saml-connection-object) or [OIDC Connection references](https://stytch.com/docs/b2b/api/oidc-connection-object).
       - email_allowed_domains: An array of email domains that allow invites or JIT provisioning for new Members. This list is enforced when either `email_invites` or `email_jit_provisioning` is set to `RESTRICTED`.
 
 
@@ -225,7 +233,7 @@ class Organization(pydantic.BaseModel):
       - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
       The list's accepted values are: `sms_otp` and `totp`.
 
-      - scim_active_connections: (no documentation yet)
+      - scim_active_connections: An array of active [SCIM Connection references](https://stytch.com/docs/b2b/api/scim-connection-object).
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
     """  # noqa
@@ -262,6 +270,21 @@ class ResultsMetadata(pydantic.BaseModel):
     next_cursor: Optional[str] = None
 
 
+class SCIMRegistration(pydantic.BaseModel):
+    """
+    Fields:
+      - connection_id: The ID of the SCIM connection.
+      - registration_id: The unique ID of a SCIM Registration.
+      - external_id: The ID of the member given by the identity provider.
+      - scim_attributes: An object for storing SCIM attributes brought over from the identity provider.
+    """  # noqa
+
+    connection_id: str
+    registration_id: str
+    external_id: Optional[str] = None
+    scim_attributes: Optional[Dict[str, Any]] = None
+
+
 class SSORegistration(pydantic.BaseModel):
     """
     Fields:
@@ -285,7 +308,7 @@ class Member(pydantic.BaseModel):
       - email_address: The email address of the Member.
       - status: The status of the Member. The possible values are: `pending`, `invited`, `active`, or `deleted`.
       - name: The name of the Member.
-      - sso_registrations: An array of registered [SAML Connection](saml-connection-object) objects the Member has authenticated with.
+      - sso_registrations: An array of registered [SAML Connection](saml-connection-object) or [OIDC Connection](oidc-connection-object) objects the Member has authenticated with.
       - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
       - member_password_id: Globally unique UUID that identifies a Member's password.
       - oauth_registrations: A list of OAuth registrations for this member.
@@ -295,6 +318,7 @@ class Member(pydantic.BaseModel):
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
       - totp_registration_id: (no documentation yet)
+      - scim_registrations: An array of scim member registrations, each one referencing a [SCIM Connection](scim-connection-object) object in use for the Member creation.
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
       - default_mfa_method: (no documentation yet)
@@ -319,6 +343,7 @@ class Member(pydantic.BaseModel):
     mfa_phone_number_verified: bool
     is_admin: bool
     totp_registration_id: str
+    scim_registrations: List[SCIMRegistration]
     mfa_enrolled: bool
     mfa_phone_number: str
     default_mfa_method: str
