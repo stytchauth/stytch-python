@@ -31,7 +31,7 @@ class Whatsapp:
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Attributes] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         locale: Optional[Union[SendRequestLocale, str]] = None,
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
@@ -73,7 +73,9 @@ class Whatsapp:
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if locale is not None:
             data["locale"] = locale
         if user_id is not None:
@@ -133,7 +135,9 @@ class Whatsapp:
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if locale is not None:
             data["locale"] = locale
         if user_id is not None:
@@ -151,7 +155,7 @@ class Whatsapp:
         self,
         phone_number: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Attributes] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         create_user_as_pending: Optional[bool] = None,
         locale: Optional[Union[LoginOrCreateRequestLocale, str]] = None,
     ) -> LoginOrCreateResponse:
@@ -187,7 +191,9 @@ class Whatsapp:
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if create_user_as_pending is not None:
             data["create_user_as_pending"] = create_user_as_pending
         if locale is not None:
@@ -237,7 +243,9 @@ class Whatsapp:
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if create_user_as_pending is not None:
             data["create_user_as_pending"] = create_user_as_pending
         if locale is not None:

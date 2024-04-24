@@ -27,7 +27,9 @@ class SCIMConnection(pydantic.BaseModel):
     base_url: str
     bearer_token_last_four: str
     scim_group_implicit_role_assignments: List[SCIMGroupImplicitRoleAssignments]
+    next_bearer_token_last_four: str
     bearer_token_expires_at: Optional[datetime.datetime] = None
+    next_bearer_token_expires_at: Optional[datetime.datetime] = None
 
 
 class SCIMConnectionWithNextToken(pydantic.BaseModel):

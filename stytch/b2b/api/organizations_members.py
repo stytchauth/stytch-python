@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.api.organizations_members_oauth_providers import OAuthProviders
 from stytch.b2b.models.organizations import SearchQuery
@@ -485,7 +485,7 @@ class Members:
         organization_ids: List[str],
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
-        query: Optional[SearchQuery] = None,
+        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
         method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
         """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
@@ -521,7 +521,7 @@ class Members:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/members/search", data)
         res = self.sync_client.post(url, data, headers)
@@ -568,7 +568,7 @@ class Members:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/members/search", data)
         res = await self.async_client.post(url, data, headers)

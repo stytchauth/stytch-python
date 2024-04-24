@@ -93,7 +93,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        authorization_check: Optional[AuthorizationCheck] = None,
+        authorization_check: Optional[Union[AuthorizationCheck, Dict[str, Any]]] = None,
     ) -> AuthenticateResponse:
         """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
@@ -148,7 +148,11 @@ class Sessions:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if authorization_check is not None:
-            data["authorization_check"] = authorization_check.dict()
+            data["authorization_check"] = (
+                authorization_check
+                if isinstance(authorization_check, dict)
+                else authorization_check.dict()
+            )
 
         url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -215,7 +219,11 @@ class Sessions:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if authorization_check is not None:
-            data["authorization_check"] = authorization_check.dict()
+            data["authorization_check"] = (
+                authorization_check
+                if isinstance(authorization_check, dict)
+                else authorization_check.dict()
+            )
 
         url = self.api_base.url_for("/v1/b2b/sessions/authenticate", data)
         res = await self.async_client.post(url, data, headers)

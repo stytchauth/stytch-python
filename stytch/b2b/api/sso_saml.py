@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.models.sso import (
     SAMLConnectionImplicitRoleAssignment,
@@ -94,10 +94,10 @@ class SAML:
         x509_certificate: Optional[str] = None,
         idp_sso_url: Optional[str] = None,
         saml_connection_implicit_role_assignments: Optional[
-            List[SAMLConnectionImplicitRoleAssignment]
+            List[Union[SAMLConnectionImplicitRoleAssignment, Dict[str, Any]]]
         ] = None,
         saml_group_implicit_role_assignments: Optional[
-            List[SAMLGroupImplicitRoleAssignment]
+            List[Union[SAMLGroupImplicitRoleAssignment, Dict[str, Any]]]
         ] = None,
         alternative_audience_uri: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
@@ -147,11 +147,13 @@ class SAML:
             data["idp_sso_url"] = idp_sso_url
         if saml_connection_implicit_role_assignments is not None:
             data["saml_connection_implicit_role_assignments"] = [
-                item.dict() for item in saml_connection_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in saml_connection_implicit_role_assignments
             ]
         if saml_group_implicit_role_assignments is not None:
             data["saml_group_implicit_role_assignments"] = [
-                item.dict() for item in saml_group_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in saml_group_implicit_role_assignments
             ]
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri
@@ -225,11 +227,13 @@ class SAML:
             data["idp_sso_url"] = idp_sso_url
         if saml_connection_implicit_role_assignments is not None:
             data["saml_connection_implicit_role_assignments"] = [
-                item.dict() for item in saml_connection_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in saml_connection_implicit_role_assignments
             ]
         if saml_group_implicit_role_assignments is not None:
             data["saml_group_implicit_role_assignments"] = [
-                item.dict() for item in saml_group_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in saml_group_implicit_role_assignments
             ]
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri

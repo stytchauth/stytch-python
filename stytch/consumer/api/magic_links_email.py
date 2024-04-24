@@ -35,7 +35,7 @@ class Email:
         self,
         email: str,
         login_template_id: Optional[str] = None,
-        attributes: Optional[Attributes] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         login_magic_link_url: Optional[str] = None,
         signup_magic_link_url: Optional[str] = None,
         login_expiration_minutes: Optional[int] = None,
@@ -82,7 +82,9 @@ class Email:
         if login_template_id is not None:
             data["login_template_id"] = login_template_id
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if login_magic_link_url is not None:
             data["login_magic_link_url"] = login_magic_link_url
         if signup_magic_link_url is not None:
@@ -159,7 +161,9 @@ class Email:
         if login_template_id is not None:
             data["login_template_id"] = login_template_id
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if login_magic_link_url is not None:
             data["login_magic_link_url"] = login_magic_link_url
         if signup_magic_link_url is not None:
@@ -194,7 +198,7 @@ class Email:
         signup_expiration_minutes: Optional[int] = None,
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
-        attributes: Optional[Attributes] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         create_user_as_pending: Optional[bool] = None,
         code_challenge: Optional[str] = None,
         locale: Optional[Union[LoginOrCreateRequestLocale, str]] = None,
@@ -243,7 +247,9 @@ class Email:
         if signup_template_id is not None:
             data["signup_template_id"] = signup_template_id
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if create_user_as_pending is not None:
             data["create_user_as_pending"] = create_user_as_pending
         if code_challenge is not None:
@@ -313,7 +319,9 @@ class Email:
         if signup_template_id is not None:
             data["signup_template_id"] = signup_template_id
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if create_user_as_pending is not None:
             data["create_user_as_pending"] = create_user_as_pending
         if code_challenge is not None:
@@ -329,8 +337,8 @@ class Email:
         self,
         email: str,
         invite_template_id: Optional[str] = None,
-        attributes: Optional[Attributes] = None,
-        name: Optional[Name] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
+        name: Optional[Union[Name, Dict[str, Any]]] = None,
         invite_magic_link_url: Optional[str] = None,
         invite_expiration_minutes: Optional[int] = None,
         locale: Optional[Union[InviteRequestLocale, str]] = None,
@@ -361,9 +369,11 @@ class Email:
         if invite_template_id is not None:
             data["invite_template_id"] = invite_template_id
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
         if invite_magic_link_url is not None:
             data["invite_magic_link_url"] = invite_magic_link_url
         if invite_expiration_minutes is not None:
@@ -411,9 +421,11 @@ class Email:
         if invite_template_id is not None:
             data["invite_template_id"] = invite_template_id
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
         if invite_magic_link_url is not None:
             data["invite_magic_link_url"] = invite_magic_link_url
         if invite_expiration_minutes is not None:

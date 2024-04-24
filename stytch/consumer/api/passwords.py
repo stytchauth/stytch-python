@@ -59,7 +59,7 @@ class Passwords:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Name, Dict[str, Any]]] = None,
     ) -> CreateResponse:
         """Create a new user with a password. If `session_duration_minutes` is specified, a new session will be started as well.
 
@@ -102,7 +102,7 @@ class Passwords:
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
 
         url = self.api_base.url_for("/v1/passwords", data)
         res = self.sync_client.post(url, data, headers)
@@ -159,7 +159,7 @@ class Passwords:
         if untrusted_metadata is not None:
             data["untrusted_metadata"] = untrusted_metadata
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
 
         url = self.api_base.url_for("/v1/passwords", data)
         res = await self.async_client.post(url, data, headers)
@@ -342,15 +342,15 @@ class Passwords:
         email: str,
         hash: str,
         hash_type: Union[MigrateRequestHashType, str],
-        md_5_config: Optional[MD5Config] = None,
-        argon_2_config: Optional[Argon2Config] = None,
-        sha_1_config: Optional[SHA1Config] = None,
-        scrypt_config: Optional[ScryptConfig] = None,
-        pbkdf_2_config: Optional[PBKDF2Config] = None,
+        md_5_config: Optional[Union[MD5Config, Dict[str, Any]]] = None,
+        argon_2_config: Optional[Union[Argon2Config, Dict[str, Any]]] = None,
+        sha_1_config: Optional[Union[SHA1Config, Dict[str, Any]]] = None,
+        scrypt_config: Optional[Union[ScryptConfig, Dict[str, Any]]] = None,
+        pbkdf_2_config: Optional[Union[PBKDF2Config, Dict[str, Any]]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         set_email_verified: Optional[bool] = None,
-        name: Optional[Name] = None,
+        name: Optional[Union[Name, Dict[str, Any]]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a User's email that doesn't have a password yet. We support migrating users from passwords stored with `bcrypt`, `scrypt`, `argon2`, `MD-5`, `SHA-1`, or `PBKDF2`. This endpoint has a rate limit of 100 requests per second.
 
@@ -377,15 +377,31 @@ class Passwords:
             "hash_type": hash_type,
         }
         if md_5_config is not None:
-            data["md_5_config"] = md_5_config.dict()
+            data["md_5_config"] = (
+                md_5_config if isinstance(md_5_config, dict) else md_5_config.dict()
+            )
         if argon_2_config is not None:
-            data["argon_2_config"] = argon_2_config.dict()
+            data["argon_2_config"] = (
+                argon_2_config
+                if isinstance(argon_2_config, dict)
+                else argon_2_config.dict()
+            )
         if sha_1_config is not None:
-            data["sha_1_config"] = sha_1_config.dict()
+            data["sha_1_config"] = (
+                sha_1_config if isinstance(sha_1_config, dict) else sha_1_config.dict()
+            )
         if scrypt_config is not None:
-            data["scrypt_config"] = scrypt_config.dict()
+            data["scrypt_config"] = (
+                scrypt_config
+                if isinstance(scrypt_config, dict)
+                else scrypt_config.dict()
+            )
         if pbkdf_2_config is not None:
-            data["pbkdf_2_config"] = pbkdf_2_config.dict()
+            data["pbkdf_2_config"] = (
+                pbkdf_2_config
+                if isinstance(pbkdf_2_config, dict)
+                else pbkdf_2_config.dict()
+            )
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
@@ -393,7 +409,7 @@ class Passwords:
         if set_email_verified is not None:
             data["set_email_verified"] = set_email_verified
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
         res = self.sync_client.post(url, data, headers)
@@ -439,15 +455,31 @@ class Passwords:
             "hash_type": hash_type,
         }
         if md_5_config is not None:
-            data["md_5_config"] = md_5_config.dict()
+            data["md_5_config"] = (
+                md_5_config if isinstance(md_5_config, dict) else md_5_config.dict()
+            )
         if argon_2_config is not None:
-            data["argon_2_config"] = argon_2_config.dict()
+            data["argon_2_config"] = (
+                argon_2_config
+                if isinstance(argon_2_config, dict)
+                else argon_2_config.dict()
+            )
         if sha_1_config is not None:
-            data["sha_1_config"] = sha_1_config.dict()
+            data["sha_1_config"] = (
+                sha_1_config if isinstance(sha_1_config, dict) else sha_1_config.dict()
+            )
         if scrypt_config is not None:
-            data["scrypt_config"] = scrypt_config.dict()
+            data["scrypt_config"] = (
+                scrypt_config
+                if isinstance(scrypt_config, dict)
+                else scrypt_config.dict()
+            )
         if pbkdf_2_config is not None:
-            data["pbkdf_2_config"] = pbkdf_2_config.dict()
+            data["pbkdf_2_config"] = (
+                pbkdf_2_config
+                if isinstance(pbkdf_2_config, dict)
+                else pbkdf_2_config.dict()
+            )
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
@@ -455,7 +487,7 @@ class Passwords:
         if set_email_verified is not None:
             data["set_email_verified"] = set_email_verified
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
         res = await self.async_client.post(url, data, headers)
