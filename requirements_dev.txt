@@ -4,7 +4,7 @@
 setuptools>=65.5.1
 
 # For type checking, codegen, and testing
-Jinja2==3.1.3
+Jinja2==3.1.4
 autoflake==2.0.0
 black==24.3.0
 isort==5.11.2
