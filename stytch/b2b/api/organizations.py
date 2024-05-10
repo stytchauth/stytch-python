@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.api.organizations_members import Members
 from stytch.b2b.models.organizations import (
@@ -52,7 +52,7 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
         rbac_email_implicit_role_assignments: Optional[
-            List[EmailImplicitRoleAssignment]
+            List[Union[EmailImplicitRoleAssignment, Dict[str, Any]]]
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
@@ -149,7 +149,8 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
             data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in rbac_email_implicit_role_assignments
             ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
@@ -271,7 +272,8 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
             data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in rbac_email_implicit_role_assignments
             ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
@@ -335,7 +337,7 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
         rbac_email_implicit_role_assignments: Optional[
-            List[EmailImplicitRoleAssignment]
+            List[Union[EmailImplicitRoleAssignment, Dict[str, Any]]]
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
@@ -489,7 +491,8 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
             data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in rbac_email_implicit_role_assignments
             ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
@@ -671,7 +674,8 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
             data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in rbac_email_implicit_role_assignments
             ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
@@ -728,7 +732,7 @@ class Organizations:
         self,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
-        query: Optional[SearchQuery] = None,
+        query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
         """Search for Organizations. If you send a request with no body params, no filtering will be applied and the endpoint will return all Organizations. All fuzzy search filters require a minimum of three characters.
 
@@ -744,7 +748,7 @@ class Organizations:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/search", data)
         res = self.sync_client.post(url, data, headers)
@@ -770,7 +774,7 @@ class Organizations:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/b2b/organizations/search", data)
         res = await self.async_client.post(url, data, headers)

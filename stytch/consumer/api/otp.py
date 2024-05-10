@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.api.otp_email import Email
 from stytch.consumer.api.otp_sms import Sms
@@ -45,8 +45,8 @@ class OTPs:
         self,
         method_id: str,
         code: str,
-        attributes: Optional[Attributes] = None,
-        options: Optional[Options] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
+        options: Optional[Union[Options, Dict[str, Any]]] = None,
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
@@ -80,9 +80,11 @@ class OTPs:
             "code": code,
         }
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if options is not None:
-            data["options"] = options.dict()
+            data["options"] = options if isinstance(options, dict) else options.dict()
         if session_token is not None:
             data["session_token"] = session_token
         if session_duration_minutes is not None:
@@ -135,9 +137,11 @@ class OTPs:
             "code": code,
         }
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if options is not None:
-            data["options"] = options.dict()
+            data["options"] = options if isinstance(options, dict) else options.dict()
         if session_token is not None:
             data["session_token"] = session_token
         if session_duration_minutes is not None:

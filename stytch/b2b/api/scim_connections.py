@@ -46,7 +46,7 @@ class Connections:
         display_name: Optional[str] = None,
         identity_provider: Optional[Union[UpdateRequestIdp, str]] = None,
         scim_group_implicit_role_assignments: Optional[
-            List[SCIMGroupImplicitRoleAssignments]
+            List[Union[SCIMGroupImplicitRoleAssignments, Dict[str, Any]]]
         ] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
@@ -72,7 +72,8 @@ class Connections:
             data["identity_provider"] = identity_provider
         if scim_group_implicit_role_assignments is not None:
             data["scim_group_implicit_role_assignments"] = [
-                item.dict() for item in scim_group_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in scim_group_implicit_role_assignments
             ]
 
         url = self.api_base.url_for(
@@ -114,7 +115,8 @@ class Connections:
             data["identity_provider"] = identity_provider
         if scim_group_implicit_role_assignments is not None:
             data["scim_group_implicit_role_assignments"] = [
-                item.dict() for item in scim_group_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in scim_group_implicit_role_assignments
             ]
 
         url = self.api_base.url_for(

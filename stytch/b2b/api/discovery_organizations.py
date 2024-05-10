@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.models.discovery_organizations import CreateResponse, ListResponse
 from stytch.b2b.models.organizations import EmailImplicitRoleAssignment
@@ -39,7 +39,7 @@ class Organizations:
         allowed_auth_methods: Optional[List[str]] = None,
         mfa_policy: Optional[str] = None,
         rbac_email_implicit_role_assignments: Optional[
-            List[EmailImplicitRoleAssignment]
+            List[Union[EmailImplicitRoleAssignment, Dict[str, Any]]]
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
@@ -165,7 +165,8 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
             data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in rbac_email_implicit_role_assignments
             ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods
@@ -319,7 +320,8 @@ class Organizations:
             data["mfa_policy"] = mfa_policy
         if rbac_email_implicit_role_assignments is not None:
             data["rbac_email_implicit_role_assignments"] = [
-                item.dict() for item in rbac_email_implicit_role_assignments
+                item if isinstance(item, dict) else item.dict()
+                for item in rbac_email_implicit_role_assignments
             ]
         if mfa_methods is not None:
             data["mfa_methods"] = mfa_methods

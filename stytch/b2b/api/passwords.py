@@ -120,11 +120,11 @@ class Passwords:
         hash: str,
         hash_type: Union[MigrateRequestHashType, str],
         organization_id: str,
-        md_5_config: Optional[MD5Config] = None,
-        argon_2_config: Optional[Argon2Config] = None,
-        sha_1_config: Optional[SHA1Config] = None,
-        scrypt_config: Optional[ScryptConfig] = None,
-        pbkdf_2_config: Optional[PBKDF2Config] = None,
+        md_5_config: Optional[Union[MD5Config, Dict[str, Any]]] = None,
+        argon_2_config: Optional[Union[Argon2Config, Dict[str, Any]]] = None,
+        sha_1_config: Optional[Union[SHA1Config, Dict[str, Any]]] = None,
+        scrypt_config: Optional[Union[ScryptConfig, Dict[str, Any]]] = None,
+        pbkdf_2_config: Optional[Union[PBKDF2Config, Dict[str, Any]]] = None,
         name: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
@@ -168,15 +168,31 @@ class Passwords:
             "organization_id": organization_id,
         }
         if md_5_config is not None:
-            data["md_5_config"] = md_5_config.dict()
+            data["md_5_config"] = (
+                md_5_config if isinstance(md_5_config, dict) else md_5_config.dict()
+            )
         if argon_2_config is not None:
-            data["argon_2_config"] = argon_2_config.dict()
+            data["argon_2_config"] = (
+                argon_2_config
+                if isinstance(argon_2_config, dict)
+                else argon_2_config.dict()
+            )
         if sha_1_config is not None:
-            data["sha_1_config"] = sha_1_config.dict()
+            data["sha_1_config"] = (
+                sha_1_config if isinstance(sha_1_config, dict) else sha_1_config.dict()
+            )
         if scrypt_config is not None:
-            data["scrypt_config"] = scrypt_config.dict()
+            data["scrypt_config"] = (
+                scrypt_config
+                if isinstance(scrypt_config, dict)
+                else scrypt_config.dict()
+            )
         if pbkdf_2_config is not None:
-            data["pbkdf_2_config"] = pbkdf_2_config.dict()
+            data["pbkdf_2_config"] = (
+                pbkdf_2_config
+                if isinstance(pbkdf_2_config, dict)
+                else pbkdf_2_config.dict()
+            )
         if name is not None:
             data["name"] = name
         if trusted_metadata is not None:
@@ -246,15 +262,31 @@ class Passwords:
             "organization_id": organization_id,
         }
         if md_5_config is not None:
-            data["md_5_config"] = md_5_config.dict()
+            data["md_5_config"] = (
+                md_5_config if isinstance(md_5_config, dict) else md_5_config.dict()
+            )
         if argon_2_config is not None:
-            data["argon_2_config"] = argon_2_config.dict()
+            data["argon_2_config"] = (
+                argon_2_config
+                if isinstance(argon_2_config, dict)
+                else argon_2_config.dict()
+            )
         if sha_1_config is not None:
-            data["sha_1_config"] = sha_1_config.dict()
+            data["sha_1_config"] = (
+                sha_1_config if isinstance(sha_1_config, dict) else sha_1_config.dict()
+            )
         if scrypt_config is not None:
-            data["scrypt_config"] = scrypt_config.dict()
+            data["scrypt_config"] = (
+                scrypt_config
+                if isinstance(scrypt_config, dict)
+                else scrypt_config.dict()
+            )
         if pbkdf_2_config is not None:
-            data["pbkdf_2_config"] = pbkdf_2_config.dict()
+            data["pbkdf_2_config"] = (
+                pbkdf_2_config
+                if isinstance(pbkdf_2_config, dict)
+                else pbkdf_2_config.dict()
+            )
         if name is not None:
             data["name"] = name
         if trusted_metadata is not None:

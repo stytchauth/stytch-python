@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, AsyncGenerator, Dict, Generator, Optional
+from typing import Any, AsyncGenerator, Dict, Generator, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.users import (
@@ -42,8 +42,8 @@ class Users:
     def create(
         self,
         email: Optional[str] = None,
-        name: Optional[Name] = None,
-        attributes: Optional[Attributes] = None,
+        name: Optional[Union[Name, Dict[str, Any]]] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         phone_number: Optional[str] = None,
         create_user_as_pending: Optional[bool] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
@@ -69,9 +69,11 @@ class Users:
         if email is not None:
             data["email"] = email
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if phone_number is not None:
             data["phone_number"] = phone_number
         if create_user_as_pending is not None:
@@ -115,9 +117,11 @@ class Users:
         if email is not None:
             data["email"] = email
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if phone_number is not None:
             data["phone_number"] = phone_number
         if create_user_as_pending is not None:
@@ -171,7 +175,7 @@ class Users:
         self,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
-        query: Optional[SearchUsersQuery] = None,
+        query: Optional[Union[SearchUsersQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
         """Search for Users within your Stytch Project. Submit an empty `query` in the request to return all Users.
 
@@ -187,7 +191,7 @@ class Users:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/users/search", data)
         res = self.sync_client.post(url, data, headers)
@@ -213,7 +217,7 @@ class Users:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/users/search", data)
         res = await self.async_client.post(url, data, headers)
@@ -222,8 +226,8 @@ class Users:
     def update(
         self,
         user_id: str,
-        name: Optional[Name] = None,
-        attributes: Optional[Attributes] = None,
+        name: Optional[Union[Name, Dict[str, Any]]] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
     ) -> UpdateResponse:
@@ -243,9 +247,11 @@ class Users:
             "user_id": user_id,
         }
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:
@@ -279,9 +285,11 @@ class Users:
             "user_id": user_id,
         }
         if name is not None:
-            data["name"] = name.dict()
+            data["name"] = name if isinstance(name, dict) else name.dict()
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
         if untrusted_metadata is not None:

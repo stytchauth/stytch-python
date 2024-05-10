@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.api.magic_links_email import Email
 from stytch.consumer.models.attribute import Attributes
@@ -35,8 +35,8 @@ class MagicLinks:
     def authenticate(
         self,
         token: str,
-        attributes: Optional[Attributes] = None,
-        options: Optional[Options] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
+        options: Optional[Union[Options, Dict[str, Any]]] = None,
         session_token: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
@@ -74,9 +74,11 @@ class MagicLinks:
             "token": token,
         }
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if options is not None:
-            data["options"] = options.dict()
+            data["options"] = options if isinstance(options, dict) else options.dict()
         if session_token is not None:
             data["session_token"] = session_token
         if session_duration_minutes is not None:
@@ -134,9 +136,11 @@ class MagicLinks:
             "token": token,
         }
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if options is not None:
-            data["options"] = options.dict()
+            data["options"] = options if isinstance(options, dict) else options.dict()
         if session_token is not None:
             data["session_token"] = session_token
         if session_duration_minutes is not None:
@@ -156,7 +160,7 @@ class MagicLinks:
         self,
         user_id: str,
         expiration_minutes: Optional[int] = None,
-        attributes: Optional[Attributes] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
     ) -> CreateResponse:
         """Create an embeddable Magic Link token for a User. Access to this endpoint is restricted. To enable it, please send us a note at support@stytch.com.
 
@@ -175,7 +179,9 @@ class MagicLinks:
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
 
         url = self.api_base.url_for("/v1/magic_links", data)
         res = self.sync_client.post(url, data, headers)
@@ -204,7 +210,9 @@ class MagicLinks:
         if expiration_minutes is not None:
             data["expiration_minutes"] = expiration_minutes
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
 
         url = self.api_base.url_for("/v1/magic_links", data)
         res = await self.async_client.post(url, data, headers)

@@ -75,7 +75,7 @@ class Clients:
         self,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
-        query: Optional[M2MSearchQuery] = None,
+        query: Optional[Union[M2MSearchQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
         """Search for M2M Clients within your Stytch Project. Submit an empty `query` in the request to return all M2M Clients.
 
@@ -96,7 +96,7 @@ class Clients:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/m2m/clients/search", data)
         res = self.sync_client.post(url, data, headers)
@@ -127,7 +127,7 @@ class Clients:
         if limit is not None:
             data["limit"] = limit
         if query is not None:
-            data["query"] = query.dict()
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/m2m/clients/search", data)
         res = await self.async_client.post(url, data, headers)

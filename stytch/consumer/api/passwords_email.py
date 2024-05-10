@@ -33,7 +33,7 @@ class Email:
         reset_password_redirect_url: Optional[str] = None,
         reset_password_expiration_minutes: Optional[int] = None,
         code_challenge: Optional[str] = None,
-        attributes: Optional[Attributes] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         login_redirect_url: Optional[str] = None,
         locale: Optional[Union[ResetStartRequestLocale, str]] = None,
         reset_password_template_id: Optional[str] = None,
@@ -76,7 +76,9 @@ class Email:
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if login_redirect_url is not None:
             data["login_redirect_url"] = login_redirect_url
         if locale is not None:
@@ -137,7 +139,9 @@ class Email:
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if login_redirect_url is not None:
             data["login_redirect_url"] = login_redirect_url
         if locale is not None:
@@ -158,8 +162,8 @@ class Email:
         session_jwt: Optional[str] = None,
         code_verifier: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-        attributes: Optional[Attributes] = None,
-        options: Optional[Options] = None,
+        attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
+        options: Optional[Union[Options, Dict[str, Any]]] = None,
     ) -> ResetResponse:
         """Reset the user’s password and authenticate them. This endpoint checks that the magic link `token` is valid, hasn’t expired, or already been used – and can optionally require additional security settings, such as the IP address and user agent matching the initial reset request.
 
@@ -208,9 +212,11 @@ class Email:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if options is not None:
-            data["options"] = options.dict()
+            data["options"] = options if isinstance(options, dict) else options.dict()
 
         url = self.api_base.url_for("/v1/passwords/email/reset", data)
         res = self.sync_client.post(url, data, headers)
@@ -275,9 +281,11 @@ class Email:
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
         if attributes is not None:
-            data["attributes"] = attributes.dict()
+            data["attributes"] = (
+                attributes if isinstance(attributes, dict) else attributes.dict()
+            )
         if options is not None:
-            data["options"] = options.dict()
+            data["options"] = options if isinstance(options, dict) else options.dict()
 
         url = self.api_base.url_for("/v1/passwords/email/reset", data)
         res = await self.async_client.post(url, data, headers)
