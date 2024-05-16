@@ -13,12 +13,14 @@ from stytch.b2b.models.sso import (
     SAMLGroupImplicitRoleAssignment,
 )
 from stytch.b2b.models.sso_saml import (
+    CreateConnectionRequestIdentityProvider,
     CreateConnectionRequestOptions,
     CreateConnectionResponse,
     DeleteVerificationCertificateRequestOptions,
     DeleteVerificationCertificateResponse,
     UpdateByURLRequestOptions,
     UpdateByURLResponse,
+    UpdateConnectionRequestIdentityProvider,
     UpdateConnectionRequestOptions,
     UpdateConnectionResponse,
 )
@@ -38,6 +40,9 @@ class SAML:
         self,
         organization_id: str,
         display_name: Optional[str] = None,
+        identity_provider: Optional[
+            Union[CreateConnectionRequestIdentityProvider, str]
+        ] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
         """Create a new SAML Connection. /%}
@@ -45,6 +50,7 @@ class SAML:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -54,6 +60,8 @@ class SAML:
         }
         if display_name is not None:
             data["display_name"] = display_name
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for("/v1/b2b/sso/saml/{organization_id}", data)
         res = self.sync_client.post(url, data, headers)
@@ -63,6 +71,7 @@ class SAML:
         self,
         organization_id: str,
         display_name: Optional[str] = None,
+        identity_provider: Optional[CreateConnectionRequestIdentityProvider] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
         """Create a new SAML Connection. /%}
@@ -70,6 +79,7 @@ class SAML:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -79,6 +89,8 @@ class SAML:
         }
         if display_name is not None:
             data["display_name"] = display_name
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for("/v1/b2b/sso/saml/{organization_id}", data)
         res = await self.async_client.post(url, data, headers)
@@ -100,6 +112,9 @@ class SAML:
             List[Union[SAMLGroupImplicitRoleAssignment, Dict[str, Any]]]
         ] = None,
         alternative_audience_uri: Optional[str] = None,
+        identity_provider: Optional[
+            Union[UpdateConnectionRequestIdentityProvider, str]
+        ] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -127,6 +142,7 @@ class SAML:
                  Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
                  `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -157,6 +173,8 @@ class SAML:
             ]
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
@@ -180,6 +198,7 @@ class SAML:
             List[SAMLGroupImplicitRoleAssignment]
         ] = None,
         alternative_audience_uri: Optional[str] = None,
+        identity_provider: Optional[UpdateConnectionRequestIdentityProvider] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -207,6 +226,7 @@ class SAML:
                  Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
                  `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -237,6 +257,8 @@ class SAML:
             ]
         if alternative_audience_uri is not None:
             data["alternative_audience_uri"] = alternative_audience_uri
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data

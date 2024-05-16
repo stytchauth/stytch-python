@@ -6,11 +6,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.sso_oidc import (
+    CreateConnectionRequestIdentityProvider,
     CreateConnectionRequestOptions,
     CreateConnectionResponse,
+    UpdateConnectionRequestIdentityProvider,
     UpdateConnectionRequestOptions,
     UpdateConnectionResponse,
 )
@@ -30,6 +32,9 @@ class OIDC:
         self,
         organization_id: str,
         display_name: Optional[str] = None,
+        identity_provider: Optional[
+            Union[CreateConnectionRequestIdentityProvider, str]
+        ] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
         """Create a new OIDC Connection. /%}
@@ -37,6 +42,7 @@ class OIDC:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -46,6 +52,8 @@ class OIDC:
         }
         if display_name is not None:
             data["display_name"] = display_name
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for("/v1/b2b/sso/oidc/{organization_id}", data)
         res = self.sync_client.post(url, data, headers)
@@ -55,6 +63,7 @@ class OIDC:
         self,
         organization_id: str,
         display_name: Optional[str] = None,
+        identity_provider: Optional[CreateConnectionRequestIdentityProvider] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
         """Create a new OIDC Connection. /%}
@@ -62,6 +71,7 @@ class OIDC:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -71,6 +81,8 @@ class OIDC:
         }
         if display_name is not None:
             data["display_name"] = display_name
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for("/v1/b2b/sso/oidc/{organization_id}", data)
         res = await self.async_client.post(url, data, headers)
@@ -88,6 +100,9 @@ class OIDC:
         token_url: Optional[str] = None,
         userinfo_url: Optional[str] = None,
         jwks_url: Optional[str] = None,
+        identity_provider: Optional[
+            Union[UpdateConnectionRequestIdentityProvider, str]
+        ] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing OIDC connection.
@@ -121,6 +136,7 @@ class OIDC:
           - token_url: The location of the URL that issues OAuth2.0 access tokens and OIDC ID tokens. This will be provided by the IdP.
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -145,6 +161,8 @@ class OIDC:
             data["userinfo_url"] = userinfo_url
         if jwks_url is not None:
             data["jwks_url"] = jwks_url
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/oidc/{organization_id}/connections/{connection_id}", data
@@ -164,6 +182,7 @@ class OIDC:
         token_url: Optional[str] = None,
         userinfo_url: Optional[str] = None,
         jwks_url: Optional[str] = None,
+        identity_provider: Optional[UpdateConnectionRequestIdentityProvider] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing OIDC connection.
@@ -197,6 +216,7 @@ class OIDC:
           - token_url: The location of the URL that issues OAuth2.0 access tokens and OIDC ID tokens. This will be provided by the IdP.
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
+          - identity_provider: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -221,6 +241,8 @@ class OIDC:
             data["userinfo_url"] = userinfo_url
         if jwks_url is not None:
             data["jwks_url"] = jwks_url
+        if identity_provider is not None:
+            data["identity_provider"] = identity_provider
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/oidc/{organization_id}/connections/{connection_id}", data

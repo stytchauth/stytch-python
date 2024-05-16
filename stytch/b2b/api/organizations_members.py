@@ -446,6 +446,17 @@ class Members:
         member_id: str,
         method_options: Optional[DeleteTOTPRequestOptions] = None,
     ) -> DeleteTOTPResponse:
+        """Delete a Member's MFA TOTP registration.
+
+        To mint a new registration for a Member, you must first call this endpoint to delete the existing registration.
+
+        Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
+         /%}
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)
@@ -466,6 +477,17 @@ class Members:
         member_id: str,
         method_options: Optional[DeleteTOTPRequestOptions] = None,
     ) -> DeleteTOTPResponse:
+        """Delete a Member's MFA TOTP registration.
+
+        To mint a new registration for a Member, you must first call this endpoint to delete the existing registration.
+
+        Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
+         /%}
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)

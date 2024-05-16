@@ -74,7 +74,7 @@ class EmailImplicitRoleAssignment(pydantic.BaseModel):
       * `stytch_member`
       * `stytch_admin`
 
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
     """  # noqa
@@ -147,7 +147,7 @@ class MemberRole(pydantic.BaseModel):
       * `stytch_member`
       * `stytch_admin`
 
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - sources: A list of sources for this role assignment. A role assignment can come from multiple sources - for example, the Role could be both explicitly assigned and implicitly granted from the Member's email domain.
@@ -316,7 +316,7 @@ class Member(pydantic.BaseModel):
       - mfa_phone_number_verified: Whether or not the Member's phone number is verified.
       - is_admin: Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
-      [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for more details on this Role.
+      [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
       - totp_registration_id: (no documentation yet)
       - scim_registrations: An array of scim member registrations, each one referencing a [SCIM Connection](scim-connection-object) object in use for the Member creation.
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.

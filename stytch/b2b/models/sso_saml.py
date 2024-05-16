@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import enum
 from typing import Dict, Optional
 
 import pydantic
@@ -13,6 +14,20 @@ import pydantic
 from stytch.b2b.models.sso import SAMLConnection
 from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
+
+
+class CreateConnectionRequestIdentityProvider(str, enum.Enum):
+    GENERIC = "generic"
+    OKTA = "okta"
+    MICROSOFTENTRA = "microsoft-entra"
+    GOOGLEWORKSPACE = "google-workspace"
+
+
+class UpdateConnectionRequestIdentityProvider(str, enum.Enum):
+    GENERIC = "generic"
+    OKTA = "okta"
+    MICROSOFTENTRA = "microsoft-entra"
+    GOOGLEWORKSPACE = "google-workspace"
 
 
 class CreateConnectionRequestOptions(pydantic.BaseModel):

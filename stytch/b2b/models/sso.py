@@ -70,6 +70,7 @@ class OIDCConnection(pydantic.BaseModel):
     token_url: str
     userinfo_url: str
     jwks_url: str
+    identity_provider: str
 
 
 class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
@@ -82,7 +83,7 @@ class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
       * `stytch_member`
       * `stytch_admin`
 
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
     """  # noqa
@@ -100,7 +101,7 @@ class SAMLGroupImplicitRoleAssignment(pydantic.BaseModel):
       * `stytch_member`
       * `stytch_admin`
 
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - group: The name of the SAML group that grants the specified role assignment.
@@ -134,6 +135,7 @@ class SAMLConnection(pydantic.BaseModel):
     ]
     saml_group_implicit_role_assignments: List[SAMLGroupImplicitRoleAssignment]
     alternative_audience_uri: str
+    identity_provider: str
     attribute_mapping: Optional[Dict[str, Any]] = None
 
 

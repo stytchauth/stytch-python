@@ -25,7 +25,7 @@ class PolicyResource(pydantic.BaseModel):
       * `stytch.sso`
       * `stytch.self`
 
-      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - description: The description of the RBAC Resource.
@@ -90,7 +90,7 @@ class PolicyRolePermission(pydantic.BaseModel):
       * `stytch.sso`
       * `stytch.self`
 
-      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - actions: A list of permitted actions the Role is authorized to take with the provided Resource. You can use `*` as a wildcard to grant a Role permission to use all possible actions related to the Resource.
@@ -110,7 +110,7 @@ class PolicyRole(pydantic.BaseModel):
       * `stytch_member`
       * `stytch_admin`
 
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - description: The description of the RBAC Role.
