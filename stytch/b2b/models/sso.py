@@ -25,6 +25,15 @@ class AuthenticateRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
+class Connection(pydantic.BaseModel):
+    organization_id: str
+    connection_id: str
+    external_organization_id: str
+    external_connection_id: str
+    display_name: str
+    status: str
+
+
 class DeleteConnectionRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -70,6 +79,7 @@ class OIDCConnection(pydantic.BaseModel):
     token_url: str
     userinfo_url: str
     jwks_url: str
+    identity_provider: str
 
 
 class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
@@ -82,7 +92,7 @@ class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
       * `stytch_member`
       * `stytch_admin`
 
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
     """  # noqa
@@ -100,7 +110,7 @@ class SAMLGroupImplicitRoleAssignment(pydantic.BaseModel):
       * `stytch_member`
       * `stytch_admin`
 
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - group: The name of the SAML group that grants the specified role assignment.
@@ -134,6 +144,7 @@ class SAMLConnection(pydantic.BaseModel):
     ]
     saml_group_implicit_role_assignments: List[SAMLGroupImplicitRoleAssignment]
     alternative_audience_uri: str
+    identity_provider: str
     attribute_mapping: Optional[Dict[str, Any]] = None
 
 
@@ -181,7 +192,9 @@ class GetConnectionsResponse(ResponseBase):
     Fields:
       - saml_connections: The list of [SAML Connections](https://stytch.com/docs/b2b/api/saml-connection-object) owned by this organization.
       - oidc_connections: The list of [OIDC Connections](https://stytch.com/docs/b2b/api/oidc-connection-object) owned by this organization.
+      - external_connections: (no documentation yet)
     """  # noqa
 
     saml_connections: List[SAMLConnection]
     oidc_connections: List[OIDCConnection]
+    external_connections: List[Connection]

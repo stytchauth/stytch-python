@@ -37,7 +37,7 @@ class AuthorizationCheck(pydantic.BaseModel):
       * `stytch.sso`
       * `stytch.self`
 
-      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-defaults) for a more detailed explanation.
+      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - action: An action to take on a Resource.

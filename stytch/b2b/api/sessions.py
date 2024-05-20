@@ -97,7 +97,7 @@ class Sessions:
     ) -> AuthenticateResponse:
         """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
-        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
+        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid. See our [How to use Stytch Session JWTs](https://stytch.com/docs/b2b/guides/sessions/using-jwts) guide for more information.
 
         If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
         In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
@@ -168,7 +168,7 @@ class Sessions:
     ) -> AuthenticateResponse:
         """Authenticates a Session and updates its lifetime by the specified `session_duration_minutes`. If the `session_duration_minutes` is not specified, a Session will not be extended. This endpoint requires either a `session_jwt` or `session_token` be included in the request. It will return an error if both are present.
 
-        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid.
+        You may provide a JWT that needs to be refreshed and is expired according to its `exp` claim. A new JWT will be returned if both the signature and the underlying Session are still valid. See our [How to use Stytch Session JWTs](https://stytch.com/docs/b2b/guides/sessions/using-jwts) guide for more information.
 
         If an `authorization_check` object is passed in, this method will also check if the Member is authorized to perform the given action on the given Resource in the specified Organization. A Member is authorized if their Member Session contains a Role, assigned [explicitly or implicitly](https://stytch.com/docs/b2b/guides/rbac/role-assignment), with adequate permissions.
         In addition, the `organization_id` passed in the authorization check must match the Member's Organization.
@@ -521,6 +521,8 @@ class Sessions:
 
         If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
 
+        See our [How to use Stytch Session JWTs](https://stytch.com/docs/b2b/guides/sessions/using-jwts) guide for more information.
+
         Fields:
           - project_id: The `project_id` to get the JWKS for.
         """  # noqa
@@ -546,6 +548,8 @@ class Sessions:
         If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JWKS roll will be handled for you.
 
         If you're using your own JWT validation library, many have built-in support for JWKS rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWKS to use for validation by inspecting the `kid` value.
+
+        See our [How to use Stytch Session JWTs](https://stytch.com/docs/b2b/guides/sessions/using-jwts) guide for more information.
 
         Fields:
           - project_id: The `project_id` to get the JWKS for.
