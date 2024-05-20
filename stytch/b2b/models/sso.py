@@ -25,6 +25,15 @@ class AuthenticateRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
+class Connection(pydantic.BaseModel):
+    organization_id: str
+    connection_id: str
+    external_organization_id: str
+    external_connection_id: str
+    display_name: str
+    status: str
+
+
 class DeleteConnectionRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -183,7 +192,9 @@ class GetConnectionsResponse(ResponseBase):
     Fields:
       - saml_connections: The list of [SAML Connections](https://stytch.com/docs/b2b/api/saml-connection-object) owned by this organization.
       - oidc_connections: The list of [OIDC Connections](https://stytch.com/docs/b2b/api/oidc-connection-object) owned by this organization.
+      - external_connections: (no documentation yet)
     """  # noqa
 
     saml_connections: List[SAMLConnection]
     oidc_connections: List[OIDCConnection]
+    external_connections: List[Connection]

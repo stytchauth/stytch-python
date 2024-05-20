@@ -42,7 +42,7 @@ class OIDC:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
-          - identity_provider: (no documentation yet)
+          - identity_provider: The identity provider of this connection. For OIDC, the accepted values are `generic`, `okta`, and `microsoft-entra`. For SAML, the accepted values are `generic`, `okta`, `microsoft-entra`, and `google-workspace`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -71,7 +71,7 @@ class OIDC:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - display_name: A human-readable display name for the connection.
-          - identity_provider: (no documentation yet)
+          - identity_provider: The identity provider of this connection. For OIDC, the accepted values are `generic`, `okta`, and `microsoft-entra`. For SAML, the accepted values are `generic`, `okta`, `microsoft-entra`, and `google-workspace`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -136,7 +136,7 @@ class OIDC:
           - token_url: The location of the URL that issues OAuth2.0 access tokens and OIDC ID tokens. This will be provided by the IdP.
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
-          - identity_provider: (no documentation yet)
+          - identity_provider: The identity provider of this connection. For OIDC, the accepted values are `generic`, `okta`, and `microsoft-entra`. For SAML, the accepted values are `generic`, `okta`, `microsoft-entra`, and `google-workspace`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -216,7 +216,7 @@ class OIDC:
           - token_url: The location of the URL that issues OAuth2.0 access tokens and OIDC ID tokens. This will be provided by the IdP.
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
-          - identity_provider: (no documentation yet)
+          - identity_provider: The identity provider of this connection. For OIDC, the accepted values are `generic`, `okta`, and `microsoft-entra`. For SAML, the accepted values are `generic`, `okta`, `microsoft-entra`, and `google-workspace`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
