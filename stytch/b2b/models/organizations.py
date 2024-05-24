@@ -235,6 +235,8 @@ class Organization(pydantic.BaseModel):
 
       - scim_active_connections: An array of active [SCIM Connection references](https://stytch.com/docs/b2b/api/scim-connection-object).
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
+      - created_at: The timestamp of the Organization's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - updated_at: The timestamp of when the Organization was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
     """  # noqa
 
@@ -256,6 +258,8 @@ class Organization(pydantic.BaseModel):
     allowed_mfa_methods: List[str]
     scim_active_connections: List[ActiveSCIMConnection]
     trusted_metadata: Optional[Dict[str, Any]] = None
+    created_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
     sso_default_connection_id: Optional[str] = None
 
 
@@ -328,6 +332,8 @@ class Member(pydantic.BaseModel):
       - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
       frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
       for complete field behavior details.
+      - created_at: The timestamp of the Member's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - updated_at: The timestamp of when the Member was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
     """  # noqa
 
     organization_id: str
@@ -350,6 +356,8 @@ class Member(pydantic.BaseModel):
     roles: List[MemberRole]
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None
+    created_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
 
 
 class SearchQuery(pydantic.BaseModel):
