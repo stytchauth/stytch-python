@@ -96,10 +96,16 @@ class AsyncClient(ClientBase):
         super().__init__(project_id, secret)
         self.auth = aiohttp.BasicAuth(project_id, secret)
         self._external_session = session is not None
-        self._session = session or aiohttp.ClientSession()
+        self.__session = session
+
+    @property
+    def _session(self) -> aiohttp.ClientSession:
+        if self.__session is None:
+            self.__session = aiohttp.ClientSession()
+        return self.__session
 
     def __del__(self) -> None:
-        if self._external_session:
+        if self._external_session or self.__session is None:
             return
 
         # If we're responsible for the session, close it now
