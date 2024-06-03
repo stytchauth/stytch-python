@@ -32,7 +32,7 @@ class Discovery:
         login_template_id: Optional[str] = None,
         locale: Optional[Union[SendRequestLocale, str]] = None,
     ) -> SendResponse:
-        """Send a discovery magic link to an email address.
+        """Send a discovery magic link to an email address. The magic link is valid for 60 minutes.
 
         Fields:
           - email_address: The email address of the Member.
@@ -74,7 +74,7 @@ class Discovery:
         login_template_id: Optional[str] = None,
         locale: Optional[SendRequestLocale] = None,
     ) -> SendResponse:
-        """Send a discovery magic link to an email address.
+        """Send a discovery magic link to an email address. The magic link is valid for 60 minutes.
 
         Fields:
           - email_address: The email address of the Member.

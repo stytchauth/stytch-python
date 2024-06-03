@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from stytch.b2b.api.scim_connections import Connections
+from stytch.b2b.api.scim_connection import Connection
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -18,7 +18,7 @@ class SCIM:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
-        self.connections = Connections(
+        self.connection = Connection(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
