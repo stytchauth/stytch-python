@@ -14,7 +14,7 @@ from stytch.consumer.api.m2m_clients import Clients
 from stytch.consumer.models.m2m import GetTokenResponse, M2MJWTClaims
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.shared import jwt_helpers
+from stytch.shared import jwt_helpers, m2m_authorization
 
 
 class M2M:
@@ -100,7 +100,7 @@ class M2M:
 
     # MANUAL(m2m.authenticate_token)(SERVICE_METHOD)
     # ADDIMPORT: from typing import List, Optional
-    # ADDIMPORT: from stytch.shared import jwt_helpers
+    # ADDIMPORT: from stytch.shared import jwt_helpers, m2m_authorization
     # ADDIMPORT: from stytch.consumer.models.m2m import M2MJWTClaims
     def authenticate_token(
         self,
@@ -130,8 +130,12 @@ class M2M:
         scope = generic_claims.untyped_claims[_scope_claim]
         scopes = [s for s in scope.split(" ") if len(s) > 0]
         required_scopes = required_scopes or []
-        missing_scopes = [scope for scope in required_scopes if scope not in scopes]
-        if len(missing_scopes) != 0:
+        try:
+            m2m_authorization.perform_authorization_check(
+                has_scopes=scopes,
+                required_scopes=required_scopes,
+            )
+        except m2m_authorization.M2MPermissionError:
             return None
 
         custom_claims = {
