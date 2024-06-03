@@ -9,8 +9,8 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.models.scim import SCIMGroupImplicitRoleAssignments
-from stytch.b2b.models.scim_connections import (
-    CreateRequestIdp,
+from stytch.b2b.models.scim_connection import (
+    CreateRequestIdentityProvider,
     CreateRequestOptions,
     CreateResponse,
     DeleteRequestOptions,
@@ -23,7 +23,7 @@ from stytch.b2b.models.scim_connections import (
     RotateCompleteResponse,
     RotateStartRequestOptions,
     RotateStartResponse,
-    UpdateRequestIdp,
+    UpdateRequestIdentityProvider,
     UpdateRequestOptions,
     UpdateResponse,
 )
@@ -31,7 +31,7 @@ from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
 
-class Connections:
+class Connection:
     def __init__(
         self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:
@@ -44,7 +44,7 @@ class Connections:
         organization_id: str,
         connection_id: str,
         display_name: Optional[str] = None,
-        identity_provider: Optional[Union[UpdateRequestIdp, str]] = None,
+        identity_provider: Optional[Union[UpdateRequestIdentityProvider, str]] = None,
         scim_group_implicit_role_assignments: Optional[
             List[Union[SCIMGroupImplicitRoleAssignments, Dict[str, Any]]]
         ] = None,
@@ -77,7 +77,7 @@ class Connections:
             ]
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}", data
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}", data
         )
         res = self.sync_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status_code, res.json)
@@ -87,7 +87,7 @@ class Connections:
         organization_id: str,
         connection_id: str,
         display_name: Optional[str] = None,
-        identity_provider: Optional[UpdateRequestIdp] = None,
+        identity_provider: Optional[UpdateRequestIdentityProvider] = None,
         scim_group_implicit_role_assignments: Optional[
             List[SCIMGroupImplicitRoleAssignments]
         ] = None,
@@ -120,7 +120,7 @@ class Connections:
             ]
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}", data
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}", data
         )
         res = await self.async_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status, res.json)
@@ -146,7 +146,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}", data
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}", data
         )
         res = self.sync_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status_code, res.json)
@@ -172,7 +172,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}", data
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}", data
         )
         res = await self.async_client.delete(url, headers)
         return DeleteResponse.from_json(res.response.status, res.json)
@@ -198,7 +198,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}/rotate/start",
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}/rotate/start",
             data,
         )
         res = self.sync_client.post(url, data, headers)
@@ -225,7 +225,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}/rotate/start",
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}/rotate/start",
             data,
         )
         res = await self.async_client.post(url, data, headers)
@@ -252,7 +252,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}/rotate/complete",
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}/rotate/complete",
             data,
         )
         res = self.sync_client.post(url, data, headers)
@@ -279,7 +279,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}/rotate/complete",
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}/rotate/complete",
             data,
         )
         res = await self.async_client.post(url, data, headers)
@@ -306,7 +306,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}/rotate/cancel",
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}/rotate/cancel",
             data,
         )
         res = self.sync_client.post(url, data, headers)
@@ -333,7 +333,7 @@ class Connections:
         }
 
         url = self.api_base.url_for(
-            "/v1/b2b/scim/{organization_id}/connections/{connection_id}/rotate/cancel",
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}/rotate/cancel",
             data,
         )
         res = await self.async_client.post(url, data, headers)
@@ -343,7 +343,7 @@ class Connections:
         self,
         organization_id: str,
         display_name: Optional[str] = None,
-        identity_provider: Optional[Union[CreateRequestIdp, str]] = None,
+        identity_provider: Optional[Union[CreateRequestIdentityProvider, str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Create a new SCIM Connection. /%}
@@ -364,7 +364,7 @@ class Connections:
         if identity_provider is not None:
             data["identity_provider"] = identity_provider
 
-        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connections", data)
+        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connection", data)
         res = self.sync_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status_code, res.json)
 
@@ -372,7 +372,7 @@ class Connections:
         self,
         organization_id: str,
         display_name: Optional[str] = None,
-        identity_provider: Optional[CreateRequestIdp] = None,
+        identity_provider: Optional[CreateRequestIdentityProvider] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Create a new SCIM Connection. /%}
@@ -393,7 +393,7 @@ class Connections:
         if identity_provider is not None:
             data["identity_provider"] = identity_provider
 
-        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connections", data)
+        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connection", data)
         res = await self.async_client.post(url, data, headers)
         return CreateResponse.from_json(res.response.status, res.json)
 
@@ -414,7 +414,7 @@ class Connections:
             "organization_id": organization_id,
         }
 
-        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connections", data)
+        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connection", data)
         res = self.sync_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status_code, res.json)
 
@@ -435,6 +435,6 @@ class Connections:
             "organization_id": organization_id,
         }
 
-        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connections", data)
+        url = self.api_base.url_for("/v1/b2b/scim/{organization_id}/connection", data)
         res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)

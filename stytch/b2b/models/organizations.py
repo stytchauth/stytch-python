@@ -233,11 +233,11 @@ class Organization(pydantic.BaseModel):
       - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
       The list's accepted values are: `sms_otp` and `totp`.
 
-      - scim_active_connections: An array of active [SCIM Connection references](https://stytch.com/docs/b2b/api/scim-connection-object).
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - created_at: The timestamp of the Organization's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - updated_at: The timestamp of when the Organization was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
+      - scim_active_connection: An active [SCIM Connection references](https://stytch.com/docs/b2b/api/scim-connection-object).
     """  # noqa
 
     organization_id: str
@@ -256,11 +256,11 @@ class Organization(pydantic.BaseModel):
     rbac_email_implicit_role_assignments: List[EmailImplicitRoleAssignment]
     mfa_methods: str
     allowed_mfa_methods: List[str]
-    scim_active_connections: List[ActiveSCIMConnection]
     trusted_metadata: Optional[Dict[str, Any]] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
     sso_default_connection_id: Optional[str] = None
+    scim_active_connection: Optional[ActiveSCIMConnection] = None
 
 
 class ResultsMetadata(pydantic.BaseModel):
@@ -322,7 +322,6 @@ class Member(pydantic.BaseModel):
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
       - totp_registration_id: (no documentation yet)
-      - scim_registrations: An array of scim member registrations, each one referencing a [SCIM Connection](scim-connection-object) object in use for the Member creation.
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
       - default_mfa_method: (no documentation yet)
@@ -334,6 +333,7 @@ class Member(pydantic.BaseModel):
       for complete field behavior details.
       - created_at: The timestamp of the Member's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - updated_at: The timestamp of when the Member was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - scim_registration: A scim member registration, referencing a [SCIM Connection](scim-connection-object) object in use for the Member creation.
     """  # noqa
 
     organization_id: str
@@ -349,7 +349,6 @@ class Member(pydantic.BaseModel):
     mfa_phone_number_verified: bool
     is_admin: bool
     totp_registration_id: str
-    scim_registrations: List[SCIMRegistration]
     mfa_enrolled: bool
     mfa_phone_number: str
     default_mfa_method: str
@@ -358,6 +357,7 @@ class Member(pydantic.BaseModel):
     untrusted_metadata: Optional[Dict[str, Any]] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
+    scim_registration: Optional[SCIMRegistration] = None
 
 
 class SearchQuery(pydantic.BaseModel):

@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import enum
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 import pydantic
 
@@ -20,8 +20,8 @@ from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
 
 
-class CreateRequestIdp(str, enum.Enum):
-    UNKNOWN = "unknown"
+class CreateRequestIdentityProvider(str, enum.Enum):
+    GENERIC = "generic"
     OKTA = "okta"
     MICROSOFTENTRA = "microsoft-entra"
     CYBERARK = "cyberark"
@@ -31,10 +31,15 @@ class CreateRequestIdp(str, enum.Enum):
     RIPPLING = "rippling"
 
 
-class UpdateRequestIdp(str, enum.Enum):
-    UNKNOWN = "unknown"
+class UpdateRequestIdentityProvider(str, enum.Enum):
+    GENERIC = "generic"
     OKTA = "okta"
     MICROSOFTENTRA = "microsoft-entra"
+    CYBERARK = "cyberark"
+    JUMPCLOUD = "jumpcloud"
+    ONELOGIN = "onelogin"
+    PINGFEDERATE = "pingfederate"
+    RIPPLING = "rippling"
 
 
 class CreateRequestOptions(pydantic.BaseModel):
@@ -150,7 +155,7 @@ class UpdateRequestOptions(pydantic.BaseModel):
 
 
 class CreateResponse(ResponseBase):
-    """Response type for `Connections.create`.
+    """Response type for `Connection.create`.
     Fields:
       - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
     """  # noqa
@@ -159,7 +164,7 @@ class CreateResponse(ResponseBase):
 
 
 class DeleteResponse(ResponseBase):
-    """Response type for `Connections.delete`.
+    """Response type for `Connection.delete`.
     Fields:
       - connection_id: The `connection_id` that was deleted as part of the delete request.
     """  # noqa
@@ -168,16 +173,16 @@ class DeleteResponse(ResponseBase):
 
 
 class GetResponse(ResponseBase):
-    """Response type for `Connections.get`.
+    """Response type for `Connection.get`.
     Fields:
-      - connections: (no documentation yet)
+      - connection: (no documentation yet)
     """  # noqa
 
-    connections: List[SCIMConnection]
+    connection: Optional[SCIMConnection] = None
 
 
 class RotateCancelResponse(ResponseBase):
-    """Response type for `Connections.rotate_cancel`.
+    """Response type for `Connection.rotate_cancel`.
     Fields:
       - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
     """  # noqa
@@ -186,7 +191,7 @@ class RotateCancelResponse(ResponseBase):
 
 
 class RotateCompleteResponse(ResponseBase):
-    """Response type for `Connections.rotate_complete`.
+    """Response type for `Connection.rotate_complete`.
     Fields:
       - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
     """  # noqa
@@ -195,7 +200,7 @@ class RotateCompleteResponse(ResponseBase):
 
 
 class RotateStartResponse(ResponseBase):
-    """Response type for `Connections.rotate_start`.
+    """Response type for `Connection.rotate_start`.
     Fields:
       - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
     """  # noqa
@@ -204,7 +209,7 @@ class RotateStartResponse(ResponseBase):
 
 
 class UpdateResponse(ResponseBase):
-    """Response type for `Connections.update`.
+    """Response type for `Connection.update`.
     Fields:
       - connection: The `SAML Connection` object affected by this API call. See the [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object) for complete response field details.
     """  # noqa
