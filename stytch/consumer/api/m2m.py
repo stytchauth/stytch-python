@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 import jwt
 
@@ -99,7 +99,7 @@ class M2M:
     # ENDMANUAL(m2m.token)
 
     # MANUAL(m2m.authenticate_token)(SERVICE_METHOD)
-    # ADDIMPORT: from typing import List, Optional
+    # ADDIMPORT: from typing import Callable, List, Optional
     # ADDIMPORT: from stytch.shared import jwt_helpers, m2m_authorization
     # ADDIMPORT: from stytch.consumer.models.m2m import M2MJWTClaims
     def authenticate_token(
@@ -107,6 +107,9 @@ class M2M:
         access_token: str,
         required_scopes: Optional[List[str]] = None,
         max_token_age: Optional[int] = None,
+        scope_authorization_func: Callable[
+            [m2m_authorization.AuthorizationCheckParams], bool
+        ] = m2m_authorization.perform_authorization_check,
     ) -> Optional[M2MJWTClaims]:
         """Validates a M2M JWT locally.
         Note: There is no async version of this since we make no network calls.
@@ -115,6 +118,9 @@ class M2M:
           - access_token: The ID of the client.
           - required_scopes: A list of scopes the token must have to be valid.
           - max_token_age: The maximum possible lifetime in seconds for the token to be valid.
+          - scope_authorization_func: A function to check if the token has the required scopes. This defaults to
+            a function that assumes scopes are either direct string matches or written in the form "action:resource".
+            See the documentation for `m2m_authorization.perform_authorization_check` for more information.
         """  # noqa
 
         _scope_claim = "scope"
@@ -130,12 +136,14 @@ class M2M:
         scope = generic_claims.untyped_claims[_scope_claim]
         scopes = [s for s in scope.split(" ") if len(s) > 0]
         required_scopes = required_scopes or []
-        try:
-            m2m_authorization.perform_authorization_check(
+
+        is_authorized = scope_authorization_func(
+            m2m_authorization.AuthorizationCheckParams(
                 has_scopes=scopes,
                 required_scopes=required_scopes,
             )
-        except m2m_authorization.M2MPermissionError:
+        )
+        if not is_authorized:
             return None
 
         custom_claims = {

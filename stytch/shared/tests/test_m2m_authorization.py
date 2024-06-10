@@ -2,50 +2,57 @@ import unittest
 
 from stytch.shared.m2m_authorization import (
     perform_authorization_check,
-    M2MPermissionError,
+    AuthorizationCheckParams,
 )
 
 
 class TestM2MAuthorization(unittest.TestCase):
     def test_perform_authorization_check(self):
         with self.subTest("basic"):
-            has = ["read:users", "write:users"]
-            needs = ["read:users"]
-
-            # Assertion is just that no exception is raised
-            perform_authorization_check(has, needs)
+            params = AuthorizationCheckParams(
+                has_scopes=["read:users"], required_scopes=["read:users"]
+            )
+            self.assertTrue(perform_authorization_check(params))
 
         with self.subTest("multiple required scopes"):
-            has = ["read:users", "write:users", "read:books"]
-            needs = ["read:users", "read:books"]
-
-            # Assertion is just that no exception is raised
-            perform_authorization_check(has, needs)
+            params = AuthorizationCheckParams(
+                has_scopes=["read:users", "write:users", "read:books"],
+                required_scopes=["read:users", "read:books"],
+            )
+            self.assertTrue(perform_authorization_check(params))
 
         with self.subTest("simple scopes"):
-            has = ["read_users", "write_users"]
-            needs = ["read_users"]
-
-            # Assertion is just that no exception is raised
-            perform_authorization_check(has, needs)
+            params = AuthorizationCheckParams(
+                has_scopes=["read_users", "write_users"], required_scopes=["read_users"]
+            )
+            self.assertTrue(perform_authorization_check(params))
 
         with self.subTest("wildcard resource"):
-            has = ["read:*", "write:*"]
-            needs = ["read:users"]
-
-            # Assertion is just that no exception is raised
-            perform_authorization_check(has, needs)
+            params = AuthorizationCheckParams(
+                has_scopes=["read:*", "write:*"], required_scopes=["read:users"]
+            )
+            self.assertTrue(perform_authorization_check(params))
 
         with self.subTest("missing required scope"):
-            has = ["read:users"]
-            needs = ["write:users"]
-
-            with self.assertRaises(M2MPermissionError):
-                perform_authorization_check(has, needs)
+            params = AuthorizationCheckParams(
+                has_scopes=["read:users"], required_scopes=["write:users"]
+            )
+            self.assertFalse(perform_authorization_check(params))
 
         with self.subTest("missing required scope with wildcard"):
-            has = ["read:users", "write:*"]
-            needs = ["delete:books"]
+            params = AuthorizationCheckParams(
+                has_scopes=["read:users", "write:*"], required_scopes=["delete:books"]
+            )
+            self.assertFalse(perform_authorization_check(params))
 
-            with self.assertRaises(M2MPermissionError):
-                perform_authorization_check(has, needs)
+        with self.subTest("has simple scope and wants specific scope"):
+            params = AuthorizationCheckParams(
+                has_scopes=["read"], required_scopes=["read:users"]
+            )
+            self.assertFalse(perform_authorization_check(params))
+
+        with self.subTest("has specific scope and wants simple scope"):
+            params = AuthorizationCheckParams(
+                has_scopes=["read:users"], required_scopes=["read"]
+            )
+            self.assertFalse(perform_authorization_check(params))
