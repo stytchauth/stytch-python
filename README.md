@@ -20,6 +20,8 @@ You can find your API credentials in the [Stytch Dashboard](https://stytch.com/d
 
 This client library supports all Stytch's live products:
 
+## B2C
+
 - [x] [Email Magic Links](https://stytch.com/docs/api/send-by-email)
 - [x] [Embeddable Magic Links](https://stytch.com/docs/guides/magic-links/embeddable-magic-links/api)
 - [x] [OAuth logins](https://stytch.com/docs/guides/oauth/idp-overview)
@@ -32,7 +34,18 @@ This client library supports all Stytch's live products:
 - [x] [Crypto wallets](https://stytch.com/docs/guides/web3/api)
 - [x] [Passwords](https://stytch.com/docs/guides/passwords/api)
 
-### Example usage
+**B2B**
+
+- [x] [Organizations](https://stytch.com/docs/b2b/api/organization-object)
+- [x] [Members](https://stytch.com/docs/b2b/api/member-object)
+- [x] [Email Magic Links](https://stytch.com/docs/b2b/api/send-login-signup-email)
+- [x] [OAuth logins](https://stytch.com/docs/b2b/api/oauth-google-start)
+- [x] [Session Management](https://stytch.com/docs/b2b/api/session-object)
+- [x] [Single-Sign On](https://stytch.com/docs/b2b/api/sso-authenticate-start)
+- [x] [Discovery](https://stytch.com/docs/b2b/api/discovered-organization-object)
+- [x] [Passwords](https://stytch.com/docs/b2b/api/passwords-authenticate)
+
+### Example B2C usage
 
 Create an API client:
 
@@ -84,6 +97,42 @@ auth_resp = await client.magic_links.authenticate(
     token="DOYoip3rvIMMW5lgItikFK-Ak1CfMsgjuiCyI7uuU94=",
 )
 print(resp)
+```
+
+### Example B2B usage
+
+Create an API client:
+
+Python:
+
+```python
+import stytch
+
+client = stytch.B2BClient(
+    project_id="project-live-c60c0abe-c25a-4472-a9ed-320c6667d317",
+    secret="secret-live-80JASucyk7z_G8Z-7dVwZVGXL5NT_qGAQ2I=",
+)
+```
+
+Create an organization
+
+```python
+response = client.organizations.create(
+    organization_name="Acme Co",
+    organization_slug="acme-co",
+    email_allowed_domains=["acme.co"]
+)
+```
+
+Log the first user into the organization
+
+```python
+response = client.magic_links.email.login_or_signup(
+    organization_id="ORGANIZATION_ID_FROM_RESPONSE",
+    email_address="admin@acme.co",
+    login_redirect_url="https://example.com/authenticate",
+    signup_redirect_url="https://example.com/authenticate"
+)
 ```
 
 ## Handling Errors
