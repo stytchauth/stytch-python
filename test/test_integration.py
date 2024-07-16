@@ -244,7 +244,8 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             auth_response = api.authenticate(session_token=TEST_SESSION_TOKEN)
             response = self.b2c_client.sessions.authenticate_jwt(session_jwt=auth_response.session_jwt)
             self.assertIsNotNone(response)
-            self.assertEquals(auth_response.session_jwt, response.session_jwt)
+            if response is not None:
+                self.assertEquals(auth_response.session_jwt, response.session_jwt)
 
     def test_authenticate_jwt_local_returns_none_for_expired_token(self) -> None:
         api = self.b2c_client.sessions
