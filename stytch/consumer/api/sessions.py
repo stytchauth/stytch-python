@@ -15,7 +15,8 @@ from stytch.consumer.models.sessions import (
     GetJWKSResponse,
     GetResponse,
     RevokeResponse,
-    Session, AuthenticateJWTLocalResponse,
+    Session,
+    AuthenticateJWTLocalResponse,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient

@@ -329,4 +329,5 @@ class AsyncIntegrationTest(IntegrationTestBase, unittest.IsolatedAsyncioTestCase
             # Grab a recent JWT token and verify it's valid
             auth_response = api.authenticate(session_token=TEST_SESSION_TOKEN)
             response = await self.b2c_client.sessions.authenticate_jwt_async(session_jwt=auth_response.session_jwt)
+            self.assertIsNotNone(response)
             self.assertEquals(auth_response.session_jwt, response.session_jwt)
