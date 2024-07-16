@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import unittest
+from time import sleep
+
 from test.constants import (
     TEST_CRYPTO_SIGNATURE,
     TEST_CRYPTO_WALLET_ADDRESS,
@@ -17,7 +19,7 @@ from test.constants import (
     TEST_TOTP_CODE,
     TEST_TOTP_RECOVERY_CODE,
     TEST_TOTP_USER_ID,
-    TEST_USERS_NAME,
+    TEST_USERS_NAME, TEST_EXPIRED_JWT,
 )
 from test.integration_base import CreatedTestUser, IntegrationTestBase
 
@@ -231,6 +233,21 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             )
             # TODO: No test public key credential (see skipTest above)
             self.assertTrue(api.authenticate(public_key_credential="").is_success)
+
+    def test_authenticate(self) -> None:
+        api = self.b2c_client.sessions
+
+        with self._get_temporary_user() as user:
+            assert isinstance(user, CreatedTestUser)
+            self.assertTrue(api.get(user_id=user.user_id).is_success)
+            # Grab a recent JWT token and verify it's valid
+            auth_response = api.authenticate(session_token=TEST_SESSION_TOKEN)
+            response = self.b2c_client.sessions.authenticate_jwt(session_jwt=auth_response.session_jwt)
+            self.assertEquals(auth_response.session_jwt, response.session_jwt)
+
+    def test_authenticate_jwt_local_returns_none_for_expired_token(self) -> None:
+        api = self.b2c_client.sessions
+        self.assertIsNone(api.authenticate_jwt_local(session_jwt=TEST_EXPIRED_JWT))
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ from stytch.consumer.models.sessions import (
     GetJWKSResponse,
     GetResponse,
     RevokeResponse,
-    Session,
+    Session, AuthenticateJWTLocalResponse,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -24,12 +24,12 @@ from stytch.shared import jwt_helpers
 
 class Sessions:
     def __init__(
-        self,
-        api_base: ApiBase,
-        sync_client: SyncClient,
-        async_client: AsyncClient,
-        jwks_client: jwt.PyJWKClient,
-        project_id: str,
+            self,
+            api_base: ApiBase,
+            sync_client: SyncClient,
+            async_client: AsyncClient,
+            jwks_client: jwt.PyJWKClient,
+            project_id: str,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -38,8 +38,8 @@ class Sessions:
         self.project_id = project_id
 
     def get(
-        self,
-        user_id: str,
+            self,
+            user_id: str,
     ) -> GetResponse:
         """List all active Sessions for a given `user_id`. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
 
@@ -56,8 +56,8 @@ class Sessions:
         return GetResponse.from_json(res.response.status_code, res.json)
 
     async def get_async(
-        self,
-        user_id: str,
+            self,
+            user_id: str,
     ) -> GetResponse:
         """List all active Sessions for a given `user_id`. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
 
@@ -74,11 +74,11 @@ class Sessions:
         return GetResponse.from_json(res.response.status, res.json)
 
     def authenticate(
-        self,
-        session_token: Optional[str] = None,
-        session_duration_minutes: Optional[int] = None,
-        session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
+            self,
+            session_token: Optional[str] = None,
+            session_duration_minutes: Optional[int] = None,
+            session_jwt: Optional[str] = None,
+            session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a session token or session JWT and retrieve associated session data. If `session_duration_minutes` is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`. This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included, you will receive a `too_many_session_arguments` error.
 
@@ -108,11 +108,11 @@ class Sessions:
         return AuthenticateResponse.from_json(res.response.status_code, res.json)
 
     async def authenticate_async(
-        self,
-        session_token: Optional[str] = None,
-        session_duration_minutes: Optional[int] = None,
-        session_jwt: Optional[str] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
+            self,
+            session_token: Optional[str] = None,
+            session_duration_minutes: Optional[int] = None,
+            session_jwt: Optional[str] = None,
+            session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a session token or session JWT and retrieve associated session data. If `session_duration_minutes` is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`. This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included, you will receive a `too_many_session_arguments` error.
 
@@ -142,10 +142,10 @@ class Sessions:
         return AuthenticateResponse.from_json(res.response.status, res.json)
 
     def revoke(
-        self,
-        session_id: Optional[str] = None,
-        session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
+            self,
+            session_id: Optional[str] = None,
+            session_token: Optional[str] = None,
+            session_jwt: Optional[str] = None,
     ) -> RevokeResponse:
         """Revoke a Session, immediately invalidating all of its session tokens. You can revoke a session in three ways: using its ID, or using one of its session tokens, or one of its JWTs. This endpoint requires exactly one of those to be included in the request. It will return an error if multiple are present.
 
@@ -168,10 +168,10 @@ class Sessions:
         return RevokeResponse.from_json(res.response.status_code, res.json)
 
     async def revoke_async(
-        self,
-        session_id: Optional[str] = None,
-        session_token: Optional[str] = None,
-        session_jwt: Optional[str] = None,
+            self,
+            session_id: Optional[str] = None,
+            session_token: Optional[str] = None,
+            session_jwt: Optional[str] = None,
     ) -> RevokeResponse:
         """Revoke a Session, immediately invalidating all of its session tokens. You can revoke a session in three ways: using its ID, or using one of its session tokens, or one of its JWTs. This endpoint requires exactly one of those to be included in the request. It will return an error if multiple are present.
 
@@ -194,8 +194,8 @@ class Sessions:
         return RevokeResponse.from_json(res.response.status, res.json)
 
     def get_jwks(
-        self,
-        project_id: str,
+            self,
+            project_id: str,
     ) -> GetJWKSResponse:
         """Get the JSON Web Key Set (JWKS) for a project.
 
@@ -222,8 +222,8 @@ class Sessions:
         return GetJWKSResponse.from_json(res.response.status_code, res.json)
 
     async def get_jwks_async(
-        self,
-        project_id: str,
+            self,
+            project_id: str,
     ) -> GetJWKSResponse:
         """Get the JSON Web Key Set (JWKS) for a project.
 
@@ -254,11 +254,11 @@ class Sessions:
     # ADDIMPORT: import jwt
     # ADDIMPORT: import time
     def authenticate_jwt(
-        self,
-        session_jwt: str,
-        max_token_age_seconds: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> Optional[Session]:
+            self,
+            session_jwt: str,
+            max_token_age_seconds: Optional[int] = None,
+            session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> Optional[AuthenticateJWTLocalResponse]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
 
@@ -269,22 +269,41 @@ class Sessions:
         zero or use the authenticate method instead.
         """
         # Return the local_result if available, otherwise call the Stytch API
-        return (
-            self.authenticate_jwt_local(
-                session_jwt=session_jwt,
-                max_token_age_seconds=max_token_age_seconds,
-            )
-            or self.authenticate(
-                session_custom_claims=session_custom_claims, session_jwt=session_jwt
-            ).session
+        # Return the local_result if available, otherwise call the Stytch API
+        local_token = self.authenticate_jwt_local(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
         )
+        if local_token is not None:
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=200,
+                json={
+                    "session": local_token,
+                    "session_jwt": session_jwt,
+                    "status_code": 200,
+                    "request_id": "",
+                },
+            )
+        else:
+            authenticate_response = self.authenticate(
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+            )
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=authenticate_response.status_code,
+                json={
+                    "session": authenticate_response.session,
+                    "session_jwt": authenticate_response.session_jwt,
+                    "status_code": authenticate_response.status_code,
+                    "request_id": authenticate_response.request_id,
+                }
+            )
 
     async def authenticate_jwt_async(
-        self,
-        session_jwt: str,
-        max_token_age_seconds: Optional[int] = None,
-        session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> Optional[Session]:
+            self,
+            session_jwt: str,
+            max_token_age_seconds: Optional[int] = None,
+            session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> Optional[AuthenticateJWTLocalResponse]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
 
@@ -295,17 +314,33 @@ class Sessions:
         zero or use the authenticate method instead.
         """
         # Return the local_result if available, otherwise call the Stytch API
-        return (
-            self.authenticate_jwt_local(
-                session_jwt=session_jwt,
-                max_token_age_seconds=max_token_age_seconds,
-            )
-            or (
-                await self.authenticate_async(
-                    session_custom_claims=session_custom_claims, session_jwt=session_jwt
-                )
-            ).session
+        local_token = self.authenticate_jwt_local(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
         )
+        if local_token is not None:
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=200,
+                json={
+                    "session": local_token,
+                    "session_jwt": session_jwt,
+                    "status_code": 200,
+                    "request_id": "",
+                },
+            )
+        else:
+            authenticate_response = await self.authenticate_async(
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+            )
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=authenticate_response.status_code,
+                json={
+                    "session": authenticate_response.session,
+                    "session_jwt": authenticate_response.session_jwt,
+                    "status_code": authenticate_response.status_code,
+                    "request_id": authenticate_response.request_id,
+                }
+            )
 
     # ENDMANUAL(authenticate_jwt)
 
@@ -313,10 +348,10 @@ class Sessions:
     # ADDIMPORT: from stytch.consumer.models.sessions import Session
     # ADDIMPORT: from stytch.shared import jwt_helpers
     def authenticate_jwt_local(
-        self,
-        session_jwt: str,
-        max_token_age_seconds: Optional[int] = None,
-        leeway: int = 0,
+            self,
+            session_jwt: str,
+            max_token_age_seconds: Optional[int] = None,
+            leeway: int = 0,
     ) -> Optional[Session]:
         _session_claim = "https://stytch.com/session"
         generic_claims = jwt_helpers.authenticate_jwt_local(

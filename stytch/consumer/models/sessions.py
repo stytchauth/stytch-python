@@ -496,3 +496,9 @@ class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:
     """  # noqa
+
+# MANUAL(AuthenticateJWTLocalResponse)(Types)
+class AuthenticateJWTLocalResponse(ResponseBase):
+    session: Session
+    session_jwt: str
+# ENDMANUAL(AuthenticateJWTLocalResponse)
