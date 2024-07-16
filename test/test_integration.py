@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import unittest
-from time import sleep
 
 from test.constants import (
     TEST_CRYPTO_SIGNATURE,
@@ -19,7 +18,8 @@ from test.constants import (
     TEST_TOTP_CODE,
     TEST_TOTP_RECOVERY_CODE,
     TEST_TOTP_USER_ID,
-    TEST_USERS_NAME, TEST_EXPIRED_JWT,
+    TEST_USERS_NAME,
+    TEST_EXPIRED_JWT,
 )
 from test.integration_base import CreatedTestUser, IntegrationTestBase
 
