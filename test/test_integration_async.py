@@ -319,3 +319,16 @@ class AsyncIntegrationTest(IntegrationTestBase, unittest.IsolatedAsyncioTestCase
             self.assertTrue(
                 (await api.authenticate_async(public_key_credential="")).is_success
             )
+
+    async def test_authenticate(self) -> None:
+        api = self.b2c_client.sessions
+
+        async with self._get_temporary_user_async() as user:
+            assert isinstance(user, CreatedTestUser)
+            self.assertTrue(api.get(user_id=user.user_id).is_success)
+            # Grab a recent JWT token and verify it's valid
+            auth_response = api.authenticate(session_token=TEST_SESSION_TOKEN)
+            response = await self.b2c_client.sessions.authenticate_jwt_async(session_jwt=auth_response.session_jwt)
+            self.assertIsNotNone(response)
+            if response is not None:
+                self.assertEquals(auth_response.session_jwt, response.session_jwt)

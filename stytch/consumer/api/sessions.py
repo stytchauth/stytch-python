@@ -16,6 +16,7 @@ from stytch.consumer.models.sessions import (
     GetResponse,
     RevokeResponse,
     Session,
+    AuthenticateJWTLocalResponse,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -253,12 +254,13 @@ class Sessions:
     # ADDIMPORT: from typing import Any, Dict, Optional
     # ADDIMPORT: import jwt
     # ADDIMPORT: import time
+    # ADDIMPORT: from stytch.consumer.models.sessions import AuthenticateJWTLocalResponse
     def authenticate_jwt(
         self,
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> Optional[Session]:
+    ) -> Optional[AuthenticateJWTLocalResponse]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
 
@@ -269,22 +271,40 @@ class Sessions:
         zero or use the authenticate method instead.
         """
         # Return the local_result if available, otherwise call the Stytch API
-        return (
-            self.authenticate_jwt_local(
-                session_jwt=session_jwt,
-                max_token_age_seconds=max_token_age_seconds,
-            )
-            or self.authenticate(
-                session_custom_claims=session_custom_claims, session_jwt=session_jwt
-            ).session
+        local_resp = self.authenticate_jwt_local(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
         )
+        if local_resp is not None:
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=200,
+                json={
+                    "session": local_resp,
+                    "session_jwt": session_jwt,
+                    "status_code": 200,
+                    "request_id": "",
+                },
+            )
+        else:
+            authenticate_response = self.authenticate(
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+            )
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=authenticate_response.status_code,
+                json={
+                    "session": authenticate_response.session,
+                    "session_jwt": authenticate_response.session_jwt,
+                    "status_code": authenticate_response.status_code,
+                    "request_id": authenticate_response.request_id,
+                }
+            )
 
     async def authenticate_jwt_async(
         self,
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> Optional[Session]:
+    ) -> Optional[AuthenticateJWTLocalResponse]:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
 
@@ -295,17 +315,33 @@ class Sessions:
         zero or use the authenticate method instead.
         """
         # Return the local_result if available, otherwise call the Stytch API
-        return (
-            self.authenticate_jwt_local(
-                session_jwt=session_jwt,
-                max_token_age_seconds=max_token_age_seconds,
-            )
-            or (
-                await self.authenticate_async(
-                    session_custom_claims=session_custom_claims, session_jwt=session_jwt
-                )
-            ).session
+        local_token = self.authenticate_jwt_local(
+            session_jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
         )
+        if local_token is not None:
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=200,
+                json={
+                    "session": local_token,
+                    "session_jwt": session_jwt,
+                    "status_code": 200,
+                    "request_id": "",
+                },
+            )
+        else:
+            authenticate_response = await self.authenticate_async(
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+            )
+            return AuthenticateJWTLocalResponse.from_json(
+                status_code=authenticate_response.status_code,
+                json={
+                    "session": authenticate_response.session,
+                    "session_jwt": authenticate_response.session_jwt,
+                    "status_code": authenticate_response.status_code,
+                    "request_id": authenticate_response.request_id,
+                }
+            )
 
     # ENDMANUAL(authenticate_jwt)
 

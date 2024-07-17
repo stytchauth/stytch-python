@@ -39,24 +39,28 @@ def authenticate_jwt_local(
 
     signing_key = jwks_client.get_signing_key_from_jwt(jwt)
 
-    # NOTE: The max_token_age_seconds value is applied after decoding.
-    payload = pyjwt.decode(
-        jwt,
-        signing_key.key,
-        algorithms=["RS256"],
-        options={
-            "require": ["aud", "iss", "exp", "iat", "nbf"],
-            "verify_signature": True,
-            "verify_aud": True,
-            "verify_iss": True,
-            "verify_exp": True,
-            "verify_iat": True,
-            "verify_nbf": True,
-        },
-        audience=jwt_audience,
-        issuer=jwt_issuer,
-        leeway=leeway,
-    )
+    try:
+        # NOTE: The max_token_age_seconds value is applied after decoding.
+        payload = pyjwt.decode(
+            jwt,
+            signing_key.key,
+            algorithms=["RS256"],
+            options={
+                "require": ["aud", "iss", "exp", "iat", "nbf"],
+                "verify_signature": True,
+                "verify_aud": True,
+                "verify_iss": True,
+                "verify_exp": True,
+                "verify_iat": True,
+                "verify_nbf": True,
+            },
+            audience=jwt_audience,
+            issuer=jwt_issuer,
+            leeway=leeway,
+        )
+    except Exception:
+        # In the event of a failure to decode, such as an expired token, we should return None
+        return None
 
     if max_token_age_seconds is not None:
         iat = payload["iat"]

@@ -34,7 +34,7 @@ This client library supports all Stytch's live products:
 - [x] [Crypto wallets](https://stytch.com/docs/guides/web3/api)
 - [x] [Passwords](https://stytch.com/docs/guides/passwords/api)
 
-**B2B**
+## B2B
 
 - [x] [Organizations](https://stytch.com/docs/b2b/api/organization-object)
 - [x] [Members](https://stytch.com/docs/b2b/api/member-object)
