@@ -254,6 +254,7 @@ class Sessions:
     # ADDIMPORT: from typing import Any, Dict, Optional
     # ADDIMPORT: import jwt
     # ADDIMPORT: import time
+    # ADDIMPORT: from stytch.consumer.models.sessions import AuthenticateJWTLocalResponse
     def authenticate_jwt(
         self,
         session_jwt: str,
@@ -270,16 +271,15 @@ class Sessions:
         zero or use the authenticate method instead.
         """
         # Return the local_result if available, otherwise call the Stytch API
-        # Return the local_result if available, otherwise call the Stytch API
-        local_token = self.authenticate_jwt_local(
+        local_resp = self.authenticate_jwt_local(
             session_jwt=session_jwt,
             max_token_age_seconds=max_token_age_seconds,
         )
-        if local_token is not None:
+        if local_resp is not None:
             return AuthenticateJWTLocalResponse.from_json(
                 status_code=200,
                 json={
-                    "session": local_token,
+                    "session": local_resp,
                     "session_jwt": session_jwt,
                     "status_code": 200,
                     "request_id": "",
