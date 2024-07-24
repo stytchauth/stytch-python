@@ -37,7 +37,7 @@ class OIDC:
         ] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
-        """Create a new OIDC Connection. /%}
+        """Create a new OIDC Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -66,7 +66,7 @@ class OIDC:
         identity_provider: Optional[CreateConnectionRequestIdentityProvider] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
-        """Create a new OIDC Connection. /%}
+        """Create a new OIDC Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -123,7 +123,6 @@ class OIDC:
         * `token_url`
         * `userinfo_url`
         * `jwks_url`
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -203,7 +202,6 @@ class OIDC:
         * `token_url`
         * `userinfo_url`
         * `jwks_url`
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.

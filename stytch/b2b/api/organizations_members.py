@@ -65,7 +65,6 @@ class Members:
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -163,7 +162,6 @@ class Members:
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -250,7 +248,7 @@ class Members:
         member_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes a Member specified by `organization_id` and `member_id`. /%}
+        """Deletes a Member specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -276,7 +274,7 @@ class Members:
         member_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes a Member specified by `organization_id` and `member_id`. /%}
+        """Deletes a Member specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -302,7 +300,7 @@ class Members:
         member_id: str,
         method_options: Optional[ReactivateRequestOptions] = None,
     ) -> ReactivateResponse:
-        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`. /%}
+        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -329,7 +327,7 @@ class Members:
         member_id: str,
         method_options: Optional[ReactivateRequestOptions] = None,
     ) -> ReactivateResponse:
-        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`. /%}
+        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -363,7 +361,6 @@ class Members:
         Existing Member Sessions that include a phone number authentication factor will not be revoked if the phone number is deleted, and MFA will not be enforced until the Member logs in again.
         If you wish to enforce MFA immediately after a phone number is deleted, you can do so by prompting the Member to enter a new phone number
         and calling the [OTP SMS send](https://stytch.com/docs/b2b/api/otp-sms-send) endpoint, then calling the [OTP SMS Authenticate](https://stytch.com/docs/b2b/api/authenticate-otp-sms) endpoint.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -399,7 +396,6 @@ class Members:
         Existing Member Sessions that include a phone number authentication factor will not be revoked if the phone number is deleted, and MFA will not be enforced until the Member logs in again.
         If you wish to enforce MFA immediately after a phone number is deleted, you can do so by prompting the Member to enter a new phone number
         and calling the [OTP SMS send](https://stytch.com/docs/b2b/api/otp-sms-send) endpoint, then calling the [OTP SMS Authenticate](https://stytch.com/docs/b2b/api/authenticate-otp-sms) endpoint.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -431,7 +427,6 @@ class Members:
         To mint a new registration for a Member, you must first call this endpoint to delete the existing registration.
 
         Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -462,7 +457,6 @@ class Members:
         To mint a new registration for a Member, you must first call this endpoint to delete the existing registration.
 
         Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -493,7 +487,6 @@ class Members:
         """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
         *All fuzzy search filters require a minimum of three characters.
-         /%}
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
@@ -529,7 +522,6 @@ class Members:
         """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
         *All fuzzy search filters require a minimum of three characters.
-         /%}
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
@@ -560,7 +552,7 @@ class Members:
         member_password_id: str,
         method_options: Optional[DeletePasswordRequestOptions] = None,
     ) -> DeletePasswordResponse:
-        """Delete a Member's password. /%}
+        """Delete a Member's password.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -587,7 +579,7 @@ class Members:
         member_password_id: str,
         method_options: Optional[DeletePasswordRequestOptions] = None,
     ) -> DeletePasswordResponse:
-        """Delete a Member's password. /%}
+        """Delete a Member's password.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -758,7 +750,7 @@ class Members:
         roles: Optional[List[str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
-        """Creates a Member. An `organization_id` and `email_address` are required. /%}
+        """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -819,7 +811,7 @@ class Members:
         roles: Optional[List[str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
-        """Creates a Member. An `organization_id` and `email_address` are required. /%}
+        """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.

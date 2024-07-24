@@ -52,7 +52,7 @@ class Connection:
         ] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
-        """Update a SCIM Connection. /%}
+        """Update a SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -95,7 +95,7 @@ class Connection:
         ] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
-        """Update a SCIM Connection. /%}
+        """Update a SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -133,7 +133,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes a SCIM Connection. /%}
+        """Deletes a SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -159,7 +159,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes a SCIM Connection. /%}
+        """Deletes a SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -185,7 +185,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[RotateStartRequestOptions] = None,
     ) -> RotateStartResponse:
-        """Start a SCIM token rotation. /%}
+        """Start a SCIM token rotation.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -212,7 +212,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[RotateStartRequestOptions] = None,
     ) -> RotateStartResponse:
-        """Start a SCIM token rotation. /%}
+        """Start a SCIM token rotation.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -239,7 +239,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[RotateCompleteRequestOptions] = None,
     ) -> RotateCompleteResponse:
-        """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response. /%}
+        """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -266,7 +266,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[RotateCompleteRequestOptions] = None,
     ) -> RotateCompleteResponse:
-        """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response. /%}
+        """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -293,7 +293,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[RotateCancelRequestOptions] = None,
     ) -> RotateCancelResponse:
-        """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active. /%}
+        """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -320,7 +320,7 @@ class Connection:
         connection_id: str,
         method_options: Optional[RotateCancelRequestOptions] = None,
     ) -> RotateCancelResponse:
-        """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active. /%}
+        """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -416,7 +416,7 @@ class Connection:
         identity_provider: Optional[Union[CreateRequestIdentityProvider, str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
-        """Create a new SCIM Connection. /%}
+        """Create a new SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -445,7 +445,7 @@ class Connection:
         identity_provider: Optional[CreateRequestIdentityProvider] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
-        """Create a new SCIM Connection. /%}
+        """Create a new SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -472,7 +472,7 @@ class Connection:
         organization_id: str,
         method_options: Optional[GetRequestOptions] = None,
     ) -> GetResponse:
-        """Get SCIM Connections. /%}
+        """Get SCIM Connections.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -493,7 +493,7 @@ class Connection:
         organization_id: str,
         method_options: Optional[GetRequestOptions] = None,
     ) -> GetResponse:
-        """Get SCIM Connections. /%}
+        """Get SCIM Connections.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.

@@ -45,7 +45,7 @@ class SSO:
         organization_id: str,
         method_options: Optional[GetConnectionsRequestOptions] = None,
     ) -> GetConnectionsResponse:
-        """Get all SSO Connections owned by the organization. /%}
+        """Get all SSO Connections owned by the organization.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -66,7 +66,7 @@ class SSO:
         organization_id: str,
         method_options: Optional[GetConnectionsRequestOptions] = None,
     ) -> GetConnectionsResponse:
-        """Get all SSO Connections owned by the organization. /%}
+        """Get all SSO Connections owned by the organization.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -88,7 +88,7 @@ class SSO:
         connection_id: str,
         method_options: Optional[DeleteConnectionRequestOptions] = None,
     ) -> DeleteConnectionResponse:
-        """Delete an existing SSO connection. /%}
+        """Delete an existing SSO connection.
 
         Fields:
           - organization_id: The organization ID that the SSO connection belongs to.
@@ -114,7 +114,7 @@ class SSO:
         connection_id: str,
         method_options: Optional[DeleteConnectionRequestOptions] = None,
     ) -> DeleteConnectionResponse:
-        """Delete an existing SSO connection. /%}
+        """Delete an existing SSO connection.
 
         Fields:
           - organization_id: The organization ID that the SSO connection belongs to.

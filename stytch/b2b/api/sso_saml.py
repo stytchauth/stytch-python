@@ -45,7 +45,7 @@ class SAML:
         ] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
-        """Create a new SAML Connection. /%}
+        """Create a new SAML Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -74,7 +74,7 @@ class SAML:
         identity_provider: Optional[CreateConnectionRequestIdentityProvider] = None,
         method_options: Optional[CreateConnectionRequestOptions] = None,
     ) -> CreateConnectionResponse:
-        """Create a new SAML Connection. /%}
+        """Create a new SAML Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -124,7 +124,6 @@ class SAML:
         * `attribute_mapping`
         * `idp_entity_id`
         * `x509_certificate`
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -208,7 +207,6 @@ class SAML:
         * `attribute_mapping`
         * `idp_entity_id`
         * `x509_certificate`
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -280,7 +278,6 @@ class SAML:
         * `idp_entity_id`
         * `x509_certificate`
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -316,7 +313,6 @@ class SAML:
         * `idp_entity_id`
         * `x509_certificate`
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -348,7 +344,6 @@ class SAML:
         """Delete a SAML verification certificate.
 
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
-         /%}
 
         Fields:
           - organization_id: The organization ID that the SAML connection belongs to.
@@ -383,7 +378,6 @@ class SAML:
         """Delete a SAML verification certificate.
 
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
-         /%}
 
         Fields:
           - organization_id: The organization ID that the SAML connection belongs to.
