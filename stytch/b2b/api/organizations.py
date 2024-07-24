@@ -341,8 +341,6 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
-        oauth_tenant_jit_provisioning: Optional[str] = None,
-        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -445,8 +443,6 @@ class Organizations:
 
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
-          - oauth_tenant_jit_provisioning: (no documentation yet)
-          - allowed_oauth_tenants: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -491,10 +487,6 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
-        if oauth_tenant_jit_provisioning is not None:
-            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
-        if allowed_oauth_tenants is not None:
-            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -521,8 +513,6 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
-        oauth_tenant_jit_provisioning: Optional[str] = None,
-        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -625,8 +615,6 @@ class Organizations:
 
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
-          - oauth_tenant_jit_provisioning: (no documentation yet)
-          - allowed_oauth_tenants: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -671,10 +659,6 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
-        if oauth_tenant_jit_provisioning is not None:
-            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
-        if allowed_oauth_tenants is not None:
-            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data, headers)

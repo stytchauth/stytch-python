@@ -234,7 +234,6 @@ class Organization(pydantic.BaseModel):
       - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
       The list's accepted values are: `sms_otp` and `totp`.
 
-      - oauth_tenant_jit_provisioning: (no documentation yet)
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - created_at: The timestamp of the Organization's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - updated_at: The timestamp of when the Organization was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
@@ -258,7 +257,6 @@ class Organization(pydantic.BaseModel):
     rbac_email_implicit_role_assignments: List[EmailImplicitRoleAssignment]
     mfa_methods: str
     allowed_mfa_methods: List[str]
-    oauth_tenant_jit_provisioning: str
     trusted_metadata: Optional[Dict[str, Any]] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
