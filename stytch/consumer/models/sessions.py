@@ -497,8 +497,11 @@ class RevokeResponse(ResponseBase):
     Fields:
     """  # noqa
 
+
 # MANUAL(AuthenticateJWTLocalResponse)(Types)
 class AuthenticateJWTLocalResponse(ResponseBase):
     session: Session
     session_jwt: str
+
+
 # ENDMANUAL(AuthenticateJWTLocalResponse)

@@ -11,12 +11,12 @@ from typing import Any, Dict, Optional
 import jwt
 
 from stytch.consumer.models.sessions import (
+    AuthenticateJWTLocalResponse,
     AuthenticateResponse,
     GetJWKSResponse,
     GetResponse,
     RevokeResponse,
     Session,
-    AuthenticateJWTLocalResponse,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -296,7 +296,7 @@ class Sessions:
                     "session_jwt": authenticate_response.session_jwt,
                     "status_code": authenticate_response.status_code,
                     "request_id": authenticate_response.request_id,
-                }
+                },
             )
 
     async def authenticate_jwt_async(
@@ -340,7 +340,7 @@ class Sessions:
                     "session_jwt": authenticate_response.session_jwt,
                     "status_code": authenticate_response.status_code,
                     "request_id": authenticate_response.request_id,
-                }
+                },
             )
 
     # ENDMANUAL(authenticate_jwt)

@@ -69,7 +69,7 @@ class Passwords:
         If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), the feedback object will contain a collection of fields that the user failed or passed. You'll want to prompt the user to create a password that meets all requirements that they failed.
 
         Fields:
-          - password: The password to authenticate.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -100,7 +100,7 @@ class Passwords:
         If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), the feedback object will contain a collection of fields that the user failed or passed. You'll want to prompt the user to create a password that meets all requirements that they failed.
 
         Fields:
-          - password: The password to authenticate.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -132,6 +132,8 @@ class Passwords:
         preserve_existing_sessions: Optional[bool] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
+
+        The member's email will be marked as verified when you use this endpoint.
 
         Fields:
           - email_address: The email address of the Member.
@@ -226,6 +228,8 @@ class Passwords:
         preserve_existing_sessions: Optional[bool] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
+
+        The member's email will be marked as verified when you use this endpoint.
 
         Fields:
           - email_address: The email address of the Member.
@@ -327,7 +331,7 @@ class Passwords:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
-          - password: The password to authenticate.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: A secret token for a given Stytch Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
@@ -402,7 +406,7 @@ class Passwords:
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - email_address: The email address of the Member.
-          - password: The password to authenticate.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: A secret token for a given Stytch Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of

@@ -12,6 +12,94 @@ from typing import List, Optional
 import pydantic
 
 
+class Address(pydantic.BaseModel):
+    formatted: str
+    street_address: str
+    locality: str
+    region: str
+    postal_code: str
+    country: str
+    type: str
+    primary: bool
+
+
+class Email(pydantic.BaseModel):
+    value: str
+    type: str
+    primary: bool
+
+
+class Group(pydantic.BaseModel):
+    value: str
+    display: str
+
+
+class Manager(pydantic.BaseModel):
+    value: str
+    ref: str
+    display_name: str
+
+
+class EnterpriseExtension(pydantic.BaseModel):
+    employee_number: str
+    cost_center: str
+    division: str
+    department: str
+    organization: str
+    manager: Optional[Manager] = None
+
+
+class Name(pydantic.BaseModel):
+    formatted: str
+    family_name: str
+    given_name: str
+    middle_name: str
+    honorific_prefix: str
+    honorific_suffix: str
+
+
+class PhoneNumber(pydantic.BaseModel):
+    value: str
+    type: str
+    primary: bool
+
+
+class SCIMAttributes(pydantic.BaseModel):
+    user_name: str
+    id: str
+    external_id: str
+    active: bool
+    groups: List[Group]
+    display_name: str
+    nick_name: str
+    profile_url: str
+    user_type: str
+    title: str
+    preferred_language: str
+    locale: str
+    timezone: str
+    emails: List[Email]
+    phone_numbers: List[PhoneNumber]
+    addresses: List[Address]
+    name: Optional[Name] = None
+    enterprise_extension: Optional[EnterpriseExtension] = None
+
+
+class SCIMGroup(pydantic.BaseModel):
+    """
+    Fields:
+      - group_id: Globally unique UUID that identifies a specific SCIM Group.
+      - group_name: The name of the SCIM group.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+      - connection_id: The ID of the SCIM connection.
+    """  # noqa
+
+    group_id: str
+    group_name: str
+    organization_id: str
+    connection_id: str
+
+
 class SCIMGroupImplicitRoleAssignments(pydantic.BaseModel):
     role_id: str
     group_id: str

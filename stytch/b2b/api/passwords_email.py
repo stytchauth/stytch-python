@@ -174,9 +174,11 @@ class Email:
 
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
+        Note that a successful password reset by email will revoke all active sessions for the `member_id`.
+
         Fields:
           - password_reset_token: The password reset token to authenticate.
-          - password: The password to reset.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
               If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
               both `session_token` and `session_jwt` are provided.
@@ -254,9 +256,11 @@ class Email:
 
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
+        Note that a successful password reset by email will revoke all active sessions for the `member_id`.
+
         Fields:
           - password_reset_token: The password reset token to authenticate.
-          - password: The password to reset.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
               If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
               both `session_token` and `session_jwt` are provided.

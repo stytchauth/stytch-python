@@ -15,6 +15,8 @@ from stytch.b2b.models.scim_connection import (
     CreateResponse,
     DeleteRequestOptions,
     DeleteResponse,
+    GetGroupsRequestOptions,
+    GetGroupsResponse,
     GetRequestOptions,
     GetResponse,
     RotateCancelRequestOptions,
@@ -338,6 +340,74 @@ class Connection:
         )
         res = await self.async_client.post(url, data, headers)
         return RotateCancelResponse.from_json(res.response.status, res.json)
+
+    def get_groups(
+        self,
+        organization_id: str,
+        connection_id: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        method_options: Optional[GetGroupsRequestOptions] = None,
+    ) -> GetGroupsResponse:
+        """Gets a paginated list of all SCIM Groups associated with a given Connection.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - connection_id: The ID of the SCIM connection.
+          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+        }
+        if cursor is not None:
+            data["cursor"] = cursor
+        if limit is not None:
+            data["limit"] = limit
+
+        url = self.api_base.url_for(
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}", data
+        )
+        res = self.sync_client.get(url, data, headers)
+        return GetGroupsResponse.from_json(res.response.status_code, res.json)
+
+    async def get_groups_async(
+        self,
+        organization_id: str,
+        connection_id: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        method_options: Optional[GetGroupsRequestOptions] = None,
+    ) -> GetGroupsResponse:
+        """Gets a paginated list of all SCIM Groups associated with a given Connection.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - connection_id: The ID of the SCIM connection.
+          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+        }
+        if cursor is not None:
+            data["cursor"] = cursor
+        if limit is not None:
+            data["limit"] = limit
+
+        url = self.api_base.url_for(
+            "/v1/b2b/scim/{organization_id}/connection/{connection_id}", data
+        )
+        res = await self.async_client.get(url, data, headers)
+        return GetGroupsResponse.from_json(res.response.status, res.json)
 
     def create(
         self,

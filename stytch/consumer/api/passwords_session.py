@@ -34,7 +34,7 @@ class Sessions:
         Note that a successful password reset via an existing session will revoke all active sessions for the `user_id`, except for the one used during the reset flow.
 
         Fields:
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -80,7 +80,7 @@ class Sessions:
         Note that a successful password reset via an existing session will revoke all active sessions for the `user_id`, except for the one used during the reset flow.
 
         Fields:
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,

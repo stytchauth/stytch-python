@@ -1,8 +1,8 @@
 import unittest
 
 from stytch.shared.m2m_authorization import (
-    perform_authorization_check,
     AuthorizationCheckParams,
+    perform_authorization_check,
 )
 
 
