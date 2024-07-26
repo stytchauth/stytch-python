@@ -492,6 +492,14 @@ class GetResponse(ResponseBase):
     sessions: List[Session]
 
 
+class MigrateResponse(ResponseBase):
+    user_id: str
+    session_token: str
+    session_jwt: str
+    user: User
+    session: Optional[Session] = None
+
+
 class RevokeResponse(ResponseBase):
     """Response type for `Sessions.revoke`.
     Fields:

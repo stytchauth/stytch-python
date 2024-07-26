@@ -648,27 +648,6 @@ class Members:
         email_address: Optional[str] = None,
         method_options: Optional[UnlinkRetiredEmailRequestOptions] = None,
     ) -> UnlinkRetiredEmailResponse:
-        """Unlinks a retired email address from a Member specified by their `organization_id` and `member_id`. The email address
-        to be retired can be identified in the request body by either its `email_id`, its `email_address`, or both. If using
-        both identifiers they must refer to the same email.
-
-        A previously active email address can be marked as retired in one of two ways:
-
-        - It's replaced with a new primary email address during an explicit Member update.
-        - A new email address is surfaced by an OAuth, SAML or OIDC provider. In this case the new email address becomes the
-          Member's primary email address and the old primary email address is retired.
-
-        A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
-        addresses allows then to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
-        on the [Member object](https://stytch.com/docs/b2b/api/member-object).
-         %}
-
-        Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - email_id: The globally unique UUID of a Member's email.
-          - email_address: The email address of the Member.
-        """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)
@@ -696,27 +675,6 @@ class Members:
         email_address: Optional[str] = None,
         method_options: Optional[UnlinkRetiredEmailRequestOptions] = None,
     ) -> UnlinkRetiredEmailResponse:
-        """Unlinks a retired email address from a Member specified by their `organization_id` and `member_id`. The email address
-        to be retired can be identified in the request body by either its `email_id`, its `email_address`, or both. If using
-        both identifiers they must refer to the same email.
-
-        A previously active email address can be marked as retired in one of two ways:
-
-        - It's replaced with a new primary email address during an explicit Member update.
-        - A new email address is surfaced by an OAuth, SAML or OIDC provider. In this case the new email address becomes the
-          Member's primary email address and the old primary email address is retired.
-
-        A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
-        addresses allows then to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
-        on the [Member object](https://stytch.com/docs/b2b/api/member-object).
-         %}
-
-        Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - email_id: The globally unique UUID of a Member's email.
-          - email_address: The email address of the Member.
-        """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)
