@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 
 import pydantic
 
+from stytch.b2b.models.scim import SCIMAttributes
 from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
 
@@ -274,6 +275,11 @@ class ResultsMetadata(pydantic.BaseModel):
     next_cursor: Optional[str] = None
 
 
+class RetiredEmail(pydantic.BaseModel):
+    email_id: str
+    email_address: str
+
+
 class SCIMRegistration(pydantic.BaseModel):
     """
     Fields:
@@ -286,7 +292,7 @@ class SCIMRegistration(pydantic.BaseModel):
     connection_id: str
     registration_id: str
     external_id: Optional[str] = None
-    scim_attributes: Optional[Dict[str, Any]] = None
+    scim_attributes: Optional[SCIMAttributes] = None
 
 
 class SSORegistration(pydantic.BaseModel):
@@ -322,6 +328,7 @@ class Member(pydantic.BaseModel):
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
       - totp_registration_id: (no documentation yet)
+      - retired_email_addresses: (no documentation yet)
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
       - default_mfa_method: (no documentation yet)
@@ -349,6 +356,7 @@ class Member(pydantic.BaseModel):
     mfa_phone_number_verified: bool
     is_admin: bool
     totp_registration_id: str
+    retired_email_addresses: List[RetiredEmail]
     mfa_enrolled: bool
     mfa_phone_number: str
     default_mfa_method: str

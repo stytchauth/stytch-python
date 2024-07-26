@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import unittest
-
 from test.constants import (
     TEST_CRYPTO_SIGNATURE,
     TEST_CRYPTO_WALLET_ADDRESS,
     TEST_CRYPTO_WALLET_TYPE,
+    TEST_EXPIRED_JWT,
     TEST_MAGIC_EMAIL,
     TEST_MAGIC_TOKEN,
     TEST_OAUTH_TOKEN,
@@ -19,7 +19,6 @@ from test.constants import (
     TEST_TOTP_RECOVERY_CODE,
     TEST_TOTP_USER_ID,
     TEST_USERS_NAME,
-    TEST_EXPIRED_JWT,
 )
 from test.integration_base import CreatedTestUser, IntegrationTestBase
 
@@ -242,7 +241,9 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
             self.assertTrue(api.get(user_id=user.user_id).is_success)
             # Grab a recent JWT token and verify it's valid
             auth_response = api.authenticate(session_token=TEST_SESSION_TOKEN)
-            response = self.b2c_client.sessions.authenticate_jwt(session_jwt=auth_response.session_jwt)
+            response = self.b2c_client.sessions.authenticate_jwt(
+                session_jwt=auth_response.session_jwt
+            )
             self.assertIsNotNone(response)
             if response is not None:
                 self.assertEquals(auth_response.session_jwt, response.session_jwt)

@@ -71,7 +71,7 @@ class Passwords:
 
         Fields:
           - email: The email address of the end user.
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.
@@ -128,7 +128,7 @@ class Passwords:
 
         Fields:
           - email: The email address of the end user.
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.
@@ -184,7 +184,7 @@ class Passwords:
 
         Fields:
           - email: The email address of the end user.
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
@@ -237,7 +237,7 @@ class Passwords:
 
         Fields:
           - email: The email address of the end user.
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
@@ -290,7 +290,7 @@ class Passwords:
         If you're using LUDS, the `feedback` object will contain an object named `luds_requirements` which contain a collection of fields that the user failed or passed. You'll want to prompt the user to create a password that meets all of the requirements that they failed.
 
         Fields:
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - email: The email address of the end user.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -323,7 +323,7 @@ class Passwords:
         If you're using LUDS, the `feedback` object will contain an object named `luds_requirements` which contain a collection of fields that the user failed or passed. You'll want to prompt the user to create a password that meets all of the requirements that they failed.
 
         Fields:
-          - password: The password of the user
+          - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - email: The email address of the end user.
         """  # noqa
         headers: Dict[str, str] = {}

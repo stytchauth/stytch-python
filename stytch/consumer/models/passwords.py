@@ -116,7 +116,7 @@ class ScryptConfig(pydantic.BaseModel):
     Fields:
       - salt: The salt value, which should be in a base64 encoded string form.
       - n_parameter: The N value, also known as the iterations count. It must be a power of two greater than 1 and less than 262,145.
-          If your applicaiton's N parameter is larger than 262,144, please reach out to [support@stytch.com](mailto:support@stytch.com)
+          If your application's N parameter is larger than 262,144, please reach out to [support@stytch.com](mailto:support@stytch.com)
       - r_parameter: The r parameter, also known as the block size.
       - p_parameter: The p parameter, also known as the parallelism factor.
       - key_length: The key length, also known as the hash length.

@@ -26,6 +26,8 @@ from stytch.b2b.models.organizations_members import (
     ReactivateResponse,
     SearchRequestOptions,
     SearchResponse,
+    UnlinkRetiredEmailRequestOptions,
+    UnlinkRetiredEmailResponse,
     UpdateRequestOptions,
     UpdateResponse,
 )
@@ -63,18 +65,6 @@ class Members:
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
-
-        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
-        a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
-        Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
-        are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
-        permission to perform the `update.info.name` action on the `stytch.organization` Resource.
-
-        If the Member Session does not contain a Role that satisfies the requested permissions, or if the Member's Organization
-        does not match the `organization_id` passed in the request, a 403 error will be thrown. Otherwise, the request will
-        proceed as normal.
-
-        To learn more about our RBAC implementation, see our [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/overview).
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -173,18 +163,6 @@ class Members:
     ) -> UpdateResponse:
         """Updates a Member specified by `organization_id` and `member_id`.
 
-        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
-        a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
-        Member Session has the necessary permissions. The specific permissions needed depend on which of the optional fields
-        are passed in the request. For example, if the `organization_name` argument is provided, the Member Session must have
-        permission to perform the `update.info.name` action on the `stytch.organization` Resource.
-
-        If the Member Session does not contain a Role that satisfies the requested permissions, or if the Member's Organization
-        does not match the `organization_id` passed in the request, a 403 error will be thrown. Otherwise, the request will
-        proceed as normal.
-
-        To learn more about our RBAC implementation, see our [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/overview).
-
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
@@ -270,7 +248,7 @@ class Members:
         member_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes a Member specified by `organization_id` and `member_id`. /%}
+        """Deletes a Member specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -296,7 +274,7 @@ class Members:
         member_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes a Member specified by `organization_id` and `member_id`. /%}
+        """Deletes a Member specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -322,7 +300,7 @@ class Members:
         member_id: str,
         method_options: Optional[ReactivateRequestOptions] = None,
     ) -> ReactivateResponse:
-        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`. /%}
+        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -349,7 +327,7 @@ class Members:
         member_id: str,
         method_options: Optional[ReactivateRequestOptions] = None,
     ) -> ReactivateResponse:
-        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`. /%}
+        """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -383,7 +361,6 @@ class Members:
         Existing Member Sessions that include a phone number authentication factor will not be revoked if the phone number is deleted, and MFA will not be enforced until the Member logs in again.
         If you wish to enforce MFA immediately after a phone number is deleted, you can do so by prompting the Member to enter a new phone number
         and calling the [OTP SMS send](https://stytch.com/docs/b2b/api/otp-sms-send) endpoint, then calling the [OTP SMS Authenticate](https://stytch.com/docs/b2b/api/authenticate-otp-sms) endpoint.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -419,7 +396,6 @@ class Members:
         Existing Member Sessions that include a phone number authentication factor will not be revoked if the phone number is deleted, and MFA will not be enforced until the Member logs in again.
         If you wish to enforce MFA immediately after a phone number is deleted, you can do so by prompting the Member to enter a new phone number
         and calling the [OTP SMS send](https://stytch.com/docs/b2b/api/otp-sms-send) endpoint, then calling the [OTP SMS Authenticate](https://stytch.com/docs/b2b/api/authenticate-otp-sms) endpoint.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -451,7 +427,6 @@ class Members:
         To mint a new registration for a Member, you must first call this endpoint to delete the existing registration.
 
         Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -482,7 +457,6 @@ class Members:
         To mint a new registration for a Member, you must first call this endpoint to delete the existing registration.
 
         Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
-         /%}
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -513,18 +487,6 @@ class Members:
         """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
         *All fuzzy search filters require a minimum of three characters.
-
-        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
-        a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
-        Member Session has permission to perform the `search` action on the `stytch.member` Resource. In addition, enforcing
-        RBAC on this endpoint means that you may only search for Members within the calling Member's Organization, so the
-        `organization_ids` argument may only contain the `organization_id` of the Member Session passed in the header.
-
-        If the Member Session does not contain a Role that satisfies the requested permission, or if the `organization_ids`
-        argument contains an `organization_id` that the Member Session does not belong to, a 403 error will be thrown.
-        Otherwise, the request will proceed as normal.
-
-        To learn more about our RBAC implementation, see our [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/overview).
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
@@ -561,18 +523,6 @@ class Members:
 
         *All fuzzy search filters require a minimum of three characters.
 
-        Our RBAC implementation offers out-of-the-box handling of authorization checks for this endpoint. If you pass in
-        a header containing a `session_token` or a `session_jwt` for an unexpired Member Session, we will check that the
-        Member Session has permission to perform the `search` action on the `stytch.member` Resource. In addition, enforcing
-        RBAC on this endpoint means that you may only search for Members within the calling Member's Organization, so the
-        `organization_ids` argument may only contain the `organization_id` of the Member Session passed in the header.
-
-        If the Member Session does not contain a Role that satisfies the requested permission, or if the `organization_ids`
-        argument contains an `organization_id` that the Member Session does not belong to, a 403 error will be thrown.
-        Otherwise, the request will proceed as normal.
-
-        To learn more about our RBAC implementation, see our [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/overview).
-
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
           - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
@@ -602,7 +552,7 @@ class Members:
         member_password_id: str,
         method_options: Optional[DeletePasswordRequestOptions] = None,
     ) -> DeletePasswordResponse:
-        """Delete a Member's password. /%}
+        """Delete a Member's password.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -629,7 +579,7 @@ class Members:
         member_password_id: str,
         method_options: Optional[DeletePasswordRequestOptions] = None,
     ) -> DeletePasswordResponse:
-        """Delete a Member's password. /%}
+        """Delete a Member's password.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -690,6 +640,102 @@ class Members:
         res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
 
+    def unlink_retired_email(
+        self,
+        organization_id: str,
+        member_id: str,
+        email_id: Optional[str] = None,
+        email_address: Optional[str] = None,
+        method_options: Optional[UnlinkRetiredEmailRequestOptions] = None,
+    ) -> UnlinkRetiredEmailResponse:
+        """Unlinks a retired email address from a Member specified by their `organization_id` and `member_id`. The email address
+        to be retired can be identified in the request body by either its `email_id`, its `email_address`, or both. If using
+        both identifiers they must refer to the same email.
+
+        A previously active email address can be marked as retired in one of two ways:
+
+        - It's replaced with a new primary email address during an explicit Member update.
+        - A new email address is surfaced by an OAuth, SAML or OIDC provider. In this case the new email address becomes the
+          Member's primary email address and the old primary email address is retired.
+
+        A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
+        addresses allows then to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
+        on the [Member object](https://stytch.com/docs/b2b/api/member-object).
+         %}
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - email_id: The globally unique UUID of a Member's email.
+          - email_address: The email address of the Member.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+        if email_id is not None:
+            data["email_id"] = email_id
+        if email_address is not None:
+            data["email_address"] = email_address
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/unlink_retired_email",
+            data,
+        )
+        res = self.sync_client.post(url, data, headers)
+        return UnlinkRetiredEmailResponse.from_json(res.response.status_code, res.json)
+
+    async def unlink_retired_email_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        email_id: Optional[str] = None,
+        email_address: Optional[str] = None,
+        method_options: Optional[UnlinkRetiredEmailRequestOptions] = None,
+    ) -> UnlinkRetiredEmailResponse:
+        """Unlinks a retired email address from a Member specified by their `organization_id` and `member_id`. The email address
+        to be retired can be identified in the request body by either its `email_id`, its `email_address`, or both. If using
+        both identifiers they must refer to the same email.
+
+        A previously active email address can be marked as retired in one of two ways:
+
+        - It's replaced with a new primary email address during an explicit Member update.
+        - A new email address is surfaced by an OAuth, SAML or OIDC provider. In this case the new email address becomes the
+          Member's primary email address and the old primary email address is retired.
+
+        A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
+        addresses allows then to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
+        on the [Member object](https://stytch.com/docs/b2b/api/member-object).
+         %}
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - email_id: The globally unique UUID of a Member's email.
+          - email_address: The email address of the Member.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+        if email_id is not None:
+            data["email_id"] = email_id
+        if email_address is not None:
+            data["email_address"] = email_address
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/unlink_retired_email",
+            data,
+        )
+        res = await self.async_client.post(url, data, headers)
+        return UnlinkRetiredEmailResponse.from_json(res.response.status, res.json)
+
     def create(
         self,
         organization_id: str,
@@ -704,7 +750,7 @@ class Members:
         roles: Optional[List[str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
-        """Creates a Member. An `organization_id` and `email_address` are required. /%}
+        """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -765,7 +811,7 @@ class Members:
         roles: Optional[List[str]] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
-        """Creates a Member. An `organization_id` and `email_address` are required. /%}
+        """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.

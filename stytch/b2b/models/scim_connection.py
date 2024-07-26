@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import enum
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import pydantic
 
@@ -15,6 +15,7 @@ from stytch.b2b.models.scim import (
     SCIMConnection,
     SCIMConnectionWithNextToken,
     SCIMConnectionWithToken,
+    SCIMGroup,
 )
 from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
@@ -59,6 +60,22 @@ class CreateRequestOptions(pydantic.BaseModel):
 
 
 class DeleteRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
+class GetGroupsRequestOptions(pydantic.BaseModel):
     """
     Fields:
       - authorization: Optional authorization object.
@@ -170,6 +187,17 @@ class DeleteResponse(ResponseBase):
     """  # noqa
 
     connection_id: str
+
+
+class GetGroupsResponse(ResponseBase):
+    """Response type for `Connection.get_groups`.
+    Fields:
+      - scim_groups: A list of SCIM Connection Groups belonging to the connection.
+      - next_cursor: The `next_cursor` string is returned when your search result contains more than one page of results. This value is passed into your next search call in the `cursor` field.
+    """  # noqa
+
+    scim_groups: List[SCIMGroup]
+    next_cursor: Optional[str] = None
 
 
 class GetResponse(ResponseBase):

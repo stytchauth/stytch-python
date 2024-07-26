@@ -16,6 +16,7 @@ from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.consumer.models.sessions import JWK, AuthenticationFactor
 from stytch.core.response_base import ResponseBase
+from stytch.shared.method_options import Authorization
 
 
 class ExchangeRequestLocale(str, enum.Enum):
@@ -85,6 +86,22 @@ class PrimaryRequired(pydantic.BaseModel):
     """  # noqa
 
     allowed_auth_methods: List[str]
+
+
+class RevokeRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
 
 
 class AuthenticateResponse(ResponseBase):

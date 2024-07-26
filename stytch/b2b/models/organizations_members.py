@@ -127,6 +127,22 @@ class SearchRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class UnlinkRetiredEmailRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
 class UpdateRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -241,6 +257,21 @@ class SearchResponse(ResponseBase):
     members: List[Member]
     results_metadata: ResultsMetadata
     organizations: Dict[str, Organization]
+
+
+class UnlinkRetiredEmailResponse(ResponseBase):
+    """Response type for `Members.unlink_retired_email`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+    """  # noqa
+
+    member_id: str
+    organization_id: str
+    member: Member
+    organization: Organization
 
 
 class UpdateResponse(ResponseBase):

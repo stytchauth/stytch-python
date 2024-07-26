@@ -50,10 +50,12 @@ class ExistingPassword:
 
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
+        Note that a successful password reset via an existing password will revoke all active sessions for the `member_id`.
+
         Fields:
           - email_address: The email address of the Member.
-          - existing_password: The member's current password that they supplied.
-          - new_password: The member's elected new password.
+          - existing_password: The Member's current password that they supplied.
+          - new_password: The Member's elected new password.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - session_token: A secret token for a given Stytch Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -128,10 +130,12 @@ class ExistingPassword:
 
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
+        Note that a successful password reset via an existing password will revoke all active sessions for the `member_id`.
+
         Fields:
           - email_address: The email address of the Member.
-          - existing_password: The member's current password that they supplied.
-          - new_password: The member's elected new password.
+          - existing_password: The Member's current password that they supplied.
+          - new_password: The Member's elected new password.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - session_token: A secret token for a given Stytch Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
