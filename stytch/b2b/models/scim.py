@@ -101,13 +101,6 @@ class SCIMGroup(pydantic.BaseModel):
 
 
 class SCIMGroupImplicitRoleAssignments(pydantic.BaseModel):
-    """
-    Fields:
-      - role_id: The ID of the role.
-      - group_id: (no documentation yet)
-      - group_name: (no documentation yet)
-    """  # noqa
-
     role_id: str
     group_id: str
     group_name: str

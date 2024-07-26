@@ -59,7 +59,7 @@ class Connection:
           - connection_id: The ID of the SCIM connection.
           - display_name: A human-readable display name for the connection.
           - identity_provider: (no documentation yet)
-          - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group` and a `role_id`.
+          - scim_group_implicit_role_assignments: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -102,7 +102,7 @@ class Connection:
           - connection_id: The ID of the SCIM connection.
           - display_name: A human-readable display name for the connection.
           - identity_provider: (no documentation yet)
-          - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group` and a `role_id`.
+          - scim_group_implicit_role_assignments: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

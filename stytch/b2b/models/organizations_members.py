@@ -260,6 +260,14 @@ class SearchResponse(ResponseBase):
 
 
 class UnlinkRetiredEmailResponse(ResponseBase):
+    """Response type for `Members.unlink_retired_email`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+    """  # noqa
+
     member_id: str
     organization_id: str
     member: Member
