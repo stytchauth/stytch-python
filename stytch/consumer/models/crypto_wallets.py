@@ -6,31 +6,37 @@
 
 from __future__ import annotations
 
-from typing import Optional
+import datetime
+from typing import List, Optional
+
+import pydantic
 
 from stytch.consumer.models.sessions import Session
 from stytch.consumer.models.users import User
 from stytch.core.response_base import ResponseBase
 
 
-class AuthenticateResponse(ResponseBase):
-    """Response type for `CryptoWallets.authenticate`.
+class SIWEParams(pydantic.BaseModel):
+    """
     Fields:
-      - user_id: The unique ID of the affected User.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
-      - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
-
+      - domain: Only required if `siwe_params` is passed. The domain that is requesting the crypto wallet signature. Must be an RFC 3986 authority.
+      - uri: Only required if `siwe_params` is passed. An RFC 3986 URI referring to the resource that is the subject of the signing.
+      - resources:  A list of information or references to information the user wishes to have resolved as part of authentication. Every resource must be an RFC 3986 URI.
+      - chain_id: The EIP-155 Chain ID to which the session is bound. Defaults to 1.
+      - statement: A human-readable ASCII assertion that the user will sign.
+      - issued_at: The time when the message was generated. Defaults to the current time. All timestamps in our API conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - not_before: The time when the signed authentication message will become valid. Defaults to the current time. All timestamps in our API conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - message_request_id: A system-specific identifier that may be used to uniquely refer to the sign-in request.
     """  # noqa
 
-    user_id: str
-    session_token: str
-    session_jwt: str
-    user: User
-    session: Optional[Session] = None
+    domain: str
+    uri: str
+    resources: List[str]
+    chain_id: Optional[int] = None
+    statement: Optional[str] = None
+    issued_at: Optional[datetime.datetime] = None
+    not_before: Optional[datetime.datetime] = None
+    message_request_id: Optional[str] = None
 
 
 class AuthenticateStartResponse(ResponseBase):
@@ -44,3 +50,44 @@ class AuthenticateStartResponse(ResponseBase):
     user_id: str
     challenge: str
     user_created: bool
+
+
+class SIWEParamsResponse(ResponseBase):
+    """
+    Fields:
+      - domain: The domain that requested the crypto wallet signature.
+      - uri: An RFC 3986 URI referring to the resource that is the subject of the signing.
+      - chain_id: The EIP-155 Chain ID to which the session is bound.
+      - resources:  A list of information or references to information the user wishes to have resolved as part of authentication. Every resource must be an RFC 3986 URI.
+      - issued_at: The time when the message was generated. All timestamps in our API conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - message_request_id: A system-specific identifier that may be used to uniquely refer to the sign-in request.
+    """  # noqa
+
+    domain: str
+    uri: str
+    chain_id: int
+    resources: List[str]
+    issued_at: Optional[datetime.datetime] = None
+    message_request_id: Optional[str] = None
+
+
+class AuthenticateResponse(ResponseBase):
+    """Response type for `CryptoWallets.authenticate`.
+    Fields:
+      - user_id: The unique ID of the affected User.
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
+
+      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+
+      - siwe_params: The parameters of the Sign In With Ethereum (SIWE) message that was signed.
+    """  # noqa
+
+    user_id: str
+    session_token: str
+    session_jwt: str
+    user: User
+    session: Optional[Session] = None
+    siwe_params: Optional[SIWEParamsResponse] = None
