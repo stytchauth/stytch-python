@@ -276,6 +276,12 @@ class ResultsMetadata(pydantic.BaseModel):
 
 
 class RetiredEmail(pydantic.BaseModel):
+    """
+    Fields:
+      - email_id: The globally unique UUID of a Member's email.
+      - email_address: The email address of the Member.
+    """  # noqa
+
     email_id: str
     email_address: str
 
@@ -328,7 +334,17 @@ class Member(pydantic.BaseModel):
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
       - totp_registration_id: (no documentation yet)
-      - retired_email_addresses: (no documentation yet)
+      - retired_email_addresses:
+      A list of retired email addresses for this member.
+      A previously active email address can be marked as retired in one of two ways:
+      - It's replaced with a new primary email address during an explicit Member update.
+      - A new email address is surfaced by an OAuth, SAML or OIDC provider. In this case the new email address becomes the
+      Member's primary email address and the old primary email address is retired.
+
+      A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
+      addresses allows them to be subsequently re-used by other Organization Members. Retired email addresses can be unlinked
+      using the [Unlink Retired Email endpoint](https://stytch.com/docs/b2b/api/unlink-retired-member-email).
+
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
       - default_mfa_method: (no documentation yet)

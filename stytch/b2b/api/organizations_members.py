@@ -659,7 +659,7 @@ class Members:
           Member's primary email address and the old primary email address is retired.
 
         A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
-        addresses allows then to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
+        addresses allows them to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
         on the [Member object](https://stytch.com/docs/b2b/api/member-object).
          %}
 
@@ -707,7 +707,7 @@ class Members:
           Member's primary email address and the old primary email address is retired.
 
         A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
-        addresses allows then to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
+        addresses allows them to be subsequently re-used by other Organization Members. Retired email addresses can be viewed
         on the [Member object](https://stytch.com/docs/b2b/api/member-object).
          %}
 

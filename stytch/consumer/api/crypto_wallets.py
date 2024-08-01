@@ -6,11 +6,12 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.models.crypto_wallets import (
     AuthenticateResponse,
     AuthenticateStartResponse,
+    SIWEParams,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -31,8 +32,14 @@ class CryptoWallets:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        siwe_params: Optional[Union[SIWEParams, Dict[str, Any]]] = None,
     ) -> AuthenticateStartResponse:
-        """Initiate the authentication of a crypto wallet. After calling this endpoint, the user will need to sign a message containing only the returned `challenge` field.
+        """Initiate the authentication of a crypto wallet. After calling this endpoint, the user will need to sign a message containing the returned `challenge` field.
+
+        For Ethereum crypto wallets, you can optionally use the Sign In With Ethereum (SIWE) protocol for the message by passing in the `siwe_params`. The only required fields are `domain` and `uri`.
+        If the crypto wallet detects that the domain in the message does not match the website's domain, it will display a warning to the user.
+
+        If not using the SIWE protocol, the message will simply consist of the project name and a random string.
 
         Fields:
           - crypto_wallet_type: The type of wallet to authenticate. Currently `ethereum` and `solana` are supported. Wallets for any EVM-compatible chains (such as Polygon or BSC) are also supported and are grouped under the `ethereum` type.
@@ -40,6 +47,7 @@ class CryptoWallets:
           - user_id: The unique ID of a specific User.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - siwe_params: The parameters for a Sign In With Ethereum (SIWE) message. May only be passed if the `crypto_wallet_type` is `ethereum`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -52,6 +60,10 @@ class CryptoWallets:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if siwe_params is not None:
+            data["siwe_params"] = (
+                siwe_params if isinstance(siwe_params, dict) else siwe_params.dict()
+            )
 
         url = self.api_base.url_for("/v1/crypto_wallets/authenticate/start", data)
         res = self.sync_client.post(url, data, headers)
@@ -64,8 +76,14 @@ class CryptoWallets:
         user_id: Optional[str] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        siwe_params: Optional[SIWEParams] = None,
     ) -> AuthenticateStartResponse:
-        """Initiate the authentication of a crypto wallet. After calling this endpoint, the user will need to sign a message containing only the returned `challenge` field.
+        """Initiate the authentication of a crypto wallet. After calling this endpoint, the user will need to sign a message containing the returned `challenge` field.
+
+        For Ethereum crypto wallets, you can optionally use the Sign In With Ethereum (SIWE) protocol for the message by passing in the `siwe_params`. The only required fields are `domain` and `uri`.
+        If the crypto wallet detects that the domain in the message does not match the website's domain, it will display a warning to the user.
+
+        If not using the SIWE protocol, the message will simply consist of the project name and a random string.
 
         Fields:
           - crypto_wallet_type: The type of wallet to authenticate. Currently `ethereum` and `solana` are supported. Wallets for any EVM-compatible chains (such as Polygon or BSC) are also supported and are grouped under the `ethereum` type.
@@ -73,6 +91,7 @@ class CryptoWallets:
           - user_id: The unique ID of a specific User.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - siwe_params: The parameters for a Sign In With Ethereum (SIWE) message. May only be passed if the `crypto_wallet_type` is `ethereum`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -85,6 +104,10 @@ class CryptoWallets:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if siwe_params is not None:
+            data["siwe_params"] = (
+                siwe_params if isinstance(siwe_params, dict) else siwe_params.dict()
+            )
 
         url = self.api_base.url_for("/v1/crypto_wallets/authenticate/start", data)
         res = await self.async_client.post(url, data, headers)
