@@ -34,6 +34,11 @@ class Group(pydantic.BaseModel):
     display: str
 
 
+class IMs(pydantic.BaseModel):
+    value: str
+    type: str
+
+
 class Manager(pydantic.BaseModel):
     value: str
     ref: str
@@ -81,6 +86,7 @@ class SCIMAttributes(pydantic.BaseModel):
     emails: List[Email]
     phone_numbers: List[PhoneNumber]
     addresses: List[Address]
+    ims: List[IMs]
     name: Optional[Name] = None
     enterprise_extension: Optional[EnterpriseExtension] = None
 
@@ -104,7 +110,7 @@ class SCIMGroupImplicitRoleAssignments(pydantic.BaseModel):
     """
     Fields:
       - role_id: The ID of the role.
-      - group_id: (no documentation yet)
+      - group_id: The ID of the group.
       - group_name: (no documentation yet)
     """  # noqa
 
