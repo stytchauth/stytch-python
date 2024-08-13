@@ -59,7 +59,7 @@ class Connection:
           - connection_id: The ID of the SCIM connection.
           - display_name: A human-readable display name for the connection.
           - identity_provider: (no documentation yet)
-          - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group` and a `role_id`.
+          - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -102,7 +102,7 @@ class Connection:
           - connection_id: The ID of the SCIM connection.
           - display_name: A human-readable display name for the connection.
           - identity_provider: (no documentation yet)
-          - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group` and a `role_id`.
+          - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -472,7 +472,7 @@ class Connection:
         organization_id: str,
         method_options: Optional[GetRequestOptions] = None,
     ) -> GetResponse:
-        """Get SCIM Connections.
+        """Get SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
@@ -493,7 +493,7 @@ class Connection:
         organization_id: str,
         method_options: Optional[GetRequestOptions] = None,
     ) -> GetResponse:
-        """Get SCIM Connections.
+        """Get SCIM Connection.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
