@@ -56,6 +56,8 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
+        oauth_tenant_jit_provisioning: Optional[str] = None,
+        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -122,6 +124,13 @@ class Organizations:
           - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sms_otp` and `totp`.
 
+          - oauth_tenant_jit_provisioning: The authentication setting that controls how a new Member can JIT provision into an organization by tenant. The accepted values are:
+
+          `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
+
+          `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
+
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -156,6 +165,10 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
+        if oauth_tenant_jit_provisioning is not None:
+            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
+        if allowed_oauth_tenants is not None:
+            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = self.sync_client.post(url, data, headers)
@@ -179,6 +192,8 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
+        oauth_tenant_jit_provisioning: Optional[str] = None,
+        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
@@ -245,6 +260,13 @@ class Organizations:
           - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sms_otp` and `totp`.
 
+          - oauth_tenant_jit_provisioning: The authentication setting that controls how a new Member can JIT provision into an organization by tenant. The accepted values are:
+
+          `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
+
+          `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
+
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -279,6 +301,10 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
+        if oauth_tenant_jit_provisioning is not None:
+            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
+        if allowed_oauth_tenants is not None:
+            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = await self.async_client.post(url, data, headers)
@@ -341,6 +367,8 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
+        oauth_tenant_jit_provisioning: Optional[str] = None,
+        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -442,6 +470,17 @@ class Organizations:
 
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
+          - oauth_tenant_jit_provisioning: The authentication setting that controls how a new Member can JIT provision into an organization by tenant. The accepted values are:
+
+          `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
+
+          `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
+
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.oauth-tenant-jit-provisioning` action on the `stytch.organization` Resource.
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -486,6 +525,10 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
+        if oauth_tenant_jit_provisioning is not None:
+            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
+        if allowed_oauth_tenants is not None:
+            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -512,6 +555,8 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
+        oauth_tenant_jit_provisioning: Optional[str] = None,
+        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -613,6 +658,17 @@ class Organizations:
 
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
+          - oauth_tenant_jit_provisioning: The authentication setting that controls how a new Member can JIT provision into an organization by tenant. The accepted values are:
+
+          `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
+
+          `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
+
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.oauth-tenant-jit-provisioning` action on the `stytch.organization` Resource.
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
+
+        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -657,6 +713,10 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
+        if oauth_tenant_jit_provisioning is not None:
+            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
+        if allowed_oauth_tenants is not None:
+            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data, headers)
