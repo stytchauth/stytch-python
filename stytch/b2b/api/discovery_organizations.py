@@ -43,6 +43,8 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
+        oauth_tenant_jit_provisioning: Optional[str] = None,
+        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
@@ -134,6 +136,13 @@ class Organizations:
           - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sms_otp` and `totp`.
 
+          - oauth_tenant_jit_provisioning: The authentication setting that controls how a new Member can JIT provision into an organization by tenant. The accepted values are:
+
+          `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
+
+          `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
+
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -172,6 +181,10 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
+        if oauth_tenant_jit_provisioning is not None:
+            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
+        if allowed_oauth_tenants is not None:
+            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = self.sync_client.post(url, data, headers)
@@ -198,6 +211,8 @@ class Organizations:
         ] = None,
         mfa_methods: Optional[str] = None,
         allowed_mfa_methods: Optional[List[str]] = None,
+        oauth_tenant_jit_provisioning: Optional[str] = None,
+        allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
         """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
@@ -289,6 +304,13 @@ class Organizations:
           - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
           The list's accepted values are: `sms_otp` and `totp`.
 
+          - oauth_tenant_jit_provisioning: The authentication setting that controls how a new Member can JIT provision into an organization by tenant. The accepted values are:
+
+          `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
+
+          `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
+
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -327,6 +349,10 @@ class Organizations:
             data["mfa_methods"] = mfa_methods
         if allowed_mfa_methods is not None:
             data["allowed_mfa_methods"] = allowed_mfa_methods
+        if oauth_tenant_jit_provisioning is not None:
+            data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
+        if allowed_oauth_tenants is not None:
+            data["allowed_oauth_tenants"] = allowed_oauth_tenants
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = await self.async_client.post(url, data, headers)
