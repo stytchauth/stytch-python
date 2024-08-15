@@ -29,6 +29,12 @@ class Email(pydantic.BaseModel):
     primary: bool
 
 
+class Entitlement(pydantic.BaseModel):
+    value: str
+    type: str
+    primary: bool
+
+
 class Group(pydantic.BaseModel):
     value: str
     display: str
@@ -37,6 +43,7 @@ class Group(pydantic.BaseModel):
 class IMs(pydantic.BaseModel):
     value: str
     type: str
+    primary: bool
 
 
 class Manager(pydantic.BaseModel):
@@ -69,26 +76,16 @@ class PhoneNumber(pydantic.BaseModel):
     primary: bool
 
 
-class SCIMAttributes(pydantic.BaseModel):
-    user_name: str
-    id: str
-    external_id: str
-    active: bool
-    groups: List[Group]
-    display_name: str
-    nick_name: str
-    profile_url: str
-    user_type: str
-    title: str
-    preferred_language: str
-    locale: str
-    timezone: str
-    emails: List[Email]
-    phone_numbers: List[PhoneNumber]
-    addresses: List[Address]
-    ims: List[IMs]
-    name: Optional[Name] = None
-    enterprise_extension: Optional[EnterpriseExtension] = None
+class Photo(pydantic.BaseModel):
+    value: str
+    type: str
+    primary: bool
+
+
+class Role(pydantic.BaseModel):
+    value: str
+    type: str
+    primary: bool
 
 
 class SCIMGroup(pydantic.BaseModel):
@@ -157,3 +154,35 @@ class SCIMConnectionWithToken(pydantic.BaseModel):
     bearer_token: str
     scim_group_implicit_role_assignments: List[SCIMGroupImplicitRoleAssignments]
     bearer_token_expires_at: Optional[datetime.datetime] = None
+
+
+class X509Certificate(pydantic.BaseModel):
+    value: str
+    type: str
+    primary: bool
+
+
+class SCIMAttributes(pydantic.BaseModel):
+    user_name: str
+    id: str
+    external_id: str
+    active: bool
+    groups: List[Group]
+    display_name: str
+    nick_name: str
+    profile_url: str
+    user_type: str
+    title: str
+    preferred_language: str
+    locale: str
+    timezone: str
+    emails: List[Email]
+    phone_numbers: List[PhoneNumber]
+    addresses: List[Address]
+    ims: List[IMs]
+    photos: List[Photo]
+    entitlements: List[Entitlement]
+    roles: List[Role]
+    x509certificates: List[X509Certificate]
+    name: Optional[Name] = None
+    enterprise_extension: Optional[EnterpriseExtension] = None
