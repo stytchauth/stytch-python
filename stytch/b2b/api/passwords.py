@@ -138,7 +138,7 @@ class Passwords:
         Fields:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
-          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
+          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon2_id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
@@ -234,7 +234,7 @@ class Passwords:
         Fields:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
-          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon2i`, `argon2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
+          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon2_id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
@@ -322,7 +322,7 @@ class Passwords:
 
         If you have breach detection during authentication enabled in your [password strength policy](https://stytch.com/docs/b2b/guides/passwords/strength-policies) and the member's credentials have appeared in the HaveIBeenPwned dataset, this endpoint will return a `member_reset_password` error even if the member enters a correct password. We force a password reset in this case to ensure that the member is the legitimate owner of the email address and not a malicious actor abusing the compromised credentials.
 
-        If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        If the is required to complete MFA to log in to the, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
         The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
 
@@ -348,7 +348,7 @@ class Passwords:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
@@ -397,7 +397,7 @@ class Passwords:
 
         If you have breach detection during authentication enabled in your [password strength policy](https://stytch.com/docs/b2b/guides/passwords/strength-policies) and the member's credentials have appeared in the HaveIBeenPwned dataset, this endpoint will return a `member_reset_password` error even if the member enters a correct password. We force a password reset in this case to ensure that the member is the legitimate owner of the email address and not a malicious actor abusing the compromised credentials.
 
-        If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        If the is required to complete MFA to log in to the, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
         The `session_duration_minutes` and `session_custom_claims` parameters will be ignored.
 
@@ -423,7 +423,7 @@ class Passwords:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
