@@ -27,12 +27,6 @@ class ResetStartRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
-class DeleteResponse(ResponseBase):
-    member: Member
-    organization: Organization
-    member_id: Optional[str] = None
-
-
 class ResetResponse(ResponseBase):
     """Response type for `Email.reset`.
     Fields:

@@ -27,7 +27,7 @@ class CreateResponse(ResponseBase):
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: Information about the primary authentication requirements of the Organization.
+      - primary_required: (no documentation yet)
     """  # noqa
 
     member_id: str

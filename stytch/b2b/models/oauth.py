@@ -60,7 +60,7 @@ class AuthenticateResponse(ResponseBase):
 
       Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft. Google One Tap does not return access tokens or refresh tokens.
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: Information about the primary authentication requirements of the Organization.
+      - primary_required: (no documentation yet)
     """  # noqa
 
     member_id: str

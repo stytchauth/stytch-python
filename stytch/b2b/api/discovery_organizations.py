@@ -46,14 +46,14 @@ class Organizations:
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
-        """If an end user does not want to join any already-existing, or has no possible Organizations to join, this endpoint can be used to create a new
+        """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
 
         This operation consumes the Intermediate Session.
 
         This endpoint will also create an initial Member Session for the newly created Member.
 
-        The created by this endpoint will automatically be granted the `stytch_admin` Role. See the
+        The Member created by this endpoint will automatically be granted the `stytch_admin` Role. See the
         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
 
         If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.
@@ -214,14 +214,14 @@ class Organizations:
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
     ) -> CreateResponse:
-        """If an end user does not want to join any already-existing, or has no possible Organizations to join, this endpoint can be used to create a new
+        """If an end user does not want to join any already-existing Organization, or has no possible Organizations to join, this endpoint can be used to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object).
 
         This operation consumes the Intermediate Session.
 
         This endpoint will also create an initial Member Session for the newly created Member.
 
-        The created by this endpoint will automatically be granted the `stytch_admin` Role. See the
+        The Member created by this endpoint will automatically be granted the `stytch_admin` Role. See the
         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
 
         If the new Organization is created with a `mfa_policy` of `REQUIRED_FOR_ALL`, the newly created Member will need to complete an MFA step to log in to the Organization.

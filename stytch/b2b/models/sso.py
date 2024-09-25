@@ -25,8 +25,13 @@ class AuthenticateRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
-class ConnectionImplicitRoleAssignment(pydantic.BaseModel):
-    role_id: str
+class Connection(pydantic.BaseModel):
+    organization_id: str
+    connection_id: str
+    external_organization_id: str
+    external_connection_id: str
+    display_name: str
+    status: str
 
 
 class DeleteConnectionRequestOptions(pydantic.BaseModel):
@@ -59,24 +64,6 @@ class GetConnectionsRequestOptions(pydantic.BaseModel):
         if self.authorization is not None:
             headers = self.authorization.add_headers(headers)
         return headers
-
-
-class GroupImplicitRoleAssignment(pydantic.BaseModel):
-    role_id: str
-    group: str
-
-
-class Connection(pydantic.BaseModel):
-    organization_id: str
-    connection_id: str
-    external_organization_id: str
-    external_connection_id: str
-    display_name: str
-    status: str
-    external_connection_implicit_role_assignments: List[
-        ConnectionImplicitRoleAssignment
-    ]
-    external_group_implicit_role_assignments: List[GroupImplicitRoleAssignment]
 
 
 class OIDCConnection(pydantic.BaseModel):

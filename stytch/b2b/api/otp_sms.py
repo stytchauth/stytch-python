@@ -35,7 +35,7 @@ class Sms:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
-        """Send a One-Time Passcode (OTP) to a's phone number.
+        """Send a One-Time Passcode (OTP) to a Member's phone number.
 
         If the Member already has a phone number, the `mfa_phone_number` field is not needed; the endpoint will send an OTP to the number associated with the Member.
         If the Member does not have a phone number, the endpoint will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
@@ -99,7 +99,7 @@ class Sms:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> SendResponse:
-        """Send a One-Time Passcode (OTP) to a's phone number.
+        """Send a One-Time Passcode (OTP) to a Member's phone number.
 
         If the Member already has a phone number, the `mfa_phone_number` field is not needed; the endpoint will send an OTP to the number associated with the Member.
         If the Member does not have a phone number, the endpoint will send an OTP to the `mfa_phone_number` provided and link the `mfa_phone_number` with the Member.
@@ -177,7 +177,7 @@ class Sms:
         such as [email magic link authenticate](https://stytch.com/docs/b2b/api/authenticate-magic-link),
         or upon successful calls to discovery authenticate methods, such as [email magic link discovery authenticate](https://stytch.com/docs/b2b/api/authenticate-discovery-magic-link).
 
-        If the's MFA policy is `REQUIRED_FOR_ALL`, a successful OTP authentication will change the's `mfa_enrolled` status to `true` if it is not already `true`.
+        If the Organization's MFA policy is `REQUIRED_FOR_ALL`, a successful OTP authentication will change the Member's `mfa_enrolled` status to `true` if it is not already `true`.
         If the Organization's MFA policy is `OPTIONAL`, the Member's MFA enrollment can be toggled by passing in a value for the `set_mfa_enrollment` field.
         The Member's MFA enrollment can also be toggled through the [Update Member](https://stytch.com/docs/b2b/api/update-member) endpoint.
 
@@ -261,7 +261,7 @@ class Sms:
         such as [email magic link authenticate](https://stytch.com/docs/b2b/api/authenticate-magic-link),
         or upon successful calls to discovery authenticate methods, such as [email magic link discovery authenticate](https://stytch.com/docs/b2b/api/authenticate-discovery-magic-link).
 
-        If the's MFA policy is `REQUIRED_FOR_ALL`, a successful OTP authentication will change the's `mfa_enrolled` status to `true` if it is not already `true`.
+        If the Organization's MFA policy is `REQUIRED_FOR_ALL`, a successful OTP authentication will change the Member's `mfa_enrolled` status to `true` if it is not already `true`.
         If the Organization's MFA policy is `OPTIONAL`, the Member's MFA enrollment can be toggled by passing in a value for the `set_mfa_enrollment` field.
         The Member's MFA enrollment can also be toggled through the [Update Member](https://stytch.com/docs/b2b/api/update-member) endpoint.
 

@@ -9,7 +9,6 @@ from __future__ import annotations
 from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.passwords_email import (
-    DeleteResponse,
     ResetRequestLocale,
     ResetResponse,
     ResetStartRequestLocale,
@@ -165,7 +164,7 @@ class Email:
         locale: Optional[Union[ResetRequestLocale, str]] = None,
         intermediate_session_token: Optional[str] = None,
     ) -> ResetResponse:
-        """Reset the's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
+        """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 
         The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
 
@@ -201,7 +200,7 @@ class Email:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
@@ -247,7 +246,7 @@ class Email:
         locale: Optional[ResetRequestLocale] = None,
         intermediate_session_token: Optional[str] = None,
     ) -> ResetResponse:
-        """Reset the's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
+        """Reset the member's password and authenticate them. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
 
         The provided password needs to meet our password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
 
@@ -283,7 +282,7 @@ class Email:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
@@ -316,41 +315,3 @@ class Email:
         url = self.api_base.url_for("/v1/b2b/passwords/email/reset", data)
         res = await self.async_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status, res.json)
-
-    def delete(
-        self,
-        email_address: str,
-        organization_id: Optional[str] = None,
-        member_id: Optional[str] = None,
-    ) -> DeleteResponse:
-        headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-            "email_address": email_address,
-        }
-        if organization_id is not None:
-            data["organization_id"] = organization_id
-        if member_id is not None:
-            data["member_id"] = member_id
-
-        url = self.api_base.url_for("/v1/b2b/passwords/email/delete", data)
-        res = self.sync_client.post(url, data, headers)
-        return DeleteResponse.from_json(res.response.status_code, res.json)
-
-    async def delete_async(
-        self,
-        email_address: str,
-        organization_id: Optional[str] = None,
-        member_id: Optional[str] = None,
-    ) -> DeleteResponse:
-        headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {
-            "email_address": email_address,
-        }
-        if organization_id is not None:
-            data["organization_id"] = organization_id
-        if member_id is not None:
-            data["member_id"] = member_id
-
-        url = self.api_base.url_for("/v1/b2b/passwords/email/delete", data)
-        res = await self.async_client.post(url, data, headers)
-        return DeleteResponse.from_json(res.response.status, res.json)
