@@ -103,6 +103,8 @@ class OIDC:
         identity_provider: Optional[
             Union[UpdateConnectionRequestIdentityProvider, str]
         ] = None,
+        custom_scopes: Optional[str] = None,
+        attribute_mapping: Optional[Dict[str, Any]] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing OIDC connection.
@@ -136,6 +138,8 @@ class OIDC:
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
           - identity_provider: The identity provider of this connection. For OIDC, the accepted values are `generic`, `okta`, and `microsoft-entra`. For SAML, the accepted values are `generic`, `okta`, `microsoft-entra`, and `google-workspace`.
+          - custom_scopes: (no documentation yet)
+          - attribute_mapping: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -162,6 +166,10 @@ class OIDC:
             data["jwks_url"] = jwks_url
         if identity_provider is not None:
             data["identity_provider"] = identity_provider
+        if custom_scopes is not None:
+            data["custom_scopes"] = custom_scopes
+        if attribute_mapping is not None:
+            data["attribute_mapping"] = attribute_mapping
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/oidc/{organization_id}/connections/{connection_id}", data
@@ -182,6 +190,8 @@ class OIDC:
         userinfo_url: Optional[str] = None,
         jwks_url: Optional[str] = None,
         identity_provider: Optional[UpdateConnectionRequestIdentityProvider] = None,
+        custom_scopes: Optional[str] = None,
+        attribute_mapping: Optional[Dict[str, Any]] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing OIDC connection.
@@ -215,6 +225,8 @@ class OIDC:
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
           - identity_provider: The identity provider of this connection. For OIDC, the accepted values are `generic`, `okta`, and `microsoft-entra`. For SAML, the accepted values are `generic`, `okta`, `microsoft-entra`, and `google-workspace`.
+          - custom_scopes: (no documentation yet)
+          - attribute_mapping: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -241,6 +253,10 @@ class OIDC:
             data["jwks_url"] = jwks_url
         if identity_provider is not None:
             data["identity_provider"] = identity_provider
+        if custom_scopes is not None:
+            data["custom_scopes"] = custom_scopes
+        if attribute_mapping is not None:
+            data["attribute_mapping"] = attribute_mapping
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/oidc/{organization_id}/connections/{connection_id}", data

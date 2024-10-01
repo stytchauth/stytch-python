@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
+from stytch.b2b.api.sso_external import External
 from stytch.b2b.api.sso_oidc import OIDC
 from stytch.b2b.api.sso_saml import SAML
 from stytch.b2b.models.sso import (
@@ -35,6 +36,11 @@ class SSO:
             async_client=self.async_client,
         )
         self.saml = SAML(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.external = External(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
