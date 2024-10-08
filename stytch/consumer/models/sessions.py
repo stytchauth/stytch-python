@@ -57,6 +57,7 @@ class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     IMPORTED_AUTH0 = "imported_auth0"
     OAUTH_EXCHANGE_SLACK = "oauth_exchange_slack"
     OAUTH_EXCHANGE_HUBSPOT = "oauth_exchange_hubspot"
+    OAUTH_EXCHANGE_GITHUB = "oauth_exchange_github"
 
 
 class AuthenticationFactorType(str, enum.Enum):
@@ -153,6 +154,10 @@ class GitLabOAuthFactor(pydantic.BaseModel):
     id: str
     provider_subject: str
     email_id: Optional[str] = None
+
+
+class GithubOAuthExchangeFactor(pydantic.BaseModel):
+    email_id: str
 
 
 class GithubOAuthFactor(pydantic.BaseModel):
@@ -388,6 +393,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - hubspot_oauth_factor: (no documentation yet)
       - slack_oauth_exchange_factor: (no documentation yet)
       - hubspot_oauth_exchange_factor: (no documentation yet)
+      - github_oauth_exchange_factor: (no documentation yet)
     """  # noqa
 
     type: AuthenticationFactorType
@@ -431,6 +437,7 @@ class AuthenticationFactor(pydantic.BaseModel):
     hubspot_oauth_factor: Optional[HubspotOAuthFactor] = None
     slack_oauth_exchange_factor: Optional[SlackOAuthExchangeFactor] = None
     hubspot_oauth_exchange_factor: Optional[HubspotOAuthExchangeFactor] = None
+    github_oauth_exchange_factor: Optional[GithubOAuthExchangeFactor] = None
 
 
 class Session(pydantic.BaseModel):

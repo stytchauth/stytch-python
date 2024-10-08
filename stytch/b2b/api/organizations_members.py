@@ -22,6 +22,7 @@ from stytch.b2b.models.organizations_members import (
     DeleteTOTPRequestOptions,
     DeleteTOTPResponse,
     GetResponse,
+    OIDCProvidersResponse,
     ReactivateRequestOptions,
     ReactivateResponse,
     SearchRequestOptions,
@@ -639,6 +640,48 @@ class Members:
         )
         res = await self.async_client.get(url, data, headers)
         return GetResponse.from_json(res.response.status, res.json)
+
+    def oidc_providers(
+        self,
+        organization_id: str,
+        member_id: str,
+        include_refresh_token: Optional[bool] = None,
+    ) -> OIDCProvidersResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+        if include_refresh_token is not None:
+            data["include_refresh_token"] = include_refresh_token
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/oidc_providers",
+            data,
+        )
+        res = self.sync_client.get(url, data, headers)
+        return OIDCProvidersResponse.from_json(res.response.status_code, res.json)
+
+    async def oidc_providers_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        include_refresh_token: Optional[bool] = None,
+    ) -> OIDCProvidersResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+        if include_refresh_token is not None:
+            data["include_refresh_token"] = include_refresh_token
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/oidc_providers",
+            data,
+        )
+        res = await self.async_client.get(url, data, headers)
+        return OIDCProvidersResponse.from_json(res.response.status, res.json)
 
     def unlink_retired_email(
         self,

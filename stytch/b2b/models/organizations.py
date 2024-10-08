@@ -184,6 +184,16 @@ class OAuthRegistration(pydantic.BaseModel):
     locale: Optional[str] = None
 
 
+class OIDCProviderInfo(pydantic.BaseModel):
+    provider_subject: str
+    id_token: str
+    access_token: str
+    access_token_expires_in: int
+    scopes: List[str]
+    connection_id: str
+    refresh_token: Optional[str] = None
+
+
 class Organization(pydantic.BaseModel):
     """
     Fields:
