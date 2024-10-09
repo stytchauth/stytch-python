@@ -93,6 +93,8 @@ class OIDCConnection(pydantic.BaseModel):
     userinfo_url: str
     jwks_url: str
     identity_provider: str
+    custom_scopes: str
+    attribute_mapping: Optional[Dict[str, Any]] = None
 
 
 class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):

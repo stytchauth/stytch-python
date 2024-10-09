@@ -10,7 +10,12 @@ from typing import Dict, List, Optional
 
 import pydantic
 
-from stytch.b2b.models.organizations import Member, Organization, ResultsMetadata
+from stytch.b2b.models.organizations import (
+    Member,
+    OIDCProviderInfo,
+    Organization,
+    ResultsMetadata,
+)
 from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
 
@@ -231,6 +236,10 @@ class GetResponse(ResponseBase):
     member_id: str
     member: Member
     organization: Organization
+
+
+class OIDCProvidersResponse(ResponseBase):
+    registrations: List[OIDCProviderInfo]
 
 
 class ReactivateResponse(ResponseBase):
