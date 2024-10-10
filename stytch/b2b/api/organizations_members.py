@@ -604,16 +604,20 @@ class Members:
     def dangerously_get(
         self,
         member_id: str,
+        include_deleted: Optional[bool] = None,
     ) -> GetResponse:
         """Get a Member by `member_id`. This endpoint does not require an `organization_id`, enabling you to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
 
         Fields:
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - include_deleted: Whether to include deleted Members in the response. Defaults to false.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "member_id": member_id,
         }
+        if include_deleted is not None:
+            data["include_deleted"] = include_deleted
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/members/dangerously_get/{member_id}", data
@@ -624,16 +628,20 @@ class Members:
     async def dangerously_get_async(
         self,
         member_id: str,
+        include_deleted: Optional[bool] = None,
     ) -> GetResponse:
         """Get a Member by `member_id`. This endpoint does not require an `organization_id`, enabling you to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
 
         Fields:
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - include_deleted: Whether to include deleted Members in the response. Defaults to false.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "member_id": member_id,
         }
+        if include_deleted is not None:
+            data["include_deleted"] = include_deleted
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/members/dangerously_get/{member_id}", data

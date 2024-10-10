@@ -26,6 +26,20 @@ class AuthenticateRequestLocale(str, enum.Enum):
 
 
 class ConnectionImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
+
+      Reserved `role_id`s that are predefined by Stytch include:
+
+      * `stytch_member`
+      * `stytch_admin`
+
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
+
+
+    """  # noqa
+
     role_id: str
 
 
@@ -62,6 +76,21 @@ class GetConnectionsRequestOptions(pydantic.BaseModel):
 
 
 class GroupImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
+
+      Reserved `role_id`s that are predefined by Stytch include:
+
+      * `stytch_member`
+      * `stytch_admin`
+
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
+
+
+      - group: The name of the group that grants the specified role assignment.
+    """  # noqa
+
     role_id: str
     group: str
 
@@ -128,7 +157,7 @@ class SAMLGroupImplicitRoleAssignment(pydantic.BaseModel):
       Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
-      - group: The name of the SAML group that grants the specified role assignment.
+      - group: The name of the group that grants the specified role assignment.
     """  # noqa
 
     role_id: str
@@ -207,7 +236,7 @@ class GetConnectionsResponse(ResponseBase):
     Fields:
       - saml_connections: The list of [SAML Connections](https://stytch.com/docs/b2b/api/saml-connection-object) owned by this organization.
       - oidc_connections: The list of [OIDC Connections](https://stytch.com/docs/b2b/api/oidc-connection-object) owned by this organization.
-      - external_connections: (no documentation yet)
+      - external_connections: The list of [External Connections](https://stytch.com/docs/b2b/api/external-connection-object) owned by this organization.
     """  # noqa
 
     saml_connections: List[SAMLConnection]

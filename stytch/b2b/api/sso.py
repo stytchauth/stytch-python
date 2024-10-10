@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
+from stytch.b2b.api.sso_external import External
 from stytch.b2b.api.sso_oidc import OIDC
 from stytch.b2b.api.sso_saml import SAML
 from stytch.b2b.models.sso import (
@@ -35,6 +36,11 @@ class SSO:
             async_client=self.async_client,
         )
         self.saml = SAML(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.external = External(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
@@ -92,7 +98,7 @@ class SSO:
 
         Fields:
           - organization_id: The organization ID that the SSO connection belongs to.
-          - connection_id: The ID of the SSO connection. Both SAML and OIDC connection IDs can be provided.
+          - connection_id: The ID of the SSO connection. SAML, OIDC, and External connection IDs can be provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -118,7 +124,7 @@ class SSO:
 
         Fields:
           - organization_id: The organization ID that the SSO connection belongs to.
-          - connection_id: The ID of the SSO connection. Both SAML and OIDC connection IDs can be provided.
+          - connection_id: The ID of the SSO connection. SAML, OIDC, and External connection IDs can be provided.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

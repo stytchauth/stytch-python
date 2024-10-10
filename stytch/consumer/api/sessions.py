@@ -204,7 +204,7 @@ class Sessions:
         """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
 
         Fields:
-          - session_token: The `session_token` associated with a User's existing Session.
+          - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.
@@ -240,7 +240,7 @@ class Sessions:
         """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
 
         Fields:
-          - session_token: The `session_token` associated with a User's existing Session.
+          - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.
