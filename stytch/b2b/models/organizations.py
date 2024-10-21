@@ -185,6 +185,17 @@ class OAuthRegistration(pydantic.BaseModel):
 
 
 class OIDCProviderInfo(pydantic.BaseModel):
+    """
+    Fields:
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
+      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
+      - access_token_expires_in: The number of seconds until the access token expires.
+      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
+      - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
+    """  # noqa
+
     provider_subject: str
     id_token: str
     access_token: str

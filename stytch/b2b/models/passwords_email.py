@@ -7,12 +7,15 @@
 from __future__ import annotations
 
 import enum
-from typing import Optional
+from typing import Dict, Optional
+
+import pydantic
 
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
 from stytch.core.response_base import ResponseBase
+from stytch.shared.method_options import Authorization
 
 
 class ResetRequestLocale(str, enum.Enum):
@@ -27,7 +30,23 @@ class ResetStartRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
 
 
-class DeleteResponse(ResponseBase):
+class RequireResetRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
+class RequireResetResponse(ResponseBase):
     member: Member
     organization: Organization
     member_id: Optional[str] = None
