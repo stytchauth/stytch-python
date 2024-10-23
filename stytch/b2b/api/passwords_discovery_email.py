@@ -34,6 +34,32 @@ class Email:
         pkce_code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetStartResponse:
+        """Initiates a password reset for the email address provided, when cross-org passwords are enabled. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
+
+        This endpoint adapts to your Project's password strength configuration.
+        If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid
+        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are
+        considered valid if they meet the requirements that you've set with Stytch.
+        You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
+
+        Fields:
+          - email_address: The email address of the Member to start the email reset process for.
+          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
+          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
+          If you have not set a default `reset_password_redirect_url`, an error is returned.
+          - discovery_redirect_url: The URL that the end user clicks from the discovery Magic Link. This URL should be an endpoint in the backend server that
+          verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
+          discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
+          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
+          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
+          - pkce_code_challenge: (no documentation yet)
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
@@ -69,6 +95,32 @@ class Email:
         pkce_code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetStartResponse:
+        """Initiates a password reset for the email address provided, when cross-org passwords are enabled. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
+
+        This endpoint adapts to your Project's password strength configuration.
+        If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid
+        if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are
+        considered valid if they meet the requirements that you've set with Stytch.
+        You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
+
+        Fields:
+          - email_address: The email address of the Member to start the email reset process for.
+          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
+          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
+          If you have not set a default `reset_password_redirect_url`, an error is returned.
+          - discovery_redirect_url: The URL that the end user clicks from the discovery Magic Link. This URL should be an endpoint in the backend server that
+          verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
+          discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
+          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
+          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
+          - pkce_code_challenge: (no documentation yet)
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "email_address": email_address,
@@ -101,6 +153,25 @@ class Email:
         pkce_code_verifier: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetResponse:
+        """Reset the password associated with an email and start an intermediate session. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
+
+        The provided password needs to meet the project's password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
+
+        Resetting a password will start an intermediate session and return a list of discovered organizations the session can be exchanged into.
+
+        Fields:
+          - password_reset_token: The password reset token to authenticate.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - pkce_code_verifier: (no documentation yet)
+          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+
+        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password_reset_token": password_reset_token,
@@ -122,6 +193,25 @@ class Email:
         pkce_code_verifier: Optional[str] = None,
         locale: Optional[str] = None,
     ) -> ResetResponse:
+        """Reset the password associated with an email and start an intermediate session. This endpoint checks that the password reset token is valid, hasn’t expired, or already been used.
+
+        The provided password needs to meet the project's password strength requirements, which can be checked in advance with the password strength endpoint. If the token and password are accepted, the password is securely stored for future authentication and the user is authenticated.
+
+        Resetting a password will start an intermediate session and return a list of discovered organizations the session can be exchanged into.
+
+        Fields:
+          - password_reset_token: The password reset token to authenticate.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - pkce_code_verifier: (no documentation yet)
+          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+
+        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "password_reset_token": password_reset_token,

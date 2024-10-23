@@ -31,6 +31,7 @@ class AuthenticateResponse(ResponseBase):
           c) The Organization has at least one other Member with a verified email address with the same domain as the end user (to prevent phishing attacks).
       - provider_type: (no documentation yet)
       - provider_tenant_id: (no documentation yet)
+      - provider_tenant_ids: (no documentation yet)
     """  # noqa
 
     intermediate_session_token: str
@@ -38,3 +39,4 @@ class AuthenticateResponse(ResponseBase):
     discovered_organizations: List[DiscoveredOrganization]
     provider_type: str
     provider_tenant_id: str
+    provider_tenant_ids: List[str]

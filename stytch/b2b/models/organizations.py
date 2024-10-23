@@ -84,6 +84,32 @@ class EmailImplicitRoleAssignment(pydantic.BaseModel):
     role_id: str
 
 
+class GithubProviderInfo(pydantic.BaseModel):
+    provider_subject: str
+    provider_tenant_ids: List[str]
+    access_token: str
+    scopes: List[str]
+
+
+class HubspOTPRoviderInfo(pydantic.BaseModel):
+    """
+    Fields:
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - provider_tenant_id: The tenant ID returned by the OAuth provider. This is typically used to identify the organization. For example, in HubSpot, this is the Hub ID, and for Slack, this is the Workspace ID.
+      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
+      - access_token_expires_in: The number of seconds until the access token expires.
+      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
+      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
+    """  # noqa
+
+    provider_subject: str
+    provider_tenant_id: str
+    access_token: str
+    access_token_expires_in: int
+    scopes: List[str]
+    refresh_token: Optional[str] = None
+
+
 class MemberRoleSource(pydantic.BaseModel):
     """
     Fields:
@@ -436,6 +462,25 @@ class SearchQuery(pydantic.BaseModel):
 
     operator: SearchQueryOperator
     operands: List[Dict[str, Any]]
+
+
+class SlackProviderInfo(pydantic.BaseModel):
+    """
+    Fields:
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - provider_tenant_id: The tenant ID returned by the OAuth provider. This is typically used to identify the organization. For example, in HubSpot, this is the Hub ID, and for Slack, this is the Workspace ID.
+      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
+      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
+      - bot_access_token: The `access_token` that you may use to access data as a bot application in Slack. Use in conjunction with `bot_scopes`.
+      - bot_scopes: The scopes that the bot application has access to in Slack.
+    """  # noqa
+
+    provider_subject: str
+    provider_tenant_id: str
+    access_token: str
+    scopes: List[str]
+    bot_access_token: str
+    bot_scopes: List[str]
 
 
 class UpdateRequestOptions(pydantic.BaseModel):

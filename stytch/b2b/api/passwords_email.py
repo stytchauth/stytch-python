@@ -325,6 +325,13 @@ class Email:
         member_id: Optional[str] = None,
         method_options: Optional[RequireResetRequestOptions] = None,
     ) -> RequireResetResponse:
+        """Require a password be reset by the associated email address. This endpoint is only functional for cross-org password use cases.
+
+        Fields:
+          - email_address: The email address of the Member to start the email reset process for.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)
@@ -347,6 +354,13 @@ class Email:
         member_id: Optional[str] = None,
         method_options: Optional[RequireResetRequestOptions] = None,
     ) -> RequireResetResponse:
+        """Require a password be reset by the associated email address. This endpoint is only functional for cross-org password use cases.
+
+        Fields:
+          - email_address: The email address of the Member to start the email reset process for.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
             headers = method_options.add_headers(headers)
