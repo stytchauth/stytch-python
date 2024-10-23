@@ -8,7 +8,17 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+from stytch.b2b.models.organizations import (
+    GithubProviderInfo,
+    HubspOTPRoviderInfo,
+    SlackProviderInfo,
+)
 from stytch.core.response_base import ResponseBase
+
+
+class GithubResponse(ResponseBase):
+    provider_type: str
+    registrations: List[GithubProviderInfo]
 
 
 class GoogleResponse(ResponseBase):
@@ -32,6 +42,17 @@ class GoogleResponse(ResponseBase):
     refresh_token: Optional[str] = None
 
 
+class HubspotResponse(ResponseBase):
+    """Response type for `OAuthProviders.hubspot`.
+    Fields:
+      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
+      - registrations: A list of tokens the member is registered with.
+    """  # noqa
+
+    provider_type: str
+    registrations: List[HubspOTPRoviderInfo]
+
+
 class MicrosoftResponse(ResponseBase):
     """Response type for `OAuthProviders.microsoft`.
     Fields:
@@ -51,3 +72,14 @@ class MicrosoftResponse(ResponseBase):
     id_token: str
     scopes: List[str]
     refresh_token: Optional[str] = None
+
+
+class SlackResponse(ResponseBase):
+    """Response type for `OAuthProviders.slack`.
+    Fields:
+      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
+      - registrations: A list of tokens the member is registered with.
+    """  # noqa
+
+    provider_type: str
+    registrations: List[SlackProviderInfo]

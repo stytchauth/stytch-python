@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
+from stytch.b2b.api.passwords_discovery import Discovery
 from stytch.b2b.api.passwords_email import Email
 from stytch.b2b.api.passwords_existing_password import ExistingPassword
 from stytch.b2b.api.passwords_session import Sessions
@@ -47,6 +48,11 @@ class Passwords:
             async_client=self.async_client,
         )
         self.existing_password = ExistingPassword(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.discovery = Discovery(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,

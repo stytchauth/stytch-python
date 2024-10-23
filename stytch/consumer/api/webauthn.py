@@ -34,6 +34,9 @@ class WebAuthn:
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
+        override_id: Optional[str] = None,
+        override_name: Optional[str] = None,
+        override_display_name: Optional[str] = None,
     ) -> RegisterStartResponse:
         """Initiate the process of creating a new Passkey or WebAuthn registration.
 
@@ -50,6 +53,9 @@ class WebAuthn:
           - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
 
+          - override_id: (no documentation yet)
+          - override_name: (no documentation yet)
+          - override_display_name: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -64,6 +70,12 @@ class WebAuthn:
             data["return_passkey_credential_options"] = (
                 return_passkey_credential_options
             )
+        if override_id is not None:
+            data["override_id"] = override_id
+        if override_name is not None:
+            data["override_name"] = override_name
+        if override_display_name is not None:
+            data["override_display_name"] = override_display_name
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
         res = self.sync_client.post(url, data, headers)
@@ -76,6 +88,9 @@ class WebAuthn:
         user_agent: Optional[str] = None,
         authenticator_type: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
+        override_id: Optional[str] = None,
+        override_name: Optional[str] = None,
+        override_display_name: Optional[str] = None,
     ) -> RegisterStartResponse:
         """Initiate the process of creating a new Passkey or WebAuthn registration.
 
@@ -92,6 +107,9 @@ class WebAuthn:
           - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
 
+          - override_id: (no documentation yet)
+          - override_name: (no documentation yet)
+          - override_display_name: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -106,6 +124,12 @@ class WebAuthn:
             data["return_passkey_credential_options"] = (
                 return_passkey_credential_options
             )
+        if override_id is not None:
+            data["override_id"] = override_id
+        if override_name is not None:
+            data["override_name"] = override_name
+        if override_display_name is not None:
+            data["override_display_name"] = override_display_name
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
         res = await self.async_client.post(url, data, headers)

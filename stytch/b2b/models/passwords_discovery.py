@@ -15,8 +15,8 @@ from stytch.core.response_base import ResponseBase
 class AuthenticateResponse(ResponseBase):
     """Response type for `Discovery.authenticate`.
     Fields:
-      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member.
       - email_address: The email address.
+      - intermediate_session_token: The returned Intermediate Session Token contains a password factor associated with the Member. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. Password factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
       - discovered_organizations: An array of `discovered_organization` objects tied to the `intermediate_session_token`, `session_token`, or `session_jwt`. See the [Discovered Organization Object](https://stytch.com/docs/b2b/api/discovered-organization-object) for complete details.
 
       Note that Organizations will only appear here under any of the following conditions:
@@ -29,14 +29,8 @@ class AuthenticateResponse(ResponseBase):
           b) The Organizations' allowed domains list contains the Member's email domain.
 
           c) The Organization has at least one other Member with a verified email address with the same domain as the end user (to prevent phishing attacks).
-      - provider_type: (no documentation yet)
-      - provider_tenant_id: (no documentation yet)
-      - provider_tenant_ids: (no documentation yet)
     """  # noqa
 
-    intermediate_session_token: str
     email_address: str
+    intermediate_session_token: str
     discovered_organizations: List[DiscoveredOrganization]
-    provider_type: str
-    provider_tenant_id: str
-    provider_tenant_ids: List[str]
