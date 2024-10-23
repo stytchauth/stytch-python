@@ -655,6 +655,15 @@ class Members:
         member_id: str,
         include_refresh_token: Optional[bool] = None,
     ) -> OIDCProvidersResponse:
+        """Retrieve the saved OIDC access tokens and ID tokens for a member. After a successful OIDC login, Stytch will save the
+        issued access token and ID token from the identity provider. If a refresh token has been issued, Stytch will refresh the
+        access token automatically.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - include_refresh_token: Whether to return the refresh token Stytch has stored for the OAuth Provider. Defaults to false. **Important:** If your application exchanges the refresh token, Stytch may not be able to automatically refresh access tokens in the future.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
@@ -676,6 +685,15 @@ class Members:
         member_id: str,
         include_refresh_token: Optional[bool] = None,
     ) -> OIDCProvidersResponse:
+        """Retrieve the saved OIDC access tokens and ID tokens for a member. After a successful OIDC login, Stytch will save the
+        issued access token and ID token from the identity provider. If a refresh token has been issued, Stytch will refresh the
+        access token automatically.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - include_refresh_token: Whether to return the refresh token Stytch has stored for the OAuth Provider. Defaults to false. **Important:** If your application exchanges the refresh token, Stytch may not be able to automatically refresh access tokens in the future.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,

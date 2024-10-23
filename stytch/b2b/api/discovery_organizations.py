@@ -142,7 +142,7 @@ class Organizations:
 
           `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
-          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -310,7 +310,7 @@ class Organizations:
 
           `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
-          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack" and "hubspot".
+          - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
