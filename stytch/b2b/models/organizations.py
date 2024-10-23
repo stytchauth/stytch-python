@@ -99,7 +99,7 @@ class GithubProviderInfo(pydantic.BaseModel):
     scopes: List[str]
 
 
-class HubspOTPRoviderInfo(pydantic.BaseModel):
+class HubspotProviderInfo(pydantic.BaseModel):
     """
     Fields:
       - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.

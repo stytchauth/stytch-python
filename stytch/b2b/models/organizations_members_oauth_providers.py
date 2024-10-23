@@ -10,7 +10,7 @@ from typing import List, Optional
 
 from stytch.b2b.models.organizations import (
     GithubProviderInfo,
-    HubspOTPRoviderInfo,
+    HubspotProviderInfo,
     SlackProviderInfo,
 )
 from stytch.core.response_base import ResponseBase
@@ -56,7 +56,7 @@ class HubspotResponse(ResponseBase):
     """  # noqa
 
     provider_type: str
-    registrations: List[HubspOTPRoviderInfo]
+    registrations: List[HubspotProviderInfo]
 
 
 class MicrosoftResponse(ResponseBase):
