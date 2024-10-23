@@ -30,8 +30,8 @@ class AuthenticateResponse(ResponseBase):
 
           c) The Organization has at least one other Member with a verified email address with the same domain as the end user (to prevent phishing attacks).
       - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - provider_tenant_id: The tenant ID returned by the OAuth provider. This is typically used to identify the organization. For example, for HubSpot this is the Hub ID, for Slack, this is the Workspace ID, and for GitHub this is an organization ID.
-      - provider_tenant_ids: The IDs of tenants returned from a completed OAuth authentication. Some providers do not return tenants.
+      - provider_tenant_id: The tenant ID returned by the OAuth provider. This is typically used to identify an organization or group within the provider's domain. For example, in HubSpot this is a Hub ID, in Slack this is the Workspace ID, and in GitHub this is an organization ID. This field will only be populated if exactly one tenant ID is returned from a successful OAuth authentication and developers should prefer `provider_tenant_ids` over this since it accounts for the possibility of an OAuth provider yielding multiple tenant IDs.
+      - provider_tenant_ids: All tenant IDs returned by the OAuth provider. These is typically used to identify organizations or groups within the provider's domain. For example, in HubSpot this is a Hub ID, in Slack this is the Workspace ID, and in GitHub this is an organization ID. Some OAuth providers do not return tenant IDs, some providers are guaranteed to return one, and some may return multiple. This field will always be populated if at least one tenant ID was returned from the OAuth provider and developers should prefer this field over `provider_tenant_id`.
     """  # noqa
 
     intermediate_session_token: str
