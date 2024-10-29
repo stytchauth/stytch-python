@@ -17,17 +17,39 @@ from stytch.shared.method_options import Authorization
 
 
 class CreateConnectionRequestIdentityProvider(str, enum.Enum):
+    CLASSLINK = "classlink"
+    CYBERARK = "cyberark"
+    DUO = "duo"
     GENERIC = "generic"
-    OKTA = "okta"
-    MICROSOFTENTRA = "microsoft-entra"
     GOOGLEWORKSPACE = "google-workspace"
+    JUMPCLOUD = "jumpcloud"
+    KEYCLOAK = "keycloak"
+    MINIORANGE = "miniorange"
+    MICROSOFTENTRA = "microsoft-entra"
+    OKTA = "okta"
+    ONELOGIN = "onelogin"
+    PINGFEDERATE = "pingfederate"
+    RIPPLING = "rippling"
+    SALESFORCE = "salesforce"
+    SHIBBOLETH = "shibboleth"
 
 
 class UpdateConnectionRequestIdentityProvider(str, enum.Enum):
+    CLASSLINK = "classlink"
+    CYBERARK = "cyberark"
+    DUO = "duo"
     GENERIC = "generic"
-    OKTA = "okta"
-    MICROSOFTENTRA = "microsoft-entra"
     GOOGLEWORKSPACE = "google-workspace"
+    JUMPCLOUD = "jumpcloud"
+    KEYCLOAK = "keycloak"
+    MINIORANGE = "miniorange"
+    MICROSOFTENTRA = "microsoft-entra"
+    OKTA = "okta"
+    ONELOGIN = "onelogin"
+    PINGFEDERATE = "pingfederate"
+    RIPPLING = "rippling"
+    SALESFORCE = "salesforce"
+    SHIBBOLETH = "shibboleth"
 
 
 class CreateConnectionRequestOptions(pydantic.BaseModel):
