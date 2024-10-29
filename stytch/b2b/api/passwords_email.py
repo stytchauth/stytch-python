@@ -9,7 +9,8 @@ from __future__ import annotations
 from typing import Any, Dict, Optional, Union
 
 from stytch.b2b.models.passwords_email import (
-    DeleteResponse,
+    RequireResetRequestOptions,
+    RequireResetResponse,
     ResetRequestLocale,
     ResetResponse,
     ResetStartRequestLocale,
@@ -317,13 +318,23 @@ class Email:
         res = await self.async_client.post(url, data, headers)
         return ResetResponse.from_json(res.response.status, res.json)
 
-    def delete(
+    def require_reset(
         self,
         email_address: str,
         organization_id: Optional[str] = None,
         member_id: Optional[str] = None,
-    ) -> DeleteResponse:
+        method_options: Optional[RequireResetRequestOptions] = None,
+    ) -> RequireResetResponse:
+        """Require a password be reset by the associated email address. This endpoint is only functional for cross-org password use cases.
+
+        Fields:
+          - email_address: The email address of the Member to start the email reset process for.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "email_address": email_address,
         }
@@ -332,17 +343,27 @@ class Email:
         if member_id is not None:
             data["member_id"] = member_id
 
-        url = self.api_base.url_for("/v1/b2b/passwords/email/delete", data)
+        url = self.api_base.url_for("/v1/b2b/passwords/email/require_reset", data)
         res = self.sync_client.post(url, data, headers)
-        return DeleteResponse.from_json(res.response.status_code, res.json)
+        return RequireResetResponse.from_json(res.response.status_code, res.json)
 
-    async def delete_async(
+    async def require_reset_async(
         self,
         email_address: str,
         organization_id: Optional[str] = None,
         member_id: Optional[str] = None,
-    ) -> DeleteResponse:
+        method_options: Optional[RequireResetRequestOptions] = None,
+    ) -> RequireResetResponse:
+        """Require a password be reset by the associated email address. This endpoint is only functional for cross-org password use cases.
+
+        Fields:
+          - email_address: The email address of the Member to start the email reset process for.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+        """  # noqa
         headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
         data: Dict[str, Any] = {
             "email_address": email_address,
         }
@@ -351,6 +372,6 @@ class Email:
         if member_id is not None:
             data["member_id"] = member_id
 
-        url = self.api_base.url_for("/v1/b2b/passwords/email/delete", data)
+        url = self.api_base.url_for("/v1/b2b/passwords/email/require_reset", data)
         res = await self.async_client.post(url, data, headers)
-        return DeleteResponse.from_json(res.response.status, res.json)
+        return RequireResetResponse.from_json(res.response.status, res.json)

@@ -239,6 +239,11 @@ class GetResponse(ResponseBase):
 
 
 class OIDCProvidersResponse(ResponseBase):
+    """Response type for `Members.oidc_providers`.
+    Fields:
+      - registrations: A list of tokens the member is registered with.
+    """  # noqa
+
     registrations: List[OIDCProviderInfo]
 
 
