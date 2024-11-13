@@ -177,7 +177,15 @@ class Users:
         limit: Optional[int] = None,
         query: Optional[Union[SearchUsersQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
-        """Search for Users within your Stytch Project. Submit an empty `query` in the request to return all Users.
+        """Search for Users within your Stytch Project.
+
+        Use the `query` object to filter by different fields. See the `query.operands.filter_value` documentation below for a list of available filters.
+
+        ### Export all User data
+
+        Submit an empty `query` in your Search Users request to return all of your Stytch Project's Users.
+
+        [This Github repository](https://github.com/stytchauth/stytch-node-export-users) contains a utility that leverages the Search Users endpoint to export all of your User data to a CSV or JSON file.
 
         Fields:
           - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
@@ -203,7 +211,15 @@ class Users:
         limit: Optional[int] = None,
         query: Optional[SearchUsersQuery] = None,
     ) -> SearchResponse:
-        """Search for Users within your Stytch Project. Submit an empty `query` in the request to return all Users.
+        """Search for Users within your Stytch Project.
+
+        Use the `query` object to filter by different fields. See the `query.operands.filter_value` documentation below for a list of available filters.
+
+        ### Export all User data
+
+        Submit an empty `query` in your Search Users request to return all of your Stytch Project's Users.
+
+        [This Github repository](https://github.com/stytchauth/stytch-node-export-users) contains a utility that leverages the Search Users endpoint to export all of your User data to a CSV or JSON file.
 
         Fields:
           - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.

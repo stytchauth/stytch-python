@@ -71,9 +71,9 @@ class Email:
         if reset_password_template_id is not None:
             data["reset_password_template_id"] = reset_password_template_id
         if reset_password_expiration_minutes is not None:
-            data["reset_password_expiration_minutes"] = (
-                reset_password_expiration_minutes
-            )
+            data[
+                "reset_password_expiration_minutes"
+            ] = reset_password_expiration_minutes
         if pkce_code_challenge is not None:
             data["pkce_code_challenge"] = pkce_code_challenge
         if locale is not None:
@@ -132,9 +132,9 @@ class Email:
         if reset_password_template_id is not None:
             data["reset_password_template_id"] = reset_password_template_id
         if reset_password_expiration_minutes is not None:
-            data["reset_password_expiration_minutes"] = (
-                reset_password_expiration_minutes
-            )
+            data[
+                "reset_password_expiration_minutes"
+            ] = reset_password_expiration_minutes
         if pkce_code_challenge is not None:
             data["pkce_code_challenge"] = pkce_code_challenge
         if locale is not None:

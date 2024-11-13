@@ -135,7 +135,6 @@ class GetTokenResponse(ResponseBase):
 
 # ENDMANUAL(GetTokenResponse)
 
-
 # MANUAL(M2MJWTClaims)(TYPES)
 # ADDIMPORT: from typing import Any, Dict, List, Optional
 class M2MJWTClaims(pydantic.BaseModel):

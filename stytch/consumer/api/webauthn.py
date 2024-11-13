@@ -67,9 +67,9 @@ class WebAuthn:
         if authenticator_type is not None:
             data["authenticator_type"] = authenticator_type
         if return_passkey_credential_options is not None:
-            data["return_passkey_credential_options"] = (
-                return_passkey_credential_options
-            )
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
         if override_id is not None:
             data["override_id"] = override_id
         if override_name is not None:
@@ -121,9 +121,9 @@ class WebAuthn:
         if authenticator_type is not None:
             data["authenticator_type"] = authenticator_type
         if return_passkey_credential_options is not None:
-            data["return_passkey_credential_options"] = (
-                return_passkey_credential_options
-            )
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
         if override_id is not None:
             data["override_id"] = override_id
         if override_name is not None:
@@ -260,9 +260,9 @@ class WebAuthn:
         if user_id is not None:
             data["user_id"] = user_id
         if return_passkey_credential_options is not None:
-            data["return_passkey_credential_options"] = (
-                return_passkey_credential_options
-            )
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
         res = self.sync_client.post(url, data, headers)
@@ -295,9 +295,9 @@ class WebAuthn:
         if user_id is not None:
             data["user_id"] = user_id
         if return_passkey_credential_options is not None:
-            data["return_passkey_credential_options"] = (
-                return_passkey_credential_options
-            )
+            data[
+                "return_passkey_credential_options"
+            ] = return_passkey_credential_options
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
         res = await self.async_client.post(url, data, headers)

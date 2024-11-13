@@ -501,9 +501,9 @@ class Organizations:
         if sso_jit_provisioning is not None:
             data["sso_jit_provisioning"] = sso_jit_provisioning
         if sso_jit_provisioning_allowed_connections is not None:
-            data["sso_jit_provisioning_allowed_connections"] = (
-                sso_jit_provisioning_allowed_connections
-            )
+            data[
+                "sso_jit_provisioning_allowed_connections"
+            ] = sso_jit_provisioning_allowed_connections
         if email_allowed_domains is not None:
             data["email_allowed_domains"] = email_allowed_domains
         if email_jit_provisioning is not None:
@@ -689,9 +689,9 @@ class Organizations:
         if sso_jit_provisioning is not None:
             data["sso_jit_provisioning"] = sso_jit_provisioning
         if sso_jit_provisioning_allowed_connections is not None:
-            data["sso_jit_provisioning_allowed_connections"] = (
-                sso_jit_provisioning_allowed_connections
-            )
+            data[
+                "sso_jit_provisioning_allowed_connections"
+            ] = sso_jit_provisioning_allowed_connections
         if email_allowed_domains is not None:
             data["email_allowed_domains"] = email_allowed_domains
         if email_jit_provisioning is not None:
