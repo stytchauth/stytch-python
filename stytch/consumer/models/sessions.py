@@ -72,6 +72,7 @@ class AuthenticationFactorType(str, enum.Enum):
     SSO = "sso"
     IMPORTED = "imported"
     RECOVERY_CODES = "recovery_codes"
+    EMAIL_OTP = "email_otp"
 
 
 class AmazonOAuthFactor(pydantic.BaseModel):
@@ -341,12 +342,12 @@ class AuthenticationFactor(pydantic.BaseModel):
     """
     Fields:
       - type: The type of authentication factor. The possible values are: `magic_link`, `otp`,
-           `oauth`, `password`, or `sso`.
+           `oauth`, `password`, `email_otp`, or `sso` .
       - delivery_method: The method that was used to deliver the authentication factor. The possible values depend on the `type`:
 
           `magic_link` – Only `email`.
 
-          `otp` – Only `sms`.
+          `otp` –  Either `sms` or `email` .
 
           `oauth` – Either `oauth_google` or `oauth_microsoft`.
 
