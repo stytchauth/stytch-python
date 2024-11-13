@@ -7,8 +7,7 @@ from typing import Any, Dict, Optional
 import pydantic
 
 
-class ResponseError(ValueError):
-    ...
+class ResponseError(ValueError): ...
 
 
 class ResponseBase(pydantic.BaseModel):
