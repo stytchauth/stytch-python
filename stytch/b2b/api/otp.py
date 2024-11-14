@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+from stytch.b2b.api.otp_email import Email
 from stytch.b2b.api.otp_sms import Sms
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -19,6 +20,11 @@ class OTPs:
         self.sync_client = sync_client
         self.async_client = async_client
         self.sms = Sms(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.email = Email(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,

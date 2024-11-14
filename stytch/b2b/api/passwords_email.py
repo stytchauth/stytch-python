@@ -75,9 +75,9 @@ class Email:
         if reset_password_redirect_url is not None:
             data["reset_password_redirect_url"] = reset_password_redirect_url
         if reset_password_expiration_minutes is not None:
-            data[
-                "reset_password_expiration_minutes"
-            ] = reset_password_expiration_minutes
+            data["reset_password_expiration_minutes"] = (
+                reset_password_expiration_minutes
+            )
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
         if login_redirect_url is not None:
@@ -138,9 +138,9 @@ class Email:
         if reset_password_redirect_url is not None:
             data["reset_password_redirect_url"] = reset_password_redirect_url
         if reset_password_expiration_minutes is not None:
-            data[
-                "reset_password_expiration_minutes"
-            ] = reset_password_expiration_minutes
+            data["reset_password_expiration_minutes"] = (
+                reset_password_expiration_minutes
+            )
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
         if login_redirect_url is not None:
