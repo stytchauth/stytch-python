@@ -1,12 +1,9 @@
 -r requirements.txt
 
-# For type checking, codegen, and testing
-Jinja2==3.1.4
-autoflake==2.0.0
+# For distributing the package
+build==1.2.2.post1
+
+# For type checking and testing
 black==24.3.0
-isort==5.11.2
 mypy==0.991
-pyright==1.1.284
-pyyaml==6.0
-types-PyYAML==6.0.12.2
 types-requests==2.28.11.5
