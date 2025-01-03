@@ -58,6 +58,8 @@ class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     OAUTH_EXCHANGE_SLACK = "oauth_exchange_slack"
     OAUTH_EXCHANGE_HUBSPOT = "oauth_exchange_hubspot"
     OAUTH_EXCHANGE_GITHUB = "oauth_exchange_github"
+    OAUTH_EXCHANGE_GOOGLE = "oauth_exchange_google"
+    IMPERSONATION = "impersonation"
 
 
 class AuthenticationFactorType(str, enum.Enum):
@@ -73,6 +75,7 @@ class AuthenticationFactorType(str, enum.Enum):
     IMPORTED = "imported"
     RECOVERY_CODES = "recovery_codes"
     EMAIL_OTP = "email_otp"
+    IMPERSONATED = "impersonated"
 
 
 class AmazonOAuthFactor(pydantic.BaseModel):
@@ -167,6 +170,10 @@ class GithubOAuthFactor(pydantic.BaseModel):
     email_id: Optional[str] = None
 
 
+class GoogleOAuthExchangeFactor(pydantic.BaseModel):
+    email_id: str
+
+
 class GoogleOAuthFactor(pydantic.BaseModel):
     """
     Fields:
@@ -188,6 +195,11 @@ class HubspotOAuthFactor(pydantic.BaseModel):
     id: str
     provider_subject: str
     email_id: Optional[str] = None
+
+
+class ImpersonatedFactor(pydantic.BaseModel):
+    impersonator_id: str
+    impersonator_email_address: str
 
 
 class InstagramOAuthFactor(pydantic.BaseModel):
@@ -395,6 +407,8 @@ class AuthenticationFactor(pydantic.BaseModel):
       - slack_oauth_exchange_factor: (no documentation yet)
       - hubspot_oauth_exchange_factor: (no documentation yet)
       - github_oauth_exchange_factor: (no documentation yet)
+      - google_oauth_exchange_factor: (no documentation yet)
+      - impersonated_factor: (no documentation yet)
     """  # noqa
 
     type: AuthenticationFactorType
@@ -439,6 +453,8 @@ class AuthenticationFactor(pydantic.BaseModel):
     slack_oauth_exchange_factor: Optional[SlackOAuthExchangeFactor] = None
     hubspot_oauth_exchange_factor: Optional[HubspotOAuthExchangeFactor] = None
     github_oauth_exchange_factor: Optional[GithubOAuthExchangeFactor] = None
+    google_oauth_exchange_factor: Optional[GoogleOAuthExchangeFactor] = None
+    impersonated_factor: Optional[ImpersonatedFactor] = None
 
 
 class Session(pydantic.BaseModel):
