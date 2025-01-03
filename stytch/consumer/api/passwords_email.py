@@ -176,7 +176,7 @@ class Email:
 
               In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
 
-              See examples and read more about redirect URLs [here](https://stytch.com/docs/guides/dashboard/redirect-urls).
+              See examples and read more about redirect URLs [here](/workspace-management/redirect-urls).
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -245,7 +245,7 @@ class Email:
 
               In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
 
-              See examples and read more about redirect URLs [here](https://stytch.com/docs/guides/dashboard/redirect-urls).
+              See examples and read more about redirect URLs [here](/workspace-management/redirect-urls).
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,

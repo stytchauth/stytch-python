@@ -18,7 +18,7 @@ from stytch.b2b.models.sessions import PrimaryRequired
 class Membership(pydantic.BaseModel):
     """
     Fields:
-      - type: Either `active_member`, `pending_member`, `invited_member`, or `eligible_to_join_by_email_domain`
+      - type: Either `active_member`, `pending_member`, `invited_member`, `eligible_to_join_by_email_domain`, or `eligible_to_join_by_oauth_tenant`
       - details: An object containing additional metadata about the membership, if available.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
     """  # noqa

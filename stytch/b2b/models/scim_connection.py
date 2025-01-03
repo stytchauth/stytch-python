@@ -203,7 +203,7 @@ class GetGroupsResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Connection.get`.
     Fields:
-      - connection: (no documentation yet)
+      - connection: A [SCIM Connection](https://stytch.com/docs/b2b/api/scim-connection-object) connection belonging to the organization (currently limited to one).
     """  # noqa
 
     connection: Optional[SCIMConnection] = None
