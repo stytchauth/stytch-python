@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import enum
-from typing import List, Optional
+from typing import List
 
 import pydantic
 
@@ -23,8 +23,8 @@ class ProjectMetricMetricType(str, enum.Enum):
 
 
 class ProjectMetric(pydantic.BaseModel):
+    metric_type: ProjectMetricMetricType
     count: int
-    metric_type: Optional[ProjectMetricMetricType] = None
 
 
 class MetricsResponse(ResponseBase):
