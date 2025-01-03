@@ -22,6 +22,7 @@ from stytch.b2b.api.scim import SCIM
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.b2b.api.totps import TOTPs
+from stytch.consumer.api.fraud import Fraud
 from stytch.consumer.api.m2m import M2M
 from stytch.consumer.api.project import Project
 from stytch.core.client_base import ClientBase
@@ -42,6 +43,7 @@ class Client(ClientBase):
         environment: Optional[str] = None,
         suppress_warnings: bool = False,
         async_session: Optional[aiohttp.ClientSession] = None,
+        fraud_environment: Optional[str] = None,
     ):
         super().__init__(
             project_id=project_id,
@@ -49,6 +51,7 @@ class Client(ClientBase):
             environment=environment,
             suppress_warnings=suppress_warnings,
             async_session=async_session,
+            fraud_environment=fraud_environment,
         )
 
         policy_cache = PolicyCache(
@@ -61,6 +64,11 @@ class Client(ClientBase):
 
         self.discovery = Discovery(
             api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.fraud = Fraud(
+            api_base=self.fraud_api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
         )

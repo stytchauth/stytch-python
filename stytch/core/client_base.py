@@ -17,9 +17,14 @@ class ClientBase(abc.ABC):
         environment: Optional[str] = None,
         suppress_warnings: bool = False,
         async_session: Optional[aiohttp.ClientSession] = None,
+        fraud_environment: Optional[str] = None,
     ):
         base_url = self._env_url(project_id, environment, suppress_warnings)
+        fraud_base_url = "https://telemetry.stytch.com"
+        if fraud_environment is not None:
+            fraud_base_url = fraud_environment
         self.api_base = ApiBase(base_url)
+        self.fraud_api_base = ApiBase(fraud_base_url)
         self.sync_client = SyncClient(project_id, secret)
         self.async_client = AsyncClient(project_id, secret, session=async_session)
         self.jwks_client = self.get_jwks_client(project_id)
