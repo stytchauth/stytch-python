@@ -136,7 +136,7 @@ class Policy(pydantic.BaseModel):
 class PolicyResponse(ResponseBase):
     """Response type for `RBAC.policy`.
     Fields:
-      - policy: The RBAC Policy document that contains all defined Roles and Resources – which are managed in the [Dashboard](/dashboard/rbac). Read more about these entities and how they work in our [RBAC overview](https://stytch.com/docs/b2b/guides/rbac/overview).
+      - policy: The RBAC Policy document that contains all defined Roles and Resources – which are managed in the [Dashboard](https://stytch.com/docs/dashboard/rbac). Read more about these entities and how they work in our [RBAC overview](https://stytch.com/docs/b2b/guides/rbac/overview).
     """  # noqa
 
     policy: Optional[Policy] = None

@@ -53,7 +53,7 @@ class Email:
           - attributes: Provided attributes help with fraud detection.
           - login_redirect_url: The URL Stytch redirects to after the OAuth flow is completed for a user that already exists. This URL should be a route in your application which will run `oauth.authenticate` (see below) and finish the login.
 
-          The URL must be configured as a Login URL in the [Redirect URL page](/dashboard/redirect-urls). If the field is not specified, the default Login URL will be used.
+          The URL must be configured as a Login URL in the [Redirect URL page](https://stytch.com/docs/dashboard/redirect-urls). If the field is not specified, the default Login URL will be used.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
@@ -116,7 +116,7 @@ class Email:
           - attributes: Provided attributes help with fraud detection.
           - login_redirect_url: The URL Stytch redirects to after the OAuth flow is completed for a user that already exists. This URL should be a route in your application which will run `oauth.authenticate` (see below) and finish the login.
 
-          The URL must be configured as a Login URL in the [Redirect URL page](/dashboard/redirect-urls). If the field is not specified, the default Login URL will be used.
+          The URL must be configured as a Login URL in the [Redirect URL page](https://stytch.com/docs/dashboard/redirect-urls). If the field is not specified, the default Login URL will be used.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
@@ -176,7 +176,7 @@ class Email:
 
               In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
 
-              See examples and read more about redirect URLs [here](/workspace-management/redirect-urls).
+              See examples and read more about redirect URLs [here](https://stytch.com/docs/workspace-management/redirect-urls).
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -245,7 +245,7 @@ class Email:
 
               In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
 
-              See examples and read more about redirect URLs [here](/workspace-management/redirect-urls).
+              See examples and read more about redirect URLs [here](https://stytch.com/docs/workspace-management/redirect-urls).
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
