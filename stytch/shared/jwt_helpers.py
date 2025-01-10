@@ -40,6 +40,7 @@ def authenticate_jwt_local(
     now = time.time()
 
     signing_key = jwks_client.get_signing_key_from_jwt(jwt)
+    
     try:
         # NOTE: The max_token_age_seconds value is applied after decoding.
         payload = pyjwt.decode(

@@ -21,7 +21,6 @@ from stytch.consumer.models.sessions import (
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.consumer.models.sessions import AccessTokenJWTClaims
 from stytch.shared import jwt_helpers
 
 
