@@ -162,10 +162,12 @@ class MagicLinks:
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
     ) -> CreateResponse:
-        """Create an embeddable Magic Link token for a User. Access to this endpoint is restricted. To enable it, please send us a note at support@stytch.com.
+        """Create an Embeddable Magic Link token for a User. Access to this endpoint is restricted. To enable it, please send us a note at support@stytch.com.
 
         ### Next steps
         Send the returned `token` value to the end user in a link which directs to your application. When the end user follows your link, collect the token, and call [Authenticate Magic Link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
+
+        **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
           - user_id: The unique ID of a specific User.
@@ -193,10 +195,12 @@ class MagicLinks:
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
     ) -> CreateResponse:
-        """Create an embeddable Magic Link token for a User. Access to this endpoint is restricted. To enable it, please send us a note at support@stytch.com.
+        """Create an Embeddable Magic Link token for a User. Access to this endpoint is restricted. To enable it, please send us a note at support@stytch.com.
 
         ### Next steps
         Send the returned `token` value to the end user in a link which directs to your application. When the end user follows your link, collect the token, and call [Authenticate Magic Link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
+
+        **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
           - user_id: The unique ID of a specific User.

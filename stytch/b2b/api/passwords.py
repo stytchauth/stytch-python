@@ -136,6 +136,8 @@ class Passwords:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
+        mfa_phone_number: Optional[str] = None,
+        set_phone_number_verified: Optional[bool] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -167,6 +169,8 @@ class Passwords:
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
+          - mfa_phone_number: (no documentation yet)
+          - set_phone_number_verified: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -211,6 +215,10 @@ class Passwords:
             data["roles"] = roles
         if preserve_existing_sessions is not None:
             data["preserve_existing_sessions"] = preserve_existing_sessions
+        if mfa_phone_number is not None:
+            data["mfa_phone_number"] = mfa_phone_number
+        if set_phone_number_verified is not None:
+            data["set_phone_number_verified"] = set_phone_number_verified
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
         res = self.sync_client.post(url, data, headers)
@@ -232,6 +240,8 @@ class Passwords:
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         roles: Optional[List[str]] = None,
         preserve_existing_sessions: Optional[bool] = None,
+        mfa_phone_number: Optional[str] = None,
+        set_phone_number_verified: Optional[bool] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -263,6 +273,8 @@ class Passwords:
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
           by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
           authentication factors with the affected SSO connection IDs will be revoked.
+          - mfa_phone_number: (no documentation yet)
+          - set_phone_number_verified: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -307,6 +319,10 @@ class Passwords:
             data["roles"] = roles
         if preserve_existing_sessions is not None:
             data["preserve_existing_sessions"] = preserve_existing_sessions
+        if mfa_phone_number is not None:
+            data["mfa_phone_number"] = mfa_phone_number
+        if set_phone_number_verified is not None:
+            data["set_phone_number_verified"] = set_phone_number_verified
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
         res = await self.async_client.post(url, data, headers)
