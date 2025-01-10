@@ -770,7 +770,7 @@ class Sessions:
         client_secret: Optional[str] = None,
         grant_type: str = 'authorization_code',
         token_type_hint: str = 'access_token'
-    ) -> Optional[AccessTokenJWTResponse]:
+    ) -> Optional[AccessTokenJWTClaims]:
         return self.introspect_idp_access_token_local(access_token, client_id) or self.introspect_idp_access_token_network(access_token, client_id, client_secret, grant_type, token_type_hint)
     # ENDMANUAL(introspect_idp_access_token)
 
