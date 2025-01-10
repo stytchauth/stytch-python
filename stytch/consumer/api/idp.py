@@ -44,14 +44,12 @@ class IDP:
         access_token: str,
         client_id: str,
         client_secret: Optional[str] = None,
-        grant_type: str = "authorization_code",
         token_type_hint: str = "access_token",
     ) -> Optional[AccessTokenJWTClaims]:
         headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {
             "token": access_token,
             "client_id": client_id,
-            "grant_type": grant_type,
             "token_type_hint": token_type_hint,
         }
         if client_secret is not None:
@@ -96,8 +94,6 @@ class IDP:
         custom_claims = {
             k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
         }
-
-        print(generic_claims)
 
         return AccessTokenJWTClaims(
             subject=generic_claims.reserved_claims["sub"],
