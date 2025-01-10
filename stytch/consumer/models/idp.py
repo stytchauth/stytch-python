@@ -1,8 +1,9 @@
-from typing import Any, List, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import pydantic
 
 from stytch.core.response_base import ResponseBase
+
 
 class AccessTokenJWTResponse(ResponseBase):
     """Response type for `Sessions.introspect_idp_access_token`.
@@ -20,6 +21,7 @@ class AccessTokenJWTResponse(ResponseBase):
     iat: Optional[int] = None
     iss: Optional[str] = None
     nbf: Optional[int] = None
+
 
 class AccessTokenJWTClaims(pydantic.BaseModel):
     """Response type for `Sessions.introspect_idp_access_token`.
