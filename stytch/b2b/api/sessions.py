@@ -27,7 +27,7 @@ from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.shared import jwt_helpers, rbac_local
 from stytch.shared.policy_cache import PolicyCache
-from stytch.b2b.models.sessions import AccessTokenJWTClaims, AccessTokenJWTResponse
+from stytch.b2b.models.idp import AccessTokenJWTClaims, AccessTokenJWTResponse
 from pydantic import ValidationError
 
 
@@ -773,7 +773,6 @@ class Sessions:
     ) -> Optional[AccessTokenJWTClaims]:
         return self.introspect_idp_access_token_local(access_token, client_id) or self.introspect_idp_access_token_network(access_token, client_id, client_secret, grant_type, token_type_hint)
     # ENDMANUAL(introspect_idp_access_token)
-
 
     # MANUAL(introspect_idp_access_token_network)(SERVICE_METHOD)
     # ADDIMPORT: from typing import Optional
