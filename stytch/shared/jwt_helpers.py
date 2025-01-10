@@ -20,7 +20,7 @@ def authenticate_jwt_local(
     max_token_age_seconds: Optional[int] = None,
     leeway: int = 0,
     custom_audience: Optional[str] = None,
-    custom_issuer: Optional[str] = False,
+    custom_issuer: Optional[str] = None,
 ) -> Optional[GenericClaims]:
     """Parse a JWT and verify the signature locally
     (without calling /authenticate in the API).
@@ -40,7 +40,7 @@ def authenticate_jwt_local(
     now = time.time()
 
     signing_key = jwks_client.get_signing_key_from_jwt(jwt)
-    
+
     try:
         # NOTE: The max_token_age_seconds value is applied after decoding.
         payload = pyjwt.decode(

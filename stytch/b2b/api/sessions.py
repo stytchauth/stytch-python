@@ -788,7 +788,7 @@ class Sessions:
         client_secret: Optional[str] = None,
         grant_type: str = 'authorization_code',
         token_type_hint: str = 'access_token'
-    ) -> Optional[Dict[str, any]]:
+    ) -> Optional[AccessTokenJWTClaims]:
         headers: Dict[str, str] = {
             "Content-Type": "application/x-www-form-urlencoded"
         }
