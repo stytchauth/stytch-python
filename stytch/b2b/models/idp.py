@@ -1,7 +1,9 @@
-from stytch.core.response_base import ResponseBase
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import pydantic
+
+from stytch.core.response_base import ResponseBase
+
 
 # MANUAL(AccessTokenJWTResponse)(TYPES)
 # ADDIMPORT: from typing import Any, Dict, List, Optional
@@ -20,6 +22,7 @@ class AccessTokenJWTResponse(ResponseBase):
 
 
 # ENDMANUAL(AccessTokenJWTResponse)
+
 
 # MANUAL(AccessTokenJWTClaims)(TYPES)
 # ADDIMPORT: from typing import Any, Dict, List, Optional

@@ -1,15 +1,15 @@
-
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 import jwt
 
+from stytch.b2b.models.idp import AccessTokenJWTClaims, AccessTokenJWTResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.shared import jwt_helpers, rbac_local
+from stytch.shared import jwt_helpers
 from stytch.shared.policy_cache import PolicyCache
-from stytch.b2b.models.idp import AccessTokenJWTClaims, AccessTokenJWTResponse
+
 
 class IDP:
     def __init__(
@@ -27,7 +27,6 @@ class IDP:
         self.policy_cache = policy_cache
         self.jwks_client = jwks_client
         self.project_id = project_id
-    
 
     # MANUAL(introspect_idp_access_token)(SERVICE_METHOD)
     # ADDIMPORT: from typing import Optional
@@ -37,10 +36,15 @@ class IDP:
         access_token: str,
         client_id: str,
         client_secret: Optional[str] = None,
-        grant_type: str = 'authorization_code',
-        token_type_hint: str = 'access_token'
+        grant_type: str = "authorization_code",
+        token_type_hint: str = "access_token",
     ) -> Optional[AccessTokenJWTClaims]:
-        return self.introspect_idp_access_token_local(access_token, client_id) or self.introspect_idp_access_token_network(access_token, client_id, client_secret, grant_type, token_type_hint)
+        return self.introspect_idp_access_token_local(
+            access_token, client_id
+        ) or self.introspect_idp_access_token_network(
+            access_token, client_id, client_secret, grant_type, token_type_hint
+        )
+
     # ENDMANUAL(introspect_idp_access_token)
 
     # MANUAL(introspect_idp_access_token_network)(SERVICE_METHOD)
@@ -53,30 +57,30 @@ class IDP:
         access_token: str,
         client_id: str,
         client_secret: Optional[str] = None,
-        grant_type: str = 'authorization_code',
-        token_type_hint: str = 'access_token'
+        grant_type: str = "authorization_code",
+        token_type_hint: str = "access_token",
     ) -> Optional[AccessTokenJWTClaims]:
-        headers: Dict[str, str] = {
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
+        headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {
             "token": access_token,
             "client_id": client_id,
             "grant_type": grant_type,
-            "token_type_hint": token_type_hint
+            "token_type_hint": token_type_hint,
         }
         if client_secret is not None:
             data["client_secret"] = client_secret
 
-        url = self.api_base.url_for(f"/v1/public/{self.project_id}/oauth2/introspect", data)
+        url = self.api_base.url_for(
+            f"/v1/public/{self.project_id}/oauth2/introspect", data
+        )
         res = self.sync_client.postForm(url, data, headers)
-        jwtResponse = AccessTokenJWTResponse.from_json(res.response.status_code, res.json)
+        jwtResponse = AccessTokenJWTResponse.from_json(
+            res.response.status_code, res.json
+        )
         if not jwtResponse.active:
             return None
         return AccessTokenJWTClaims(
-            subject=jwtResponse.sub,
-            scopes=jwtResponse.scope,
-            custom_claims=None
+            subject=jwtResponse.sub, scopes=jwtResponse.scope, custom_claims=None
         )
 
     # ENDMANUAL(introspect_idp_access_token_network)
@@ -96,7 +100,7 @@ class IDP:
             jwks_client=self.jwks_client,
             jwt=access_token,
             custom_audience=client_id,
-            custom_issuer=f"https://stytch.com/{self.project_id}"
+            custom_issuer=f"https://stytch.com/{self.project_id}",
         )
         if generic_claims is None:
             return None
@@ -108,7 +112,7 @@ class IDP:
         return AccessTokenJWTClaims(
             subject=generic_claims.reserved_claims["sub"],
             scopes=generic_claims.untyped_claims[_scope_claim],
-            custom_claims=custom_claims
+            custom_claims=custom_claims,
         )
 
     # ENDMANUAL(introspect_idp_access_token_local)

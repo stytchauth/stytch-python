@@ -65,7 +65,7 @@ class SyncClient(ClientBase):
         final_headers.update(headers or {})
         resp = requests.post(url, json=json, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
-    
+
     def postForm(
         self,
         url: str,
