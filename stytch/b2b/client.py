@@ -11,6 +11,7 @@ import aiohttp
 import jwt
 
 from stytch.b2b.api.discovery import Discovery
+from stytch.b2b.api.impersonation import Impersonation
 from stytch.b2b.api.magic_links import MagicLinks
 from stytch.b2b.api.oauth import OAuth
 from stytch.b2b.api.organizations import Organizations
@@ -23,6 +24,7 @@ from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.b2b.api.totps import TOTPs
 from stytch.consumer.api.fraud import Fraud
+from stytch.consumer.api.idp import IDP
 from stytch.consumer.api.m2m import M2M
 from stytch.consumer.api.project import Project
 from stytch.core.client_base import ClientBase
@@ -69,6 +71,11 @@ class Client(ClientBase):
         )
         self.fraud = Fraud(
             api_base=self.fraud_api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.impersonation = Impersonation(
+            api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
         )
@@ -141,6 +148,13 @@ class Client(ClientBase):
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
+        )
+        self.idp = IDP(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+            jwks_client=self.jwks_client,
+            project_id=project_id,
         )
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
