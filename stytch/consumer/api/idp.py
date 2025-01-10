@@ -25,9 +25,6 @@ class IDP:
         self.jwks_client = jwks_client
         self.project_id = project_id
 
-    # MANUAL(introspect_idp_access_token)(SERVICE_METHOD)
-    # ADDIMPORT: from typing import Optional
-    # ADDIMPORT: from stytch.b2b.models.idp import AccessTokenJWTResponse
     def introspect_idp_access_token(
         self,
         access_token: str,
@@ -42,13 +39,6 @@ class IDP:
             access_token, client_id, client_secret, grant_type, token_type_hint
         )
 
-    # ENDMANUAL(introspect_idp_access_token)
-
-    # MANUAL(introspect_idp_access_token_network)(SERVICE_METHOD)
-    # ADDIMPORT: from typing import Optional
-    # ADDIMPORT: from stytch.b2b.models.idp import AccessTokenJWTClaims, AccessTokenJWTResponse
-    # ADDIMPORT: from stytch.shared import jwt_helpers
-    # ADDIMPORT: from stytch.shared import rbac_local
     def introspect_idp_access_token_network(
         self,
         access_token: str,
@@ -77,15 +67,16 @@ class IDP:
         if not jwtResponse.active:
             return None
         return AccessTokenJWTClaims(
-            subject=jwtResponse.sub, scopes=jwtResponse.scope, custom_claims={}
+            subject=jwtResponse.sub,
+            scope=jwtResponse.scope,
+            custom_claims={},
+            audience=jwtResponse.aud,
+            expires_at=jwtResponse.exp,
+            issued_at=jwtResponse.iat,
+            issuer=jwtResponse.iss,
+            not_before=jwtResponse.nbf,
         )
 
-    # ENDMANUAL(introspect_idp_access_token_network)
-
-    # MANUAL(introspect_idp_access_token_local)(SERVICE_METHOD)
-    # ADDIMPORT: from typing import Optional
-    # ADDIMPORT: from stytch.b2b.models.sessions import AccessTokenJWTClaims
-    # ADDIMPORT: from stytch.shared import jwt_helpers
     def introspect_idp_access_token_local(
         self,
         access_token: str,
@@ -106,10 +97,15 @@ class IDP:
             k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
         }
 
+        print(generic_claims)
+
         return AccessTokenJWTClaims(
             subject=generic_claims.reserved_claims["sub"],
-            scopes=generic_claims.untyped_claims[_scope_claim],
+            scope=generic_claims.untyped_claims[_scope_claim],
             custom_claims=custom_claims,
+            audience=generic_claims.reserved_claims["aud"],
+            expires_at=generic_claims.reserved_claims["exp"],
+            issued_at=generic_claims.reserved_claims["iat"],
+            issuer=generic_claims.reserved_claims["iss"],
+            not_before=generic_claims.reserved_claims["nbf"],
         )
-
-    # ENDMANUAL(introspect_idp_access_token_local)
