@@ -15,8 +15,8 @@ class AccessTokenJWTResponse(ResponseBase):
     """  # noqa
 
     active: bool
-    sub: Optional[str]
-    scope: Optional[str]
+    sub: Optional[str] = None
+    scope: Optional[str] = None
 
 
 # ENDMANUAL(AccessTokenJWTResponse)

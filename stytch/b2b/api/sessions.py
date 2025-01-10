@@ -802,15 +802,14 @@ class Sessions:
 
         url = self.api_base.url_for(f"/v1/public/{self.project_id}/oauth2/introspect", data)
         res = self.sync_client.postForm(url, data, headers)
-        try:
-            jwtResponse = AccessTokenJWTResponse.from_json(res.response.status_code, res.json)
-            return AccessTokenJWTClaims(
-                subject=jwtResponse.sub,
-                scopes=jwtResponse.scope,
-                custom_claims=None
-            )
-        except ValidationError as e:
+        jwtResponse = AccessTokenJWTResponse.from_json(res.response.status_code, res.json)
+        if not jwtResponse.active:
             return None
+        return AccessTokenJWTClaims(
+            subject=jwtResponse.sub,
+            scopes=jwtResponse.scope,
+            custom_claims=None
+        )
 
     # ENDMANUAL(introspect_idp_access_token_network)
 
