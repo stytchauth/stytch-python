@@ -65,6 +65,17 @@ class SyncClient(ClientBase):
         final_headers.update(headers or {})
         resp = requests.post(url, json=json, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
+    
+    def postForm(
+        self,
+        url: str,
+        form: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        resp = requests.post(url, data=form, headers=final_headers, auth=self.auth)
+        return self._response_from_request(resp)
 
     def put(
         self,
