@@ -28,7 +28,6 @@ from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.shared import jwt_helpers, rbac_local
 from stytch.shared.policy_cache import PolicyCache
 from stytch.b2b.models.idp import AccessTokenJWTClaims, AccessTokenJWTResponse
-from pydantic import ValidationError
 
 
 class Sessions:
@@ -779,7 +778,6 @@ class Sessions:
     # ADDIMPORT: from stytch.b2b.models.idp import AccessTokenJWTClaims, AccessTokenJWTResponse
     # ADDIMPORT: from stytch.shared import jwt_helpers
     # ADDIMPORT: from stytch.shared import rbac_local
-    # ADDIMPORT: from pydantic import ValidationError
     def introspect_idp_access_token_network(
         self,
         access_token: str,
