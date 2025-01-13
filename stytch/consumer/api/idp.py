@@ -37,7 +37,21 @@ class IDP:
         ) or self.introspect_idp_access_token_network(
             access_token, client_id, client_secret, token_type_hint
         )
-
+    
+    async def introspect_idp_access_token_async(
+        self,
+        access_token: str,
+        client_id: str,
+        client_secret: Optional[str] = None,
+        token_type_hint: str = "access_token",
+    ) -> Optional[AccessTokenJWTClaims]:
+        local_introspection_response = self.introspect_idp_access_token_local(access_token, client_id)
+        if local_introspection_response is not None:
+            return local_introspection_response
+        return self.introspect_idp_access_token_network_async(
+            access_token, client_id, client_secret, token_type_hint
+        )
+    
     def introspect_idp_access_token_network(
         self,
         access_token: str,
@@ -60,6 +74,42 @@ class IDP:
         res = self.sync_client.postForm(url, data, headers)
         jwtResponse = AccessTokenJWTResponse.from_json(
             res.response.status_code, res.json
+        )
+        if not jwtResponse.active:
+            return None
+        return AccessTokenJWTClaims(
+            subject=jwtResponse.sub,
+            scope=jwtResponse.scope,
+            custom_claims={},
+            audience=jwtResponse.aud,
+            expires_at=jwtResponse.exp,
+            issued_at=jwtResponse.iat,
+            issuer=jwtResponse.iss,
+            not_before=jwtResponse.nbf,
+        )
+    
+    async def introspect_idp_access_token_network_async(
+        self,
+        access_token: str,
+        client_id: str,
+        client_secret: Optional[str] = None,
+        token_type_hint: str = "access_token",
+    ) -> Optional[AccessTokenJWTClaims]:
+        headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
+        data: Dict[str, Any] = {
+            "token": access_token,
+            "client_id": client_id,
+            "token_type_hint": token_type_hint,
+        }
+        if client_secret is not None:
+            data["client_secret"] = client_secret
+
+        url = self.api_base.url_for(
+            f"/v1/public/{self.project_id}/oauth2/introspect", data
+        )
+        res = await self.async_client.postForm(url, data, headers)
+        jwtResponse = AccessTokenJWTResponse.from_json(
+            res.response.status, res.json
         )
         if not jwtResponse.active:
             return None
