@@ -11,6 +11,7 @@ import aiohttp
 import jwt
 
 from stytch.b2b.api.discovery import Discovery
+from stytch.b2b.api.impersonation import Impersonation
 from stytch.b2b.api.magic_links import MagicLinks
 from stytch.b2b.api.oauth import OAuth
 from stytch.b2b.api.organizations import Organizations
@@ -69,6 +70,11 @@ class Client(ClientBase):
         )
         self.fraud = Fraud(
             api_base=self.fraud_api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.impersonation = Impersonation(
+            api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
         )
