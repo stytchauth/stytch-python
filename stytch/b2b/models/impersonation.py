@@ -15,6 +15,20 @@ from stytch.core.response_base import ResponseBase
 
 
 class AuthenticateResponse(ResponseBase):
+    """Response type for `Impersonation.authenticate`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - intermediate_session_token: Successfully authenticating an impersonation token will never result in an intermediate session. If the token is valid, a full session will be created.
+      - member_authenticated: The member will always be fully authenticated if an impersonation token is successfully authenticated.
+      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object) for the impersonated Member.
+      - mfa_required: MFA will not be required when authenticating impersonation tokens.
+    """  # noqa
+
     member_id: str
     organization_id: str
     member: Member
