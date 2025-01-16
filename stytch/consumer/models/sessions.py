@@ -198,6 +198,12 @@ class HubspotOAuthFactor(pydantic.BaseModel):
 
 
 class ImpersonatedFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - impersonator_id: The unique UUID of the impersonator. For impersonation sessions initiated via the Stytch dashboard, the `impersonator_id` will be the impersonator's Stytch workspace id.
+      - impersonator_email_address: The email address of the impersonator.
+    """  # noqa
+
     impersonator_id: str
     impersonator_email_address: str
 
@@ -408,7 +414,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - hubspot_oauth_exchange_factor: (no documentation yet)
       - github_oauth_exchange_factor: (no documentation yet)
       - google_oauth_exchange_factor: (no documentation yet)
-      - impersonated_factor: (no documentation yet)
+      - impersonated_factor: Information about the impersonated factor, if one is present.
     """  # noqa
 
     type: AuthenticationFactorType
