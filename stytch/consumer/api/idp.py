@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 
 import jwt
 
-from stytch.consumer.models.idp import AccessTokenJWTClaims, AccessTokenJWTResponse
+from stytch.consumer.models.idp import IDPTokenClaims, IDPTokenResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.shared import jwt_helpers
@@ -24,74 +24,28 @@ class IDP:
         self.async_client = async_client
         self.jwks_client = jwks_client
         self.project_id = project_id
-
-    def introspect_idp_access_token(
-        self,
-        access_token: str,
-        client_id: str,
-        client_secret: Optional[str] = None,
-        token_type_hint: str = "access_token",
-    ) -> Optional[AccessTokenJWTClaims]:
-        """Introspects a token JWT from an authorization code response.
-        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
-        Access tokens contain a standard set of claims as well as any custom claims generated from templates.
-
-        Fields:
-          - access_token: The access token (or refresh token) to introspect.
-          - client_id: The ID of the client.
-          - client_secret: The secret of the client.
-          - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
-        """
-        return self.introspect_idp_access_token_local(
-            access_token, client_id
-        ) or self.introspect_idp_access_token_network(
-            access_token, client_id, client_secret, token_type_hint
-        )
+        self.non_custom_claim_keys = ["aud","exp","iat","iss","jti","nbf","sub","active","client_id","request_id","scope","status_code","token_type"]
     
-    async def introspect_idp_access_token_async(
+    def introspect_token_network(
         self,
-        access_token: str,
+        token: str,
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
-    ) -> Optional[AccessTokenJWTClaims]:
+    ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
-        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
         Access tokens contain a standard set of claims as well as any custom claims generated from templates.
 
         Fields:
-          - access_token: The access token (or refresh token) to introspect.
-          - client_id: The ID of the client.
-          - client_secret: The secret of the client.
-          - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
-        """
-        local_introspection_response = self.introspect_idp_access_token_local(access_token, client_id)
-        if local_introspection_response is not None:
-            return local_introspection_response
-        return await self.introspect_idp_access_token_network_async(
-            access_token, client_id, client_secret, token_type_hint
-        )
-    
-    def introspect_idp_access_token_network(
-        self,
-        access_token: str,
-        client_id: str,
-        client_secret: Optional[str] = None,
-        token_type_hint: str = "access_token",
-    ) -> Optional[AccessTokenJWTClaims]:
-        """Introspects a token JWT from an authorization code response.
-        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
-        Access tokens contain a standard set of claims as well as any custom claims generated from templates.
-
-        Fields:
-          - access_token: The access token (or refresh token) to introspect.
+          - token: The access token (or refresh token) to introspect.
           - client_id: The ID of the client.
           - client_secret: The secret of the client.
           - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
         """
         headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {
-            "token": access_token,
+            "token": token,
             "client_id": client_id,
             "token_type_hint": token_type_hint,
         }
@@ -102,42 +56,44 @@ class IDP:
             f"/v1/public/{self.project_id}/oauth2/introspect", data
         )
         res = self.sync_client.postForm(url, data, headers)
-        jwtResponse = AccessTokenJWTResponse.from_json(
+        jwtResponse = IDPTokenResponse.from_json(
             res.response.status_code, res.json
         )
+        custom_claims = {k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys}
         if not jwtResponse.active:
             return None
-        return AccessTokenJWTClaims(
+        return IDPTokenClaims(
             subject=jwtResponse.sub,
             scope=jwtResponse.scope,
-            custom_claims={},
             audience=jwtResponse.aud,
             expires_at=jwtResponse.exp,
             issued_at=jwtResponse.iat,
             issuer=jwtResponse.iss,
             not_before=jwtResponse.nbf,
+            token_type=jwtResponse.token_type,
+            custom_claims=custom_claims
         )
     
-    async def introspect_idp_access_token_network_async(
+    async def introspect_token_network_async(
         self,
-        access_token: str,
+        token: str,
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
-    ) -> Optional[AccessTokenJWTClaims]:
+    ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
-        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
         Access tokens contain a standard set of claims as well as any custom claims generated from templates.
 
         Fields:
-          - access_token: The access token (or refresh token) to introspect.
+          - token: The access token (or refresh token) to introspect.
           - client_id: The ID of the client.
           - client_secret: The secret of the client.
           - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
         """
         headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {
-            "token": access_token,
+            "token": token,
             "client_id": client_id,
             "token_type_hint": token_type_hint,
         }
@@ -148,29 +104,31 @@ class IDP:
             f"/v1/public/{self.project_id}/oauth2/introspect", data
         )
         res = await self.async_client.postForm(url, data, headers)
-        jwtResponse = AccessTokenJWTResponse.from_json(
+        jwtResponse = IDPTokenResponse.from_json(
             res.response.status, res.json
         )
+        custom_claims = {k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys}
         if not jwtResponse.active:
             return None
-        return AccessTokenJWTClaims(
+        return IDPTokenClaims(
             subject=jwtResponse.sub,
             scope=jwtResponse.scope,
-            custom_claims={},
             audience=jwtResponse.aud,
             expires_at=jwtResponse.exp,
             issued_at=jwtResponse.iat,
             issuer=jwtResponse.iss,
             not_before=jwtResponse.nbf,
+            token_type=jwtResponse.token_type,
+            custom_claims=custom_claims
         )
 
-    def introspect_idp_access_token_local(
+    def introspect_access_token_local(
         self,
         access_token: str,
         client_id: str,
-    ) -> Optional[AccessTokenJWTClaims]:
+    ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
-        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
         Access tokens contain a standard set of claims as well as any custom claims generated from templates.
 
         Fields:
@@ -192,7 +150,7 @@ class IDP:
             k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
         }
 
-        return AccessTokenJWTClaims(
+        return IDPTokenClaims(
             subject=generic_claims.reserved_claims["sub"],
             scope=generic_claims.untyped_claims[_scope_claim],
             custom_claims=custom_claims,
@@ -201,4 +159,5 @@ class IDP:
             issued_at=generic_claims.reserved_claims["iat"],
             issuer=generic_claims.reserved_claims["iss"],
             not_before=generic_claims.reserved_claims["nbf"],
+            token_type='access_token',
         )
