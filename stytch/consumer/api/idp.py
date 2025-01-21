@@ -48,7 +48,7 @@ class IDP:
         local_introspection_response = self.introspect_idp_access_token_local(access_token, client_id)
         if local_introspection_response is not None:
             return local_introspection_response
-        return self.introspect_idp_access_token_network_async(
+        return await self.introspect_idp_access_token_network_async(
             access_token, client_id, client_secret, token_type_hint
         )
     
