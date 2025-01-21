@@ -68,7 +68,7 @@ class SyncClient(ClientBase):
         resp = requests.post(url, json=json, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
-    def postForm(
+    def post_form(
         self,
         url: str,
         form: Optional[Dict[str, Any]],
@@ -177,7 +177,7 @@ class AsyncClient(ClientBase):
         )
         return await self._response_from_request(resp)
     
-    async def postForm(
+    async def post_form(
         self,
         url: str,
         form: Optional[Dict[str, Any]],

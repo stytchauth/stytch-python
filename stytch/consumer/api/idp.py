@@ -55,7 +55,7 @@ class IDP:
         url = self.api_base.url_for(
             f"/v1/public/{self.project_id}/oauth2/introspect", data
         )
-        res = self.sync_client.postForm(url, data, headers)
+        res = self.sync_client.post_form(url, data, headers)
         jwtResponse = IDPTokenResponse.from_json(
             res.response.status_code, res.json
         )
@@ -103,7 +103,7 @@ class IDP:
         url = self.api_base.url_for(
             f"/v1/public/{self.project_id}/oauth2/introspect", data
         )
-        res = await self.async_client.postForm(url, data, headers)
+        res = await self.async_client.post_form(url, data, headers)
         jwtResponse = IDPTokenResponse.from_json(
             res.response.status, res.json
         )
