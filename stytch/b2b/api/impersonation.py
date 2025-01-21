@@ -23,11 +23,17 @@ class Impersonation:
 
     def authenticate(
         self,
-        token: str,
+        impersonation_token: str,
     ) -> AuthenticateResponse:
+        """Authenticate an impersonation token to impersonate a. This endpoint requires an impersonation token that is not expired or previously used.
+        A Stytch session will be created for the impersonated member with a 60 minute duration. Impersonated sessions cannot be extended.
+
+        Fields:
+          - impersonation_token: The User Impersonation token to authenticate.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-            "token": token,
+            "impersonation_token": impersonation_token,
         }
 
         url = self.api_base.url_for("/v1/b2b/impersonation/authenticate", data)
@@ -36,11 +42,17 @@ class Impersonation:
 
     async def authenticate_async(
         self,
-        token: str,
+        impersonation_token: str,
     ) -> AuthenticateResponse:
+        """Authenticate an impersonation token to impersonate a. This endpoint requires an impersonation token that is not expired or previously used.
+        A Stytch session will be created for the impersonated member with a 60 minute duration. Impersonated sessions cannot be extended.
+
+        Fields:
+          - impersonation_token: The User Impersonation token to authenticate.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-            "token": token,
+            "impersonation_token": impersonation_token,
         }
 
         url = self.api_base.url_for("/v1/b2b/impersonation/authenticate", data)
