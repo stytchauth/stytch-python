@@ -8,6 +8,8 @@ import aiohttp
 import requests
 import requests.auth
 
+import json
+
 from stytch.version import __version__
 
 HEADERS = {
@@ -64,6 +66,17 @@ class SyncClient(ClientBase):
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
         resp = requests.post(url, json=json, headers=final_headers, auth=self.auth)
+        return self._response_from_request(resp)
+
+    def post_form(
+        self,
+        url: str,
+        form: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        resp = requests.post(url, data=form, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
     def put(
@@ -127,6 +140,16 @@ class AsyncClient(ClientBase):
         except Exception:
             resp_json = {}
         return ResponseWithJson(response=r, json=resp_json)
+    
+    async def _response_from_post_form_request(
+        cls, r: aiohttp.ClientResponse
+    ) -> ResponseWithJson:
+        try:
+            content = await r.content.read()
+            resp_json = json.loads(content.decode())
+        except Exception as e:
+            resp_json = {}
+        return ResponseWithJson(response=r, json=resp_json)
 
     async def get(
         self,
@@ -153,6 +176,19 @@ class AsyncClient(ClientBase):
             url, json=json, headers=final_headers, auth=self.auth
         )
         return await self._response_from_request(resp)
+    
+    async def post_form(
+        self,
+        url: str,
+        form: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson:
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        resp = await self._session.post(
+            url, data=form, headers=final_headers, auth=self.auth
+        )
+        return await self._response_from_post_form_request(resp)
 
     async def put(
         self,
