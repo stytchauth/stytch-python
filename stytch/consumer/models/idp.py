@@ -6,11 +6,16 @@ from stytch.core.response_base import ResponseBase
 
 
 class AccessTokenJWTResponse(ResponseBase):
-    """Response type for `Sessions.introspect_idp_access_token`.
+    """Response type for `IDP.introspect_idp_access_token`.
     Fields:
       - active: Whether or not this token is active.
       - sub: Subject of this JWT.
       - scope: A space-delimited string of scopes this JWT is granted.
+      - aud: Audience of this JWT. Usually the user or member ID, and any custom audience, if present.
+      - exp: Expiration of this access token, in Unix time.
+      - iat: The time this access token was issued.
+      - iss: The issuer of this access token.
+      - nbf: The time before which the JWT must not be accepted for processing.
     """  # noqa
 
     active: bool
@@ -24,11 +29,16 @@ class AccessTokenJWTResponse(ResponseBase):
 
 
 class AccessTokenJWTClaims(pydantic.BaseModel):
-    """Response type for `Sessions.introspect_idp_access_token`.
+    """Response type for `IDP.introspect_idp_access_token`.
     Fields:
       - subject: The subject (either user_id or member_id) that the JWT is intended for.
       - scope: A space-delimited string of scopes this JWT is granted.
       - custom_claims: A dict of custom claims of the JWT.
+      - audience: Audience of this JWT. Usually the user or member ID, and any custom audience, if present.
+      - expires_at: Expiration of this access token, in Unix time.
+      - issued_at: The time this access token was issued.
+      - issuer: The issuer of this access token.
+      - not_before: The time before which the JWT must not be accepted for processing.
     """  # noqa
 
     subject: str

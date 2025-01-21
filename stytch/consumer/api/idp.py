@@ -32,6 +32,16 @@ class IDP:
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
     ) -> Optional[AccessTokenJWTClaims]:
+        """Introspects a token JWT from an authorization code response.
+        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens contain a standard set of claims as well as any custom claims generated from templates.
+
+        Fields:
+          - access_token: The access token (or refresh token) to introspect.
+          - client_id: The ID of the client.
+          - client_secret: The secret of the client.
+          - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
+        """
         return self.introspect_idp_access_token_local(
             access_token, client_id
         ) or self.introspect_idp_access_token_network(
@@ -45,6 +55,16 @@ class IDP:
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
     ) -> Optional[AccessTokenJWTClaims]:
+        """Introspects a token JWT from an authorization code response.
+        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens contain a standard set of claims as well as any custom claims generated from templates.
+
+        Fields:
+          - access_token: The access token (or refresh token) to introspect.
+          - client_id: The ID of the client.
+          - client_secret: The secret of the client.
+          - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
+        """
         local_introspection_response = self.introspect_idp_access_token_local(access_token, client_id)
         if local_introspection_response is not None:
             return local_introspection_response
@@ -59,6 +79,16 @@ class IDP:
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
     ) -> Optional[AccessTokenJWTClaims]:
+        """Introspects a token JWT from an authorization code response.
+        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens contain a standard set of claims as well as any custom claims generated from templates.
+
+        Fields:
+          - access_token: The access token (or refresh token) to introspect.
+          - client_id: The ID of the client.
+          - client_secret: The secret of the client.
+          - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
+        """
         headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {
             "token": access_token,
@@ -95,6 +125,16 @@ class IDP:
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
     ) -> Optional[AccessTokenJWTClaims]:
+        """Introspects a token JWT from an authorization code response.
+        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens contain a standard set of claims as well as any custom claims generated from templates.
+
+        Fields:
+          - access_token: The access token (or refresh token) to introspect.
+          - client_id: The ID of the client.
+          - client_secret: The secret of the client.
+          - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
+        """
         headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {
             "token": access_token,
@@ -129,6 +169,14 @@ class IDP:
         access_token: str,
         client_id: str,
     ) -> Optional[AccessTokenJWTClaims]:
+        """Introspects a token JWT from an authorization code response.
+        Access tokens and refresh tokens are JWTs signed with the project's JWKs.
+        Access tokens contain a standard set of claims as well as any custom claims generated from templates.
+
+        Fields:
+          - access_token: The access token (or refresh token) to introspect.
+          - client_id: The ID of the client.
+        """
         _scope_claim = "scope"
         generic_claims = jwt_helpers.authenticate_jwt_local(
             project_id=self.project_id,
