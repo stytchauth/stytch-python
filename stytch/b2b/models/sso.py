@@ -23,6 +23,8 @@ class AuthenticateRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
+    IT = "it"
 
 
 class ConnectionImplicitRoleAssignment(pydantic.BaseModel):

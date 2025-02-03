@@ -19,6 +19,8 @@ class ExchangeRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
+    IT = "it"
 
 
 class ExchangeResponse(ResponseBase):
