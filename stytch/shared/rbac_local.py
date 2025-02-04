@@ -56,3 +56,30 @@ def perform_authorization_check(
 
     # If we made it here, we didn't find a matching permission
     raise RBACPermissionError(authorization_check)
+
+
+def perform_scope_authorization_check(
+    policy: Policy,
+    token_scopes: List[str],
+    authorization_check: AuthorizationCheck,
+) -> None:
+    """Performs an authorization check against a policy and a set of scopes. If the check
+    succeeds, this method will return. If the check fails, a PermissionError will be
+    raised.
+    """
+    for scope in policy.scopes:
+        if scope.scope in token_scopes:
+            for permission in scope.permissions:
+                has_matching_action = (
+                    "*" in permission.actions
+                    or authorization_check.action in permission.actions
+                )
+                has_matching_resource = (
+                    authorization_check.resource_id == permission.resource_id
+                )
+                if has_matching_action and has_matching_resource:
+                    # All good, we found a matching permission
+                    return
+
+    # If we made it here, we didn't find a matching permission
+    raise RBACPermissionError(authorization_check)

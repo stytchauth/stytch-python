@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 import asyncio
+import json
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Optional, TypeVar
 
 import aiohttp
 import requests
 import requests.auth
-
-import json
 
 from stytch.version import __version__
 
@@ -140,7 +139,7 @@ class AsyncClient(ClientBase):
         except Exception:
             resp_json = {}
         return ResponseWithJson(response=r, json=resp_json)
-    
+
     async def _response_from_post_form_request(
         cls, r: aiohttp.ClientResponse
     ) -> ResponseWithJson:
@@ -176,7 +175,7 @@ class AsyncClient(ClientBase):
             url, json=json, headers=final_headers, auth=self.auth
         )
         return await self._response_from_request(resp)
-    
+
     async def post_form(
         self,
         url: str,

@@ -155,6 +155,7 @@ class Client(ClientBase):
             async_client=self.async_client,
             jwks_client=self.jwks_client,
             project_id=project_id,
+            policy_cache=policy_cache,
         )
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:

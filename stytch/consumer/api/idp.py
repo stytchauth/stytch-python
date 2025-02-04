@@ -4,10 +4,12 @@ from typing import Any, Dict, Optional
 
 import jwt
 
+from stytch.b2b.models.sessions import AuthorizationCheck
 from stytch.consumer.models.idp import IDPTokenClaims, IDPTokenResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.shared import jwt_helpers
+from stytch.shared import jwt_helpers, rbac_local
+from stytch.shared.policy_cache import PolicyCache
 
 
 class IDP:
@@ -18,20 +20,37 @@ class IDP:
         async_client: AsyncClient,
         jwks_client: jwt.PyJWKClient,
         project_id: str,
+        policy_cache: Optional[PolicyCache],
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
         self.jwks_client = jwks_client
         self.project_id = project_id
-        self.non_custom_claim_keys = ["aud","exp","iat","iss","jti","nbf","sub","active","client_id","request_id","scope","status_code","token_type"]
-    
+        self.non_custom_claim_keys = [
+            "aud",
+            "exp",
+            "iat",
+            "iss",
+            "jti",
+            "nbf",
+            "sub",
+            "active",
+            "client_id",
+            "request_id",
+            "scope",
+            "status_code",
+            "token_type",
+        ]
+        self.policy_cache = policy_cache
+
     def introspect_token_network(
         self,
         token: str,
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -56,12 +75,22 @@ class IDP:
             f"/v1/public/{self.project_id}/oauth2/introspect", data
         )
         res = self.sync_client.post_form(url, data, headers)
-        jwtResponse = IDPTokenResponse.from_json(
-            res.response.status_code, res.json
-        )
-        custom_claims = {k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys}
+        jwtResponse = IDPTokenResponse.from_json(res.response.status_code, res.json)
+        custom_claims = {
+            k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys
+        }
         if not jwtResponse.active:
             return None
+
+        scope = jwtResponse.scope
+
+        if authorization_check is not None:
+            rbac_local.perform_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=scope.split(),
+                authorization_check=authorization_check,
+            )
+
         return IDPTokenClaims(
             subject=jwtResponse.sub,
             scope=jwtResponse.scope,
@@ -71,15 +100,16 @@ class IDP:
             issuer=jwtResponse.iss,
             not_before=jwtResponse.nbf,
             token_type=jwtResponse.token_type,
-            custom_claims=custom_claims
+            custom_claims=custom_claims,
         )
-    
+
     async def introspect_token_network_async(
         self,
         token: str,
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -104,12 +134,22 @@ class IDP:
             f"/v1/public/{self.project_id}/oauth2/introspect", data
         )
         res = await self.async_client.post_form(url, data, headers)
-        jwtResponse = IDPTokenResponse.from_json(
-            res.response.status, res.json
-        )
-        custom_claims = {k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys}
+        jwtResponse = IDPTokenResponse.from_json(res.response.status, res.json)
+        custom_claims = {
+            k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys
+        }
         if not jwtResponse.active:
             return None
+
+        scope = jwtResponse.scope
+
+        if authorization_check is not None:
+            rbac_local.perform_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=scope.split(),
+                authorization_check=authorization_check,
+            )
+
         return IDPTokenClaims(
             subject=jwtResponse.sub,
             scope=jwtResponse.scope,
@@ -119,13 +159,14 @@ class IDP:
             issuer=jwtResponse.iss,
             not_before=jwtResponse.nbf,
             token_type=jwtResponse.token_type,
-            custom_claims=custom_claims
+            custom_claims=custom_claims,
         )
 
     def introspect_access_token_local(
         self,
         access_token: str,
         client_id: str,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -150,14 +191,23 @@ class IDP:
             k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
         }
 
+        scope = generic_claims.untyped_claims[_scope_claim]
+
+        if authorization_check is not None:
+            rbac_local.perform_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=scope.split(),
+                authorization_check=authorization_check,
+            )
+
         return IDPTokenClaims(
             subject=generic_claims.reserved_claims["sub"],
-            scope=generic_claims.untyped_claims[_scope_claim],
+            scope=scope,
             custom_claims=custom_claims,
             audience=generic_claims.reserved_claims["aud"],
             expires_at=generic_claims.reserved_claims["exp"],
             issued_at=generic_claims.reserved_claims["iat"],
             issuer=generic_claims.reserved_claims["iss"],
             not_before=generic_claims.reserved_claims["nbf"],
-            token_type='access_token',
+            token_type="access_token",
         )
