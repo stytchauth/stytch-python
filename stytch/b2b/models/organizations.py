@@ -42,10 +42,12 @@ class ActiveSSOConnection(pydantic.BaseModel):
     Fields:
       - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
       - display_name: A human-readable display name for the connection.
+      - identity_provider: (no documentation yet)
     """  # noqa
 
     connection_id: str
     display_name: str
+    identity_provider: str
 
 
 class DeleteRequestOptions(pydantic.BaseModel):
