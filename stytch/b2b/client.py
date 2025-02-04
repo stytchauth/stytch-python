@@ -11,6 +11,7 @@ import aiohttp
 import jwt
 
 from stytch.b2b.api.discovery import Discovery
+from stytch.b2b.api.idp import IDP
 from stytch.b2b.api.impersonation import Impersonation
 from stytch.b2b.api.magic_links import MagicLinks
 from stytch.b2b.api.oauth import OAuth
@@ -24,7 +25,6 @@ from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.b2b.api.totps import TOTPs
 from stytch.consumer.api.fraud import Fraud
-from stytch.consumer.api.idp import IDP
 from stytch.consumer.api.m2m import M2M
 from stytch.consumer.api.project import Project
 from stytch.core.client_base import ClientBase

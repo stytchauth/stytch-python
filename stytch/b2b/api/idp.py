@@ -20,6 +20,7 @@ class IDP:
         async_client: AsyncClient,
         jwks_client: jwt.PyJWKClient,
         project_id: str,
+        policy_cache: PolicyCache,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -41,6 +42,7 @@ class IDP:
             "status_code",
             "token_type",
         ]
+        self.policy_cache = policy_cache
 
     def introspect_token_network(
         self,
@@ -48,6 +50,7 @@ class IDP:
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -79,6 +82,15 @@ class IDP:
         if not jwtResponse.active:
             return None
 
+        scope = jwtResponse.scope
+
+        if authorization_check is not None:
+            rbac_local.perform_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=scope.split(),
+                authorization_check=authorization_check,
+            )
+
         return IDPTokenClaims(
             subject=jwtResponse.sub,
             scope=jwtResponse.scope,
@@ -97,6 +109,7 @@ class IDP:
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -128,6 +141,15 @@ class IDP:
         if not jwtResponse.active:
             return None
 
+        scope = jwtResponse.scope
+
+        if authorization_check is not None:
+            rbac_local.perform_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=scope.split(),
+                authorization_check=authorization_check,
+            )
+
         return IDPTokenClaims(
             subject=jwtResponse.sub,
             scope=jwtResponse.scope,
@@ -144,6 +166,7 @@ class IDP:
         self,
         access_token: str,
         client_id: str,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -168,9 +191,18 @@ class IDP:
             k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
         }
 
+        scope = generic_claims.untyped_claims[_scope_claim]
+
+        if authorization_check is not None:
+            rbac_local.perform_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=scope.split(),
+                authorization_check=authorization_check,
+            )
+
         return IDPTokenClaims(
             subject=generic_claims.reserved_claims["sub"],
-            scope=generic_claims.untyped_claims[_scope_claim],
+            scope=scope,
             custom_claims=custom_claims,
             audience=generic_claims.reserved_claims["aud"],
             expires_at=generic_claims.reserved_claims["exp"],
