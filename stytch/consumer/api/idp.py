@@ -4,12 +4,10 @@ from typing import Any, Dict, Optional
 
 import jwt
 
-from stytch.b2b.models.sessions import AuthorizationCheck
 from stytch.consumer.models.idp import IDPTokenClaims, IDPTokenResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.shared import jwt_helpers, rbac_local
-from stytch.shared.policy_cache import PolicyCache
+from stytch.shared import jwt_helpers
 
 
 class IDP:
