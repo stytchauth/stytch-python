@@ -143,7 +143,7 @@ class TestRbacLocal(unittest.TestCase):
         with self.subTest("has matching action but not resource"):
             with self.assertRaises(RBACPermissionError):
                 # Arrange
-                scopes = [self.write_scope]
+                scopes = [self.write_scope.scope]
                 org_id = "my_org"
                 req = AuthorizationCheck(
                     organization_id=org_id,
@@ -156,7 +156,7 @@ class TestRbacLocal(unittest.TestCase):
         with self.subTest("has matching resource but not action"):
             with self.assertRaises(RBACPermissionError):
                 # Arrange
-                scopes = [self.read_scope]
+                scopes = [self.read_scope.scope]
                 org_id = "my_org"
                 req = AuthorizationCheck(
                     organization_id=org_id,
@@ -168,7 +168,7 @@ class TestRbacLocal(unittest.TestCase):
 
         with self.subTest("has matching resource and specific action"):
             # Arrange
-            scopes = [self.write_scope]
+            scopes = [self.write_scope.scope]
             org_id = "my_org"
             req = AuthorizationCheck(
                 organization_id=org_id,
@@ -181,7 +181,7 @@ class TestRbacLocal(unittest.TestCase):
 
         with self.subTest("has matching resource and star action"):
             # Arrange
-            scopes = [self.wildcard_scope]
+            scopes = [self.wildcard_scope.scope]
             org_id = "my_org"
             req = AuthorizationCheck(
                 organization_id=org_id,
