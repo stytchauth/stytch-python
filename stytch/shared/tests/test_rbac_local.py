@@ -1,6 +1,6 @@
 import unittest
 
-from stytch.b2b.models.rbac import Policy, PolicyRole, PolicyRolePermission, PolicyScope
+from stytch.b2b.models.rbac import Policy, PolicyRole, PolicyRolePermission, PolicyScope, PolicyScopePermission
 from stytch.b2b.models.sessions import AuthorizationCheck
 from stytch.shared.rbac_local import (
     RBACPermissionError,
@@ -47,24 +47,24 @@ class TestRbacLocal(unittest.TestCase):
             scope="read:documents",
             description="Read documents",
             permissions=[
-                PolicyRolePermission(actions=["read"], resource_id="foo"),
-                PolicyRolePermission(actions=["read"], resource_id="bar"),
+                PolicyScopePermission(actions=["read"], resource_id="foo"),
+                PolicyScopePermission(actions=["read"], resource_id="bar"),
             ],
         )
         self.write_scope = PolicyScope(
             scope="write:documents",
             description="Write documents",
             permissions=[
-                PolicyRolePermission(actions=["write", "read"], resource_id="foo"),
-                PolicyRolePermission(actions=["write", "read"], resource_id="bar"),
+                PolicyScopePermission(actions=["write", "read"], resource_id="foo"),
+                PolicyScopePermission(actions=["write", "read"], resource_id="bar"),
             ],
         )
         self.wildcard_scope = PolicyScope(
             scope="wildcard:documents",
             description="Wildcard documents",
             permissions=[
-                PolicyRolePermission(actions=["*"], resource_id="foo"),
-                PolicyRolePermission(actions=["*"], resource_id="bar"),
+                PolicyScopePermission(actions=["*"], resource_id="foo"),
+                PolicyScopePermission(actions=["*"], resource_id="bar"),
             ],
         )
         self.policy = Policy(
