@@ -181,8 +181,6 @@ class IDP:
             project_id=self.project_id,
             jwks_client=self.jwks_client,
             jwt=access_token,
-            custom_audience=client_id,
-            custom_issuer=f"https://stytch.com/{self.project_id}",
         )
         if generic_claims is None:
             return None

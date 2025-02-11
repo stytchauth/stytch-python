@@ -18,9 +18,7 @@ def authenticate_jwt_local(
     project_id: str,
     jwt: str,
     max_token_age_seconds: Optional[int] = None,
-    leeway: int = 0,
-    custom_audience: Optional[str] = None,
-    custom_issuer: Optional[str] = None,
+    leeway: int = 0
 ) -> Optional[GenericClaims]:
     """Parse a JWT and verify the signature locally
     (without calling /authenticate in the API).
@@ -34,8 +32,8 @@ def authenticate_jwt_local(
     The value for leeway is the maximum allowable difference in seconds when
     comparing timestamps. It defaults to zero.
     """
-    jwt_audience = custom_audience if custom_audience else project_id
-    jwt_issuer = custom_issuer if custom_issuer else f"stytch.com/{project_id}"
+    jwt_audience = project_id
+    jwt_issuer = f"stytch.com/{project_id}"
 
     now = time.time()
 
