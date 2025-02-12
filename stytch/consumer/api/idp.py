@@ -141,7 +141,6 @@ class IDP:
     def introspect_access_token_local(
         self,
         access_token: str,
-        client_id: str,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.

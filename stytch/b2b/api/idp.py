@@ -165,7 +165,6 @@ class IDP:
     def introspect_access_token_local(
         self,
         access_token: str,
-        client_id: str,
         authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
