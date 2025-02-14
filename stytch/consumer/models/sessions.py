@@ -507,7 +507,7 @@ class AuthenticateResponse(ResponseBase):
 class GetJWKSResponse(ResponseBase):
     """Response type for `Sessions.get_jwks`.
     Fields:
-      - keys: The JWK
+      - keys: The list of JWKs associated with the project.
     """  # noqa
 
     keys: List[JWK]
