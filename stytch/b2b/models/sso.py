@@ -172,6 +172,7 @@ class X509Certificate(pydantic.BaseModel):
     issuer: str
     created_at: Optional[datetime.datetime] = None
     expires_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
 
 
 class SAMLConnection(pydantic.BaseModel):
