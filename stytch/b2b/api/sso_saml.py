@@ -119,6 +119,7 @@ class SAML:
         identity_provider: Optional[
             Union[UpdateConnectionRequestIdentityProvider, str]
         ] = None,
+        signing_private_key: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -147,6 +148,7 @@ class SAML:
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
 
         Specifying a known provider allows Stytch to handle any provider-specific logic.
+          - signing_private_key: A PKCS1 format RSA private key used for signing SAML requests. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported. When provided, Stytch will generate a new x509 certificate from this key and return it in the signing_certificates array.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -179,6 +181,8 @@ class SAML:
             data["alternative_audience_uri"] = alternative_audience_uri
         if identity_provider is not None:
             data["identity_provider"] = identity_provider
+        if signing_private_key is not None:
+            data["signing_private_key"] = signing_private_key
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
@@ -203,6 +207,7 @@ class SAML:
         ] = None,
         alternative_audience_uri: Optional[str] = None,
         identity_provider: Optional[UpdateConnectionRequestIdentityProvider] = None,
+        signing_private_key: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -231,6 +236,7 @@ class SAML:
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
 
         Specifying a known provider allows Stytch to handle any provider-specific logic.
+          - signing_private_key: A PKCS1 format RSA private key used for signing SAML requests. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported. When provided, Stytch will generate a new x509 certificate from this key and return it in the signing_certificates array.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -263,6 +269,8 @@ class SAML:
             data["alternative_audience_uri"] = alternative_audience_uri
         if identity_provider is not None:
             data["identity_provider"] = identity_provider
+        if signing_private_key is not None:
+            data["signing_private_key"] = signing_private_key
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
