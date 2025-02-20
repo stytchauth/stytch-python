@@ -17,13 +17,16 @@ class SetResponse(ResponseBase):
     """Response type for `Rules.set`.
     Fields:
       - action: The action that will be returned for the specified fingerprint or ID.
-      - visitor_id: The cookie stored on the user's device that uniquely identifies them.
-      - browser_id: Combination of VisitorID and NetworkFingerprint to create a clear identifier of a browser.
-      - visitor_fingerprint: Cookie-less way of identifying a unique user.
-      - browser_fingerprint: Combination of signals to identify a browser and its specific version.
-      - hardware_fingerprint: Combinations of signals to identify an operating system and architecture.
-      - network_fingerprint: Combination of signals associated with a specific network commonly known as TLS fingerprinting.
+      - visitor_id: The visitor ID that a rule was set for.
+      - browser_id: The browser ID that a rule was set for.
+      - visitor_fingerprint: The visitor fingerprint that a rule was set for.
+      - browser_fingerprint: The browser fingerprint that a rule was set for.
+      - hardware_fingerprint: The hardware fingerprint that a rule was set for.
+      - network_fingerprint: The network fingerprint that a rule was set for.
       - expires_at: The timestamp when the rule expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - cidr_block: The CIDR block that a rule was set for. If an end user's IP address is within this CIDR block, this rule will be applied.
+      - country_code: The country code that a rule was set for.
+      - asn: The ASN that a rule was set for.
     """  # noqa
 
     action: RuleAction
@@ -34,3 +37,6 @@ class SetResponse(ResponseBase):
     hardware_fingerprint: Optional[str] = None
     network_fingerprint: Optional[str] = None
     expires_at: Optional[datetime.datetime] = None
+    cidr_block: Optional[str] = None
+    country_code: Optional[str] = None
+    asn: Optional[str] = None
