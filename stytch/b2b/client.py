@@ -11,6 +11,7 @@ import aiohttp
 import jwt
 
 from stytch.b2b.api.discovery import Discovery
+from stytch.b2b.api.idp import IDP
 from stytch.b2b.api.impersonation import Impersonation
 from stytch.b2b.api.magic_links import MagicLinks
 from stytch.b2b.api.oauth import OAuth
@@ -147,6 +148,14 @@ class Client(ClientBase):
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
+        )
+        self.idp = IDP(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+            jwks_client=self.jwks_client,
+            project_id=project_id,
+            policy_cache=policy_cache,
         )
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
