@@ -71,7 +71,6 @@ class TestRbacLocal(unittest.TestCase):
             resources=[],
             roles=[self.admin, self.global_writer, self.global_reader, self.bar_writer],
             scopes=[self.read_scope, self.write_scope, self.wildcard_scope],
-            scopes=[],
         )
 
     def test_perform_authorization_check(self) -> None:
