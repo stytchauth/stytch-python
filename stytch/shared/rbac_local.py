@@ -61,12 +61,17 @@ def perform_authorization_check(
 def perform_scope_authorization_check(
     policy: Policy,
     token_scopes: List[str],
+    subject_org_id: str,
     authorization_check: AuthorizationCheck,
 ) -> None:
     """Performs an authorization check against a policy and a set of scopes. If the check
     succeeds, this method will return. If the check fails, a PermissionError will be
-    raised.
+    raised. It's also possible for a TenancyError to be raised if the subject_org_id
+    does not match the token's organization_id.
     """
+    if subject_org_id != authorization_check.organization_id:
+        raise TenancyError(subject_org_id, authorization_check.organization_id)
+    
     for scope in policy.scopes:
         if scope.scope in token_scopes:
             for permission in scope.permissions:

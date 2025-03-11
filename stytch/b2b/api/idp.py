@@ -41,6 +41,7 @@ class IDP:
             "scope",
             "status_code",
             "token_type",
+            "https://stytch.com/organization"
         ]
         self.policy_cache = policy_cache
 
@@ -76,12 +77,12 @@ class IDP:
         )
         res = self.sync_client.post_form(url, data, headers)
         jwtResponse = IDPTokenResponse.from_json(res.response.status_code, res.json)
+        if not jwtResponse.active:
+            return None
         custom_claims = {
             k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys
         }
-        if not jwtResponse.active:
-            return None
-
+        organization_id = res.json["https://stytch.com/organization"]["organization_id"]
         scope = jwtResponse.scope
 
         if authorization_check is not None:
@@ -89,6 +90,7 @@ class IDP:
                 policy=self.policy_cache.get(),
                 token_scopes=scope.split(),
                 authorization_check=authorization_check,
+                subject_org_id=organization_id
             )
 
         return IDPTokenClaims(
@@ -135,12 +137,12 @@ class IDP:
         )
         res = await self.async_client.post_form(url, data, headers)
         jwtResponse = IDPTokenResponse.from_json(res.response.status, res.json)
+        if not jwtResponse.active:
+            return None
         custom_claims = {
             k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys
         }
-        if not jwtResponse.active:
-            return None
-
+        organization_id = res.json["https://stytch.com/organization"]["organization_id"]
         scope = jwtResponse.scope
 
         if authorization_check is not None:
@@ -148,6 +150,7 @@ class IDP:
                 policy=self.policy_cache.get(),
                 token_scopes=scope.split(),
                 authorization_check=authorization_check,
+                subject_org_id=organization_id
             )
 
         return IDPTokenClaims(
@@ -176,6 +179,7 @@ class IDP:
           - client_id: The ID of the client.
         """
         _scope_claim = "scope"
+        _organization_claim = "https://stytch.com/organization"
         generic_claims = jwt_helpers.authenticate_jwt_local(
             project_id=self.project_id,
             jwks_client=self.jwks_client,
@@ -185,16 +189,18 @@ class IDP:
             return None
 
         custom_claims = {
-            k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
+            k: v for k, v in generic_claims.untyped_claims.items() if k not in [_scope_claim, _organization_claim]
         }
 
         scope = generic_claims.untyped_claims[_scope_claim]
+        org_claim = generic_claims.untyped_claims[_organization_claim]
 
         if authorization_check is not None:
             rbac_local.perform_scope_authorization_check(
                 policy=self.policy_cache.get(),
                 token_scopes=scope.split(),
                 authorization_check=authorization_check,
+                subject_org_id=org_claim["organization_id"]
             )
 
         return IDPTokenClaims(
