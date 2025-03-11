@@ -151,7 +151,7 @@ class TestRbacLocal(unittest.TestCase):
                     action="write",
                 )
                 # Act
-                perform_scope_authorization_check(self.policy, scopes, req)
+                perform_scope_authorization_check(self.policy, scopes, org_id, req)
 
         with self.subTest("has matching resource but not action"):
             with self.assertRaises(RBACPermissionError):
@@ -164,7 +164,7 @@ class TestRbacLocal(unittest.TestCase):
                     action="write",
                 )
                 # Act
-                perform_scope_authorization_check(self.policy, scopes, req)
+                perform_scope_authorization_check(self.policy, scopes, org_id, req)
 
         with self.subTest("has matching resource and specific action"):
             # Arrange
@@ -176,7 +176,7 @@ class TestRbacLocal(unittest.TestCase):
                 action="write",
             )
             # Act
-            perform_scope_authorization_check(self.policy, scopes, req)
+            perform_scope_authorization_check(self.policy, scopes, org_id, req)
             # Assertion is that no exception is raised
 
         with self.subTest("has matching resource and star action"):
@@ -189,5 +189,5 @@ class TestRbacLocal(unittest.TestCase):
                 action="write",
             )
             # Act
-            perform_scope_authorization_check(self.policy, scopes, req)
+            perform_scope_authorization_check(self.policy, scopes, org_id, req)
             # Assertion is that no exception is raised

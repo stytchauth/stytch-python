@@ -41,7 +41,7 @@ class IDP:
             "scope",
             "status_code",
             "token_type",
-            "https://stytch.com/organization"
+            "https://stytch.com/organization",
         ]
         self.policy_cache = policy_cache
 
@@ -90,7 +90,7 @@ class IDP:
                 policy=self.policy_cache.get(),
                 token_scopes=scope.split(),
                 authorization_check=authorization_check,
-                subject_org_id=organization_id
+                subject_org_id=organization_id,
             )
 
         return IDPTokenClaims(
@@ -150,7 +150,7 @@ class IDP:
                 policy=self.policy_cache.get(),
                 token_scopes=scope.split(),
                 authorization_check=authorization_check,
-                subject_org_id=organization_id
+                subject_org_id=organization_id,
             )
 
         return IDPTokenClaims(
@@ -189,7 +189,9 @@ class IDP:
             return None
 
         custom_claims = {
-            k: v for k, v in generic_claims.untyped_claims.items() if k not in [_scope_claim, _organization_claim]
+            k: v
+            for k, v in generic_claims.untyped_claims.items()
+            if k not in [_scope_claim, _organization_claim]
         }
 
         scope = generic_claims.untyped_claims[_scope_claim]
@@ -200,7 +202,7 @@ class IDP:
                 policy=self.policy_cache.get(),
                 token_scopes=scope.split(),
                 authorization_check=authorization_check,
-                subject_org_id=org_claim["organization_id"]
+                subject_org_id=org_claim["organization_id"],
             )
 
         return IDPTokenClaims(
