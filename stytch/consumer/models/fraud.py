@@ -19,6 +19,18 @@ class RuleAction(str, enum.Enum):
     NONE = "NONE"
 
 
+class RuleType(str, enum.Enum):
+    VISITOR_ID = "VISITOR_ID"
+    BROWSER_ID = "BROWSER_ID"
+    VISITOR_FINGERPRINT = "VISITOR_FINGERPRINT"
+    BROWSER_FINGERPRINT = "BROWSER_FINGERPRINT"
+    HARDWARE_FINGERPRINT = "HARDWARE_FINGERPRINT"
+    NETWORK_FINGERPRINT = "NETWORK_FINGERPRINT"
+    CIDR_BLOCK = "CIDR_BLOCK"
+    ASN = "ASN"
+    COUNTRY_CODE = "COUNTRY_CODE"
+
+
 class VerdictAction(str, enum.Enum):
     ALLOW = "ALLOW"
     CHALLENGE = "CHALLENGE"
@@ -131,9 +143,13 @@ class Verdict(pydantic.BaseModel):
       - reasons: A set of contextual clues to inform why a `CHALLENGE` or `BLOCK` action was suggested. For a list of possible Reasons, please [contact support](mailto:support@stytch.com).
       - detected_device_type: The operating system and architecture that took the fingerprint.
       - is_authentic_device: The assessment of whether this is an authentic device. It will be false if hardware or browser deception is detected.
+      - rule_match_type: The type of rule match that was applied (e.g. `VISITOR_ID`), if any. This field will only be present if there is a `RULE_MATCH` reason in the list of verdict reasons.
+      - rule_match_identifier: The rule that was applied (e.g. a specific visitor ID value), if any. This field will only be present if there is a `RULE_MATCH` reason in the list of verdict reasons.
     """  # noqa
 
     action: VerdictAction
     reasons: List[str]
     detected_device_type: str
     is_authentic_device: bool
+    rule_match_type: Optional[RuleType] = None
+    rule_match_identifier: Optional[str] = None
