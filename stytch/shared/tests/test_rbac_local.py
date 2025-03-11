@@ -140,6 +140,19 @@ class TestRbacLocal(unittest.TestCase):
             # Assertion is that no exception is raised
 
     def test_perform_scope_authorization_check(self) -> None:
+        with self.subTest("tenancy mismatch"):
+            with self.assertRaises(TenancyError):
+                # Arrange
+                scopes = [self.write_scope.scope]
+                org_id = "my_org"
+                req = AuthorizationCheck(
+                    organization_id="other_org",
+                    resource_id="foo",
+                    action="write",
+                )
+                # Act
+                perform_scope_authorization_check(self.policy, scopes, org_id, req)
+
         with self.subTest("has matching action but not resource"):
             with self.assertRaises(RBACPermissionError):
                 # Arrange
