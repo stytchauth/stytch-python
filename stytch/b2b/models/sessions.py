@@ -126,6 +126,25 @@ class AuthenticateResponse(ResponseBase):
     verdict: Optional[AuthorizationVerdict] = None
 
 
+class ExchangeAccessTokenResponse(ResponseBase):
+    """Response type for `Sessions.exchange_access_token`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+    """  # noqa
+
+    member_id: str
+    session_token: str
+    session_jwt: str
+    member: Member
+    organization: Organization
+    member_session: Optional[MemberSession] = None
+
+
 class ExchangeResponse(ResponseBase):
     """Response type for `Sessions.exchange`.
     Fields:

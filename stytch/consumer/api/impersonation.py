@@ -28,6 +28,8 @@ class Impersonation:
         """Authenticate an impersonation token to impersonate a User. This endpoint requires an impersonation token that is not expired or previously used.
         A Stytch session will be created for the impersonated user with a 60 minute duration. Impersonated sessions cannot be extended.
 
+        Prior to this step, you can generate an impersonation token by visiting the Stytch dashboard, viewing a user, and clicking the `Impersonate User` button.
+
         Fields:
           - impersonation_token: The User Impersonation token to authenticate.
         """  # noqa
@@ -46,6 +48,8 @@ class Impersonation:
     ) -> AuthenticateResponse:
         """Authenticate an impersonation token to impersonate a User. This endpoint requires an impersonation token that is not expired or previously used.
         A Stytch session will be created for the impersonated user with a 60 minute duration. Impersonated sessions cannot be extended.
+
+        Prior to this step, you can generate an impersonation token by visiting the Stytch dashboard, viewing a user, and clicking the `Impersonate User` button.
 
         Fields:
           - impersonation_token: The User Impersonation token to authenticate.

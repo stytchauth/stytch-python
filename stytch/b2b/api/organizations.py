@@ -41,6 +41,7 @@ class Organizations:
     def create(
         self,
         organization_name: str,
+        claimed_email_domains: List[str],
         organization_slug: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
@@ -67,6 +68,7 @@ class Organizations:
 
         Fields:
           - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+          - claimed_email_domains: (no documentation yet)
           - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
@@ -135,6 +137,7 @@ class Organizations:
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_name": organization_name,
+            "claimed_email_domains": claimed_email_domains,
         }
         if organization_slug is not None:
             data["organization_slug"] = organization_slug
@@ -177,6 +180,7 @@ class Organizations:
     async def create_async(
         self,
         organization_name: str,
+        claimed_email_domains: List[str],
         organization_slug: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
@@ -203,6 +207,7 @@ class Organizations:
 
         Fields:
           - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+          - claimed_email_domains: (no documentation yet)
           - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
@@ -271,6 +276,7 @@ class Organizations:
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_name": organization_name,
+            "claimed_email_domains": claimed_email_domains,
         }
         if organization_slug is not None:
             data["organization_slug"] = organization_slug
@@ -369,6 +375,7 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        claimed_email_domains: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -481,6 +488,7 @@ class Organizations:
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
+          - claimed_email_domains: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -529,6 +537,8 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if claimed_email_domains is not None:
+            data["claimed_email_domains"] = claimed_email_domains
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -557,6 +567,7 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        claimed_email_domains: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -669,6 +680,7 @@ class Organizations:
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
+          - claimed_email_domains: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -717,6 +729,8 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if claimed_email_domains is not None:
+            data["claimed_email_domains"] = claimed_email_domains
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data, headers)

@@ -306,6 +306,7 @@ class Organization(pydantic.BaseModel):
 
       `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
+      - claimed_email_domains: (no documentation yet)
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - created_at: The timestamp of the Organization's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - updated_at: The timestamp of when the Organization was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
@@ -331,6 +332,7 @@ class Organization(pydantic.BaseModel):
     mfa_methods: str
     allowed_mfa_methods: List[str]
     oauth_tenant_jit_provisioning: str
+    claimed_email_domains: List[str]
     trusted_metadata: Optional[Dict[str, Any]] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None

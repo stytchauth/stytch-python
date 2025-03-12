@@ -60,6 +60,7 @@ class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     OAUTH_EXCHANGE_GITHUB = "oauth_exchange_github"
     OAUTH_EXCHANGE_GOOGLE = "oauth_exchange_google"
     IMPERSONATION = "impersonation"
+    OAUTH_ACCESS_TOKEN_EXCHANGE = "oauth_access_token_exchange"
 
 
 class AuthenticationFactorType(str, enum.Enum):
@@ -245,6 +246,10 @@ class MicrosoftOAuthFactor(pydantic.BaseModel):
     email_id: Optional[str] = None
 
 
+class OAuthAccessTokenExchangeFactor(pydantic.BaseModel):
+    client_id: str
+
+
 class OIDCSSOFactor(pydantic.BaseModel):
     """
     Fields:
@@ -415,6 +420,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - github_oauth_exchange_factor: (no documentation yet)
       - google_oauth_exchange_factor: (no documentation yet)
       - impersonated_factor: Information about the impersonated factor, if one is present.
+      - oauth_access_token_exchange_factor: (no documentation yet)
     """  # noqa
 
     type: AuthenticationFactorType
@@ -461,6 +467,7 @@ class AuthenticationFactor(pydantic.BaseModel):
     github_oauth_exchange_factor: Optional[GithubOAuthExchangeFactor] = None
     google_oauth_exchange_factor: Optional[GoogleOAuthExchangeFactor] = None
     impersonated_factor: Optional[ImpersonatedFactor] = None
+    oauth_access_token_exchange_factor: Optional[OAuthAccessTokenExchangeFactor] = None
 
 
 class Session(pydantic.BaseModel):
