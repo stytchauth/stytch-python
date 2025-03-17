@@ -58,6 +58,7 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        claimed_email_domains: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates an. An `organization_name` and a unique `organization_slug` are required.
 
@@ -131,6 +132,7 @@ class Organizations:
           `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
+          - claimed_email_domains: A list of email domains that are claimed by the Organization.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -169,6 +171,8 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if claimed_email_domains is not None:
+            data["claimed_email_domains"] = claimed_email_domains
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = self.sync_client.post(url, data, headers)
@@ -194,6 +198,7 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        claimed_email_domains: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates an. An `organization_name` and a unique `organization_slug` are required.
 
@@ -267,6 +272,7 @@ class Organizations:
           `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
+          - claimed_email_domains: A list of email domains that are claimed by the Organization.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -305,6 +311,8 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if claimed_email_domains is not None:
+            data["claimed_email_domains"] = claimed_email_domains
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = await self.async_client.post(url, data, headers)
@@ -369,6 +377,7 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        claimed_email_domains: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -481,6 +490,7 @@ class Organizations:
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
+          - claimed_email_domains: A list of email domains that are claimed by the Organization.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -529,6 +539,8 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if claimed_email_domains is not None:
+            data["claimed_email_domains"] = claimed_email_domains
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -557,6 +569,7 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        claimed_email_domains: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -669,6 +682,7 @@ class Organizations:
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
+          - claimed_email_domains: A list of email domains that are claimed by the Organization.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -717,6 +731,8 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if claimed_email_domains is not None:
+            data["claimed_email_domains"] = claimed_email_domains
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data, headers)

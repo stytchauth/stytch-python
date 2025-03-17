@@ -49,14 +49,14 @@ class RequireResetRequestOptions(pydantic.BaseModel):
 class RequireResetResponse(ResponseBase):
     """Response type for `Email.require_reset`.
     Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - member_id: Globally unique UUID that identifies a specific Member.
     """  # noqa
 
-    member: Member
-    organization: Organization
     member_id: Optional[str] = None
+    member: Optional[Member] = None
+    organization: Optional[Organization] = None
 
 
 class ResetResponse(ResponseBase):
