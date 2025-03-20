@@ -6,11 +6,19 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import List, Optional
+
+import pydantic
 
 from stytch.consumer.models.sessions import Session
 from stytch.consumer.models.users import User, WebAuthnRegistration
 from stytch.core.response_base import ResponseBase
+
+
+class WebAuthnCredential(pydantic.BaseModel):
+    credential_id: str
+    webauthn_registration_id: str
+    type: str
 
 
 class AuthenticateResponse(ResponseBase):
@@ -44,6 +52,10 @@ class AuthenticateStartResponse(ResponseBase):
 
     user_id: str
     public_key_credential_request_options: str
+
+
+class CredentialsResponse(ResponseBase):
+    credentials: List[WebAuthnCredential]
 
 
 class RegisterResponse(ResponseBase):

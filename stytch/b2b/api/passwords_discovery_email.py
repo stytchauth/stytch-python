@@ -33,6 +33,7 @@ class Email:
         reset_password_expiration_minutes: Optional[int] = None,
         pkce_code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
+        verify_email_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """Initiates a password reset for the email address provided, when cross-org passwords are enabled. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
@@ -59,6 +60,7 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - verify_email_template_id: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -78,6 +80,8 @@ class Email:
             data["pkce_code_challenge"] = pkce_code_challenge
         if locale is not None:
             data["locale"] = locale
+        if verify_email_template_id is not None:
+            data["verify_email_template_id"] = verify_email_template_id
 
         url = self.api_base.url_for(
             "/v1/b2b/passwords/discovery/email/reset/start", data
@@ -94,6 +98,7 @@ class Email:
         reset_password_expiration_minutes: Optional[int] = None,
         pkce_code_challenge: Optional[str] = None,
         locale: Optional[str] = None,
+        verify_email_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """Initiates a password reset for the email address provided, when cross-org passwords are enabled. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
@@ -120,6 +125,7 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - verify_email_template_id: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -139,6 +145,8 @@ class Email:
             data["pkce_code_challenge"] = pkce_code_challenge
         if locale is not None:
             data["locale"] = locale
+        if verify_email_template_id is not None:
+            data["verify_email_template_id"] = verify_email_template_id
 
         url = self.api_base.url_for(
             "/v1/b2b/passwords/discovery/email/reset/start", data

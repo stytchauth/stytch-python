@@ -38,6 +38,7 @@ class Email:
         login_redirect_url: Optional[str] = None,
         locale: Optional[Union[ResetStartRequestLocale, str]] = None,
         reset_password_template_id: Optional[str] = None,
+        verify_email_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
@@ -66,6 +67,7 @@ class Email:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
+          - verify_email_template_id: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -86,6 +88,8 @@ class Email:
             data["locale"] = locale
         if reset_password_template_id is not None:
             data["reset_password_template_id"] = reset_password_template_id
+        if verify_email_template_id is not None:
+            data["verify_email_template_id"] = verify_email_template_id
 
         url = self.api_base.url_for("/v1/b2b/passwords/email/reset/start", data)
         res = self.sync_client.post(url, data, headers)
@@ -101,6 +105,7 @@ class Email:
         login_redirect_url: Optional[str] = None,
         locale: Optional[ResetStartRequestLocale] = None,
         reset_password_template_id: Optional[str] = None,
+        verify_email_template_id: Optional[str] = None,
     ) -> ResetStartResponse:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
@@ -129,6 +134,7 @@ class Email:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
+          - verify_email_template_id: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -149,6 +155,8 @@ class Email:
             data["locale"] = locale
         if reset_password_template_id is not None:
             data["reset_password_template_id"] = reset_password_template_id
+        if verify_email_template_id is not None:
+            data["verify_email_template_id"] = verify_email_template_id
 
         url = self.api_base.url_for("/v1/b2b/passwords/email/reset/start", data)
         res = await self.async_client.post(url, data, headers)
