@@ -16,6 +16,7 @@ class IDPTokenResponse(ResponseBase):
       - iat: The time this access token was issued.
       - iss: The issuer of this access token.
       - nbf: The time before which the token must not be accepted for processing.
+      - token_type: The type of token. Possible values are `access_token` and `refresh_token`.
     """  # noqa
 
     active: bool
@@ -52,3 +53,4 @@ class IDPTokenClaims(pydantic.BaseModel):
     issuer: Optional[str]
     not_before: Optional[int]
     token_type: Optional[str]
+    organization_claim: Optional[Dict[str, Any]] = None

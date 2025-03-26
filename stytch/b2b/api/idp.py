@@ -82,7 +82,8 @@ class IDP:
         custom_claims = {
             k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys
         }
-        organization_id = res.json["https://stytch.com/organization"]["organization_id"]
+        organization_claim = res.json["https://stytch.com/organization"]
+        organization_id = organization_claim["organization_id"]
         scope = jwtResponse.scope
 
         if authorization_check is not None:
@@ -103,6 +104,7 @@ class IDP:
             not_before=jwtResponse.nbf,
             token_type=jwtResponse.token_type,
             custom_claims=custom_claims,
+            organization_claim=organization_claim,
         )
 
     async def introspect_token_network_async(
@@ -142,7 +144,8 @@ class IDP:
         custom_claims = {
             k: v for k, v in res.json.items() if k not in self.non_custom_claim_keys
         }
-        organization_id = res.json["https://stytch.com/organization"]["organization_id"]
+        organization_claim = res.json["https://stytch.com/organization"]
+        organization_id = organization_claim["organization_id"]
         scope = jwtResponse.scope
 
         if authorization_check is not None:
@@ -163,6 +166,7 @@ class IDP:
             not_before=jwtResponse.nbf,
             token_type=jwtResponse.token_type,
             custom_claims=custom_claims,
+            organization_claim=organization_claim,
         )
 
     def introspect_access_token_local(
@@ -215,4 +219,5 @@ class IDP:
             issuer=generic_claims.reserved_claims["iss"],
             not_before=generic_claims.reserved_claims["nbf"],
             token_type="access_token",
+            organization_claim=org_claim,
         )
