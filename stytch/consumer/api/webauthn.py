@@ -11,6 +11,7 @@ from typing import Any, Dict, Optional
 from stytch.consumer.models.webauthn import (
     AuthenticateResponse,
     AuthenticateStartResponse,
+    CredentialsResponse,
     RegisterResponse,
     RegisterStartResponse,
     UpdateResponse,
@@ -436,3 +437,33 @@ class WebAuthn:
         url = self.api_base.url_for("/v1/webauthn/{webauthn_registration_id}", data)
         res = await self.async_client.put(url, data, headers)
         return UpdateResponse.from_json(res.response.status, res.json)
+
+    def credentials(
+        self,
+        user_id: str,
+        domain: str,
+    ) -> CredentialsResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+            "domain": domain,
+        }
+
+        url = self.api_base.url_for("/v1/webauthn/credentials", data)
+        res = self.sync_client.get(url, data, headers)
+        return CredentialsResponse.from_json(res.response.status_code, res.json)
+
+    async def credentials_async(
+        self,
+        user_id: str,
+        domain: str,
+    ) -> CredentialsResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+            "domain": domain,
+        }
+
+        url = self.api_base.url_for("/v1/webauthn/credentials", data)
+        res = await self.async_client.get(url, data, headers)
+        return CredentialsResponse.from_json(res.response.status, res.json)
