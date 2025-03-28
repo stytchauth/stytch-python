@@ -90,10 +90,10 @@ class PolicyRolePermission(pydantic.BaseModel):
       * `stytch.sso`
       * `stytch.self`
 
-      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
+      Check out the [guide on Stytch default Resources](https://stytch.com/docs/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
-      - actions: A list of permitted actions the Role is authorized to take with the provided Resource. You can use `*` as a wildcard to grant a Role permission to use all possible actions related to the Resource.
+      - actions: A list of permitted actions the Scope is required to take with the provided Resource. You can use `*` as a wildcard to require a Scope permission to use all possible actions related to the Resource.
     """  # noqa
 
     resource_id: str
