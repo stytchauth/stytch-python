@@ -16,6 +16,13 @@ from stytch.core.response_base import ResponseBase
 
 
 class WebAuthnCredential(pydantic.BaseModel):
+    """
+    Fields:
+      - credential_id: The unique, public ID of the WebAuthn credential.
+      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
+      - type: The type of the WebAuthn credential. Examples include `public-key`.
+    """  # noqa
+
     credential_id: str
     webauthn_registration_id: str
     type: str
@@ -55,6 +62,11 @@ class AuthenticateStartResponse(ResponseBase):
 
 
 class CredentialsResponse(ResponseBase):
+    """Response type for `WebAuthn.credentials`.
+    Fields:
+      - credentials: A list of WebAuthn credential objects.
+    """  # noqa
+
     credentials: List[WebAuthnCredential]
 
 

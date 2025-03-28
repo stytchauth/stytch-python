@@ -120,6 +120,8 @@ class SAML:
             Union[UpdateConnectionRequestIdentityProvider, str]
         ] = None,
         signing_private_key: Optional[str] = None,
+        nameid_format: Optional[str] = None,
+        alternative_acs_url: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -149,6 +151,8 @@ class SAML:
 
         Specifying a known provider allows Stytch to handle any provider-specific logic.
           - signing_private_key: A PKCS1 format RSA private key used for signing SAML requests. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported. When provided, Stytch will generate a new x509 certificate from this key and return it in the signing_certificates array.
+          - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
+          - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -183,6 +187,10 @@ class SAML:
             data["identity_provider"] = identity_provider
         if signing_private_key is not None:
             data["signing_private_key"] = signing_private_key
+        if nameid_format is not None:
+            data["nameid_format"] = nameid_format
+        if alternative_acs_url is not None:
+            data["alternative_acs_url"] = alternative_acs_url
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
@@ -208,6 +216,8 @@ class SAML:
         alternative_audience_uri: Optional[str] = None,
         identity_provider: Optional[UpdateConnectionRequestIdentityProvider] = None,
         signing_private_key: Optional[str] = None,
+        nameid_format: Optional[str] = None,
+        alternative_acs_url: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -237,6 +247,8 @@ class SAML:
 
         Specifying a known provider allows Stytch to handle any provider-specific logic.
           - signing_private_key: A PKCS1 format RSA private key used for signing SAML requests. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported. When provided, Stytch will generate a new x509 certificate from this key and return it in the signing_certificates array.
+          - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
+          - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -271,6 +283,10 @@ class SAML:
             data["identity_provider"] = identity_provider
         if signing_private_key is not None:
             data["signing_private_key"] = signing_private_key
+        if nameid_format is not None:
+            data["nameid_format"] = nameid_format
+        if alternative_acs_url is not None:
+            data["alternative_acs_url"] = alternative_acs_url
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
