@@ -1,6 +1,12 @@
 import unittest
 
-from stytch.b2b.models.rbac import Policy, PolicyRole, PolicyRolePermission, PolicyScope, PolicyScopePermission
+from stytch.b2b.models.rbac import (
+    Policy,
+    PolicyRole,
+    PolicyRolePermission,
+    PolicyScope,
+    PolicyScopePermission,
+)
 from stytch.b2b.models.sessions import AuthorizationCheck
 from stytch.shared.rbac_local import (
     RBACPermissionError,

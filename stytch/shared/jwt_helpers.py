@@ -18,7 +18,7 @@ def authenticate_jwt_local(
     project_id: str,
     jwt: str,
     max_token_age_seconds: Optional[int] = None,
-    leeway: int = 0
+    leeway: int = 0,
 ) -> Optional[GenericClaims]:
     """Parse a JWT and verify the signature locally
     (without calling /authenticate in the API).

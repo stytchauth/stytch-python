@@ -71,7 +71,7 @@ def perform_scope_authorization_check(
     """
     if subject_org_id != authorization_check.organization_id:
         raise TenancyError(subject_org_id, authorization_check.organization_id)
-    
+
     for scope in policy.scopes:
         if scope.scope in token_scopes:
             for permission in scope.permissions:
