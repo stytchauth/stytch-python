@@ -192,6 +192,8 @@ class SAMLConnection(pydantic.BaseModel):
     saml_group_implicit_role_assignments: List[SAMLGroupImplicitRoleAssignment]
     alternative_audience_uri: str
     identity_provider: str
+    nameid_format: str
+    alternative_acs_url: str
     attribute_mapping: Optional[Dict[str, Any]] = None
 
 

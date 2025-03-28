@@ -443,6 +443,12 @@ class WebAuthn:
         user_id: str,
         domain: str,
     ) -> CredentialsResponse:
+        """List the public key credentials of the WebAuthn Registrations or Passkeys registered to a specific User.
+
+        Fields:
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
@@ -458,6 +464,12 @@ class WebAuthn:
         user_id: str,
         domain: str,
     ) -> CredentialsResponse:
+        """List the public key credentials of the WebAuthn Registrations or Passkeys registered to a specific User.
+
+        Fields:
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "user_id": user_id,
