@@ -46,7 +46,7 @@ class Sessions:
         """List all active Sessions for a given `user_id`. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
 
         Fields:
-          - user_id: The `user_id` to get active Sessions for.
+          - user_id: The `user_id` to get active Sessions for. You may use an external_id here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -64,7 +64,7 @@ class Sessions:
         """List all active Sessions for a given `user_id`. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
 
         Fields:
-          - user_id: The `user_id` to get active Sessions for.
+          - user_id: The `user_id` to get active Sessions for. You may use an external_id here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

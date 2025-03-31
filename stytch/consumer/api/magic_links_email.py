@@ -64,7 +64,7 @@ class Email:
           - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - user_id: The unique ID of a specific User.
+          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
           - session_token: The `session_token` of the user to associate the email with.
           - session_jwt: The `session_jwt` of the user to associate the email with.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
@@ -143,7 +143,7 @@ class Email:
           - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - user_id: The unique ID of a specific User.
+          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
           - session_token: The `session_token` of the user to associate the email with.
           - session_jwt: The `session_jwt` of the user to associate the email with.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.

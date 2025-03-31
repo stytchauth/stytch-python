@@ -45,7 +45,7 @@ class Email:
         The OTP is valid for 10 minutes. Only the most recently sent OTP is valid: when an OTP is sent, all OTPs previously sent to the same email address are invalidated, even if unused or unexpired.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - email_address: The email address of the Member.
           - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Login.
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Signup.
@@ -85,7 +85,7 @@ class Email:
         The OTP is valid for 10 minutes. Only the most recently sent OTP is valid: when an OTP is sent, all OTPs previously sent to the same email address are invalidated, even if unused or unexpired.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - email_address: The email address of the Member.
           - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Login.
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Signup.
@@ -137,7 +137,7 @@ class Email:
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - email_address: The email address of the Member.
           - code: The code to authenticate.
           - session_token: A secret token for a given Stytch Session.
@@ -212,7 +212,7 @@ class Email:
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - email_address: The email address of the Member.
           - code: The code to authenticate.
           - session_token: A secret token for a given Stytch Session.
