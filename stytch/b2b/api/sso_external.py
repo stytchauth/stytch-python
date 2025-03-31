@@ -49,7 +49,7 @@ class External:
         """Create a new External SSO Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - external_organization_id: Globally unique UUID that identifies a different Organization within your Project.
           - external_connection_id: Globally unique UUID that identifies a specific SSO connection configured for a different Organization in your Project.
           - display_name: A human-readable display name for the connection.
@@ -98,7 +98,7 @@ class External:
         """Create a new External SSO Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - external_organization_id: Globally unique UUID that identifies a different Organization within your Project.
           - external_connection_id: Globally unique UUID that identifies a specific SSO connection configured for a different Organization in your Project.
           - display_name: A human-readable display name for the connection.
@@ -146,7 +146,7 @@ class External:
         """Updates an existing External SSO connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - connection_id: Globally unique UUID that identifies a specific External SSO Connection.
           - display_name: A human-readable display name for the connection.
           - external_connection_implicit_role_assignments: All Members who log in with this External connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Implicit role assignments are not supported for External connections if the underlying SSO connection is an OIDC connection.
@@ -199,7 +199,7 @@ class External:
         """Updates an existing External SSO connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - connection_id: Globally unique UUID that identifies a specific External SSO Connection.
           - display_name: A human-readable display name for the connection.
           - external_connection_implicit_role_assignments: All Members who log in with this External connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Implicit role assignments are not supported for External connections if the underlying SSO connection is an OIDC connection.

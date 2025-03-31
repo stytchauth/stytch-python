@@ -38,7 +38,7 @@ class OAuth:
 
         Fields:
           - provider: The OAuth provider's name.
-          - user_id: The unique ID of a specific User.
+          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
         """  # noqa
@@ -74,7 +74,7 @@ class OAuth:
 
         Fields:
           - provider: The OAuth provider's name.
-          - user_id: The unique ID of a specific User.
+          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
         """  # noqa

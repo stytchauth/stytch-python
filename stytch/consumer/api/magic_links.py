@@ -170,7 +170,7 @@ class MagicLinks:
         **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
-          - user_id: The unique ID of a specific User.
+          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
           - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - attributes: Provided attributes help with fraud detection.
         """  # noqa
@@ -203,7 +203,7 @@ class MagicLinks:
         **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
-          - user_id: The unique ID of a specific User.
+          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
           - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - attributes: Provided attributes help with fraud detection.
         """  # noqa
