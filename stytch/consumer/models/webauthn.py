@@ -21,11 +21,13 @@ class WebAuthnCredential(pydantic.BaseModel):
       - credential_id: The unique, public ID of the WebAuthn credential.
       - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
       - type: The type of the WebAuthn credential. Examples include `public-key`.
+      - public_key: The public key for the WebAuthn credential in base64 format.
     """  # noqa
 
     credential_id: str
     webauthn_registration_id: str
     type: str
+    public_key: str
 
 
 class AuthenticateResponse(ResponseBase):
@@ -61,8 +63,8 @@ class AuthenticateStartResponse(ResponseBase):
     public_key_credential_request_options: str
 
 
-class CredentialsResponse(ResponseBase):
-    """Response type for `WebAuthn.credentials`.
+class ListCredentialsResponse(ResponseBase):
+    """Response type for `WebAuthn.list_credentials`.
     Fields:
       - credentials: A list of WebAuthn credential objects.
     """  # noqa
