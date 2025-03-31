@@ -54,7 +54,7 @@ class SSO:
         """Get all SSO Connections owned by the organization.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -75,7 +75,7 @@ class SSO:
         """Get all SSO Connections owned by the organization.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -97,7 +97,7 @@ class SSO:
         """Delete an existing SSO connection.
 
         Fields:
-          - organization_id: The organization ID that the SSO connection belongs to.
+          - organization_id: The organization ID that the SSO connection belongs to. You may also use the organization_slug here as a convenience.
           - connection_id: The ID of the SSO connection. SAML, OIDC, and External connection IDs can be provided.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -123,7 +123,7 @@ class SSO:
         """Delete an existing SSO connection.
 
         Fields:
-          - organization_id: The organization ID that the SSO connection belongs to.
+          - organization_id: The organization ID that the SSO connection belongs to. You may also use the organization_slug here as a convenience.
           - connection_id: The ID of the SSO connection. SAML, OIDC, and External connection IDs can be provided.
         """  # noqa
         headers: Dict[str, str] = {}

@@ -30,7 +30,7 @@ class ExchangeRequestLocale(str, enum.Enum):
 class AuthorizationCheck(pydantic.BaseModel):
     """
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
       - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
 
       A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved  `resource_id`s. These include:

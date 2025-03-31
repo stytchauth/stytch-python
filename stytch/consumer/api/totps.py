@@ -34,7 +34,7 @@ class TOTPs:
         """Create a new TOTP instance for a user. The user can use the authenticator application of their choice to scan the QR code or enter the secret.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
           - expiration_minutes: The expiration for the TOTP instance. If the newly created TOTP is not authenticated within this time frame the TOTP will be unusable. Defaults to 1440 (1 day) with a minimum of 5 and a maximum of 1440.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -56,7 +56,7 @@ class TOTPs:
         """Create a new TOTP instance for a user. The user can use the authenticator application of their choice to scan the QR code or enter the secret.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
           - expiration_minutes: The expiration for the TOTP instance. If the newly created TOTP is not authenticated within this time frame the TOTP will be unusable. Defaults to 1440 (1 day) with a minimum of 5 and a maximum of 1440.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -82,7 +82,7 @@ class TOTPs:
         """Authenticate a TOTP code entered by a user.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
           - totp_code: The TOTP code to authenticate. The TOTP code should consist of 6 digits.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -129,7 +129,7 @@ class TOTPs:
         """Authenticate a TOTP code entered by a user.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
           - totp_code: The TOTP code to authenticate. The TOTP code should consist of 6 digits.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -171,7 +171,7 @@ class TOTPs:
         """Retrieve the recovery codes for a TOTP instance tied to a User.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -189,7 +189,7 @@ class TOTPs:
         """Retrieve the recovery codes for a TOTP instance tied to a User.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -212,7 +212,7 @@ class TOTPs:
         """Authenticate a recovery code for a TOTP instance.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
           - recovery_code: The recovery code to authenticate.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -259,7 +259,7 @@ class TOTPs:
         """Authenticate a recovery code for a TOTP instance.
 
         Fields:
-          - user_id: The `user_id` of an active user the TOTP registration should be tied to.
+          - user_id: The `user_id` of an active user the TOTP registration should be tied to. You may use an external_id here if one is set for the user.
           - recovery_code: The recovery code to authenticate.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
