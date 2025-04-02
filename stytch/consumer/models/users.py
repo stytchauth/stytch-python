@@ -186,6 +186,7 @@ class User(pydantic.BaseModel):
       - password: The password object is returned for users with a password.
       - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
       - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+      - external_id: (no documentation yet)
     """  # noqa
 
     user_id: str
@@ -202,6 +203,7 @@ class User(pydantic.BaseModel):
     password: Optional[Password] = None
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None
+    external_id: Optional[str] = None
 
 
 class CreateResponse(ResponseBase):
@@ -346,6 +348,7 @@ class GetResponse(ResponseBase):
       - password: The password object is returned for users with a password.
       - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
       - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+      - external_id: (no documentation yet)
     """  # noqa
 
     user_id: str
@@ -362,6 +365,7 @@ class GetResponse(ResponseBase):
     password: Optional[Password] = None
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None
+    external_id: Optional[str] = None
 
 
 class SearchResponse(ResponseBase):
