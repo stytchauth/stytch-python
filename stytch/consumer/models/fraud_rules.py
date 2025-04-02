@@ -16,7 +16,7 @@ from stytch.core.response_base import ResponseBase
 class SetResponse(ResponseBase):
     """Response type for `Rules.set`.
     Fields:
-      - action: The action that will be returned for the specified fingerprint or ID.
+      - action: The action that will be returned for the specified identifier.
       - visitor_id: The visitor ID that a rule was set for.
       - browser_id: The browser ID that a rule was set for.
       - visitor_fingerprint: The visitor fingerprint that a rule was set for.
