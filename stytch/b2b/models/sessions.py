@@ -222,3 +222,12 @@ class LocalJWTResponse(pydantic.BaseModel):
 
 
 # ENDMANUAL(LocalJWTResponse)
+
+
+# MANUAL(AuthenticateJWTLocalResponse)(Types)
+class AuthenticateJWTLocalResponse(ResponseBase):
+    member_session: MemberSession
+    session_jwt: str
+
+
+# ENDMANUAL(AuthenticateJWTLocalResponse)
