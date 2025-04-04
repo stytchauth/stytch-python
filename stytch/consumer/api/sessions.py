@@ -333,7 +333,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> Optional[AuthenticateJWTLocalResponse]:
+    ) -> AuthenticateJWTLocalResponse:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
 
@@ -377,7 +377,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
-    ) -> Optional[AuthenticateJWTLocalResponse]:
+    ) -> AuthenticateJWTLocalResponse:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
 
