@@ -51,7 +51,7 @@ class Email:
           - discovery_redirect_url: The URL that the end user clicks from the discovery Magic Link. This URL should be an endpoint in the backend server that
           verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
           discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
-          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
+          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Reset Password.
           - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
           - pkce_code_challenge: (no documentation yet)
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
@@ -60,7 +60,8 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - verify_email_template_id: (no documentation yet)
+          - verify_email_template_id: Use a custom template for verification emails sent during password reset flows. This template will be used the first time a user sets a password via a
+          password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -116,7 +117,7 @@ class Email:
           - discovery_redirect_url: The URL that the end user clicks from the discovery Magic Link. This URL should be an endpoint in the backend server that
           verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
           discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
-          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Reset Password.
+          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Reset Password.
           - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
           - pkce_code_challenge: (no documentation yet)
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
@@ -125,7 +126,8 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
-          - verify_email_template_id: (no documentation yet)
+          - verify_email_template_id: Use a custom template for verification emails sent during password reset flows. This template will be used the first time a user sets a password via a
+          password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

@@ -138,6 +138,7 @@ class Passwords:
         preserve_existing_sessions: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         set_phone_number_verified: Optional[bool] = None,
+        external_id: Optional[str] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -171,6 +172,7 @@ class Passwords:
           authentication factors with the affected SSO connection IDs will be revoked.
           - mfa_phone_number: (no documentation yet)
           - set_phone_number_verified: (no documentation yet)
+          - external_id: If a new member is created, this will set an identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -219,6 +221,8 @@ class Passwords:
             data["mfa_phone_number"] = mfa_phone_number
         if set_phone_number_verified is not None:
             data["set_phone_number_verified"] = set_phone_number_verified
+        if external_id is not None:
+            data["external_id"] = external_id
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
         res = self.sync_client.post(url, data, headers)
@@ -242,6 +246,7 @@ class Passwords:
         preserve_existing_sessions: Optional[bool] = None,
         mfa_phone_number: Optional[str] = None,
         set_phone_number_verified: Optional[bool] = None,
+        external_id: Optional[str] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a member's email that doesn't have a password yet. We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -275,6 +280,7 @@ class Passwords:
           authentication factors with the affected SSO connection IDs will be revoked.
           - mfa_phone_number: (no documentation yet)
           - set_phone_number_verified: (no documentation yet)
+          - external_id: If a new member is created, this will set an identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -323,6 +329,8 @@ class Passwords:
             data["mfa_phone_number"] = mfa_phone_number
         if set_phone_number_verified is not None:
             data["set_phone_number_verified"] = set_phone_number_verified
+        if external_id is not None:
+            data["external_id"] = external_id
 
         url = self.api_base.url_for("/v1/b2b/passwords/migrate", data)
         res = await self.async_client.post(url, data, headers)

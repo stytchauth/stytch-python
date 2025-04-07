@@ -825,6 +825,7 @@ class Members:
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
         roles: Optional[List[str]] = None,
+        external_id: Optional[str] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Creates a. An `organization_id` and `email_address` are required.
@@ -843,6 +844,7 @@ class Members:
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
+          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -867,6 +869,8 @@ class Members:
             data["mfa_enrolled"] = mfa_enrolled
         if roles is not None:
             data["roles"] = roles
+        if external_id is not None:
+            data["external_id"] = external_id
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data
@@ -886,6 +890,7 @@ class Members:
         mfa_phone_number: Optional[str] = None,
         mfa_enrolled: Optional[bool] = None,
         roles: Optional[List[str]] = None,
+        external_id: Optional[str] = None,
         method_options: Optional[CreateRequestOptions] = None,
     ) -> CreateResponse:
         """Creates a. An `organization_id` and `email_address` are required.
@@ -904,6 +909,7 @@ class Members:
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
+          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -928,6 +934,8 @@ class Members:
             data["mfa_enrolled"] = mfa_enrolled
         if roles is not None:
             data["roles"] = roles
+        if external_id is not None:
+            data["external_id"] = external_id
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members", data

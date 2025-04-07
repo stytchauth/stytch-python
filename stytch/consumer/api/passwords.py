@@ -353,6 +353,7 @@ class Passwords:
         name: Optional[Union[Name, Dict[str, Any]]] = None,
         phone_number: Optional[str] = None,
         set_phone_number_verified: Optional[bool] = None,
+        external_id: Optional[str] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a User's email that doesn't have a password yet. We support migrating users from passwords stored with `bcrypt`, `scrypt`, `argon2`, `MD-5`, `SHA-1`, or `PBKDF2`. This endpoint has a rate limit of 100 requests per second.
 
@@ -374,6 +375,7 @@ class Passwords:
           - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
            the user owns the phone number in question. Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
+          - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a user already exists, this field will be ignored.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -419,6 +421,8 @@ class Passwords:
             data["phone_number"] = phone_number
         if set_phone_number_verified is not None:
             data["set_phone_number_verified"] = set_phone_number_verified
+        if external_id is not None:
+            data["external_id"] = external_id
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
         res = self.sync_client.post(url, data, headers)
@@ -440,6 +444,7 @@ class Passwords:
         name: Optional[Name] = None,
         phone_number: Optional[str] = None,
         set_phone_number_verified: Optional[bool] = None,
+        external_id: Optional[str] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a User's email that doesn't have a password yet. We support migrating users from passwords stored with `bcrypt`, `scrypt`, `argon2`, `MD-5`, `SHA-1`, or `PBKDF2`. This endpoint has a rate limit of 100 requests per second.
 
@@ -461,6 +466,7 @@ class Passwords:
           - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
            the user owns the phone number in question. Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
+          - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a user already exists, this field will be ignored.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -506,6 +512,8 @@ class Passwords:
             data["phone_number"] = phone_number
         if set_phone_number_verified is not None:
             data["set_phone_number_verified"] = set_phone_number_verified
+        if external_id is not None:
+            data["external_id"] = external_id
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
         res = await self.async_client.post(url, data, headers)
