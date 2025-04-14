@@ -20,12 +20,14 @@ class InviteRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class LoginOrSignupRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class InviteRequestOptions(pydantic.BaseModel):

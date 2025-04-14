@@ -20,6 +20,9 @@ class SendRequestLocale(str, enum.Enum):
     PTBR = "pt-br"
     FR = "fr"
     IT = "it"
+    DEDE = "de-DE"
+    ZHHANS = "zh-Hans"
+    CAES = "ca-ES"
 
 
 class AuthenticateResponse(ResponseBase):

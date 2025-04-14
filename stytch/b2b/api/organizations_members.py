@@ -112,7 +112,7 @@ class Members:
                 A Member's email address can only be useable again by other Members if the Member is deleted.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -213,7 +213,7 @@ class Members:
                 A Member's email address can only be useable again by other Members if the Member is deleted.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -844,7 +844,7 @@ class Members:
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -909,7 +909,7 @@ class Members:
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, or `-` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

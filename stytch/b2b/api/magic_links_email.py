@@ -43,6 +43,8 @@ class Email:
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
         locale: Optional[Union[LoginOrSignupRequestLocale, str]] = None,
+        login_expiration_minutes: Optional[int] = None,
+        signup_expiration_minutes: Optional[int] = None,
     ) -> LoginOrSignupResponse:
         """Send either a login or signup magic link to a Member. A new, pending, or invited Member will receive a signup Email Magic Link. Members will have a `pending` status until they successfully authenticate. An active Member will receive a login Email Magic Link.
 
@@ -64,10 +66,12 @@ class Email:
         built-in customizations or a custom HTML email for Magic Links - Signup.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - login_expiration_minutes: The expiration time, in minutes, for a login Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
+          - signup_expiration_minutes: The expiration time, in minutes, for a signup Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -86,6 +90,10 @@ class Email:
             data["signup_template_id"] = signup_template_id
         if locale is not None:
             data["locale"] = locale
+        if login_expiration_minutes is not None:
+            data["login_expiration_minutes"] = login_expiration_minutes
+        if signup_expiration_minutes is not None:
+            data["signup_expiration_minutes"] = signup_expiration_minutes
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/login_or_signup", data)
         res = self.sync_client.post(url, data, headers)
@@ -101,6 +109,8 @@ class Email:
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
         locale: Optional[LoginOrSignupRequestLocale] = None,
+        login_expiration_minutes: Optional[int] = None,
+        signup_expiration_minutes: Optional[int] = None,
     ) -> LoginOrSignupResponse:
         """Send either a login or signup magic link to a Member. A new, pending, or invited Member will receive a signup Email Magic Link. Members will have a `pending` status until they successfully authenticate. An active Member will receive a login Email Magic Link.
 
@@ -122,10 +132,12 @@ class Email:
         built-in customizations or a custom HTML email for Magic Links - Signup.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - login_expiration_minutes: The expiration time, in minutes, for a login Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
+          - signup_expiration_minutes: The expiration time, in minutes, for a signup Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -144,6 +156,10 @@ class Email:
             data["signup_template_id"] = signup_template_id
         if locale is not None:
             data["locale"] = locale
+        if login_expiration_minutes is not None:
+            data["login_expiration_minutes"] = login_expiration_minutes
+        if signup_expiration_minutes is not None:
+            data["signup_expiration_minutes"] = signup_expiration_minutes
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/login_or_signup", data)
         res = await self.async_client.post(url, data, headers)
@@ -161,6 +177,7 @@ class Email:
         invite_template_id: Optional[str] = None,
         locale: Optional[Union[InviteRequestLocale, str]] = None,
         roles: Optional[List[str]] = None,
+        invite_expiration_minutes: Optional[int] = None,
         method_options: Optional[InviteRequestOptions] = None,
     ) -> InviteResponse:
         """Send an invite email to a new to join an. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error.
@@ -187,12 +204,13 @@ class Email:
           using our built-in customizations or a custom HTML email for Magic Links - Invite.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
+          - invite_expiration_minutes: The expiration time, in minutes, for an invite email. If not accepted within this time frame, the invite will need to be resent. Defaults to 10080 (1 week) with a minimum of 5 and a maximum of 10080.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -217,6 +235,8 @@ class Email:
             data["locale"] = locale
         if roles is not None:
             data["roles"] = roles
+        if invite_expiration_minutes is not None:
+            data["invite_expiration_minutes"] = invite_expiration_minutes
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/invite", data)
         res = self.sync_client.post(url, data, headers)
@@ -234,6 +254,7 @@ class Email:
         invite_template_id: Optional[str] = None,
         locale: Optional[InviteRequestLocale] = None,
         roles: Optional[List[str]] = None,
+        invite_expiration_minutes: Optional[int] = None,
         method_options: Optional[InviteRequestOptions] = None,
     ) -> InviteResponse:
         """Send an invite email to a new to join an. The Member will be created with an `invited` status until they successfully authenticate. Sending invites to `pending` Members will update their status to `invited`. Sending invites to already `active` Members will return an error.
@@ -260,12 +281,13 @@ class Email:
           using our built-in customizations or a custom HTML email for Magic Links - Invite.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
+          - invite_expiration_minutes: The expiration time, in minutes, for an invite email. If not accepted within this time frame, the invite will need to be resent. Defaults to 10080 (1 week) with a minimum of 5 and a maximum of 10080.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -290,6 +312,8 @@ class Email:
             data["locale"] = locale
         if roles is not None:
             data["roles"] = roles
+        if invite_expiration_minutes is not None:
+            data["invite_expiration_minutes"] = invite_expiration_minutes
 
         url = self.api_base.url_for("/v1/b2b/magic_links/email/invite", data)
         res = await self.async_client.post(url, data, headers)

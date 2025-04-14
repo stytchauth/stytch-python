@@ -19,6 +19,7 @@ class ResetRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class ResetResponse(ResponseBase):

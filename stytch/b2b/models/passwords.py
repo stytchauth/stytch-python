@@ -21,6 +21,7 @@ class AuthenticateRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class MigrateRequestHashType(str, enum.Enum):
