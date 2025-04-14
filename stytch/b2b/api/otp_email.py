@@ -39,6 +39,8 @@ class Email:
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
         locale: Optional[Union[LoginOrSignupRequestLocale, str]] = None,
+        login_expiration_minutes: Optional[int] = None,
+        signup_expiration_minutes: Optional[int] = None,
     ) -> LoginOrSignupResponse:
         """Send either a login or signup email OTP to a Member. A new, pending, or invited Member will receive a signup email OTP. Non-active members will have a pending status until they successfully authenticate. An active Member will receive a login email OTP.
 
@@ -51,10 +53,12 @@ class Email:
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Signup.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - login_expiration_minutes: The expiration time, in minutes, for a login OTP email to a Member. If not authenticated within this time frame, the OTP will need to be resent. Defaults to 10 with a minimum of 2 and a maximum of 15.
+          - signup_expiration_minutes: The expiration time, in minutes, for a signup OTP email to a Member. If not authenticated within this time frame, the OTP will need to be resent. Defaults to 10 with a minimum of 2 and a maximum of 15.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -67,6 +71,10 @@ class Email:
             data["signup_template_id"] = signup_template_id
         if locale is not None:
             data["locale"] = locale
+        if login_expiration_minutes is not None:
+            data["login_expiration_minutes"] = login_expiration_minutes
+        if signup_expiration_minutes is not None:
+            data["signup_expiration_minutes"] = signup_expiration_minutes
 
         url = self.api_base.url_for("/v1/b2b/otps/email/login_or_signup", data)
         res = self.sync_client.post(url, data, headers)
@@ -79,6 +87,8 @@ class Email:
         login_template_id: Optional[str] = None,
         signup_template_id: Optional[str] = None,
         locale: Optional[LoginOrSignupRequestLocale] = None,
+        login_expiration_minutes: Optional[int] = None,
+        signup_expiration_minutes: Optional[int] = None,
     ) -> LoginOrSignupResponse:
         """Send either a login or signup email OTP to a Member. A new, pending, or invited Member will receive a signup email OTP. Non-active members will have a pending status until they successfully authenticate. An active Member will receive a login email OTP.
 
@@ -91,10 +101,12 @@ class Email:
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Signup.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - login_expiration_minutes: The expiration time, in minutes, for a login OTP email to a Member. If not authenticated within this time frame, the OTP will need to be resent. Defaults to 10 with a minimum of 2 and a maximum of 15.
+          - signup_expiration_minutes: The expiration time, in minutes, for a signup OTP email to a Member. If not authenticated within this time frame, the OTP will need to be resent. Defaults to 10 with a minimum of 2 and a maximum of 15.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -107,6 +119,10 @@ class Email:
             data["signup_template_id"] = signup_template_id
         if locale is not None:
             data["locale"] = locale
+        if login_expiration_minutes is not None:
+            data["login_expiration_minutes"] = login_expiration_minutes
+        if signup_expiration_minutes is not None:
+            data["signup_expiration_minutes"] = signup_expiration_minutes
 
         url = self.api_base.url_for("/v1/b2b/otps/email/login_or_signup", data)
         res = await self.async_client.post(url, data, headers)
@@ -159,7 +175,7 @@ class Email:
           Total custom claims size cannot exceed four kilobytes.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
@@ -234,7 +250,7 @@ class Email:
           Total custom claims size cannot exceed four kilobytes.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 

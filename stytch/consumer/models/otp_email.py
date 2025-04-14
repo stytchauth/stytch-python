@@ -15,12 +15,14 @@ class LoginOrCreateRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class SendRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class LoginOrCreateResponse(ResponseBase):

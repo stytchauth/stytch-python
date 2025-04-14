@@ -22,12 +22,14 @@ class ResetRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class ResetStartRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
     PTBR = "pt-br"
+    FR = "fr"
 
 
 class RequireResetRequestOptions(pydantic.BaseModel):
