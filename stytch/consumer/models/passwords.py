@@ -93,11 +93,13 @@ class PBKDF2Config(pydantic.BaseModel):
       - salt: The salt value, which should be in a base64 encoded string form.
       - iteration_amount: The iteration amount.
       - key_length: The key length, also known as the hash length.
+      - algorithm: The algorithm that was used to generate the HMAC hash. Accepted values are "sha512" and sha256". Defaults to sha256.
     """  # noqa
 
     salt: str
     iteration_amount: int
     key_length: int
+    algorithm: str
 
 
 class SHA1Config(pydantic.BaseModel):

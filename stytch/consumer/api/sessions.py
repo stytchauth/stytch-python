@@ -13,6 +13,7 @@ import jwt
 from stytch.consumer.models.sessions import (
     AuthenticateJWTLocalResponse,
     AuthenticateResponse,
+    ExchangeAccessTokenResponse,
     GetJWKSResponse,
     GetResponse,
     MigrateResponse,
@@ -266,6 +267,44 @@ class Sessions:
         url = self.api_base.url_for("/v1/sessions/migrate", data)
         res = await self.async_client.post(url, data, headers)
         return MigrateResponse.from_json(res.response.status, res.json)
+
+    def exchange_access_token(
+        self,
+        access_token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> ExchangeAccessTokenResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "access_token": access_token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+
+        url = self.api_base.url_for("/v1/sessions/exchange_access_token", data)
+        res = self.sync_client.post(url, data, headers)
+        return ExchangeAccessTokenResponse.from_json(res.response.status_code, res.json)
+
+    async def exchange_access_token_async(
+        self,
+        access_token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+    ) -> ExchangeAccessTokenResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "access_token": access_token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+
+        url = self.api_base.url_for("/v1/sessions/exchange_access_token", data)
+        res = await self.async_client.post(url, data, headers)
+        return ExchangeAccessTokenResponse.from_json(res.response.status, res.json)
 
     def get_jwks(
         self,
