@@ -434,7 +434,7 @@ class Member(pydantic.BaseModel):
       - created_at: The timestamp of the Member's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - updated_at: The timestamp of when the Member was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - scim_registration: A scim member registration, referencing a [SCIM Connection](scim-connection-object) object in use for the Member creation.
-      - external_id: (no documentation yet)
+      - external_id: The ID of the member given by the identity provider.
     """  # noqa
 
     organization_id: str

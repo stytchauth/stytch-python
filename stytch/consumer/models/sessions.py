@@ -511,6 +511,14 @@ class AuthenticateResponse(ResponseBase):
     user: User
 
 
+class ExchangeAccessTokenResponse(ResponseBase):
+    user_id: str
+    session_token: str
+    session_jwt: str
+    user: User
+    session: Optional[Session] = None
+
+
 class GetJWKSResponse(ResponseBase):
     """Response type for `Sessions.get_jwks`.
     Fields:
