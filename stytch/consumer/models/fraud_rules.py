@@ -7,10 +7,21 @@
 from __future__ import annotations
 
 import datetime
-from typing import Optional
+from typing import List, Optional
 
-from stytch.consumer.models.fraud import RuleAction
+from stytch.consumer.models.fraud import Rule, RuleAction
 from stytch.core.response_base import ResponseBase
+
+
+class ListResponse(ResponseBase):
+    """Response type for `Rules.list`.
+    Fields:
+      - next_cursor: The `next_cursor` string is returned when your result contains more than one page of results. This value is passed into your next request in the `cursor` field.
+      - rules: A list of rules for the project
+    """  # noqa
+
+    next_cursor: str
+    rules: List[Rule]
 
 
 class SetResponse(ResponseBase):

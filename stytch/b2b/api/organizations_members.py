@@ -64,6 +64,7 @@ class Members:
         default_mfa_method: Optional[str] = None,
         email_address: Optional[str] = None,
         external_id: Optional[str] = None,
+        unlink_email: Optional[bool] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a specified by `organization_id` and `member_id`.
@@ -113,6 +114,7 @@ class Members:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
           - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - unlink_email: If `unlink_email` is `true` and an `email_address` is provided, the Member's previous email will be deleted instead of retired. Defaults to `false`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -143,6 +145,8 @@ class Members:
             data["email_address"] = email_address
         if external_id is not None:
             data["external_id"] = external_id
+        if unlink_email is not None:
+            data["unlink_email"] = unlink_email
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
@@ -165,6 +169,7 @@ class Members:
         default_mfa_method: Optional[str] = None,
         email_address: Optional[str] = None,
         external_id: Optional[str] = None,
+        unlink_email: Optional[bool] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates a specified by `organization_id` and `member_id`.
@@ -214,6 +219,7 @@ class Members:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
           - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - unlink_email: If `unlink_email` is `true` and an `email_address` is provided, the Member's previous email will be deleted instead of retired. Defaults to `false`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -244,6 +250,8 @@ class Members:
             data["email_address"] = email_address
         if external_id is not None:
             data["external_id"] = external_id
+        if unlink_email is not None:
+            data["unlink_email"] = unlink_email
 
         url = self.api_base.url_for(
             "/v1/b2b/organizations/{organization_id}/members/{member_id}", data
