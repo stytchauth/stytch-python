@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import datetime
 import enum
 from typing import List, Optional
 
@@ -130,6 +131,43 @@ class Properties(pydantic.BaseModel):
 
     network_properties: NetworkProperties
     browser_properties: BrowserProperties
+
+
+class Rule(pydantic.BaseModel):
+    """
+    Fields:
+      - rule_type: The rule type. The possible values are `VISITOR_ID`, `BROWSER_ID`, `VISITOR_FINGERPRINT`, `BROWSER_FINGERPRINT`, `HARDWARE_FINGERPRINT`, `NETWORK_FINGERPRINT`, `CIDR_BLOCK`, `ASN`, or `COUNTRY_CODE`.
+      - action: The action (`ALLOW`, `BLOCK`, or `CHALLENGE`) that will be returned for this rule.
+      - created_at: The time when the rule was created. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - visitor_id: The visitor ID that a rule was set for.
+      - browser_id: The browser ID that a rule was set for.
+      - visitor_fingerprint: The visitor fingerprint that a rule was set for.
+      - browser_fingerprint: The browser fingerprint that a rule was set for.
+      - hardware_fingerprint: The hardware fingerprint that a rule was set for.
+      - network_fingerprint: The network fingerprint that a rule was set for.
+      - cidr_block: The CIDR block that a rule was set for. If an end user's IP address is within this CIDR block, this rule will be applied.
+      - country_code: The country code that a rule was set for.
+      - asn: The ASN that a rule was set for.
+      - description: A description for the rule.
+      - expires_at: The timestamp when the rule expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - last_updated_at: The time when the rule was last updated. Will be null if the rule has never been updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+    """  # noqa
+
+    rule_type: RuleType
+    action: RuleAction
+    created_at: datetime.datetime
+    visitor_id: Optional[str] = None
+    browser_id: Optional[str] = None
+    visitor_fingerprint: Optional[str] = None
+    browser_fingerprint: Optional[str] = None
+    hardware_fingerprint: Optional[str] = None
+    network_fingerprint: Optional[str] = None
+    cidr_block: Optional[str] = None
+    country_code: Optional[str] = None
+    asn: Optional[str] = None
+    description: Optional[str] = None
+    expires_at: Optional[datetime.datetime] = None
+    last_updated_at: Optional[datetime.datetime] = None
 
 
 class Verdict(pydantic.BaseModel):

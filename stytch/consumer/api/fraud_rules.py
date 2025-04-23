@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.models.fraud import RuleAction
-from stytch.consumer.models.fraud_rules import SetResponse
+from stytch.consumer.models.fraud_rules import ListResponse, SetResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
@@ -161,3 +161,47 @@ class Rules:
         url = self.api_base.url_for("/v1/rules/set", data)
         res = await self.async_client.post(url, data, headers)
         return SetResponse.from_json(res.response.status, res.json)
+
+    def list(
+        self,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> ListResponse:
+        """Get all rules that have been set for your project.
+
+        Fields:
+          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 100 results. If your query returns more than 100 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor`, repeat the request with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make requests until the `next_cursor` in the response is null.
+          - limit: The number of results to return per page. The default limit is 10. A maximum of 100 results can be returned by a single get request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {}
+        if cursor is not None:
+            data["cursor"] = cursor
+        if limit is not None:
+            data["limit"] = limit
+
+        url = self.api_base.url_for("/v1/rules/list", data)
+        res = self.sync_client.post(url, data, headers)
+        return ListResponse.from_json(res.response.status_code, res.json)
+
+    async def list_async(
+        self,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> ListResponse:
+        """Get all rules that have been set for your project.
+
+        Fields:
+          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 100 results. If your query returns more than 100 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor`, repeat the request with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make requests until the `next_cursor` in the response is null.
+          - limit: The number of results to return per page. The default limit is 10. A maximum of 100 results can be returned by a single get request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {}
+        if cursor is not None:
+            data["cursor"] = cursor
+        if limit is not None:
+            data["limit"] = limit
+
+        url = self.api_base.url_for("/v1/rules/list", data)
+        res = await self.async_client.post(url, data, headers)
+        return ListResponse.from_json(res.response.status, res.json)

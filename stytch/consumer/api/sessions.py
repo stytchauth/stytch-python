@@ -274,6 +274,26 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ExchangeAccessTokenResponse:
+        """Use this endpoint to exchange a Connected Apps Access Token back into a Stytch Session for the underlying User.
+        This session can be used with the Stytch SDKs and APIs.
+
+        The Access Token must contain the `full_access` scope and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
+
+        Fields:
+          - access_token: The access token to exchange for a Stytch Session. Must be granted the `full_access` scope.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+
+          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "access_token": access_token,
@@ -293,6 +313,26 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> ExchangeAccessTokenResponse:
+        """Use this endpoint to exchange a Connected Apps Access Token back into a Stytch Session for the underlying User.
+        This session can be used with the Stytch SDKs and APIs.
+
+        The Access Token must contain the `full_access` scope and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
+
+        Fields:
+          - access_token: The access token to exchange for a Stytch Session. Must be granted the `full_access` scope.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+
+          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "access_token": access_token,

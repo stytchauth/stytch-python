@@ -147,7 +147,7 @@ class Passwords:
         Fields:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
-          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon2_id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
+          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
@@ -255,7 +255,7 @@ class Passwords:
         Fields:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
-          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon2_id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
+          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
