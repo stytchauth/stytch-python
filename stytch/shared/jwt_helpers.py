@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List, Optional
 
 import jwt as pyjwt
 import pydantic
@@ -37,7 +37,9 @@ def authenticate_jwt_local(
     default_issuer = f"stytch.com/{project_id}"
     allowed_issuers: List[str] = [
         default_issuer,
-        base_url[:-1] # Remove trailing slash, our issuers will never have a trailing slash
+        base_url[
+            :-1
+        ],  # Remove trailing slash, our issuers will never have a trailing slash
     ]
 
     now = time.time()

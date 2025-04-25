@@ -1,6 +1,8 @@
-import unittest, time
+import time
+import unittest
+
 import jwt
-from jwt import algorithms
+
 from stytch.shared import jwt_helpers
 
 PROJECT_ID = "project-test-123"
@@ -8,13 +10,17 @@ BASE_URL = "https://custom.example.com/"
 BASE_URL_CUSTOM_ISSUER = "https://custom.example.com"
 DEFAULT_ISSUER = f"stytch.com/{PROJECT_ID}"
 
+
 def _generate_rsa_key():
     from cryptography.hazmat.primitives.asymmetric import rsa
+
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     public_key = private_key.public_key()
     return private_key, public_key
 
+
 PRIVATE_KEY, PUBLIC_KEY = _generate_rsa_key()
+
 
 def _generate_token(issuer: str):
     now = int(time.time())
@@ -73,4 +79,4 @@ class TestJWTLocalIssuer(unittest.TestCase):
             jwt=token,
             base_url=BASE_URL,
         )
-        self.assertIsNone(claims) 
+        self.assertIsNone(claims)
