@@ -513,6 +513,7 @@ class Sessions:
             jwt=session_jwt,
             max_token_age_seconds=max_token_age_seconds,
             leeway=leeway,
+            base_url=self.api_base.base_url,
         )
         if generic_claims is None:
             return None

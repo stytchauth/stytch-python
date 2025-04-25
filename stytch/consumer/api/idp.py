@@ -155,6 +155,7 @@ class IDP:
             project_id=self.project_id,
             jwks_client=self.jwks_client,
             jwt=access_token,
+            base_url=self.api_base.base_url,
         )
         if generic_claims is None:
             return None
