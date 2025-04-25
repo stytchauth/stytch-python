@@ -42,6 +42,7 @@ class Client(ClientBase):
         suppress_warnings: bool = False,
         async_session: Optional[aiohttp.ClientSession] = None,
         fraud_environment: Optional[str] = None,
+        custom_base_url: Optional[str] = None,
     ):
         super().__init__(
             project_id=project_id,
@@ -50,6 +51,7 @@ class Client(ClientBase):
             suppress_warnings=suppress_warnings,
             async_session=async_session,
             fraud_environment=fraud_environment,
+            custom_base_url=custom_base_url,
         )
 
         self.crypto_wallets = CryptoWallets(
