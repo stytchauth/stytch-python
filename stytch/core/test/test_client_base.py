@@ -71,7 +71,7 @@ class CustomBaseURLClientRequests(TestCase):
         self.assertIn("/v1/b2b/magic_links/email/", url_called)
 
 
-class ClientBaseBase(TestCase):
+class ResolveApiUrl(TestCase):
     def test_resolve_api_url_custom_base_url(self):
         """Test that custom_base_url is prioritized over environment."""
         # Arrange
