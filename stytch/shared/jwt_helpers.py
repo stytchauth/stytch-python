@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import jwt as pyjwt
 import pydantic
@@ -17,6 +17,7 @@ def authenticate_jwt_local(
     jwks_client: pyjwt.PyJWKClient,
     project_id: str,
     jwt: str,
+    base_url: str,
     max_token_age_seconds: Optional[int] = None,
     leeway: int = 0,
 ) -> Optional[GenericClaims]:
@@ -33,7 +34,13 @@ def authenticate_jwt_local(
     comparing timestamps. It defaults to zero.
     """
     jwt_audience = project_id
-    jwt_issuer = f"stytch.com/{project_id}"
+    default_issuer = f"stytch.com/{project_id}"
+    allowed_issuers: List[str] = [
+        default_issuer,
+        base_url.rstrip(
+            "/"
+        ),  # Remove trailing slash, our issuers will never have a trailing slash
+    ]
 
     now = time.time()
 
@@ -55,7 +62,7 @@ def authenticate_jwt_local(
                 "verify_nbf": True,
             },
             audience=jwt_audience,
-            issuer=jwt_issuer,
+            issuer=allowed_issuers,
             leeway=leeway,
         )
     except Exception:

@@ -18,8 +18,12 @@ class ClientBase(abc.ABC):
         suppress_warnings: bool = False,
         async_session: Optional[aiohttp.ClientSession] = None,
         fraud_environment: Optional[str] = None,
+        custom_base_url: Optional[str] = None,
     ):
-        base_url = self._env_url(project_id, environment, suppress_warnings)
+        base_url = self._resolve_api_url(
+            project_id, environment, custom_base_url, suppress_warnings
+        )
+
         fraud_base_url = "https://telemetry.stytch.com"
         if fraud_environment is not None:
             fraud_base_url = fraud_environment
@@ -34,10 +38,33 @@ class ClientBase(abc.ABC):
         pass
 
     @classmethod
-    def _env_url(
-        cls, project_id: str, env: Optional[str], suppress_warnings: bool = False
+    def _resolve_api_url(
+        cls,
+        project_id: str,
+        env: Optional[str],
+        custom_base_url: Optional[str] = None,
+        suppress_warnings: bool = False,
     ) -> str:
-        """Resolve the base URL for the Stytch API environment."""
+        """Resolve the base URL for the Stytch API.
+
+        If custom_base_url is provided, it will take precedence over environment.
+        Otherwise, the URL is determined based on the environment setting.
+        """
+        if custom_base_url is not None:
+            if env is not None and not suppress_warnings:
+                warnings.warn(
+                    "Both environment and custom_base_url are provided. custom_base_url will take precedence."
+                )
+
+            # Ensure custom_base_url uses HTTPS scheme
+            if not custom_base_url.startswith("https://"):
+                raise ValueError("custom_base_url must use the HTTPS scheme")
+
+            # Ensure custom_base_url ends with a trailing slash
+            if not custom_base_url.endswith("/"):
+                custom_base_url = custom_base_url + "/"
+            return custom_base_url
+
         if env is None:
             env = "live" if project_id.startswith("project-live-") else "test"
 

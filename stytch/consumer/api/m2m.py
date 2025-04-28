@@ -129,6 +129,7 @@ class M2M:
             jwks_client=self.jwks_client,
             jwt=access_token,
             max_token_age_seconds=max_token_age,
+            base_url=self.api_base.base_url,
         )
         if generic_claims is None:
             return None
