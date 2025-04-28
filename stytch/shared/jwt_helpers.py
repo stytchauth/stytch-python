@@ -37,9 +37,9 @@ def authenticate_jwt_local(
     default_issuer = f"stytch.com/{project_id}"
     allowed_issuers: List[str] = [
         default_issuer,
-        base_url[
-            :-1
-        ],  # Remove trailing slash, our issuers will never have a trailing slash
+        base_url.rstrip(
+            "/"
+        ),  # Remove trailing slash, our issuers will never have a trailing slash
     ]
 
     now = time.time()
