@@ -12,6 +12,7 @@ import pydantic
 
 from stytch.b2b.models.organizations import (
     Member,
+    MemberConnectedApp,
     OIDCProviderInfo,
     Organization,
     ResultsMetadata,
@@ -85,6 +86,22 @@ class DeleteRequestOptions(pydantic.BaseModel):
 
 
 class DeleteTOTPRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
+class GetConnectedAppsRequestOptions(pydantic.BaseModel):
     """
     Fields:
       - authorization: Optional authorization object.
@@ -223,6 +240,10 @@ class DeleteTOTPResponse(ResponseBase):
     member_id: str
     member: Member
     organization: Organization
+
+
+class GetConnectedAppsResponse(ResponseBase):
+    connected_apps: List[MemberConnectedApp]
 
 
 class GetResponse(ResponseBase):

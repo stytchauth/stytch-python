@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
+from stytch.b2b.api.organizations_members_connected_apps import ConnectedApps
 from stytch.b2b.api.organizations_members_oauth_providers import OAuthProviders
 from stytch.b2b.models.organizations import SearchQuery
 from stytch.b2b.models.organizations_members import (
@@ -21,6 +22,8 @@ from stytch.b2b.models.organizations_members import (
     DeleteResponse,
     DeleteTOTPRequestOptions,
     DeleteTOTPResponse,
+    GetConnectedAppsRequestOptions,
+    GetConnectedAppsResponse,
     GetResponse,
     OIDCProvidersResponse,
     ReactivateRequestOptions,
@@ -44,6 +47,11 @@ class Members:
         self.sync_client = sync_client
         self.async_client = async_client
         self.oauth_providers = OAuthProviders(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.connected_apps = ConnectedApps(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
@@ -820,6 +828,48 @@ class Members:
         )
         res = await self.async_client.post(url, data, headers)
         return UnlinkRetiredEmailResponse.from_json(res.response.status, res.json)
+
+    def get_connected_apps(
+        self,
+        organization_id: str,
+        member_id: str,
+        method_options: Optional[GetConnectedAppsRequestOptions] = None,
+    ) -> GetConnectedAppsResponse:
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/connected_apps",
+            data,
+        )
+        res = self.sync_client.get(url, data, headers)
+        return GetConnectedAppsResponse.from_json(res.response.status_code, res.json)
+
+    async def get_connected_apps_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        method_options: Optional[GetConnectedAppsRequestOptions] = None,
+    ) -> GetConnectedAppsResponse:
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/connected_apps",
+            data,
+        )
+        res = await self.async_client.get(url, data, headers)
+        return GetConnectedAppsResponse.from_json(res.response.status, res.json)
 
     def create(
         self,

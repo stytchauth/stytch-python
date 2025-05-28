@@ -50,7 +50,7 @@ class Email:
           - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
           The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - login_redirect_url: The URL Stytch redirects to after the OAuth flow is completed for a user that already exists. This URL should be a route in your application which will run `oauth.authenticate` (see below) and finish the login.
 
           The URL must be configured as a Login URL in the [Redirect URL page](https://stytch.com/docs/dashboard/redirect-urls). If the field is not specified, the default Login URL will be used.
@@ -113,7 +113,7 @@ class Email:
           - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
           The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - login_redirect_url: The URL Stytch redirects to after the OAuth flow is completed for a user that already exists. This URL should be a route in your application which will run `oauth.authenticate` (see below) and finish the login.
 
           The URL must be configured as a Login URL in the [Redirect URL page](https://stytch.com/docs/dashboard/redirect-urls). If the field is not specified, the default Login URL will be used.
@@ -193,7 +193,7 @@ class Email:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -262,7 +262,7 @@ class Email:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
         """  # noqa
         headers: Dict[str, str] = {}

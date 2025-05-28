@@ -375,7 +375,7 @@ class Passwords:
           - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
            the user owns the phone number in question. Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
-          - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a user already exists, this field will be ignored.
+          - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -466,7 +466,7 @@ class Passwords:
           - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
            the user owns the phone number in question. Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
-          - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a user already exists, this field will be ignored.
+          - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

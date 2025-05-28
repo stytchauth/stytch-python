@@ -10,6 +10,7 @@ from typing import Any, AsyncGenerator, Dict, Generator, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.users import (
+    ConnectedAppsResponse,
     CreateResponse,
     DeleteBiometricRegistrationResponse,
     DeleteCryptoWalletResponse,
@@ -23,6 +24,7 @@ from stytch.consumer.models.users import (
     ExchangePrimaryFactorResponse,
     GetResponse,
     Name,
+    RevokeResponse,
     SearchResponse,
     SearchUsersQuery,
     UpdateResponse,
@@ -64,7 +66,7 @@ class Users:
                 an account for them.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -116,7 +118,7 @@ class Users:
                 an account for them.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -150,7 +152,7 @@ class Users:
         """Get information about a specific User.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -168,7 +170,7 @@ class Users:
         """Get information about a specific User.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -261,12 +263,12 @@ class Users:
         **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing User's `user_id` while calling the `/send` endpoint, the new, unverified email address or phone number will be added to the existing User object. If the user successfully authenticates within 5 minutes of the `/send` request, the new email address or phone number will be marked as verified and remain permanently on the existing Stytch User. Otherwise, it will be removed from the User object, and any subsequent login requests using that phone number will create a new User. We require this process to guard against an account takeover vulnerability.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - name: The name of the user. Each field in the name object is optional.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -303,12 +305,12 @@ class Users:
         **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing User's `user_id` while calling the `/send` endpoint, the new, unverified email address or phone number will be added to the existing User object. If the user successfully authenticates within 5 minutes of the `/send` request, the new email address or phone number will be marked as verified and remain permanently on the existing Stytch User. Otherwise, it will be removed from the User object, and any subsequent login requests using that phone number will create a new User. We require this process to guard against an account takeover vulnerability.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - name: The name of the user. Each field in the name object is optional.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -346,7 +348,7 @@ class Users:
         Use this endpoint with caution as it performs an admin level action.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - email_address: The email address to exchange to.
           - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
         """  # noqa
@@ -380,7 +382,7 @@ class Users:
         Use this endpoint with caution as it performs an admin level action.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - email_address: The email address to exchange to.
           - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
         """  # noqa
@@ -404,7 +406,7 @@ class Users:
         """Delete a User from Stytch.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -422,7 +424,7 @@ class Users:
         """Delete a User from Stytch.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -742,6 +744,66 @@ class Users:
         )
         res = await self.async_client.delete(url, headers)
         return DeleteOAuthRegistrationResponse.from_json(res.response.status, res.json)
+
+    def connected_apps(
+        self,
+        user_id: str,
+    ) -> ConnectedAppsResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+
+        url = self.api_base.url_for("/v1/users/{user_id}/connected_apps", data)
+        res = self.sync_client.get(url, data, headers)
+        return ConnectedAppsResponse.from_json(res.response.status_code, res.json)
+
+    async def connected_apps_async(
+        self,
+        user_id: str,
+    ) -> ConnectedAppsResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+
+        url = self.api_base.url_for("/v1/users/{user_id}/connected_apps", data)
+        res = await self.async_client.get(url, data, headers)
+        return ConnectedAppsResponse.from_json(res.response.status, res.json)
+
+    def revoke(
+        self,
+        user_id: str,
+        connected_app_id: str,
+    ) -> RevokeResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+            "connected_app_id": connected_app_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/users/{user_id}/connected_apps/{connected_app_id}/revoke", data
+        )
+        res = self.sync_client.post(url, data, headers)
+        return RevokeResponse.from_json(res.response.status_code, res.json)
+
+    async def revoke_async(
+        self,
+        user_id: str,
+        connected_app_id: str,
+    ) -> RevokeResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+            "connected_app_id": connected_app_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/users/{user_id}/connected_apps/{connected_app_id}/revoke", data
+        )
+        res = await self.async_client.post(url, data, headers)
+        return RevokeResponse.from_json(res.response.status, res.json)
 
     # MANUAL(search_all)(SERVICE_METHOD)
     # ADDIMPORT: from typing import AsyncGenerator, Generator

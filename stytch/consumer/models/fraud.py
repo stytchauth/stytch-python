@@ -108,7 +108,7 @@ class Metadata(pydantic.BaseModel):
 class NetworkProperties(pydantic.BaseModel):
     """
     Fields:
-      - ip_address: The IP address of the user.
+      - ip_address: The IP address of the client.
       - asn: Information about the network's ASN (Autonomous System Number).
       - ip_geolocation: Information about the geolocation of the user's IP address.
       - is_proxy: Whether the user is using a proxy.
