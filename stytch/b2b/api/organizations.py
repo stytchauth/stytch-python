@@ -10,15 +10,23 @@ from typing import Any, Dict, List, Optional, Union
 
 from stytch.b2b.api.organizations_members import Members
 from stytch.b2b.models.organizations import (
+    ConnectedAppsRequestOptions,
+    ConnectedAppsResponse,
+    CreateRequestFirstPartyConnectedAppsAllowedType,
+    CreateRequestThirdPartyConnectedAppsAllowedType,
     CreateResponse,
     DeleteRequestOptions,
     DeleteResponse,
     EmailImplicitRoleAssignment,
+    GetConnectedAppRequestOptions,
+    GetConnectedAppResponse,
     GetResponse,
     MetricsResponse,
     SearchQuery,
     SearchResponse,
+    UpdateRequestFirstPartyConnectedAppsAllowedType,
     UpdateRequestOptions,
+    UpdateRequestThirdPartyConnectedAppsAllowedType,
     UpdateResponse,
 )
 from stytch.core.api_base import ApiBase
@@ -59,6 +67,14 @@ class Organizations:
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         claimed_email_domains: Optional[List[str]] = None,
+        first_party_connected_apps_allowed_type: Optional[
+            Union[CreateRequestFirstPartyConnectedAppsAllowedType, str]
+        ] = None,
+        allowed_first_party_connected_apps: Optional[List[str]] = None,
+        third_party_connected_apps_allowed_type: Optional[
+            Union[CreateRequestThirdPartyConnectedAppsAllowedType, str]
+        ] = None,
+        allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates an. An `organization_name` and a unique `organization_slug` are required.
 
@@ -133,6 +149,10 @@ class Organizations:
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
+          - first_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_first_party_connected_apps: (no documentation yet)
+          - third_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_third_party_connected_apps: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -173,6 +193,22 @@ class Organizations:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
         if claimed_email_domains is not None:
             data["claimed_email_domains"] = claimed_email_domains
+        if first_party_connected_apps_allowed_type is not None:
+            data["first_party_connected_apps_allowed_type"] = (
+                first_party_connected_apps_allowed_type
+            )
+        if allowed_first_party_connected_apps is not None:
+            data["allowed_first_party_connected_apps"] = (
+                allowed_first_party_connected_apps
+            )
+        if third_party_connected_apps_allowed_type is not None:
+            data["third_party_connected_apps_allowed_type"] = (
+                third_party_connected_apps_allowed_type
+            )
+        if allowed_third_party_connected_apps is not None:
+            data["allowed_third_party_connected_apps"] = (
+                allowed_third_party_connected_apps
+            )
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = self.sync_client.post(url, data, headers)
@@ -199,6 +235,14 @@ class Organizations:
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         claimed_email_domains: Optional[List[str]] = None,
+        first_party_connected_apps_allowed_type: Optional[
+            CreateRequestFirstPartyConnectedAppsAllowedType
+        ] = None,
+        allowed_first_party_connected_apps: Optional[List[str]] = None,
+        third_party_connected_apps_allowed_type: Optional[
+            CreateRequestThirdPartyConnectedAppsAllowedType
+        ] = None,
+        allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
         """Creates an. An `organization_name` and a unique `organization_slug` are required.
 
@@ -273,6 +317,10 @@ class Organizations:
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
+          - first_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_first_party_connected_apps: (no documentation yet)
+          - third_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_third_party_connected_apps: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -313,6 +361,22 @@ class Organizations:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
         if claimed_email_domains is not None:
             data["claimed_email_domains"] = claimed_email_domains
+        if first_party_connected_apps_allowed_type is not None:
+            data["first_party_connected_apps_allowed_type"] = (
+                first_party_connected_apps_allowed_type
+            )
+        if allowed_first_party_connected_apps is not None:
+            data["allowed_first_party_connected_apps"] = (
+                allowed_first_party_connected_apps
+            )
+        if third_party_connected_apps_allowed_type is not None:
+            data["third_party_connected_apps_allowed_type"] = (
+                third_party_connected_apps_allowed_type
+            )
+        if allowed_third_party_connected_apps is not None:
+            data["allowed_third_party_connected_apps"] = (
+                allowed_third_party_connected_apps
+            )
 
         url = self.api_base.url_for("/v1/b2b/organizations", data)
         res = await self.async_client.post(url, data, headers)
@@ -378,6 +442,14 @@ class Organizations:
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         claimed_email_domains: Optional[List[str]] = None,
+        first_party_connected_apps_allowed_type: Optional[
+            Union[UpdateRequestFirstPartyConnectedAppsAllowedType, str]
+        ] = None,
+        allowed_first_party_connected_apps: Optional[List[str]] = None,
+        third_party_connected_apps_allowed_type: Optional[
+            Union[UpdateRequestThirdPartyConnectedAppsAllowedType, str]
+        ] = None,
+        allowed_third_party_connected_apps: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -491,6 +563,10 @@ class Organizations:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
+          - first_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_first_party_connected_apps: (no documentation yet)
+          - third_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_third_party_connected_apps: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -541,6 +617,22 @@ class Organizations:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
         if claimed_email_domains is not None:
             data["claimed_email_domains"] = claimed_email_domains
+        if first_party_connected_apps_allowed_type is not None:
+            data["first_party_connected_apps_allowed_type"] = (
+                first_party_connected_apps_allowed_type
+            )
+        if allowed_first_party_connected_apps is not None:
+            data["allowed_first_party_connected_apps"] = (
+                allowed_first_party_connected_apps
+            )
+        if third_party_connected_apps_allowed_type is not None:
+            data["third_party_connected_apps_allowed_type"] = (
+                third_party_connected_apps_allowed_type
+            )
+        if allowed_third_party_connected_apps is not None:
+            data["allowed_third_party_connected_apps"] = (
+                allowed_third_party_connected_apps
+            )
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -570,6 +662,14 @@ class Organizations:
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
         claimed_email_domains: Optional[List[str]] = None,
+        first_party_connected_apps_allowed_type: Optional[
+            UpdateRequestFirstPartyConnectedAppsAllowedType
+        ] = None,
+        allowed_first_party_connected_apps: Optional[List[str]] = None,
+        third_party_connected_apps_allowed_type: Optional[
+            UpdateRequestThirdPartyConnectedAppsAllowedType
+        ] = None,
+        allowed_third_party_connected_apps: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
         """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
@@ -683,6 +783,10 @@ class Organizations:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
+          - first_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_first_party_connected_apps: (no documentation yet)
+          - third_party_connected_apps_allowed_type: (no documentation yet)
+          - allowed_third_party_connected_apps: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -733,6 +837,22 @@ class Organizations:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
         if claimed_email_domains is not None:
             data["claimed_email_domains"] = claimed_email_domains
+        if first_party_connected_apps_allowed_type is not None:
+            data["first_party_connected_apps_allowed_type"] = (
+                first_party_connected_apps_allowed_type
+            )
+        if allowed_first_party_connected_apps is not None:
+            data["allowed_first_party_connected_apps"] = (
+                allowed_first_party_connected_apps
+            )
+        if third_party_connected_apps_allowed_type is not None:
+            data["third_party_connected_apps_allowed_type"] = (
+                third_party_connected_apps_allowed_type
+            )
+        if allowed_third_party_connected_apps is not None:
+            data["allowed_third_party_connected_apps"] = (
+                allowed_third_party_connected_apps
+            )
 
         url = self.api_base.url_for("/v1/b2b/organizations/{organization_id}", data)
         res = await self.async_client.put(url, data, headers)
@@ -861,3 +981,115 @@ class Organizations:
         )
         res = await self.async_client.get(url, data, headers)
         return MetricsResponse.from_json(res.response.status, res.json)
+
+    def connected_apps(
+        self,
+        organization_id: str,
+        method_options: Optional[ConnectedAppsRequestOptions] = None,
+    ) -> ConnectedAppsResponse:
+        """Retrieves a list of Connected Apps for the Organization that have been installed by Members. Installation comprises
+        successful completion of an authorization flow with a Connected App that has not been explicitly revoked.
+
+        Available Connected Apps will change according to the Organization's `first_party_connected_apps_allowed_type`
+        and `third_party_connected_apps_allowed_type` policies.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/connected_apps", data
+        )
+        res = self.sync_client.get(url, data, headers)
+        return ConnectedAppsResponse.from_json(res.response.status_code, res.json)
+
+    async def connected_apps_async(
+        self,
+        organization_id: str,
+        method_options: Optional[ConnectedAppsRequestOptions] = None,
+    ) -> ConnectedAppsResponse:
+        """Retrieves a list of Connected Apps for the Organization that have been installed by Members. Installation comprises
+        successful completion of an authorization flow with a Connected App that has not been explicitly revoked.
+
+        Available Connected Apps will change according to the Organization's `first_party_connected_apps_allowed_type`
+        and `third_party_connected_apps_allowed_type` policies.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/connected_apps", data
+        )
+        res = await self.async_client.get(url, data, headers)
+        return ConnectedAppsResponse.from_json(res.response.status, res.json)
+
+    def get_connected_app(
+        self,
+        organization_id: str,
+        connected_app_id: str,
+        method_options: Optional[GetConnectedAppRequestOptions] = None,
+    ) -> GetConnectedAppResponse:
+        """Get Connected App for Organization retrieves information about the specified Connected App as well as a list of the
+        Organization's Members who have the App installed along with the scopes they requested at completion of their last
+        authorization with the App.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - connected_app_id: The ID of the Connected App.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connected_app_id": connected_app_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/connected_apps/{connected_app_id}",
+            data,
+        )
+        res = self.sync_client.get(url, data, headers)
+        return GetConnectedAppResponse.from_json(res.response.status_code, res.json)
+
+    async def get_connected_app_async(
+        self,
+        organization_id: str,
+        connected_app_id: str,
+        method_options: Optional[GetConnectedAppRequestOptions] = None,
+    ) -> GetConnectedAppResponse:
+        """Get Connected App for Organization retrieves information about the specified Connected App as well as a list of the
+        Organization's Members who have the App installed along with the scopes they requested at completion of their last
+        authorization with the App.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - connected_app_id: The ID of the Connected App.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connected_app_id": connected_app_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/connected_apps/{connected_app_id}",
+            data,
+        )
+        res = await self.async_client.get(url, data, headers)
+        return GetConnectedAppResponse.from_json(res.response.status, res.json)

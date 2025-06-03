@@ -58,7 +58,7 @@ class AuthenticateResponse(ResponseBase):
       - oauth_user_registration_id: The unique ID for an OAuth registration.
       - user_session: A `Session` object. For backwards compatibility reasons, the session from an OAuth authenticate call is labeled as `user_session`, but is otherwise just a standard stytch `Session` object.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
     """  # noqa
 

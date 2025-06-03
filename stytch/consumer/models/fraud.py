@@ -108,7 +108,7 @@ class Metadata(pydantic.BaseModel):
 class NetworkProperties(pydantic.BaseModel):
     """
     Fields:
-      - ip_address: The IP address of the user.
+      - ip_address: The IP address of the client.
       - asn: Information about the network's ASN (Autonomous System Number).
       - ip_geolocation: Information about the geolocation of the user's IP address.
       - is_proxy: Whether the user is using a proxy.
@@ -178,7 +178,7 @@ class Verdict(pydantic.BaseModel):
       * `BLOCK` - This is a known bad or malicious device profile that is undesirable and should be blocked from completing the privileged action in question
       * `CHALLENGE` - This is an unknown or potentially malicious device that should be put through increased friction such as 2FA or other forms of extended user verification before allowing the privileged action to proceed
 
-      - reasons: A set of contextual clues to inform why a `CHALLENGE` or `BLOCK` action was suggested. For a list of possible Reasons, please [contact support](mailto:support@stytch.com).
+      - reasons: A set of contextual clues to inform why a `CHALLENGE` or `BLOCK` action was suggested. For a list of possible Reasons, see [Warning Flags (Verdict Reasons)](https://stytch.com/docs/docs/fraud/guides/device-fingerprinting/reference/warning-flags-verdict-reasons).
       - detected_device_type: The operating system and architecture that took the fingerprint.
       - is_authentic_device: The assessment of whether this is an authentic device. It will be false if hardware or browser deception is detected.
       - rule_match_type: The type of rule match that was applied (e.g. `VISITOR_ID`), if any. This field will only be present if there is a `RULE_MATCH` reason in the list of verdict reasons.

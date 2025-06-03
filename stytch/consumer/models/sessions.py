@@ -201,7 +201,7 @@ class HubspotOAuthFactor(pydantic.BaseModel):
 class ImpersonatedFactor(pydantic.BaseModel):
     """
     Fields:
-      - impersonator_id: The unique UUID of the impersonator. For impersonation sessions initiated via the Stytch dashboard, the `impersonator_id` will be the impersonator's Stytch workspace id.
+      - impersonator_id: For impersonated sessions initiated via the Stytch Dashboard, the `impersonator_id` will be the impersonator's Stytch Dashboard `member_id`.
       - impersonator_email_address: The email address of the impersonator.
     """  # noqa
 
@@ -498,7 +498,7 @@ class AuthenticateResponse(ResponseBase):
     Fields:
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
@@ -520,7 +520,7 @@ class ExchangeAccessTokenResponse(ResponseBase):
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
     """  # noqa
 
@@ -543,7 +543,7 @@ class GetJWKSResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Sessions.get`.
     Fields:
-      - sessions: An array of Session objects.
+      - sessions: An array of [Session objects](https://stytch.com/docs/api/session-object).
     """  # noqa
 
     sessions: List[Session]
@@ -558,7 +558,7 @@ class MigrateResponse(ResponseBase):
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
     """  # noqa
 

@@ -40,7 +40,7 @@ class Discovery:
 
         Fields:
           - email_address: The email address of the Member.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -65,7 +65,7 @@ class Discovery:
 
         Fields:
           - email_address: The email address of the Member.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
