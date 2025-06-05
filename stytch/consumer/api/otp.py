@@ -57,7 +57,7 @@ class OTPs:
         Fields:
           - method_id: The `email_id` or `phone_id` involved in the given authentication.
           - code: The code to authenticate.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -114,7 +114,7 @@ class OTPs:
         Fields:
           - method_id: The `email_id` or `phone_id` involved in the given authentication.
           - code: The code to authenticate.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,

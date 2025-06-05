@@ -27,7 +27,7 @@ class Fingerprint:
         telemetry_id: str,
         external_metadata: Optional[Union[Metadata, Dict[str, Any]]] = None,
     ) -> LookupResponse:
-        """Lookup the associated fingerprint for the `telemetry_id` returned from the `GetTelemetryID` function. Learn more about the different fingerprint types and verdicts in our [DFP guide](https://stytch.com/docs/fraud/guides/device-fingerprinting/overview).
+        """Lookup the associated fingerprint for the `telemetry_id` returned from the `GetTelemetryID()` function. Learn more about the different fingerprint types and verdicts in our [DFP guide](https://stytch.com/docs/fraud/guides/device-fingerprinting/overview).
 
         Make a decision based on the returned `verdict`:
         * `ALLOW` - This is a known valid device grouping or device profile that is part of the default `ALLOW` listed set of known devices by Stytch. This grouping is made up of  verified device profiles that match the characteristics of known/authentic traffic origins.
@@ -60,7 +60,7 @@ class Fingerprint:
         telemetry_id: str,
         external_metadata: Optional[Metadata] = None,
     ) -> LookupResponse:
-        """Lookup the associated fingerprint for the `telemetry_id` returned from the `GetTelemetryID` function. Learn more about the different fingerprint types and verdicts in our [DFP guide](https://stytch.com/docs/fraud/guides/device-fingerprinting/overview).
+        """Lookup the associated fingerprint for the `telemetry_id` returned from the `GetTelemetryID()` function. Learn more about the different fingerprint types and verdicts in our [DFP guide](https://stytch.com/docs/fraud/guides/device-fingerprinting/overview).
 
         Make a decision based on the returned `verdict`:
         * `ALLOW` - This is a known valid device grouping or device profile that is part of the default `ALLOW` listed set of known devices by Stytch. This grouping is made up of  verified device profiles that match the characteristics of known/authentic traffic origins.

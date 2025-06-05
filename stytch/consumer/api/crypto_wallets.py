@@ -44,7 +44,7 @@ class CryptoWallets:
         Fields:
           - crypto_wallet_type: The type of wallet to authenticate. Currently `ethereum` and `solana` are supported. Wallets for any EVM-compatible chains (such as Polygon or BSC) are also supported and are grouped under the `ethereum` type.
           - crypto_wallet_address: The crypto wallet address to authenticate.
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
           - siwe_params: The parameters for a Sign In With Ethereum (SIWE) message. May only be passed if the `crypto_wallet_type` is `ethereum`.
@@ -88,7 +88,7 @@ class CryptoWallets:
         Fields:
           - crypto_wallet_type: The type of wallet to authenticate. Currently `ethereum` and `solana` are supported. Wallets for any EVM-compatible chains (such as Polygon or BSC) are also supported and are grouped under the `ethereum` type.
           - crypto_wallet_address: The crypto wallet address to authenticate.
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_jwt: The `session_jwt` associated with a User's existing Session.
           - siwe_params: The parameters for a Sign In With Ethereum (SIWE) message. May only be passed if the `crypto_wallet_type` is `ethereum`.

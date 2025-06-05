@@ -61,6 +61,7 @@ class AuthenticationFactorDeliveryMethod(str, enum.Enum):
     OAUTH_EXCHANGE_GOOGLE = "oauth_exchange_google"
     IMPERSONATION = "impersonation"
     OAUTH_ACCESS_TOKEN_EXCHANGE = "oauth_access_token_exchange"
+    TRUSTED_TOKEN_EXCHANGE = "trusted_token_exchange"
 
 
 class AuthenticationFactorType(str, enum.Enum):
@@ -77,6 +78,7 @@ class AuthenticationFactorType(str, enum.Enum):
     RECOVERY_CODES = "recovery_codes"
     EMAIL_OTP = "email_otp"
     IMPERSONATED = "impersonated"
+    TRUSTED_AUTH_TOKEN = "trusted_auth_token"
 
 
 class AmazonOAuthFactor(pydantic.BaseModel):
@@ -201,7 +203,7 @@ class HubspotOAuthFactor(pydantic.BaseModel):
 class ImpersonatedFactor(pydantic.BaseModel):
     """
     Fields:
-      - impersonator_id: The unique UUID of the impersonator. For impersonation sessions initiated via the Stytch dashboard, the `impersonator_id` will be the impersonator's Stytch workspace id.
+      - impersonator_id: For impersonated sessions initiated via the Stytch Dashboard, the `impersonator_id` will be the impersonator's Stytch Dashboard `member_id`.
       - impersonator_email_address: The email address of the impersonator.
     """  # noqa
 
@@ -337,6 +339,10 @@ class TikTokOAuthFactor(pydantic.BaseModel):
     email_id: Optional[str] = None
 
 
+class TrustedAuthTokenFactor(pydantic.BaseModel):
+    token_id: str
+
+
 class TwitchOAuthFactor(pydantic.BaseModel):
     id: str
     provider_subject: str
@@ -421,6 +427,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - google_oauth_exchange_factor: (no documentation yet)
       - impersonated_factor: Information about the impersonated factor, if one is present.
       - oauth_access_token_exchange_factor: (no documentation yet)
+      - trusted_auth_token_factor: (no documentation yet)
     """  # noqa
 
     type: AuthenticationFactorType
@@ -468,6 +475,7 @@ class AuthenticationFactor(pydantic.BaseModel):
     google_oauth_exchange_factor: Optional[GoogleOAuthExchangeFactor] = None
     impersonated_factor: Optional[ImpersonatedFactor] = None
     oauth_access_token_exchange_factor: Optional[OAuthAccessTokenExchangeFactor] = None
+    trusted_auth_token_factor: Optional[TrustedAuthTokenFactor] = None
 
 
 class Session(pydantic.BaseModel):
@@ -498,7 +506,7 @@ class AuthenticateResponse(ResponseBase):
     Fields:
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
@@ -520,7 +528,7 @@ class ExchangeAccessTokenResponse(ResponseBase):
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
     """  # noqa
 
@@ -543,7 +551,7 @@ class GetJWKSResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Sessions.get`.
     Fields:
-      - sessions: An array of Session objects.
+      - sessions: An array of [Session objects](https://stytch.com/docs/api/session-object).
     """  # noqa
 
     sessions: List[Session]
@@ -558,7 +566,7 @@ class MigrateResponse(ResponseBase):
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
     """  # noqa
 

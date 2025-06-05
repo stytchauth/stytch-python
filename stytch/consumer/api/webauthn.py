@@ -48,9 +48,9 @@ class WebAuthn:
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an external_id here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
-          - user_agent: The user agent of the User.
+          - user_agent: The user agent of the client.
           - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
 
@@ -102,9 +102,9 @@ class WebAuthn:
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an external_id here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
-          - user_agent: The user agent of the User.
+          - user_agent: The user agent of the client.
           - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
 
@@ -150,7 +150,7 @@ class WebAuthn:
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an external_id here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -199,7 +199,7 @@ class WebAuthn:
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an external_id here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -250,7 +250,7 @@ class WebAuthn:
 
         Fields:
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an external_id here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
 
         """  # noqa
@@ -285,7 +285,7 @@ class WebAuthn:
 
         Fields:
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an external_id here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
 
         """  # noqa

@@ -190,7 +190,7 @@ class Email:
 
         Fields:
           - password_reset_token: The password reset token to authenticate.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
               If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
               both `session_token` and `session_jwt` are provided.
@@ -272,7 +272,7 @@ class Email:
 
         Fields:
           - password_reset_token: The password reset token to authenticate.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
               If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
               both `session_token` and `session_jwt` are provided.

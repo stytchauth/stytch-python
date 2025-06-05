@@ -51,7 +51,7 @@ class MagicLinks:
               The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7`
 
               In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/workspace-management/redirect-urls) for more detail.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -113,7 +113,7 @@ class MagicLinks:
               The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7`
 
               In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/workspace-management/redirect-urls) for more detail.
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
           - session_token: The `session_token` associated with a User's existing Session.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
@@ -170,9 +170,9 @@ class MagicLinks:
         **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -203,9 +203,9 @@ class MagicLinks:
         **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an external_id here if one is set for the user.
+          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
           - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
-          - attributes: Provided attributes help with fraud detection.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

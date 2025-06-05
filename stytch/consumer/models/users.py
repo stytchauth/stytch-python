@@ -150,6 +150,25 @@ class TOTP(pydantic.BaseModel):
     verified: bool
 
 
+class UserConnectedApp(pydantic.BaseModel):
+    """
+    Fields:
+      - connected_app_id: The ID of the Connected App.
+      - name: The name of the Connected App.
+      - description: A description of the Connected App.
+      - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
+      - scopes_granted: The scopes granted to the Connected App at the completion of the last authorization flow.
+      - logo_url: The logo URL of the Connected App, if any.
+    """  # noqa
+
+    connected_app_id: str
+    name: str
+    description: str
+    client_type: str
+    scopes_granted: str
+    logo_url: Optional[str] = None
+
+
 class WebAuthnRegistration(pydantic.BaseModel):
     """
     Fields:
@@ -181,12 +200,15 @@ class User(pydantic.BaseModel):
       - totps: An array containing a list of all TOTP instances for a given User in the Stytch API.
       - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
       - biometric_registrations: An array that contains a list of all biometric registrations for a given User in the Stytch API.
+      - is_locked: (no documentation yet)
       - name: The name of the User. Each field in the `name` object is optional.
       - created_at: The timestamp of the User's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - password: The password object is returned for users with a password.
       - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
       - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
       - external_id: (no documentation yet)
+      - lock_created_at: (no documentation yet)
+      - lock_expires_at: (no documentation yet)
     """  # noqa
 
     user_id: str
@@ -198,12 +220,24 @@ class User(pydantic.BaseModel):
     totps: List[TOTP]
     crypto_wallets: List[CryptoWallet]
     biometric_registrations: List[BiometricRegistration]
+    is_locked: bool
     name: Optional[Name] = None
     created_at: Optional[datetime.datetime] = None
     password: Optional[Password] = None
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None
     external_id: Optional[str] = None
+    lock_created_at: Optional[datetime.datetime] = None
+    lock_expires_at: Optional[datetime.datetime] = None
+
+
+class ConnectedAppsResponse(ResponseBase):
+    """Response type for `Users.connected_apps`.
+    Fields:
+      - connected_apps: An array of Connected Apps with which the User has successfully completed an authorization flow.
+    """  # noqa
+
+    connected_apps: List[UserConnectedApp]
 
 
 class CreateResponse(ResponseBase):
@@ -343,12 +377,15 @@ class GetResponse(ResponseBase):
       - totps: An array containing a list of all TOTP instances for a given User in the Stytch API.
       - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
       - biometric_registrations: An array that contains a list of all biometric registrations for a given User in the Stytch API.
+      - is_locked: (no documentation yet)
       - name: The name of the User. Each field in the `name` object is optional.
       - created_at: The timestamp of the User's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - password: The password object is returned for users with a password.
       - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
       - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
       - external_id: (no documentation yet)
+      - lock_created_at: (no documentation yet)
+      - lock_expires_at: (no documentation yet)
     """  # noqa
 
     user_id: str
@@ -360,12 +397,21 @@ class GetResponse(ResponseBase):
     totps: List[TOTP]
     crypto_wallets: List[CryptoWallet]
     biometric_registrations: List[BiometricRegistration]
+    is_locked: bool
     name: Optional[Name] = None
     created_at: Optional[datetime.datetime] = None
     password: Optional[Password] = None
     trusted_metadata: Optional[Dict[str, Any]] = None
     untrusted_metadata: Optional[Dict[str, Any]] = None
     external_id: Optional[str] = None
+    lock_created_at: Optional[datetime.datetime] = None
+    lock_expires_at: Optional[datetime.datetime] = None
+
+
+class RevokeResponse(ResponseBase):
+    """Response type for `Users.revoke`.
+    Fields:
+    """  # noqa
 
 
 class SearchResponse(ResponseBase):

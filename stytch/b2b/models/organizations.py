@@ -17,9 +17,33 @@ from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
 
 
+class CreateRequestFirstPartyConnectedAppsAllowedType(str, enum.Enum):
+    ALL_ALLOWED = "ALL_ALLOWED"
+    RESTRICTED = "RESTRICTED"
+    NOT_ALLOWED = "NOT_ALLOWED"
+
+
+class CreateRequestThirdPartyConnectedAppsAllowedType(str, enum.Enum):
+    ALL_ALLOWED = "ALL_ALLOWED"
+    RESTRICTED = "RESTRICTED"
+    NOT_ALLOWED = "NOT_ALLOWED"
+
+
 class SearchQueryOperator(str, enum.Enum):
     OR = "OR"
     AND = "AND"
+
+
+class UpdateRequestFirstPartyConnectedAppsAllowedType(str, enum.Enum):
+    ALL_ALLOWED = "ALL_ALLOWED"
+    RESTRICTED = "RESTRICTED"
+    NOT_ALLOWED = "NOT_ALLOWED"
+
+
+class UpdateRequestThirdPartyConnectedAppsAllowedType(str, enum.Enum):
+    ALL_ALLOWED = "ALL_ALLOWED"
+    RESTRICTED = "RESTRICTED"
+    NOT_ALLOWED = "NOT_ALLOWED"
 
 
 class ActiveSCIMConnection(pydantic.BaseModel):
@@ -48,6 +72,22 @@ class ActiveSSOConnection(pydantic.BaseModel):
     connection_id: str
     display_name: str
     identity_provider: str
+
+
+class ConnectedAppsRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
 
 
 class DeleteRequestOptions(pydantic.BaseModel):
@@ -86,6 +126,22 @@ class EmailImplicitRoleAssignment(pydantic.BaseModel):
     role_id: str
 
 
+class GetConnectedAppRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
 class GithubProviderInfo(pydantic.BaseModel):
     """
     Fields:
@@ -118,6 +174,25 @@ class HubspotProviderInfo(pydantic.BaseModel):
     access_token_expires_in: int
     scopes: List[str]
     refresh_token: Optional[str] = None
+
+
+class MemberConnectedApp(pydantic.BaseModel):
+    """
+    Fields:
+      - connected_app_id: The ID of the Connected App.
+      - name: The name of the Connected App.
+      - description: A description of the Connected App.
+      - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
+      - scopes_granted: The scopes granted to the Connected App at the completion of the last authorization flow.
+      - logo_url: The logo URL of the Connected App, if any.
+    """  # noqa
+
+    connected_app_id: str
+    name: str
+    description: str
+    client_type: str
+    scopes_granted: str
+    logo_url: Optional[str] = None
 
 
 class MemberRoleSource(pydantic.BaseModel):
@@ -307,6 +382,24 @@ class Organization(pydantic.BaseModel):
       `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
       - claimed_email_domains: (no documentation yet)
+      - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
+
+      `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+
+      `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+      `NOT_ALLOWED` – no first party Connected Apps are permitted.
+
+      - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
+      - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
+
+      `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+
+      `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+      `NOT_ALLOWED` – no third party Connected Apps are permitted.
+
+      - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - created_at: The timestamp of the Organization's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - updated_at: The timestamp of when the Organization was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
@@ -333,12 +426,35 @@ class Organization(pydantic.BaseModel):
     allowed_mfa_methods: List[str]
     oauth_tenant_jit_provisioning: str
     claimed_email_domains: List[str]
+    first_party_connected_apps_allowed_type: str
+    allowed_first_party_connected_apps: List[str]
+    third_party_connected_apps_allowed_type: str
+    allowed_third_party_connected_apps: List[str]
     trusted_metadata: Optional[Dict[str, Any]] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
     sso_default_connection_id: Optional[str] = None
     scim_active_connection: Optional[ActiveSCIMConnection] = None
     allowed_oauth_tenants: Optional[Dict[str, Any]] = None
+
+
+class OrganizationConnectedApp(pydantic.BaseModel):
+    connected_app_id: str
+    name: str
+    description: str
+    client_type: str
+    logo_url: Optional[str] = None
+
+
+class OrganizationConnectedAppActiveMember(pydantic.BaseModel):
+    """
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - granted_scopes: Scopes that were granted at the completion of the last authorization flow.
+    """  # noqa
+
+    member_id: str
+    granted_scopes: List[str]
 
 
 class ResultsMetadata(pydantic.BaseModel):
@@ -422,6 +538,7 @@ class Member(pydantic.BaseModel):
       addresses allows them to be subsequently re-used by other Organization Members. Retired email addresses can be unlinked
       using the [Unlink Retired Email endpoint](https://stytch.com/docs/b2b/api/unlink-retired-member-email).
 
+      - is_locked: (no documentation yet)
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
       - default_mfa_method: (no documentation yet)
@@ -435,6 +552,8 @@ class Member(pydantic.BaseModel):
       - updated_at: The timestamp of when the Member was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - scim_registration: A scim member registration, referencing a [SCIM Connection](scim-connection-object) object in use for the Member creation.
       - external_id: The ID of the member given by the identity provider.
+      - lock_created_at: (no documentation yet)
+      - lock_expires_at: (no documentation yet)
     """  # noqa
 
     organization_id: str
@@ -451,6 +570,7 @@ class Member(pydantic.BaseModel):
     is_admin: bool
     totp_registration_id: str
     retired_email_addresses: List[RetiredEmail]
+    is_locked: bool
     mfa_enrolled: bool
     mfa_phone_number: str
     default_mfa_method: str
@@ -461,6 +581,8 @@ class Member(pydantic.BaseModel):
     updated_at: Optional[datetime.datetime] = None
     scim_registration: Optional[SCIMRegistration] = None
     external_id: Optional[str] = None
+    lock_created_at: Optional[datetime.datetime] = None
+    lock_expires_at: Optional[datetime.datetime] = None
 
 
 class SearchQuery(pydantic.BaseModel):
@@ -513,6 +635,15 @@ class UpdateRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class ConnectedAppsResponse(ResponseBase):
+    """Response type for `Organizations.connected_apps`.
+    Fields:
+      - connected_apps: (no documentation yet)
+    """  # noqa
+
+    connected_apps: List[OrganizationConnectedApp]
+
+
 class CreateResponse(ResponseBase):
     """Response type for `Organizations.create`.
     Fields:
@@ -529,6 +660,25 @@ class DeleteResponse(ResponseBase):
     """  # noqa
 
     organization_id: str
+
+
+class GetConnectedAppResponse(ResponseBase):
+    """Response type for `Organizations.get_connected_app`.
+    Fields:
+      - connected_app_id: The ID of the Connected App.
+      - name: The name of the Connected App.
+      - description: A description of the Connected App.
+      - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
+      - active_members: Details about Members who has installed a Connected App.
+      - logo_url: (no documentation yet)
+    """  # noqa
+
+    connected_app_id: str
+    name: str
+    description: str
+    client_type: str
+    active_members: List[OrganizationConnectedAppActiveMember]
+    logo_url: Optional[str] = None
 
 
 class GetResponse(ResponseBase):
