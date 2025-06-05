@@ -24,7 +24,7 @@ class AuthenticateResponse(ResponseBase):
       - reset_sessions: Indicates if all other of the User's Sessions need to be reset. You should check this field if you aren't using Stytch's Session product. If you are using Stytch's Session product, we revoke the User's other sessions for you.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
 
-      See [GET sessions](https://stytch.com/docs/api/session-get) for complete response fields.
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
     """  # noqa
 

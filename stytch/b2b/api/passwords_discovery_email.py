@@ -170,7 +170,7 @@ class Email:
 
         Fields:
           - password_reset_token: The password reset token to authenticate.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - pkce_code_verifier: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
@@ -199,7 +199,7 @@ class Email:
 
         Fields:
           - password_reset_token: The password reset token to authenticate.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characers, etc.
+          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - pkce_code_verifier: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}

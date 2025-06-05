@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
+from stytch.b2b.api.organizations_members_connected_apps import ConnectedApps
 from stytch.b2b.api.organizations_members_oauth_providers import OAuthProviders
 from stytch.b2b.models.organizations import SearchQuery
 from stytch.b2b.models.organizations_members import (
@@ -21,6 +22,8 @@ from stytch.b2b.models.organizations_members import (
     DeleteResponse,
     DeleteTOTPRequestOptions,
     DeleteTOTPResponse,
+    GetConnectedAppsRequestOptions,
+    GetConnectedAppsResponse,
     GetResponse,
     OIDCProvidersResponse,
     ReactivateRequestOptions,
@@ -44,6 +47,11 @@ class Members:
         self.sync_client = sync_client
         self.async_client = async_client
         self.oauth_providers = OAuthProviders(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.connected_apps = ConnectedApps(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
@@ -820,6 +828,68 @@ class Members:
         )
         res = await self.async_client.post(url, data, headers)
         return UnlinkRetiredEmailResponse.from_json(res.response.status, res.json)
+
+    def get_connected_apps(
+        self,
+        organization_id: str,
+        member_id: str,
+        method_options: Optional[GetConnectedAppsRequestOptions] = None,
+    ) -> GetConnectedAppsResponse:
+        """Member Get Connected Apps retrieves a list of Connected Apps with which the Member has successfully completed an
+        authorization flow.
+        If the Member revokes a Connected App's access (e.g. via the Revoke Connected App endpoint) then the Connected App will
+        no longer be returned in the response. A Connected App's access may also be revoked if the Organization's allowed Connected
+        App policy changes.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/connected_apps",
+            data,
+        )
+        res = self.sync_client.get(url, data, headers)
+        return GetConnectedAppsResponse.from_json(res.response.status_code, res.json)
+
+    async def get_connected_apps_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        method_options: Optional[GetConnectedAppsRequestOptions] = None,
+    ) -> GetConnectedAppsResponse:
+        """Member Get Connected Apps retrieves a list of Connected Apps with which the Member has successfully completed an
+        authorization flow.
+        If the Member revokes a Connected App's access (e.g. via the Revoke Connected App endpoint) then the Connected App will
+        no longer be returned in the response. A Connected App's access may also be revoked if the Organization's allowed Connected
+        App policy changes.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/connected_apps",
+            data,
+        )
+        res = await self.async_client.get(url, data, headers)
+        return GetConnectedAppsResponse.from_json(res.response.status, res.json)
 
     def create(
         self,
