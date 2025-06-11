@@ -277,7 +277,9 @@ class Sessions:
         """Use this endpoint to exchange a Connected Apps Access Token back into a Stytch Session for the underlying User.
         This session can be used with the Stytch SDKs and APIs.
 
-        The Access Token must contain the `full_access` scope and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
+        The Session returned will be the same Session that was active in your application (the authorizing party) during the initial authorization flow.
+
+        The Access Token must contain the `full_access` scope (only available to First Party clients) and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
 
         Fields:
           - access_token: The access token to exchange for a Stytch Session. Must be granted the `full_access` scope.
@@ -316,7 +318,9 @@ class Sessions:
         """Use this endpoint to exchange a Connected Apps Access Token back into a Stytch Session for the underlying User.
         This session can be used with the Stytch SDKs and APIs.
 
-        The Access Token must contain the `full_access` scope and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
+        The Session returned will be the same Session that was active in your application (the authorizing party) during the initial authorization flow.
+
+        The Access Token must contain the `full_access` scope (only available to First Party clients) and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
 
         Fields:
           - access_token: The access token to exchange for a Stytch Session. Must be granted the `full_access` scope.
