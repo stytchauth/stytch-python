@@ -13,7 +13,7 @@ import pydantic
 
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
-from stytch.b2b.models.sessions import MemberSession
+from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
 from stytch.core.response_base import ResponseBase
 
 
@@ -80,6 +80,7 @@ class AuthenticateResponse(ResponseBase):
       - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - primary_required: Information about the primary authentication requirements of the Organization.
     """  # noqa
 
     member_id: str
@@ -92,6 +93,7 @@ class AuthenticateResponse(ResponseBase):
     member_authenticated: bool
     member_session: Optional[MemberSession] = None
     mfa_required: Optional[MfaRequired] = None
+    primary_required: Optional[PrimaryRequired] = None
 
 
 class MigrateResponse(ResponseBase):
