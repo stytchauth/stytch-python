@@ -38,6 +38,18 @@ class VerdictAction(str, enum.Enum):
     BLOCK = "BLOCK"
 
 
+class VerdictReasonActionAction(str, enum.Enum):
+    ALLOW = "ALLOW"
+    CHALLENGE = "CHALLENGE"
+    BLOCK = "BLOCK"
+
+
+class VerdictReasonOverrideAction(str, enum.Enum):
+    ALLOW = "ALLOW"
+    CHALLENGE = "CHALLENGE"
+    BLOCK = "BLOCK"
+
+
 class ASNProperties(pydantic.BaseModel):
     """
     Fields:
@@ -170,6 +182,34 @@ class Rule(pydantic.BaseModel):
     last_updated_at: Optional[datetime.datetime] = None
 
 
+class VerdictReasonAction(pydantic.BaseModel):
+    """
+    Fields:
+      - verdict_reason: The verdict reason.
+      - default_action: The default action returned for the specified verdict reason in a fingerprint lookup when no overrides are specified.
+      - override_action: If not null, this action will be returned for the specified verdict reason in a fingerprint lookup, in place of the default action.
+      - override_created_at: The time when the override was created, if one exists. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - override_description: A description of the override, if one exists.
+    """  # noqa
+
+    verdict_reason: str
+    default_action: VerdictReasonActionAction
+    override_action: Optional[VerdictReasonActionAction] = None
+    override_created_at: Optional[datetime.datetime] = None
+    override_description: Optional[str] = None
+
+
+class VerdictReasonOverride(pydantic.BaseModel):
+    """
+    Fields:
+      - verdict_reason: The verdict reason that was overridden.
+      - override_action: The action that was applied for the given verdict reason.
+    """  # noqa
+
+    verdict_reason: str
+    override_action: Optional[VerdictReasonOverrideAction] = None
+
+
 class Verdict(pydantic.BaseModel):
     """
     Fields:
@@ -181,6 +221,7 @@ class Verdict(pydantic.BaseModel):
       - reasons: A set of contextual clues to inform why a `CHALLENGE` or `BLOCK` action was suggested. For a list of possible Reasons, see [Warning Flags (Verdict Reasons)](https://stytch.com/docs/docs/fraud/guides/device-fingerprinting/reference/warning-flags-verdict-reasons).
       - detected_device_type: The operating system and architecture that took the fingerprint.
       - is_authentic_device: The assessment of whether this is an authentic device. It will be false if hardware or browser deception is detected.
+      - verdict_reason_overrides: A list of verdict reason overrides that were applied, if any.
       - rule_match_type: The type of rule match that was applied (e.g. `VISITOR_ID`), if any. This field will only be present if there is a `RULE_MATCH` reason in the list of verdict reasons.
       - rule_match_identifier: The rule that was applied (e.g. a specific visitor ID value), if any. This field will only be present if there is a `RULE_MATCH` reason in the list of verdict reasons.
     """  # noqa
@@ -189,5 +230,6 @@ class Verdict(pydantic.BaseModel):
     reasons: List[str]
     detected_device_type: str
     is_authentic_device: bool
+    verdict_reason_overrides: List[VerdictReasonOverride]
     rule_match_type: Optional[RuleType] = None
     rule_match_identifier: Optional[str] = None
