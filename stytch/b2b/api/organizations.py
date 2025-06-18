@@ -149,10 +149,24 @@ class Organizations:
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
-          - first_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_first_party_connected_apps: (no documentation yet)
-          - third_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_third_party_connected_apps: (no documentation yet)
+          - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no first party Connected Apps are permitted.
+
+          - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no third party Connected Apps are permitted.
+
+          - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -317,10 +331,24 @@ class Organizations:
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
-          - first_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_first_party_connected_apps: (no documentation yet)
-          - third_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_third_party_connected_apps: (no documentation yet)
+          - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no first party Connected Apps are permitted.
+
+          - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no third party Connected Apps are permitted.
+
+          - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -563,10 +591,24 @@ class Organizations:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
-          - first_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_first_party_connected_apps: (no documentation yet)
-          - third_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_third_party_connected_apps: (no documentation yet)
+          - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no first party Connected Apps are permitted.
+
+          - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no third party Connected Apps are permitted.
+
+          - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -783,10 +825,24 @@ class Organizations:
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
           - claimed_email_domains: A list of email domains that are claimed by the Organization.
-          - first_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_first_party_connected_apps: (no documentation yet)
-          - third_party_connected_apps_allowed_type: (no documentation yet)
-          - allowed_third_party_connected_apps: (no documentation yet)
+          - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no first party Connected Apps are permitted.
+
+          - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no third party Connected Apps are permitted.
+
+          - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
