@@ -54,7 +54,7 @@ class Email:
           - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
           Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
           If you have not set a default `reset_password_redirect_url`, an error is returned.
-          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
+          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid. The minimum allowed expiration is 5 minutes and the maximum is 10080 minutes (7 days). By default, the expiration is 30 minutes.
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - login_redirect_url: The URL that the member clicks from the reset without password link. This URL should be an endpoint in the backend server
               that verifies the request by querying Stytch's authenticate endpoint and finishes the magic link flow. If this value is not passed, the
@@ -122,7 +122,7 @@ class Email:
           - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
           Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
           If you have not set a default `reset_password_redirect_url`, an error is returned.
-          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid.
+          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid. The minimum allowed expiration is 5 minutes and the maximum is 10080 minutes (7 days). By default, the expiration is 30 minutes.
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - login_redirect_url: The URL that the member clicks from the reset without password link. This URL should be an endpoint in the backend server
               that verifies the request by querying Stytch's authenticate endpoint and finishes the magic link flow. If this value is not passed, the
