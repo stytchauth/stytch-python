@@ -540,7 +540,7 @@ class Member(pydantic.BaseModel):
 
       - is_locked: (no documentation yet)
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
-      - mfa_phone_number: The Member's phone number. A Member may only have one phone number.
+      - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
       - default_mfa_method: (no documentation yet)
       - roles: Explicit or implicit Roles assigned to this Member, along with details about the role assignment source.
        See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
