@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import enum
 from typing import List, Optional
 
 from stytch.b2b.models.discovery import DiscoveredOrganization
@@ -13,6 +14,18 @@ from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
 from stytch.core.response_base import ResponseBase
+
+
+class CreateRequestFirstPartyConnectedAppsAllowedType(str, enum.Enum):
+    ALL_ALLOWED = "ALL_ALLOWED"
+    RESTRICTED = "RESTRICTED"
+    NOT_ALLOWED = "NOT_ALLOWED"
+
+
+class CreateRequestThirdPartyConnectedAppsAllowedType(str, enum.Enum):
+    ALL_ALLOWED = "ALL_ALLOWED"
+    RESTRICTED = "RESTRICTED"
+    NOT_ALLOWED = "NOT_ALLOWED"
 
 
 class CreateResponse(ResponseBase):

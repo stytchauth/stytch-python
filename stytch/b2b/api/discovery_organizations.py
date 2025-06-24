@@ -8,7 +8,12 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
-from stytch.b2b.models.discovery_organizations import CreateResponse, ListResponse
+from stytch.b2b.models.discovery_organizations import (
+    CreateRequestFirstPartyConnectedAppsAllowedType,
+    CreateRequestThirdPartyConnectedAppsAllowedType,
+    CreateResponse,
+    ListResponse,
+)
 from stytch.b2b.models.organizations import EmailImplicitRoleAssignment
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -45,6 +50,14 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        first_party_connected_apps_allowed_type: Optional[
+            Union[CreateRequestFirstPartyConnectedAppsAllowedType, str]
+        ] = None,
+        allowed_first_party_connected_apps: Optional[List[str]] = None,
+        third_party_connected_apps_allowed_type: Optional[
+            Union[CreateRequestThirdPartyConnectedAppsAllowedType, str]
+        ] = None,
+        allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
         """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a authentication flow to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object) and log the user in. If the user wants to log into an existing Organization, use the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) instead.
@@ -143,6 +156,24 @@ class Organizations:
           `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
+          - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no first party Connected Apps are permitted.
+
+          - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no third party Connected Apps are permitted.
+
+          - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -187,6 +218,22 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if first_party_connected_apps_allowed_type is not None:
+            data["first_party_connected_apps_allowed_type"] = (
+                first_party_connected_apps_allowed_type
+            )
+        if allowed_first_party_connected_apps is not None:
+            data["allowed_first_party_connected_apps"] = (
+                allowed_first_party_connected_apps
+            )
+        if third_party_connected_apps_allowed_type is not None:
+            data["third_party_connected_apps_allowed_type"] = (
+                third_party_connected_apps_allowed_type
+            )
+        if allowed_third_party_connected_apps is not None:
+            data["allowed_third_party_connected_apps"] = (
+                allowed_third_party_connected_apps
+            )
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = self.sync_client.post(url, data, headers)
@@ -215,6 +262,14 @@ class Organizations:
         allowed_mfa_methods: Optional[List[str]] = None,
         oauth_tenant_jit_provisioning: Optional[str] = None,
         allowed_oauth_tenants: Optional[Dict[str, Any]] = None,
+        first_party_connected_apps_allowed_type: Optional[
+            CreateRequestFirstPartyConnectedAppsAllowedType
+        ] = None,
+        allowed_first_party_connected_apps: Optional[List[str]] = None,
+        third_party_connected_apps_allowed_type: Optional[
+            CreateRequestThirdPartyConnectedAppsAllowedType
+        ] = None,
+        allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
         """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a authentication flow to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object) and log the user in. If the user wants to log into an existing Organization, use the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) instead.
@@ -313,6 +368,24 @@ class Organizations:
           `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
 
           - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
+          - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no first party Connected Apps are permitted.
+
+          - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
+
+          `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+
+          `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+
+          `NOT_ALLOWED` – no third party Connected Apps are permitted.
+
+          - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -357,6 +430,22 @@ class Organizations:
             data["oauth_tenant_jit_provisioning"] = oauth_tenant_jit_provisioning
         if allowed_oauth_tenants is not None:
             data["allowed_oauth_tenants"] = allowed_oauth_tenants
+        if first_party_connected_apps_allowed_type is not None:
+            data["first_party_connected_apps_allowed_type"] = (
+                first_party_connected_apps_allowed_type
+            )
+        if allowed_first_party_connected_apps is not None:
+            data["allowed_first_party_connected_apps"] = (
+                allowed_first_party_connected_apps
+            )
+        if third_party_connected_apps_allowed_type is not None:
+            data["third_party_connected_apps_allowed_type"] = (
+                third_party_connected_apps_allowed_type
+            )
+        if allowed_third_party_connected_apps is not None:
+            data["allowed_third_party_connected_apps"] = (
+                allowed_third_party_connected_apps
+            )
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = await self.async_client.post(url, data, headers)
