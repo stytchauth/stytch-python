@@ -38,6 +38,7 @@ class WebAuthn:
         override_id: Optional[str] = None,
         override_name: Optional[str] = None,
         override_display_name: Optional[str] = None,
+        use_base64_url_encoding: Optional[bool] = None,
     ) -> RegisterStartResponse:
         """Initiate the process of creating a new Passkey or WebAuthn registration.
 
@@ -57,6 +58,7 @@ class WebAuthn:
           - override_id: (no documentation yet)
           - override_name: (no documentation yet)
           - override_display_name: (no documentation yet)
+          - use_base64_url_encoding: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -77,6 +79,8 @@ class WebAuthn:
             data["override_name"] = override_name
         if override_display_name is not None:
             data["override_display_name"] = override_display_name
+        if use_base64_url_encoding is not None:
+            data["use_base64_url_encoding"] = use_base64_url_encoding
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
         res = self.sync_client.post(url, data, headers)
@@ -92,6 +96,7 @@ class WebAuthn:
         override_id: Optional[str] = None,
         override_name: Optional[str] = None,
         override_display_name: Optional[str] = None,
+        use_base64_url_encoding: Optional[bool] = None,
     ) -> RegisterStartResponse:
         """Initiate the process of creating a new Passkey or WebAuthn registration.
 
@@ -111,6 +116,7 @@ class WebAuthn:
           - override_id: (no documentation yet)
           - override_name: (no documentation yet)
           - override_display_name: (no documentation yet)
+          - use_base64_url_encoding: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -131,6 +137,8 @@ class WebAuthn:
             data["override_name"] = override_name
         if override_display_name is not None:
             data["override_display_name"] = override_display_name
+        if use_base64_url_encoding is not None:
+            data["use_base64_url_encoding"] = use_base64_url_encoding
 
         url = self.api_base.url_for("/v1/webauthn/register/start", data)
         res = await self.async_client.post(url, data, headers)

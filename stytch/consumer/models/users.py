@@ -201,6 +201,7 @@ class User(pydantic.BaseModel):
       - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
       - biometric_registrations: An array that contains a list of all biometric registrations for a given User in the Stytch API.
       - is_locked: (no documentation yet)
+      - roles: (no documentation yet)
       - name: The name of the User. Each field in the `name` object is optional.
       - created_at: The timestamp of the User's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - password: The password object is returned for users with a password.
@@ -221,6 +222,7 @@ class User(pydantic.BaseModel):
     crypto_wallets: List[CryptoWallet]
     biometric_registrations: List[BiometricRegistration]
     is_locked: bool
+    roles: List[str]
     name: Optional[Name] = None
     created_at: Optional[datetime.datetime] = None
     password: Optional[Password] = None
@@ -378,6 +380,7 @@ class GetResponse(ResponseBase):
       - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
       - biometric_registrations: An array that contains a list of all biometric registrations for a given User in the Stytch API.
       - is_locked: (no documentation yet)
+      - roles: (no documentation yet)
       - name: The name of the User. Each field in the `name` object is optional.
       - created_at: The timestamp of the User's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - password: The password object is returned for users with a password.
@@ -398,6 +401,7 @@ class GetResponse(ResponseBase):
     crypto_wallets: List[CryptoWallet]
     biometric_registrations: List[BiometricRegistration]
     is_locked: bool
+    roles: List[str]
     name: Optional[Name] = None
     created_at: Optional[datetime.datetime] = None
     password: Optional[Password] = None
