@@ -11,6 +11,7 @@ from typing import Any, Dict, Optional
 import jwt
 
 from stytch.consumer.models.sessions import (
+    AttestResponse,
     AuthenticateJWTLocalResponse,
     AuthenticateResponse,
     ExchangeAccessTokenResponse,
@@ -405,6 +406,60 @@ class Sessions:
         url = self.api_base.url_for("/v1/sessions/jwks/{project_id}", data)
         res = await self.async_client.get(url, data, headers)
         return GetJWKSResponse.from_json(res.response.status, res.json)
+
+    def attest(
+        self,
+        profile_id: str,
+        token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttestResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "profile_id": profile_id,
+            "token": token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+
+        url = self.api_base.url_for("/v1/sessions/attest", data)
+        res = self.sync_client.post(url, data, headers)
+        return AttestResponse.from_json(res.response.status_code, res.json)
+
+    async def attest_async(
+        self,
+        profile_id: str,
+        token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttestResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "profile_id": profile_id,
+            "token": token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+
+        url = self.api_base.url_for("/v1/sessions/attest", data)
+        res = await self.async_client.post(url, data, headers)
+        return AttestResponse.from_json(res.response.status, res.json)
 
     # MANUAL(authenticate_jwt)(SERVICE_METHOD)
     # ADDIMPORT: from typing import Any, Dict, Optional

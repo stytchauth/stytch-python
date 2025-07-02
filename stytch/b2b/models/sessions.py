@@ -109,6 +109,15 @@ class RevokeRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class AttestResponse(ResponseBase):
+    member_id: str
+    member_session: MemberSession
+    session_token: str
+    session_jwt: str
+    member: Member
+    organization: Organization
+
+
 class AuthenticateResponse(ResponseBase):
     """Response type for `Sessions.authenticate`.
     Fields:

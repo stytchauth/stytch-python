@@ -501,6 +501,14 @@ class Session(pydantic.BaseModel):
     custom_claims: Optional[Dict[str, Any]] = None
 
 
+class AttestResponse(ResponseBase):
+    user_id: str
+    session_token: str
+    session_jwt: str
+    user: User
+    session: Optional[Session] = None
+
+
 class AuthenticateResponse(ResponseBase):
     """Response type for `Sessions.authenticate`.
     Fields:

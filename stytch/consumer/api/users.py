@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, AsyncGenerator, Dict, Generator, Optional, Union
+from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Union
 
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.users import (
@@ -43,6 +43,7 @@ class Users:
 
     def create(
         self,
+        roles: List[str],
         email: Optional[str] = None,
         name: Optional[Union[Name, Dict[str, Any]]] = None,
         attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
@@ -55,6 +56,7 @@ class Users:
         """Add a User to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
 
         Fields:
+          - roles: (no documentation yet)
           - email: The email address of the end user.
           - name: The name of the user. Each field in the name object is optional.
           - attributes: (no documentation yet)
@@ -69,7 +71,9 @@ class Users:
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {}
+        data: Dict[str, Any] = {
+            "roles": roles,
+        }
         if email is not None:
             data["email"] = email
         if name is not None:
@@ -95,6 +99,7 @@ class Users:
 
     async def create_async(
         self,
+        roles: List[str],
         email: Optional[str] = None,
         name: Optional[Name] = None,
         attributes: Optional[Attributes] = None,
@@ -107,6 +112,7 @@ class Users:
         """Add a User to Stytch. A `user_id` is returned in the response that can then be used to perform other operations within Stytch. An `email` or a `phone_number` is required.
 
         Fields:
+          - roles: (no documentation yet)
           - email: The email address of the end user.
           - name: The name of the user. Each field in the name object is optional.
           - attributes: (no documentation yet)
@@ -121,7 +127,9 @@ class Users:
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
         """  # noqa
         headers: Dict[str, str] = {}
-        data: Dict[str, Any] = {}
+        data: Dict[str, Any] = {
+            "roles": roles,
+        }
         if email is not None:
             data["email"] = email
         if name is not None:
@@ -257,6 +265,7 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         external_id: Optional[str] = None,
+        roles: Optional[List[str]] = None,
     ) -> UpdateResponse:
         """Update a User's attributes.
 
@@ -269,6 +278,7 @@ class Users:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+          - roles: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -286,6 +296,8 @@ class Users:
             data["untrusted_metadata"] = untrusted_metadata
         if external_id is not None:
             data["external_id"] = external_id
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -299,6 +311,7 @@ class Users:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         external_id: Optional[str] = None,
+        roles: Optional[List[str]] = None,
     ) -> UpdateResponse:
         """Update a User's attributes.
 
@@ -311,6 +324,7 @@ class Users:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+          - roles: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -328,6 +342,8 @@ class Users:
             data["untrusted_metadata"] = untrusted_metadata
         if external_id is not None:
             data["external_id"] = external_id
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/users/{user_id}", data)
         res = await self.async_client.put(url, data, headers)

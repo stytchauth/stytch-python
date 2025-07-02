@@ -11,6 +11,7 @@ from typing import Any, Dict, Optional, Union
 import jwt
 
 from stytch.b2b.models.sessions import (
+    AttestResponse,
     AuthenticateJWTLocalResponse,
     AuthenticateResponse,
     AuthorizationCheck,
@@ -532,6 +533,64 @@ class Sessions:
         res = await self.async_client.post(url, data, headers)
         return ExchangeAccessTokenResponse.from_json(res.response.status, res.json)
 
+    def attest(
+        self,
+        organization_id: str,
+        profile_id: str,
+        token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttestResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "profile_id": profile_id,
+            "token": token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+
+        url = self.api_base.url_for("/v1/b2b/sessions/attest", data)
+        res = self.sync_client.post(url, data, headers)
+        return AttestResponse.from_json(res.response.status_code, res.json)
+
+    async def attest_async(
+        self,
+        organization_id: str,
+        profile_id: str,
+        token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttestResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "profile_id": profile_id,
+            "token": token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+
+        url = self.api_base.url_for("/v1/b2b/sessions/attest", data)
+        res = await self.async_client.post(url, data, headers)
+        return AttestResponse.from_json(res.response.status, res.json)
+
     def migrate(
         self,
         session_token: str,
@@ -539,7 +598,10 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session. You will need to create the member before using this endpoint.
+        """Migrate a session from an external OIDC compliant endpoint.
+        Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. <!-- FIXME more specific dashboard link-->
+        If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session.
+        You will need to create the member before using this endpoint.
 
         Fields:
           - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
@@ -580,7 +642,10 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session. You will need to create the member before using this endpoint.
+        """Migrate a session from an external OIDC compliant endpoint.
+        Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. <!-- FIXME more specific dashboard link-->
+        If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session.
+        You will need to create the member before using this endpoint.
 
         Fields:
           - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
