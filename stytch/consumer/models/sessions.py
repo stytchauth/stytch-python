@@ -501,6 +501,26 @@ class Session(pydantic.BaseModel):
     custom_claims: Optional[Dict[str, Any]] = None
 
 
+class AttestResponse(ResponseBase):
+    """Response type for `Sessions.attest`.
+    Fields:
+      - user_id: The unique ID of the affected User.
+      - session_token: A secret token for a given Stytch Session.
+      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
+
+      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
+
+    """  # noqa
+
+    user_id: str
+    session_token: str
+    session_jwt: str
+    user: User
+    session: Optional[Session] = None
+
+
 class AuthenticateResponse(ResponseBase):
     """Response type for `Sessions.authenticate`.
     Fields:
