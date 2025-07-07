@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from stytch.consumer.api.passwords_email import Email
 from stytch.consumer.api.passwords_existing_password import ExistingPassword
@@ -278,7 +278,7 @@ class Passwords:
     ) -> StrengthCheckResponse:
         """This API allows you to check whether or not the user’s provided password is valid, and to provide feedback to the user on how to increase the strength of their password.
 
-        This endpoint adapts to your Project's password strength configuration. If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are considered valid if they meet the requirements that you've set with Stytch. You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
+        This endpoint adapts to your Project's password strength configuration. If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are considered valid if they meet the requirements that you've set with Stytch. You may update your password strength configuration in the [Stytch Dashboard](https://stytch.com/dashboard/password-strength-config).
 
 
         ### Password feedback
@@ -311,7 +311,7 @@ class Passwords:
     ) -> StrengthCheckResponse:
         """This API allows you to check whether or not the user’s provided password is valid, and to provide feedback to the user on how to increase the strength of their password.
 
-        This endpoint adapts to your Project's password strength configuration. If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are considered valid if they meet the requirements that you've set with Stytch. You may update your password strength configuration in the [stytch dashboard](https://stytch.com/dashboard/password-strength-config).
+        This endpoint adapts to your Project's password strength configuration. If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid if the strength score is >= 3. If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), your passwords are considered valid if they meet the requirements that you've set with Stytch. You may update your password strength configuration in the [Stytch Dashboard](https://stytch.com/dashboard/password-strength-config).
 
 
         ### Password feedback
@@ -354,6 +354,7 @@ class Passwords:
         phone_number: Optional[str] = None,
         set_phone_number_verified: Optional[bool] = None,
         external_id: Optional[str] = None,
+        roles: Optional[List[str]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a User's email that doesn't have a password yet. We support migrating users from passwords stored with `bcrypt`, `scrypt`, `argon2`, `MD-5`, `SHA-1`, or `PBKDF2`. This endpoint has a rate limit of 100 requests per second.
 
@@ -368,14 +369,15 @@ class Passwords:
           - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - set_email_verified: Whether to set the user's email as verified. This is a dangerous field. Incorrect use may lead to users getting erroneously
-                        deduplicated into one user object. This flag should only be set if you can attest that the user owns the email address in question.
-                        Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
+          - set_email_verified: Whether to set the user's email as verified. This is a dangerous field, incorrect use may lead to users getting erroneously
+                        deduplicated into one User object. This flag should only be set if you can attest that the user owns the email address in question.
+
           - name: The name of the user. Each field in the name object is optional.
           - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
-          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
-           the user owns the phone number in question. Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
+          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
+           the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+          - roles: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -423,6 +425,8 @@ class Passwords:
             data["set_phone_number_verified"] = set_phone_number_verified
         if external_id is not None:
             data["external_id"] = external_id
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
         res = self.sync_client.post(url, data, headers)
@@ -445,6 +449,7 @@ class Passwords:
         phone_number: Optional[str] = None,
         set_phone_number_verified: Optional[bool] = None,
         external_id: Optional[str] = None,
+        roles: Optional[List[str]] = None,
     ) -> MigrateResponse:
         """Adds an existing password to a User's email that doesn't have a password yet. We support migrating users from passwords stored with `bcrypt`, `scrypt`, `argon2`, `MD-5`, `SHA-1`, or `PBKDF2`. This endpoint has a rate limit of 100 requests per second.
 
@@ -459,14 +464,15 @@ class Passwords:
           - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys.
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - set_email_verified: Whether to set the user's email as verified. This is a dangerous field. Incorrect use may lead to users getting erroneously
-                        deduplicated into one user object. This flag should only be set if you can attest that the user owns the email address in question.
-                        Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
+          - set_email_verified: Whether to set the user's email as verified. This is a dangerous field, incorrect use may lead to users getting erroneously
+                        deduplicated into one User object. This flag should only be set if you can attest that the user owns the email address in question.
+
           - name: The name of the user. Each field in the name object is optional.
           - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
-          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
-           the user owns the phone number in question. Access to this field is restricted. To enable it, please send us a note at support@stytch.com.
+          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
+           the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+          - roles: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -514,6 +520,8 @@ class Passwords:
             data["set_phone_number_verified"] = set_phone_number_verified
         if external_id is not None:
             data["external_id"] = external_id
+        if roles is not None:
+            data["roles"] = roles
 
         url = self.api_base.url_for("/v1/passwords/migrate", data)
         res = await self.async_client.post(url, data, headers)

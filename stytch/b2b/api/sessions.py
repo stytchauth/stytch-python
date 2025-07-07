@@ -11,6 +11,7 @@ from typing import Any, Dict, Optional, Union
 import jwt
 
 from stytch.b2b.models.sessions import (
+    AttestResponse,
     AuthenticateJWTLocalResponse,
     AuthenticateResponse,
     AuthorizationCheck,
@@ -532,6 +533,110 @@ class Sessions:
         res = await self.async_client.post(url, data, headers)
         return ExchangeAccessTokenResponse.from_json(res.response.status, res.json)
 
+    def attest(
+        self,
+        organization_id: str,
+        profile_id: str,
+        token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttestResponse:
+        """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/docs/dashboard/trusted-auth-tokens).  If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
+
+        Fields:
+          - organization_id: The organization ID that the session should be authenticated in.
+          - profile_id: The ID of the trusted auth token profile to use for attestation.
+          - token: The trusted auth token to authenticate.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+          - session_token: The `session_token` for the session that you wish to add the trusted auth token authentication factor to.
+          - session_jwt: The `session_jwt` for the session that you wish to add the trusted auth token authentication factor to.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "profile_id": profile_id,
+            "token": token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+
+        url = self.api_base.url_for("/v1/b2b/sessions/attest", data)
+        res = self.sync_client.post(url, data, headers)
+        return AttestResponse.from_json(res.response.status_code, res.json)
+
+    async def attest_async(
+        self,
+        organization_id: str,
+        profile_id: str,
+        token: str,
+        session_duration_minutes: Optional[int] = None,
+        session_custom_claims: Optional[Dict[str, Any]] = None,
+        session_token: Optional[str] = None,
+        session_jwt: Optional[str] = None,
+    ) -> AttestResponse:
+        """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/docs/dashboard/trusted-auth-tokens).  If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
+
+        Fields:
+          - organization_id: The organization ID that the session should be authenticated in.
+          - profile_id: The ID of the trusted auth token profile to use for attestation.
+          - token: The trusted auth token to authenticate.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
+          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
+          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
+
+          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
+
+          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
+
+          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
+          to use the Stytch session product, you can ignore the session fields in the response.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
+          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
+          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
+          Total custom claims size cannot exceed four kilobytes.
+          - session_token: The `session_token` for the session that you wish to add the trusted auth token authentication factor to.
+          - session_jwt: The `session_jwt` for the session that you wish to add the trusted auth token authentication factor to.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "profile_id": profile_id,
+            "token": token,
+        }
+        if session_duration_minutes is not None:
+            data["session_duration_minutes"] = session_duration_minutes
+        if session_custom_claims is not None:
+            data["session_custom_claims"] = session_custom_claims
+        if session_token is not None:
+            data["session_token"] = session_token
+        if session_jwt is not None:
+            data["session_jwt"] = session_jwt
+
+        url = self.api_base.url_for("/v1/b2b/sessions/attest", data)
+        res = await self.async_client.post(url, data, headers)
+        return AttestResponse.from_json(res.response.status, res.json)
+
     def migrate(
         self,
         session_token: str,
@@ -539,7 +644,10 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session. You will need to create the member before using this endpoint.
+        """Migrate a session from an external OIDC compliant endpoint.
+        Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. <!-- FIXME more specific dashboard link-->
+        If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session.
+        You will need to create the member before using this endpoint.
 
         Fields:
           - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
@@ -580,7 +688,10 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session. You will need to create the member before using this endpoint.
+        """Migrate a session from an external OIDC compliant endpoint.
+        Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. <!-- FIXME more specific dashboard link-->
+        If the response contains a valid email address, Stytch will attempt to match that email address with an existing in your and create a Stytch Session.
+        You will need to create the member before using this endpoint.
 
         Fields:
           - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
