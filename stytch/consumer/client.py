@@ -10,6 +10,7 @@ from typing import Optional
 import aiohttp
 import jwt
 
+from stytch.consumer.api.connected_apps import ConnectedApp
 from stytch.consumer.api.crypto_wallets import CryptoWallets
 from stytch.consumer.api.fraud import Fraud
 from stytch.consumer.api.idp import IDP
@@ -54,6 +55,11 @@ class Client(ClientBase):
             custom_base_url=custom_base_url,
         )
 
+        self.connected_app = ConnectedApp(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.crypto_wallets = CryptoWallets(
             api_base=self.api_base,
             sync_client=self.sync_client,

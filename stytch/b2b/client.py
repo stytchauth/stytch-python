@@ -24,6 +24,7 @@ from stytch.b2b.api.scim import SCIM
 from stytch.b2b.api.sessions import Sessions
 from stytch.b2b.api.sso import SSO
 from stytch.b2b.api.totps import TOTPs
+from stytch.consumer.api.connected_apps import ConnectedApp
 from stytch.consumer.api.fraud import Fraud
 from stytch.consumer.api.m2m import M2M
 from stytch.consumer.api.project import Project
@@ -66,6 +67,11 @@ class Client(ClientBase):
             )
         )
 
+        self.connected_app = ConnectedApp(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.discovery = Discovery(
             api_base=self.api_base,
             sync_client=self.sync_client,
