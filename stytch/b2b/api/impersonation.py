@@ -25,13 +25,13 @@ class Impersonation:
         self,
         impersonation_token: str,
     ) -> AuthenticateResponse:
-        """Authenticate an impersonation token to impersonate a. This endpoint requires an impersonation token that is not expired or previously used.
+        """Authenticate an impersonation token to impersonate a Member. This endpoint requires an impersonation token that is not expired or previously used.
         A Stytch session will be created for the impersonated member with a 60 minute duration. Impersonated sessions cannot be extended.
 
         Prior to this step, you can generate an impersonation token by visiting the Stytch Dashboard, viewing a member, and clicking the `Impersonate Member` button.
 
         Fields:
-          - impersonation_token: The User Impersonation token to authenticate.
+          - impersonation_token: The Member Impersonation token to authenticate. Expires in 5 minutes by default.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -46,13 +46,13 @@ class Impersonation:
         self,
         impersonation_token: str,
     ) -> AuthenticateResponse:
-        """Authenticate an impersonation token to impersonate a. This endpoint requires an impersonation token that is not expired or previously used.
+        """Authenticate an impersonation token to impersonate a Member. This endpoint requires an impersonation token that is not expired or previously used.
         A Stytch session will be created for the impersonated member with a 60 minute duration. Impersonated sessions cannot be extended.
 
         Prior to this step, you can generate an impersonation token by visiting the Stytch Dashboard, viewing a member, and clicking the `Impersonate Member` button.
 
         Fields:
-          - impersonation_token: The User Impersonation token to authenticate.
+          - impersonation_token: The Member Impersonation token to authenticate. Expires in 5 minutes by default.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

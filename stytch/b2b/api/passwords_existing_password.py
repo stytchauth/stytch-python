@@ -36,7 +36,7 @@ class ExistingPassword:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[Union[ResetRequestLocale, str]] = None,
     ) -> ResetResponse:
-        """Reset the’s password using their existing password.
+        """Reset the member’s password using their existing password.
 
         This endpoint adapts to your Project's password strength configuration.
         If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid
@@ -73,7 +73,7 @@ class ExistingPassword:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
@@ -116,7 +116,7 @@ class ExistingPassword:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[ResetRequestLocale] = None,
     ) -> ResetResponse:
-        """Reset the’s password using their existing password.
+        """Reset the member’s password using their existing password.
 
         This endpoint adapts to your Project's password strength configuration.
         If you're using [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy), the default, your passwords are considered valid
@@ -153,7 +153,7 @@ class ExistingPassword:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 

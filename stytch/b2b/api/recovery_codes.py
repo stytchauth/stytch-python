@@ -36,7 +36,7 @@ class RecoveryCodes:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
-        """Allows a to complete an MFA flow by consuming a recovery code. This consumes the recovery code and returns a session token that can be used to authenticate the Member.
+        """Allows a Member to complete an MFA flow by consuming a recovery code. This consumes the recovery code and returns a session token that can be used to authenticate the Member.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -92,7 +92,7 @@ class RecoveryCodes:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> RecoverResponse:
-        """Allows a to complete an MFA flow by consuming a recovery code. This consumes the recovery code and returns a session token that can be used to authenticate the Member.
+        """Allows a Member to complete an MFA flow by consuming a recovery code. This consumes the recovery code and returns a session token that can be used to authenticate the Member.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -142,7 +142,7 @@ class RecoveryCodes:
         organization_id: str,
         member_id: str,
     ) -> GetResponse:
-        """Returns a's full set of active recovery codes.
+        """Returns a Member's full set of active recovery codes.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -165,7 +165,7 @@ class RecoveryCodes:
         organization_id: str,
         member_id: str,
     ) -> GetResponse:
-        """Returns a's full set of active recovery codes.
+        """Returns a Member's full set of active recovery codes.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -188,7 +188,7 @@ class RecoveryCodes:
         organization_id: str,
         member_id: str,
     ) -> RotateResponse:
-        """Rotate a's recovery codes. This invalidates all existing recovery codes and generates a new set of recovery codes.
+        """Rotate a Member's recovery codes. This invalidates all existing recovery codes and generates a new set of recovery codes.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -209,7 +209,7 @@ class RecoveryCodes:
         organization_id: str,
         member_id: str,
     ) -> RotateResponse:
-        """Rotate a's recovery codes. This invalidates all existing recovery codes and generates a new set of recovery codes.
+        """Rotate a Member's recovery codes. This invalidates all existing recovery codes and generates a new set of recovery codes.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.

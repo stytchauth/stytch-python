@@ -34,7 +34,7 @@ class IntermediateSessions:
     ) -> ExchangeResponse:
         """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) for the [Organization](https://stytch.com/docs/b2b/api/organization-object) that the user wishes to log into.
 
-        This endpoint can be used to accept invites and into a new Organization on the basis of the user's email domain or OAuth tenant.
+        This endpoint can be used to accept invites and JIT Provision into a new Organization on the basis of the user's email domain or OAuth tenant.
 
         If the user **has** already satisfied the authentication requirements of the Organization they are trying to exchange into and logged in with a method that verifies their email address, this API will return `member_authenticated: true` and a `session_token` and `session_jwt`.
 
@@ -65,7 +65,7 @@ class IntermediateSessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
@@ -102,7 +102,7 @@ class IntermediateSessions:
     ) -> ExchangeResponse:
         """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) for the [Organization](https://stytch.com/docs/b2b/api/organization-object) that the user wishes to log into.
 
-        This endpoint can be used to accept invites and into a new Organization on the basis of the user's email domain or OAuth tenant.
+        This endpoint can be used to accept invites and JIT Provision into a new Organization on the basis of the user's email domain or OAuth tenant.
 
         If the user **has** already satisfied the authentication requirements of the Organization they are trying to exchange into and logged in with a method that verifies their email address, this API will return `member_authenticated: true` and a `session_token` and `session_jwt`.
 
@@ -133,7 +133,7 @@ class IntermediateSessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
-          - locale: If the needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
+          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
         Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
