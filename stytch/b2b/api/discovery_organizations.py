@@ -59,7 +59,7 @@ class Organizations:
         ] = None,
         allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
-        """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a authentication flow to create a new
+        """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a Discovery authentication flow to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object) and log the user in. If the user wants to log into an existing Organization, use the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) instead.
 
         Stytch **requires that users verify their email address** prior to creating a new Organization in order to prevent Account Takeover (ATO) attacks and phishing.
@@ -271,7 +271,7 @@ class Organizations:
         ] = None,
         allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
-        """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a authentication flow to create a new
+        """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a Discovery authentication flow to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object) and log the user in. If the user wants to log into an existing Organization, use the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) instead.
 
         Stytch **requires that users verify their email address** prior to creating a new Organization in order to prevent Account Takeover (ATO) attacks and phishing.

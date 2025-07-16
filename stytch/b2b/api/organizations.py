@@ -76,7 +76,7 @@ class Organizations:
         ] = None,
         allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
-        """Creates an. An `organization_name` and a unique `organization_slug` are required.
+        """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
         By default, `email_invites` and `sso_jit_provisioning` will be set to `ALL_ALLOWED`, and `mfa_policy` will be set to `OPTIONAL` if no Organization authentication settings are explicitly defined in the request.
 
@@ -258,7 +258,7 @@ class Organizations:
         ] = None,
         allowed_third_party_connected_apps: Optional[List[str]] = None,
     ) -> CreateResponse:
-        """Creates an. An `organization_name` and a unique `organization_slug` are required.
+        """Creates an Organization. An `organization_name` and a unique `organization_slug` are required.
 
         By default, `email_invites` and `sso_jit_provisioning` will be set to `ALL_ALLOWED`, and `mfa_policy` will be set to `OPTIONAL` if no Organization authentication settings are explicitly defined in the request.
 
@@ -414,7 +414,7 @@ class Organizations:
         self,
         organization_id: str,
     ) -> GetResponse:
-        """Returns an specified by `organization_id`.
+        """Returns an Organization specified by `organization_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -432,7 +432,7 @@ class Organizations:
         self,
         organization_id: str,
     ) -> GetResponse:
-        """Returns an specified by `organization_id`.
+        """Returns an Organization specified by `organization_id`.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -480,7 +480,7 @@ class Organizations:
         allowed_third_party_connected_apps: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
-        """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
+        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
@@ -714,7 +714,7 @@ class Organizations:
         allowed_third_party_connected_apps: Optional[List[str]] = None,
         method_options: Optional[UpdateRequestOptions] = None,
     ) -> UpdateResponse:
-        """Updates an specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
+        """Updates an Organization specified by `organization_id`. An Organization must always have at least one auth setting set to either `RESTRICTED` or `ALL_ALLOWED` in order to provision new Members.
 
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
@@ -919,7 +919,7 @@ class Organizations:
         organization_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes an specified by `organization_id`. All Members of the Organization will also be deleted.
+        """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -940,7 +940,7 @@ class Organizations:
         organization_id: str,
         method_options: Optional[DeleteRequestOptions] = None,
     ) -> DeleteResponse:
-        """Deletes an specified by `organization_id`. All Members of the Organization will also be deleted.
+        """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.

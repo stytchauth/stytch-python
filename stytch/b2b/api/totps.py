@@ -34,7 +34,7 @@ class TOTPs:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> CreateResponse:
-        """Create a new TOTP instance for a. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
+        """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
         Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
 
@@ -73,7 +73,7 @@ class TOTPs:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> CreateResponse:
-        """Create a new TOTP instance for a. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
+        """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
         Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
 
@@ -248,7 +248,7 @@ class TOTPs:
         secret: str,
         recovery_codes: List[str],
     ) -> MigrateResponse:
-        """Migrate an existing TOTP instance for a. Recovery codes are not required and will be minted for the Member if not provided.
+        """Migrate an existing TOTP instance for a Member. Recovery codes are not required and will be minted for the Member if not provided.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -275,7 +275,7 @@ class TOTPs:
         secret: str,
         recovery_codes: List[str],
     ) -> MigrateResponse:
-        """Migrate an existing TOTP instance for a. Recovery codes are not required and will be minted for the Member if not provided.
+        """Migrate an existing TOTP instance for a Member. Recovery codes are not required and will be minted for the Member if not provided.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.

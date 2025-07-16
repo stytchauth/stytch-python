@@ -140,11 +140,11 @@ class Email:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
     ) -> AuthenticateResponse:
-        """Authenticate a with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
+        """Authenticate a Member with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
         OTPs have a default expiry of 10 minutes. If the Member’s status is `pending` or `invited`, they will be updated to `active`.
         Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
-        If the Member is required to complete MFA to log in to the, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp),
         or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete the MFA step and acquire a full member session.
         The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.
@@ -215,11 +215,11 @@ class Email:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
-        """Authenticate a with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
+        """Authenticate a Member with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
         OTPs have a default expiry of 10 minutes. If the Member’s status is `pending` or `invited`, they will be updated to `active`.
         Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
-        If the Member is required to complete MFA to log in to the, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
+        If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp),
         or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete the MFA step and acquire a full member session.
         The `intermediate_session_token` can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to join a different Organization or create a new one.

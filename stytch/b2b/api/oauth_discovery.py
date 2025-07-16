@@ -30,7 +30,7 @@ class Discovery:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         pkce_code_verifier: Optional[str] = None,
     ) -> AuthenticateResponse:
-        """Authenticates the Discovery token and exchanges it for an Intermediate
+        """Authenticates the Discovery OAuth token and exchanges it for an Intermediate
         Session Token. Intermediate Session Tokens can be used for various Discovery login flows and are valid for 10 minutes.
 
         Fields:
@@ -69,7 +69,7 @@ class Discovery:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         pkce_code_verifier: Optional[str] = None,
     ) -> AuthenticateResponse:
-        """Authenticates the Discovery token and exchanges it for an Intermediate
+        """Authenticates the Discovery OAuth token and exchanges it for an Intermediate
         Session Token. Intermediate Session Tokens can be used for various Discovery login flows and are valid for 10 minutes.
 
         Fields:
