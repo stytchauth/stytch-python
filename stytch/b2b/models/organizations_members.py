@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import enum
 from typing import Dict, List, Optional
 
 import pydantic
@@ -19,6 +20,13 @@ from stytch.b2b.models.organizations import (
 )
 from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
+
+
+class StartEmailUpdateRequestLocale(str, enum.Enum):
+    EN = "en"
+    ES = "es"
+    PTBR = "pt-br"
+    FR = "fr"
 
 
 class CreateRequestOptions(pydantic.BaseModel):
@@ -134,6 +142,22 @@ class ReactivateRequestOptions(pydantic.BaseModel):
 
 
 class SearchRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
+class StartEmailUpdateRequestOptions(pydantic.BaseModel):
     """
     Fields:
       - authorization: Optional authorization object.
@@ -297,6 +321,19 @@ class SearchResponse(ResponseBase):
     members: List[Member]
     results_metadata: ResultsMetadata
     organizations: Dict[str, Organization]
+
+
+class StartEmailUpdateResponse(ResponseBase):
+    """Response type for `Members.start_email_update`.
+    Fields:
+      - member_id: Globally unique UUID that identifies a specific Member.
+      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
+      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+    """  # noqa
+
+    member_id: str
+    member: Member
+    organization: Organization
 
 
 class UnlinkRetiredEmailResponse(ResponseBase):

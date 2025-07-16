@@ -337,6 +337,8 @@ class Email:
     ) -> RequireResetResponse:
         """Require a password be reset by the associated email address. This endpoint is only functional for cross-org password use cases.
 
+        If there are is only one active Member using the associated email address in the Project, the password will be deleted.
+
         Fields:
           - email_address: The email address of the Member to start the email reset process for.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -365,6 +367,8 @@ class Email:
         method_options: Optional[RequireResetRequestOptions] = None,
     ) -> RequireResetResponse:
         """Require a password be reset by the associated email address. This endpoint is only functional for cross-org password use cases.
+
+        If there are is only one active Member using the associated email address in the Project, the password will be deleted.
 
         Fields:
           - email_address: The email address of the Member to start the email reset process for.

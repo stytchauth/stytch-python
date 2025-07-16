@@ -30,6 +30,9 @@ from stytch.b2b.models.organizations_members import (
     ReactivateResponse,
     SearchRequestOptions,
     SearchResponse,
+    StartEmailUpdateRequestLocale,
+    StartEmailUpdateRequestOptions,
+    StartEmailUpdateResponse,
     UnlinkRetiredEmailRequestOptions,
     UnlinkRetiredEmailResponse,
     UpdateRequestOptions,
@@ -579,6 +582,8 @@ class Members:
     ) -> DeletePasswordResponse:
         """Delete a's password.
 
+        This endpoint only works for Organization-scoped passwords. For cross-org password Projects, use [Require Password Reset By Email](https://stytch.com/docs/b2b/api/passwords-require-reset-by-email) instead.
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - member_password_id: Globally unique UUID that identifies a Member's password.
@@ -605,6 +610,8 @@ class Members:
         method_options: Optional[DeletePasswordRequestOptions] = None,
     ) -> DeletePasswordResponse:
         """Delete a's password.
+
+        This endpoint only works for Organization-scoped passwords. For cross-org password Projects, use [Require Password Reset By Email](https://stytch.com/docs/b2b/api/passwords-require-reset-by-email) instead.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -828,6 +835,126 @@ class Members:
         )
         res = await self.async_client.post(url, data, headers)
         return UnlinkRetiredEmailResponse.from_json(res.response.status, res.json)
+
+    def start_email_update(
+        self,
+        organization_id: str,
+        member_id: str,
+        email_address: str,
+        login_redirect_url: Optional[str] = None,
+        locale: Optional[Union[StartEmailUpdateRequestLocale, str]] = None,
+        login_template_id: Optional[str] = None,
+        method_options: Optional[StartEmailUpdateRequestOptions] = None,
+    ) -> StartEmailUpdateResponse:
+        """Starts a self-serve email update for a specified by their `organization_id` and `member_id`.
+        To perform a self-serve update, members must be active and have an active, verified email address.
+
+        The new email address must meet the following requirements:
+
+        - Must not be in use by another member (retired emails count as used until they are [unlinked](https://stytch.com/docs/b2b/api/unlink-retired-email))
+        - Must not be updating for another member (i.e. two members cannot attempt to update to the same email at once)
+
+        The member will receive an Email Magic Link that expires in 5 minutes. If they do not verify their new email address in that timeframe, the email
+        will be freed up for other members to use.
+         %}
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - email_address: The email address of the Member.
+          - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
+          verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
+          redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
+        built-in customizations or a custom HTML email for Magic Links - Login.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+            "email_address": email_address,
+        }
+        if login_redirect_url is not None:
+            data["login_redirect_url"] = login_redirect_url
+        if locale is not None:
+            data["locale"] = locale
+        if login_template_id is not None:
+            data["login_template_id"] = login_template_id
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/start_email_update",
+            data,
+        )
+        res = self.sync_client.post(url, data, headers)
+        return StartEmailUpdateResponse.from_json(res.response.status_code, res.json)
+
+    async def start_email_update_async(
+        self,
+        organization_id: str,
+        member_id: str,
+        email_address: str,
+        login_redirect_url: Optional[str] = None,
+        locale: Optional[StartEmailUpdateRequestLocale] = None,
+        login_template_id: Optional[str] = None,
+        method_options: Optional[StartEmailUpdateRequestOptions] = None,
+    ) -> StartEmailUpdateResponse:
+        """Starts a self-serve email update for a specified by their `organization_id` and `member_id`.
+        To perform a self-serve update, members must be active and have an active, verified email address.
+
+        The new email address must meet the following requirements:
+
+        - Must not be in use by another member (retired emails count as used until they are [unlinked](https://stytch.com/docs/b2b/api/unlink-retired-email))
+        - Must not be updating for another member (i.e. two members cannot attempt to update to the same email at once)
+
+        The member will receive an Email Magic Link that expires in 5 minutes. If they do not verify their new email address in that timeframe, the email
+        will be freed up for other members to use.
+         %}
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - email_address: The email address of the Member.
+          - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
+          verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
+          redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+
+        Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
+        built-in customizations or a custom HTML email for Magic Links - Login.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "member_id": member_id,
+            "email_address": email_address,
+        }
+        if login_redirect_url is not None:
+            data["login_redirect_url"] = login_redirect_url
+        if locale is not None:
+            data["locale"] = locale
+        if login_template_id is not None:
+            data["login_template_id"] = login_template_id
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/members/{member_id}/start_email_update",
+            data,
+        )
+        res = await self.async_client.post(url, data, headers)
+        return StartEmailUpdateResponse.from_json(res.response.status, res.json)
 
     def get_connected_apps(
         self,
