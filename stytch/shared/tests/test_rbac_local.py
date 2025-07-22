@@ -7,12 +7,15 @@ from stytch.b2b.models.rbac import (
     PolicyScope,
     PolicyScopePermission,
 )
-from stytch.b2b.models.sessions import AuthorizationCheck
+from stytch.b2b.models.sessions import AuthorizationCheck as B2BAuthorizationCheck
+from stytch.consumer.models.sessions import AuthorizationCheck as ConsumerAuthorizationCheck
 from stytch.shared.rbac_local import (
     RBACPermissionError,
     TenancyError,
     perform_authorization_check,
     perform_scope_authorization_check,
+    perform_consumer_scope_authorization_check,
+    perform_consumer_scope_authorization_check_local,
 )
 
 
@@ -85,7 +88,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 roles = [self.admin.role_id]
                 org_id = "my_org"
-                req = AuthorizationCheck(
+                req = B2BAuthorizationCheck(
                     organization_id="other_org",
                     resource_id="foo",
                     action="write",
@@ -98,7 +101,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 roles = [self.global_writer.role_id]
                 org_id = "my_org"
-                req = AuthorizationCheck(
+                req = B2BAuthorizationCheck(
                     organization_id=org_id,
                     resource_id="baz",
                     action="write",
@@ -111,7 +114,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 roles = [self.global_reader.role_id]
                 org_id = "my_org"
-                req = AuthorizationCheck(
+                req = B2BAuthorizationCheck(
                     organization_id=org_id,
                     resource_id="foo",
                     action="write",
@@ -123,7 +126,7 @@ class TestRbacLocal(unittest.TestCase):
             # Arrange
             roles = [self.global_writer.role_id]
             org_id = "my_org"
-            req = AuthorizationCheck(
+            req = B2BAuthorizationCheck(
                 organization_id=org_id,
                 resource_id="foo",
                 action="write",
@@ -136,7 +139,7 @@ class TestRbacLocal(unittest.TestCase):
             # Arrange
             roles = [self.admin.role_id]
             org_id = "my_org"
-            req = AuthorizationCheck(
+            req = B2BAuthorizationCheck(
                 organization_id=org_id,
                 resource_id="foo",
                 action="write",
@@ -151,7 +154,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 scopes = [self.write_scope.scope]
                 org_id = "my_org"
-                req = AuthorizationCheck(
+                req = B2BAuthorizationCheck(
                     organization_id="other_org",
                     resource_id="foo",
                     action="write",
@@ -164,7 +167,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 scopes = [self.write_scope.scope]
                 org_id = "my_org"
-                req = AuthorizationCheck(
+                req = B2BAuthorizationCheck(
                     organization_id=org_id,
                     resource_id="baz",
                     action="write",
@@ -177,7 +180,7 @@ class TestRbacLocal(unittest.TestCase):
                 # Arrange
                 scopes = [self.read_scope.scope]
                 org_id = "my_org"
-                req = AuthorizationCheck(
+                req = B2BAuthorizationCheck(
                     organization_id=org_id,
                     resource_id="foo",
                     action="write",
@@ -189,7 +192,7 @@ class TestRbacLocal(unittest.TestCase):
             # Arrange
             scopes = [self.write_scope.scope]
             org_id = "my_org"
-            req = AuthorizationCheck(
+            req = B2BAuthorizationCheck(
                 organization_id=org_id,
                 resource_id="foo",
                 action="write",
@@ -202,11 +205,189 @@ class TestRbacLocal(unittest.TestCase):
             # Arrange
             scopes = [self.wildcard_scope.scope]
             org_id = "my_org"
-            req = AuthorizationCheck(
+            req = B2BAuthorizationCheck(
                 organization_id=org_id,
                 resource_id="foo",
                 action="write",
             )
             # Act
             perform_scope_authorization_check(self.policy, scopes, org_id, req)
+            # Assertion is that no exception is raised
+
+    def test_perform_consumer_scope_authorization_check(self) -> None:
+        with self.subTest("has matching action but not resource"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = [self.write_scope.scope]
+                req = ConsumerAuthorizationCheck(
+                    resource_id="baz",
+                    action="write",
+                )
+                # Act
+                perform_consumer_scope_authorization_check(self.policy, scopes, req)
+
+        with self.subTest("has matching resource but not action"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = [self.read_scope.scope]
+                req = ConsumerAuthorizationCheck(
+                    resource_id="foo",
+                    action="write",
+                )
+                # Act
+                perform_consumer_scope_authorization_check(self.policy, scopes, req)
+
+        with self.subTest("has matching resource and specific action"):
+            # Arrange
+            scopes = [self.write_scope.scope]
+            req = ConsumerAuthorizationCheck(
+                resource_id="foo",
+                action="write",
+            )
+            # Act
+            perform_consumer_scope_authorization_check(self.policy, scopes, req)
+            # Assertion is that no exception is raised
+
+        with self.subTest("has matching resource and star action"):
+            # Arrange
+            scopes = [self.wildcard_scope.scope]
+            req = ConsumerAuthorizationCheck(
+                resource_id="foo",
+                action="write",
+            )
+            # Act
+            perform_consumer_scope_authorization_check(self.policy, scopes, req)
+            # Assertion is that no exception is raised
+
+        with self.subTest("no matching scope"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = ["nonexistent:scope"]
+                req = ConsumerAuthorizationCheck(
+                    resource_id="foo",
+                    action="read",
+                )
+                # Act
+                perform_consumer_scope_authorization_check(self.policy, scopes, req)
+
+        with self.subTest("empty scopes list"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = []
+                req = ConsumerAuthorizationCheck(
+                    resource_id="foo",
+                    action="read",
+                )
+                # Act
+                perform_consumer_scope_authorization_check(self.policy, scopes, req)
+
+        with self.subTest("multiple scopes with one matching"):
+            # Arrange
+            scopes = ["nonexistent:scope", self.read_scope.scope, "another:scope"]
+            req = ConsumerAuthorizationCheck(
+                resource_id="foo",
+                action="read",
+            )
+            # Act
+            perform_consumer_scope_authorization_check(self.policy, scopes, req)
+            # Assertion is that no exception is raised
+
+    def test_perform_consumer_scope_authorization_check_local(self) -> None:
+        with self.subTest("has matching action but not resource"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = [self.write_scope.scope]
+                req = ConsumerAuthorizationCheck(
+                    resource_id="baz",
+                    action="write",
+                )
+                # Act
+                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+
+        with self.subTest("has matching resource but not action"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = [self.read_scope.scope]
+                req = ConsumerAuthorizationCheck(
+                    resource_id="foo",
+                    action="write",
+                )
+                # Act
+                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+
+        with self.subTest("has matching resource and specific action"):
+            # Arrange
+            scopes = [self.write_scope.scope]
+            req = ConsumerAuthorizationCheck(
+                resource_id="foo",
+                action="write",
+            )
+            # Act
+            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+            # Assertion is that no exception is raised
+
+        with self.subTest("has matching resource and star action"):
+            # Arrange
+            scopes = [self.wildcard_scope.scope]
+            req = ConsumerAuthorizationCheck(
+                resource_id="foo",
+                action="write",
+            )
+            # Act
+            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+            # Assertion is that no exception is raised
+
+        with self.subTest("no matching scope"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = ["nonexistent:scope"]
+                req = ConsumerAuthorizationCheck(
+                    resource_id="foo",
+                    action="read",
+                )
+                # Act
+                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+
+        with self.subTest("empty scopes list"):
+            with self.assertRaises(RBACPermissionError):
+                # Arrange
+                scopes = []
+                req = ConsumerAuthorizationCheck(
+                    resource_id="foo",
+                    action="read",
+                )
+                # Act
+                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+
+        with self.subTest("multiple scopes with one matching"):
+            # Arrange
+            scopes = ["nonexistent:scope", self.read_scope.scope, "another:scope"]
+            req = ConsumerAuthorizationCheck(
+                resource_id="foo",
+                action="read",
+            )
+            # Act
+            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+            # Assertion is that no exception is raised
+
+        with self.subTest("bar resource with bar_writer scope"):
+            # Arrange
+            scopes = [self.bar_writer.role_id]  # This is actually a role, not a scope, but testing the function
+            req = ConsumerAuthorizationCheck(
+                resource_id="bar",
+                action="write",
+            )
+            # Act
+            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+            # Assertion is that no exception is raised
+
+        with self.subTest("admin role with wildcard permissions"):
+            # Arrange
+            scopes = [self.admin.role_id]  # This is actually a role, not a scope, but testing the function
+            req = ConsumerAuthorizationCheck(
+                resource_id="foo",
+                action="delete",
+            )
+            # Act
+            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
             # Assertion is that no exception is raised

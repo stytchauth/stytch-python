@@ -5,9 +5,10 @@ from typing import Any, Dict, Optional
 import jwt
 
 from stytch.consumer.models.idp import IDPTokenClaims, IDPTokenResponse
+from stytch.consumer.models.sessions import AuthorizationCheck
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.shared import jwt_helpers
+from stytch.shared import jwt_helpers, rbac_local
 
 
 class IDP:
@@ -46,6 +47,7 @@ class IDP:
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -56,6 +58,7 @@ class IDP:
           - client_id: The ID of the client.
           - client_secret: The secret of the client.
           - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
+          - authorization_check: An optional authorization check to perform on the token.
         """
         headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {
@@ -76,6 +79,13 @@ class IDP:
         }
         if not jwtResponse.active:
             return None
+        
+        if authorization_check is not None:
+            rbac_local.perform_consumer_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=jwtResponse.scope.split(),
+                authorization_check=authorization_check,
+            )
 
         return IDPTokenClaims(
             subject=jwtResponse.sub,
@@ -95,6 +105,7 @@ class IDP:
         client_id: str,
         client_secret: Optional[str] = None,
         token_type_hint: str = "access_token",
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -125,6 +136,13 @@ class IDP:
         }
         if not jwtResponse.active:
             return None
+        
+        if authorization_check is not None:
+            rbac_local.perform_consumer_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=jwtResponse.scope.split(),
+                authorization_check=authorization_check,
+            )
 
         return IDPTokenClaims(
             subject=jwtResponse.sub,
@@ -141,6 +159,7 @@ class IDP:
     def introspect_access_token_local(
         self,
         access_token: str,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[IDPTokenClaims]:
         """Introspects a token JWT from an authorization code response.
         Access tokens are JWTs signed with the project's JWKs. Refresh tokens are opaque tokens.
@@ -149,6 +168,7 @@ class IDP:
         Fields:
           - access_token: The access token (or refresh token) to introspect.
           - client_id: The ID of the client.
+          - authorization_check: An optional authorization check to perform on the token.
         """
         _scope_claim = "scope"
         generic_claims = jwt_helpers.authenticate_jwt_local(
@@ -163,6 +183,14 @@ class IDP:
         custom_claims = {
             k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
         }
+
+        scope = generic_claims.untyped_claims[_scope_claim]
+        if authorization_check is not None:
+            rbac_local.perform_scope_authorization_check(
+                policy=self.policy_cache.get(),
+                token_scopes=scope.split(),
+                authorization_check=authorization_check,
+            )
 
         return IDPTokenClaims(
             subject=generic_claims.reserved_claims["sub"],

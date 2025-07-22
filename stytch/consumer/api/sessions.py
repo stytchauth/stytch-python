@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import jwt
 
@@ -14,6 +14,7 @@ from stytch.consumer.models.sessions import (
     AttestResponse,
     AuthenticateJWTLocalResponse,
     AuthenticateResponse,
+    AuthorizationCheck,
     ExchangeAccessTokenResponse,
     GetJWKSResponse,
     GetResponse,
@@ -23,7 +24,7 @@ from stytch.consumer.models.sessions import (
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
-from stytch.shared import jwt_helpers
+from stytch.shared import jwt_helpers, rbac_local
 
 
 class Sessions:
@@ -83,6 +84,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[Union[AuthorizationCheck, Dict[str, Any]]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a session token or session JWT and retrieve associated session data. If `session_duration_minutes` is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`. This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included, you will receive a `too_many_session_arguments` error.
 
@@ -95,6 +97,7 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - authorization_check: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -106,6 +109,12 @@ class Sessions:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if authorization_check is not None:
+            data["authorization_check"] = (
+                authorization_check
+                if isinstance(authorization_check, dict)
+                else authorization_check.dict()
+            )
 
         url = self.api_base.url_for("/v1/sessions/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -117,6 +126,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> AuthenticateResponse:
         """Authenticate a session token or session JWT and retrieve associated session data. If `session_duration_minutes` is included, update the lifetime of the session to be that many minutes from now. All timestamps are formatted according to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`. This endpoint requires exactly one `session_jwt` or `session_token` as part of the request. If both are included, you will receive a `too_many_session_arguments` error.
 
@@ -129,6 +139,7 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - authorization_check: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -140,6 +151,12 @@ class Sessions:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if authorization_check is not None:
+            data["authorization_check"] = (
+                authorization_check
+                if isinstance(authorization_check, dict)
+                else authorization_check.dict()
+            )
 
         url = self.api_base.url_for("/v1/sessions/authenticate", data)
         res = await self.async_client.post(url, data, headers)
@@ -511,6 +528,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> AuthenticateJWTLocalResponse:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -538,7 +556,8 @@ class Sessions:
             )
         else:
             authenticate_response = self.authenticate(
-                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+                session_custom_claims=session_custom_claims, session_jwt=session_jwt,
+                authorization_check=authorization_check,
             )
             return AuthenticateJWTLocalResponse.from_json(
                 status_code=authenticate_response.status_code,
@@ -555,6 +574,7 @@ class Sessions:
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> AuthenticateJWTLocalResponse:
         """Parse a JWT and verify the signature, preferring local verification
         over remote.
@@ -569,6 +589,7 @@ class Sessions:
         local_token = self.authenticate_jwt_local(
             session_jwt=session_jwt,
             max_token_age_seconds=max_token_age_seconds,
+            authorization_check=authorization_check,
         )
         if local_token is not None:
             return AuthenticateJWTLocalResponse.from_json(
@@ -582,7 +603,9 @@ class Sessions:
             )
         else:
             authenticate_response = await self.authenticate_async(
-                session_custom_claims=session_custom_claims, session_jwt=session_jwt
+                session_custom_claims=session_custom_claims,
+                session_jwt=session_jwt,
+                authorization_check=authorization_check,
             )
             return AuthenticateJWTLocalResponse.from_json(
                 status_code=authenticate_response.status_code,
@@ -598,12 +621,13 @@ class Sessions:
 
     # MANUAL(authenticate_jwt_local)(SERVICE_METHOD)
     # ADDIMPORT: from stytch.consumer.models.sessions import Session
-    # ADDIMPORT: from stytch.shared import jwt_helpers
+    # ADDIMPORT: from stytch.shared import jwt_helpers, rbac_local
     def authenticate_jwt_local(
         self,
         session_jwt: str,
         max_token_age_seconds: Optional[int] = None,
         leeway: int = 0,
+        authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[Session]:
         _session_claim = "https://stytch.com/session"
         generic_claims = jwt_helpers.authenticate_jwt_local(
@@ -626,6 +650,17 @@ class Sessions:
 
         # For JWTs that include it, prefer the inner expires_at claim.
         expires_at = claim.get("expires_at", generic_claims.reserved_claims["exp"])
+
+        if authorization_check is not None:
+            if generic_claims.roles_claim is None:
+                # If the roles claim is not present, we'll assume the user has no roles
+                generic_claims.roles_claim = []
+
+            rbac_local.perform_consumer_scope_authorization_check_local(
+                policy=self.policy_cache.get(),
+                subject_roles=generic_claims.roles_claim,
+                authorization_check=authorization_check,
+            )
 
         return Session(
             attributes=claim["attributes"],

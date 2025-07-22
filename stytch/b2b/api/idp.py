@@ -62,6 +62,7 @@ class IDP:
           - client_id: The ID of the client.
           - client_secret: The secret of the client.
           - token_type_hint: A hint on what the token contains. Valid fields are 'access_token' and 'refresh_token'.
+          - authorization_check: An optional authorization check to perform on the token.
         """
         headers: Dict[str, str] = {"Content-Type": "application/x-www-form-urlencoded"}
         data: Dict[str, Any] = {

@@ -102,6 +102,16 @@ class AuthenticatorAppFactor(pydantic.BaseModel):
     totp_id: str
 
 
+class AuthorizationCheck(pydantic.BaseModel):
+    resource_id: str
+    action: str
+
+
+class AuthorizationVerdict(pydantic.BaseModel):
+    authorized: bool
+    granting_roles: List[str]
+
+
 class BiometricFactor(pydantic.BaseModel):
     biometric_registration_id: str
 
@@ -531,12 +541,14 @@ class AuthenticateResponse(ResponseBase):
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - verdict: (no documentation yet)
     """  # noqa
 
     session: Session
     session_token: str
     session_jwt: str
     user: User
+    verdict: Optional[AuthorizationVerdict] = None
 
 
 class ExchangeAccessTokenResponse(ResponseBase):
