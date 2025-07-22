@@ -370,9 +370,9 @@ class TestRbacLocal(unittest.TestCase):
             perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
             # Assertion is that no exception is raised
 
-        with self.subTest("bar resource with bar_writer scope"):
+        with self.subTest("bar resource with write scope"):
             # Arrange
-            scopes = [self.bar_writer.role_id]  # This is actually a role, not a scope, but testing the function
+            scopes = [self.write_scope.scope]  # Use the write scope which includes bar resource
             req = ConsumerAuthorizationCheck(
                 resource_id="bar",
                 action="write",
@@ -381,9 +381,9 @@ class TestRbacLocal(unittest.TestCase):
             perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
             # Assertion is that no exception is raised
 
-        with self.subTest("admin role with wildcard permissions"):
+        with self.subTest("wildcard scope with delete action"):
             # Arrange
-            scopes = [self.admin.role_id]  # This is actually a role, not a scope, but testing the function
+            scopes = [self.wildcard_scope.scope]  # Use the wildcard scope
             req = ConsumerAuthorizationCheck(
                 resource_id="foo",
                 action="delete",
