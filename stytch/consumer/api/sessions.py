@@ -381,7 +381,7 @@ class Sessions:
 
         JWTs have a set lifetime of 5 minutes, so there will be a 5 minute period where some JWTs will be signed by the old keys, and some JWTs will be signed by the new keys. The correct key to use for validation is determined by matching the `kid` value of the JWT and key.
 
-         If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JSON Web Key (JWK) rotation will be handled for you.
+        If you're using one of our [backend SDKs](https://stytch.com/docs/b2b/sdks), the JSON Web Key (JWK) rotation will be handled for you.
 
         If you're using your own JWT validation library, many have built-in support for JWK rotation, and you'll just need to supply this API endpoint. If not, your application should decide which JWK to use for validation by inspecting the `kid` value.
 
@@ -437,7 +437,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
     ) -> AttestResponse:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/docs/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
-        
+
         Fields:
           - profile_id: The ID of the trusted auth token profile to use for attestation.
           - token: The trusted auth token to authenticate.
@@ -484,7 +484,7 @@ class Sessions:
         session_jwt: Optional[str] = None,
     ) -> AttestResponse:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/docs/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
-        
+
         Fields:
           - profile_id: The ID of the trusted auth token profile to use for attestation.
           - token: The trusted auth token to authenticate.
