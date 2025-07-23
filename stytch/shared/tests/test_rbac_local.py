@@ -12,11 +12,11 @@ from stytch.consumer.models.sessions import (
     AuthorizationCheck as ConsumerAuthorizationCheck,
 )
 from stytch.shared.rbac_local import (
+    RBACConsumerPermissionError,
     RBACPermissionError,
     TenancyError,
     perform_authorization_check,
     perform_consumer_scope_authorization_check,
-    perform_consumer_scope_authorization_check_local,
     perform_scope_authorization_check,
 )
 
@@ -218,7 +218,7 @@ class TestRbacLocal(unittest.TestCase):
 
     def test_perform_consumer_scope_authorization_check(self) -> None:
         with self.subTest("has matching action but not resource"):
-            with self.assertRaises(RBACPermissionError):
+            with self.assertRaises(RBACConsumerPermissionError):
                 # Arrange
                 scopes = [self.write_scope.scope]
                 req = ConsumerAuthorizationCheck(
@@ -229,7 +229,7 @@ class TestRbacLocal(unittest.TestCase):
                 perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
         with self.subTest("has matching resource but not action"):
-            with self.assertRaises(RBACPermissionError):
+            with self.assertRaises(RBACConsumerPermissionError):
                 # Arrange
                 scopes = [self.read_scope.scope]
                 req = ConsumerAuthorizationCheck(
@@ -262,7 +262,7 @@ class TestRbacLocal(unittest.TestCase):
             # Assertion is that no exception is raised
 
         with self.subTest("no matching scope"):
-            with self.assertRaises(RBACPermissionError):
+            with self.assertRaises(RBACConsumerPermissionError):
                 # Arrange
                 scopes = ["nonexistent:scope"]
                 req = ConsumerAuthorizationCheck(
@@ -273,7 +273,7 @@ class TestRbacLocal(unittest.TestCase):
                 perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
         with self.subTest("empty scopes list"):
-            with self.assertRaises(RBACPermissionError):
+            with self.assertRaises(RBACConsumerPermissionError):
                 # Arrange
                 scopes = []
                 req = ConsumerAuthorizationCheck(
@@ -292,114 +292,4 @@ class TestRbacLocal(unittest.TestCase):
             )
             # Act
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
-            # Assertion is that no exception is raised
-
-    def test_perform_consumer_scope_authorization_check_local(self) -> None:
-        with self.subTest("has matching action but not resource"):
-            with self.assertRaises(RBACPermissionError):
-                # Arrange
-                scopes = [self.write_scope.scope]
-                req = ConsumerAuthorizationCheck(
-                    resource_id="baz",
-                    action="write",
-                )
-                # Act
-                perform_consumer_scope_authorization_check_local(
-                    self.policy, scopes, req
-                )
-
-        with self.subTest("has matching resource but not action"):
-            with self.assertRaises(RBACPermissionError):
-                # Arrange
-                scopes = [self.read_scope.scope]
-                req = ConsumerAuthorizationCheck(
-                    resource_id="foo",
-                    action="write",
-                )
-                # Act
-                perform_consumer_scope_authorization_check_local(
-                    self.policy, scopes, req
-                )
-
-        with self.subTest("has matching resource and specific action"):
-            # Arrange
-            scopes = [self.write_scope.scope]
-            req = ConsumerAuthorizationCheck(
-                resource_id="foo",
-                action="write",
-            )
-            # Act
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-            # Assertion is that no exception is raised
-
-        with self.subTest("has matching resource and star action"):
-            # Arrange
-            scopes = [self.wildcard_scope.scope]
-            req = ConsumerAuthorizationCheck(
-                resource_id="foo",
-                action="write",
-            )
-            # Act
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-            # Assertion is that no exception is raised
-
-        with self.subTest("no matching scope"):
-            with self.assertRaises(RBACPermissionError):
-                # Arrange
-                scopes = ["nonexistent:scope"]
-                req = ConsumerAuthorizationCheck(
-                    resource_id="foo",
-                    action="read",
-                )
-                # Act
-                perform_consumer_scope_authorization_check_local(
-                    self.policy, scopes, req
-                )
-
-        with self.subTest("empty scopes list"):
-            with self.assertRaises(RBACPermissionError):
-                # Arrange
-                scopes = []
-                req = ConsumerAuthorizationCheck(
-                    resource_id="foo",
-                    action="read",
-                )
-                # Act
-                perform_consumer_scope_authorization_check_local(
-                    self.policy, scopes, req
-                )
-
-        with self.subTest("multiple scopes with one matching"):
-            # Arrange
-            scopes = ["nonexistent:scope", self.read_scope.scope, "another:scope"]
-            req = ConsumerAuthorizationCheck(
-                resource_id="foo",
-                action="read",
-            )
-            # Act
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-            # Assertion is that no exception is raised
-
-        with self.subTest("bar resource with write scope"):
-            # Arrange
-            scopes = [
-                self.write_scope.scope
-            ]  # Use the write scope which includes bar resource
-            req = ConsumerAuthorizationCheck(
-                resource_id="bar",
-                action="write",
-            )
-            # Act
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-            # Assertion is that no exception is raised
-
-        with self.subTest("wildcard scope with delete action"):
-            # Arrange
-            scopes = [self.wildcard_scope.scope]  # Use the wildcard scope
-            req = ConsumerAuthorizationCheck(
-                resource_id="foo",
-                action="delete",
-            )
-            # Act
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
             # Assertion is that no exception is raised

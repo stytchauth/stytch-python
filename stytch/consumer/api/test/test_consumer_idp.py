@@ -15,7 +15,6 @@ from stytch.consumer.models.sessions import AuthorizationCheck as ConsumerAuthor
 from stytch.shared.rbac_local import (
     RBACPermissionError,
     perform_consumer_scope_authorization_check,
-    perform_consumer_scope_authorization_check_local,
 )
 
 
@@ -165,94 +164,6 @@ class TestConsumerIDP(unittest.TestCase):
         
         # Act & Assert - should not raise an exception
         perform_consumer_scope_authorization_check(self.policy, scopes, req)
-
-    def test_perform_consumer_scope_authorization_check_local_success(self) -> None:
-        """Test successful local authorization with matching scope and action."""
-        # Arrange
-        scopes = [self.write_scope.scope]
-        req = ConsumerAuthorizationCheck(
-            resource_id="foo",
-            action="write",
-        )
-        
-        # Act & Assert - should not raise an exception
-        perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-
-    def test_perform_consumer_scope_authorization_check_local_wildcard_success(self) -> None:
-        """Test successful local authorization with wildcard scope."""
-        # Arrange
-        scopes = [self.wildcard_scope.scope]
-        req = ConsumerAuthorizationCheck(
-            resource_id="foo",
-            action="delete",  # Action not explicitly defined but covered by wildcard
-        )
-        
-        # Act & Assert - should not raise an exception
-        perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-
-    def test_perform_consumer_scope_authorization_check_local_wrong_resource(self) -> None:
-        """Test local authorization failure when resource doesn't match."""
-        # Arrange
-        scopes = [self.write_scope.scope]
-        req = ConsumerAuthorizationCheck(
-            resource_id="baz",  # Resource not in scope
-            action="write",
-        )
-        
-        # Act & Assert
-        with self.assertRaises(RBACPermissionError):
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-
-    def test_perform_consumer_scope_authorization_check_local_wrong_action(self) -> None:
-        """Test local authorization failure when action doesn't match."""
-        # Arrange
-        scopes = [self.read_scope.scope]
-        req = ConsumerAuthorizationCheck(
-            resource_id="foo",
-            action="write",  # Action not in read scope
-        )
-        
-        # Act & Assert
-        with self.assertRaises(RBACPermissionError):
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-
-    def test_perform_consumer_scope_authorization_check_local_no_matching_scope(self) -> None:
-        """Test local authorization failure when no scope matches."""
-        # Arrange
-        scopes = ["nonexistent:scope"]
-        req = ConsumerAuthorizationCheck(
-            resource_id="foo",
-            action="read",
-        )
-        
-        # Act & Assert
-        with self.assertRaises(RBACPermissionError):
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-
-    def test_perform_consumer_scope_authorization_check_local_empty_scopes(self) -> None:
-        """Test local authorization failure with empty scopes list."""
-        # Arrange
-        scopes = []
-        req = ConsumerAuthorizationCheck(
-            resource_id="foo",
-            action="read",
-        )
-        
-        # Act & Assert
-        with self.assertRaises(RBACPermissionError):
-            perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
-
-    def test_perform_consumer_scope_authorization_check_local_multiple_scopes(self) -> None:
-        """Test successful local authorization with multiple scopes where one matches."""
-        # Arrange
-        scopes = ["nonexistent:scope", self.read_scope.scope, "another:scope"]
-        req = ConsumerAuthorizationCheck(
-            resource_id="foo",
-            action="read",
-        )
-        
-        # Act & Assert - should not raise an exception
-        perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
 
     @patch('stytch.consumer.api.idp.rbac_local.perform_consumer_scope_authorization_check')
     def test_introspect_token_network_with_authorization_check(self, mock_auth_check) -> None:

@@ -93,7 +93,7 @@ def perform_consumer_authorization_check(
                     return
 
     # If we made it here, we didn't find a matching permission
-    raise RBACPermissionError(authorization_check)
+    raise RBACConsumerPermissionError(authorization_check)
 
 
 def perform_scope_authorization_check(
