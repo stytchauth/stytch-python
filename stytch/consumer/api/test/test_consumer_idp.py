@@ -202,8 +202,8 @@ class TestConsumerIDP(unittest.TestCase):
             async_client=mock_async_client,
             jwks_client=mock_jwks_client,
             project_id="test_project",
+            policy_cache=mock_policy_cache,
         )
-        idp.policy_cache = mock_policy_cache
         
         auth_check = ConsumerAuthorizationCheck(
             resource_id="foo",
