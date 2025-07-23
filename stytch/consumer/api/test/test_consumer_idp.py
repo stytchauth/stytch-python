@@ -14,6 +14,7 @@ from stytch.consumer.models.rbac import (
 from stytch.consumer.models.sessions import AuthorizationCheck as ConsumerAuthorizationCheck
 from stytch.shared.rbac_local import (
     RBACPermissionError,
+    RBACConsumerPermissionError,
     perform_consumer_scope_authorization_check,
 )
 
@@ -111,7 +112,7 @@ class TestConsumerIDP(unittest.TestCase):
         )
         
         # Act & Assert
-        with self.assertRaises(RBACPermissionError):
+        with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
     def test_perform_consumer_scope_authorization_check_wrong_action(self) -> None:
@@ -124,7 +125,7 @@ class TestConsumerIDP(unittest.TestCase):
         )
         
         # Act & Assert
-        with self.assertRaises(RBACPermissionError):
+        with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
     def test_perform_consumer_scope_authorization_check_no_matching_scope(self) -> None:
@@ -137,7 +138,7 @@ class TestConsumerIDP(unittest.TestCase):
         )
         
         # Act & Assert
-        with self.assertRaises(RBACPermissionError):
+        with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
     def test_perform_consumer_scope_authorization_check_empty_scopes(self) -> None:
@@ -150,7 +151,7 @@ class TestConsumerIDP(unittest.TestCase):
         )
         
         # Act & Assert
-        with self.assertRaises(RBACPermissionError):
+        with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
     def test_perform_consumer_scope_authorization_check_multiple_scopes(self) -> None:
