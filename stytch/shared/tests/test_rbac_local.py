@@ -8,14 +8,16 @@ from stytch.b2b.models.rbac import (
     PolicyScopePermission,
 )
 from stytch.b2b.models.sessions import AuthorizationCheck as B2BAuthorizationCheck
-from stytch.consumer.models.sessions import AuthorizationCheck as ConsumerAuthorizationCheck
+from stytch.consumer.models.sessions import (
+    AuthorizationCheck as ConsumerAuthorizationCheck,
+)
 from stytch.shared.rbac_local import (
     RBACPermissionError,
     TenancyError,
     perform_authorization_check,
-    perform_scope_authorization_check,
     perform_consumer_scope_authorization_check,
     perform_consumer_scope_authorization_check_local,
+    perform_scope_authorization_check,
 )
 
 
@@ -302,7 +304,9 @@ class TestRbacLocal(unittest.TestCase):
                     action="write",
                 )
                 # Act
-                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+                perform_consumer_scope_authorization_check_local(
+                    self.policy, scopes, req
+                )
 
         with self.subTest("has matching resource but not action"):
             with self.assertRaises(RBACPermissionError):
@@ -313,7 +317,9 @@ class TestRbacLocal(unittest.TestCase):
                     action="write",
                 )
                 # Act
-                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+                perform_consumer_scope_authorization_check_local(
+                    self.policy, scopes, req
+                )
 
         with self.subTest("has matching resource and specific action"):
             # Arrange
@@ -346,7 +352,9 @@ class TestRbacLocal(unittest.TestCase):
                     action="read",
                 )
                 # Act
-                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+                perform_consumer_scope_authorization_check_local(
+                    self.policy, scopes, req
+                )
 
         with self.subTest("empty scopes list"):
             with self.assertRaises(RBACPermissionError):
@@ -357,7 +365,9 @@ class TestRbacLocal(unittest.TestCase):
                     action="read",
                 )
                 # Act
-                perform_consumer_scope_authorization_check_local(self.policy, scopes, req)
+                perform_consumer_scope_authorization_check_local(
+                    self.policy, scopes, req
+                )
 
         with self.subTest("multiple scopes with one matching"):
             # Arrange
@@ -372,7 +382,9 @@ class TestRbacLocal(unittest.TestCase):
 
         with self.subTest("bar resource with write scope"):
             # Arrange
-            scopes = [self.write_scope.scope]  # Use the write scope which includes bar resource
+            scopes = [
+                self.write_scope.scope
+            ]  # Use the write scope which includes bar resource
             req = ConsumerAuthorizationCheck(
                 resource_id="bar",
                 action="write",

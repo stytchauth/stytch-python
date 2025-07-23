@@ -9,6 +9,7 @@ from stytch.consumer.models.sessions import AuthorizationCheck
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.shared import jwt_helpers, rbac_local
+from stytch.shared.policy_cache import PolicyCache
 
 
 class IDP:
@@ -19,6 +20,7 @@ class IDP:
         async_client: AsyncClient,
         jwks_client: jwt.PyJWKClient,
         project_id: str,
+        policy_cache: PolicyCache,
     ) -> None:
         self.api_base = api_base
         self.sync_client = sync_client
@@ -40,6 +42,7 @@ class IDP:
             "status_code",
             "token_type",
         ]
+        self.policy_cache = policy_cache
 
     def introspect_token_network(
         self,
@@ -79,7 +82,7 @@ class IDP:
         }
         if not jwtResponse.active:
             return None
-        
+
         if authorization_check is not None:
             rbac_local.perform_consumer_scope_authorization_check(
                 policy=self.policy_cache.get(),
@@ -136,7 +139,7 @@ class IDP:
         }
         if not jwtResponse.active:
             return None
-        
+
         if authorization_check is not None:
             rbac_local.perform_consumer_scope_authorization_check(
                 policy=self.policy_cache.get(),
@@ -185,8 +188,9 @@ class IDP:
         }
 
         scope = generic_claims.untyped_claims[_scope_claim]
+
         if authorization_check is not None:
-            rbac_local.perform_scope_authorization_check(
+            rbac_local.perform_consumer_scope_authorization_check(
                 policy=self.policy_cache.get(),
                 token_scopes=scope.split(),
                 authorization_check=authorization_check,
@@ -194,7 +198,7 @@ class IDP:
 
         return IDPTokenClaims(
             subject=generic_claims.reserved_claims["sub"],
-            scope=generic_claims.untyped_claims[_scope_claim],
+            scope=scope,
             custom_claims=custom_claims,
             audience=generic_claims.reserved_claims["aud"],
             expires_at=generic_claims.reserved_claims["exp"],
