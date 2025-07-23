@@ -26,7 +26,7 @@ from stytch.consumer.api.sessions import Sessions
 from stytch.consumer.api.totps import TOTPs
 from stytch.consumer.api.users import Users
 from stytch.consumer.api.webauthn import WebAuthn
-from stytch.consumer.api.consumer_policy_cache import PolicyCache
+from stytch.consumer.api.policy_cache import PolicyCache
 from stytch.core.client_base import ClientBase
 
 
