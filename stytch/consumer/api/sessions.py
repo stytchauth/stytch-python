@@ -656,6 +656,7 @@ class Sessions:
         expires_at = claim.get("expires_at", generic_claims.reserved_claims["exp"])
 
         if authorization_check is not None:
+            _session_claim = "https://stytch.com/session"
             rbac_local.perform_consumer_authorization_check(
                 policy=self.policy_cache.get(),
                 subject_roles=claim["roles"],
