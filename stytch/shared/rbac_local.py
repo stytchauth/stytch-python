@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import List, Union
 
+import pydantic
+
 from stytch.b2b.models.rbac import Policy as B2BPolicy
 from stytch.b2b.models.sessions import AuthorizationCheck
 from stytch.consumer.models.rbac import Policy as ConsumerPolicy
@@ -141,7 +143,7 @@ def perform_authorization_check(
     if subject_org_id != authorization_check.organization_id:
         raise TenancyError(subject_org_id, authorization_check.organization_id)
 
-    if not authorization_check(policy_from_b2b_policy(policy), subject_roles, authorization_check):
+    if not is_authorized(policy_from_b2b_policy(policy), subject_roles, authorization_check):
         raise RBACPermissionError(authorization_check)
     return
 
@@ -154,11 +156,11 @@ def perform_consumer_authorization_check(
     succeeds, this method will return. If the check fails, a PermissionError will be
     raised.
     """
-    if not authorization_check(policy_from_consumer_policy(policy), subject_roles, authorization_check):
+    if not is_authorized(policy_from_consumer_policy(policy), subject_roles, authorization_check):
         raise RBACConsumerPermissionError(authorization_check)
     return
 
-def authorization_check(
+def is_authorized(
     policy: Policy,
     subject_roles: List[str],
     authorization_check: Union[AuthorizationCheck, ConsumerAuthorizationCheck],
@@ -195,7 +197,7 @@ def perform_scope_authorization_check(
     if subject_org_id != authorization_check.organization_id:
         raise TenancyError(subject_org_id, authorization_check.organization_id)
 
-    if scope_authorization_check(policy, token_scopes, authorization_check.resource_id, authorization_check.action):
+    if scope_authorization_check(policy_from_b2b_policy(policy), token_scopes, authorization_check.resource_id, authorization_check.action):
         return
     raise RBACPermissionError(authorization_check)
 
@@ -208,7 +210,7 @@ def perform_consumer_scope_authorization_check(
     succeeds, this method will return. If the check fails, a PermissionError will be
     raised.
     """
-    if not scope_authorization_check(policy, token_scopes, authorization_check.resource_id, authorization_check.action):
+    if not scope_authorization_check(policy_from_consumer_policy(policy), token_scopes, authorization_check.resource_id, authorization_check.action):
         raise RBACConsumerPermissionError(authorization_check)
     return
 
