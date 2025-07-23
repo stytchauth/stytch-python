@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional, Union
 
 import jwt
 
+from stytch.consumer.api.policy_cache import PolicyCache
 from stytch.consumer.models.sessions import (
     AttestResponse,
     AuthenticateJWTLocalResponse,
@@ -25,7 +26,6 @@ from stytch.consumer.models.sessions import (
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 from stytch.shared import jwt_helpers, rbac_local
-from stytch.shared.policy_cache import PolicyCache
 
 
 class Sessions:
