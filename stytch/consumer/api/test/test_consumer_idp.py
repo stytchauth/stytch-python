@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import Mock, patch, MagicMock, AsyncMock
 from typing import Optional
 
-from stytch.b2b.models.rbac import (
+from stytch.consumer.models.rbac import (
     Policy,
     PolicyRole,
     PolicyRolePermission,
