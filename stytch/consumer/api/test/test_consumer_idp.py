@@ -2,7 +2,7 @@
 
 import unittest
 from unittest.mock import Mock, patch, MagicMock, AsyncMock
-from typing import Optional
+from typing import List, Optional
 
 from stytch.consumer.models.rbac import (
     Policy,
@@ -143,7 +143,7 @@ class TestConsumerIDP(unittest.TestCase):
     def test_perform_consumer_scope_authorization_check_empty_scopes(self) -> None:
         """Test authorization failure with empty scopes list."""
         # Arrange
-        scopes = []
+        scopes: List[str] = []
         req = ConsumerAuthorizationCheck(
             resource_id="foo",
             action="read",
@@ -332,8 +332,10 @@ class TestConsumerIDP(unittest.TestCase):
         
         # Assert
         self.assertIsNotNone(result)
-        self.assertEqual(result.subject, "user123")
-        self.assertEqual(result.scope, "write:documents")
+        # Lint requires us to be sure this isn't None, in a way that tests doesn't check.
+        if result is not None:
+            self.assertEqual(result.subject, "user123")
+            self.assertEqual(result.scope, "write:documents")
 
     def test_introspect_token_network_inactive_token(self) -> None:
         """Test that introspect_token_network returns None for inactive tokens."""
