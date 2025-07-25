@@ -21,10 +21,12 @@ from stytch.consumer.api.oauth import OAuth
 from stytch.consumer.api.otp import OTPs
 from stytch.consumer.api.passwords import Passwords
 from stytch.consumer.api.project import Project
+from stytch.consumer.api.rbac import RBAC
 from stytch.consumer.api.sessions import Sessions
 from stytch.consumer.api.totps import TOTPs
 from stytch.consumer.api.users import Users
 from stytch.consumer.api.webauthn import WebAuthn
+from stytch.consumer.api.policy_cache import PolicyCache
 from stytch.core.client_base import ClientBase
 
 
@@ -53,6 +55,14 @@ class Client(ClientBase):
             async_session=async_session,
             fraud_environment=fraud_environment,
             custom_base_url=custom_base_url,
+        )
+
+        policy_cache = PolicyCache(
+            RBAC(
+                api_base=self.api_base,
+                sync_client=self.sync_client,
+                async_client=self.async_client,
+            )
         )
 
         self.connected_app = ConnectedApp(
@@ -107,12 +117,18 @@ class Client(ClientBase):
             sync_client=self.sync_client,
             async_client=self.async_client,
         )
+        self.rbac = RBAC(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
         self.sessions = Sessions(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
             jwks_client=self.jwks_client,
             project_id=project_id,
+            policy_cache=policy_cache,
         )
         self.totps = TOTPs(
             api_base=self.api_base,
@@ -135,6 +151,7 @@ class Client(ClientBase):
             async_client=self.async_client,
             jwks_client=self.jwks_client,
             project_id=project_id,
+            policy_cache=policy_cache,
         )
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
