@@ -55,15 +55,13 @@ class ResponseBase(pydantic.BaseModel):
 
 class StytchErrorDetails(ResponseBase):
     error_type: Optional[str] = pydantic.Field(
-        validation_alias=pydantic.AliasChoices("error_type", "error"),
-        default=None
+        validation_alias=pydantic.AliasChoices("error_type", "error"), default=None
     )
     error_message: str = pydantic.Field(
         validation_alias=pydantic.AliasChoices("error_message", "error_description")
     )
     error_url: Optional[str] = pydantic.Field(
-        validation_alias=pydantic.AliasChoices("error_url", "error_uri"),
-        default=None
+        validation_alias=pydantic.AliasChoices("error_url", "error_uri"), default=None
     )
     original_json: Optional[Dict[str, Any]] = None
 
