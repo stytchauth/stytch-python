@@ -55,13 +55,15 @@ class ResponseBase(pydantic.BaseModel):
 
 class StytchErrorDetails(ResponseBase):
     error_type: Optional[str] = pydantic.Field(
-        validation_alias=pydantic.AliasChoices("error_type", "error")
+        validation_alias=pydantic.AliasChoices("error_type", "error"),
+        default=None
     )
     error_message: str = pydantic.Field(
         validation_alias=pydantic.AliasChoices("error_message", "error_description")
     )
     error_url: Optional[str] = pydantic.Field(
-        validation_alias=pydantic.AliasChoices("error_url", "error_uri")
+        validation_alias=pydantic.AliasChoices("error_url", "error_uri"),
+        default=None
     )
     original_json: Optional[Dict[str, Any]] = None
 
@@ -72,7 +74,7 @@ class StytchErrorDetails(ResponseBase):
         message = "An unknown error occurred"
         if 200 <= status_code < 300:
             message = "Failed to parse JSON into target object type"
-        return StytchErrorDetails(
+        result = StytchErrorDetails(
             status_code=status_code,
             request_id="",
             error_type=None,
@@ -80,6 +82,7 @@ class StytchErrorDetails(ResponseBase):
             error_url=None,
             original_json=original_json,
         )
+        return result
 
 
 class StytchError(Exception):
