@@ -33,10 +33,10 @@ class ExchangeRequestLocale(str, enum.Enum):
 class AuthorizationCheck(pydantic.BaseModel):
     """
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The Organization's ID must match the Member's Organization
       - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
 
-      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved  `resource_id`s. These include:
+      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s. These include:
 
       * `stytch.organization`
       * `stytch.member`
@@ -55,6 +55,12 @@ class AuthorizationCheck(pydantic.BaseModel):
 
 
 class AuthorizationVerdict(pydantic.BaseModel):
+    """
+    Fields:
+      - authorized: Whether the Member was authorized to perform the specified action on the specified Resource. Always true if the request succeeds.
+      - granting_roles: The complete list of Roles that gave the Member permission to perform the specified action on the specified Resource.
+    """  # noqa
+
     authorized: bool
     granting_roles: List[str]
 
@@ -70,6 +76,7 @@ class MemberSession(pydantic.BaseModel):
       - authentication_factors: An array of different authentication factors that comprise a Session.
       - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
       - roles: (no documentation yet)
+      - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length. Wherever an organization_id is expected in a path or request parameter, you may also use the organization_slug as a convenience.
       - custom_claims: The custom claims map for a Session. Claims can be added to a session during a Sessions authenticate call.
     """  # noqa
 
@@ -81,6 +88,7 @@ class MemberSession(pydantic.BaseModel):
     authentication_factors: List[AuthenticationFactor]
     organization_id: str
     roles: List[str]
+    organization_slug: str
     custom_claims: Optional[Dict[str, Any]] = None
 
 
@@ -137,7 +145,7 @@ class AuthenticateResponse(ResponseBase):
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - verdict: If an `authorization_check` is provided in the request and the check succeeds, this field will return
-      the complete list of Roles that gave the Member permission to perform the specified action on the specified Resource.
+      information about why the Member was granted permission.
     """  # noqa
 
     member_session: MemberSession

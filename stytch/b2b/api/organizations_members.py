@@ -855,10 +855,12 @@ class Members:
         The member will receive an Email Magic Link that expires in 5 minutes. If they do not verify their new email address in that timeframe, the email
         will be freed up for other members to use.
 
+        The Magic Link will redirect to your `login_redirect_url` (or the configured default if one isn't provided), and you should invoke the [Authenticate Magic Link](https://stytch.com/docs/b2b/api/authenticate-magic-link) endpoint as normal to complete the flow.
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - email_address: The email address of the Member.
+          - email_address: The new email address for the Member.
           - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
           verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
           redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
@@ -914,10 +916,12 @@ class Members:
         The member will receive an Email Magic Link that expires in 5 minutes. If they do not verify their new email address in that timeframe, the email
         will be freed up for other members to use.
 
+        The Magic Link will redirect to your `login_redirect_url` (or the configured default if one isn't provided), and you should invoke the [Authenticate Magic Link](https://stytch.com/docs/b2b/api/authenticate-magic-link) endpoint as normal to complete the flow.
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
           - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - email_address: The email address of the Member.
+          - email_address: The new email address for the Member.
           - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
           verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
           redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.

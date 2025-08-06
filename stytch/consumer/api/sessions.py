@@ -100,7 +100,11 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
-          - authorization_check: (no documentation yet)
+          - authorization_check: If an `authorization_check` object is passed in, this endpoint will also check if the User is
+          authorized to perform the given action on the given Resource. A User is authorized if they are assigned a Role with adequate permissions.
+
+          If the User is not authorized to perform the specified action on the specified Resource, a 403 error will be thrown.
+          Otherwise, the response will contain a list of Roles that satisfied the authorization check.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -142,7 +146,11 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
-          - authorization_check: (no documentation yet)
+          - authorization_check: If an `authorization_check` object is passed in, this endpoint will also check if the User is
+          authorized to perform the given action on the given Resource. A User is authorized if they are assigned a Role with adequate permissions.
+
+          If the User is not authorized to perform the specified action on the specified Resource, a 403 error will be thrown.
+          Otherwise, the response will contain a list of Roles that satisfied the authorization check.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -223,7 +231,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
+        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
 
         Fields:
           - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
@@ -259,7 +267,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
     ) -> MigrateResponse:
-        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/docs/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
+        """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
 
         Fields:
           - session_token: The authorization token Stytch will pass in to the external userinfo endpoint.
@@ -436,7 +444,7 @@ class Sessions:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> AttestResponse:
-        """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/docs/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
+        """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
         Fields:
           - profile_id: The ID of the trusted auth token profile to use for attestation.
@@ -483,7 +491,7 @@ class Sessions:
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
     ) -> AttestResponse:
-        """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/docs/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
+        """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
         Fields:
           - profile_id: The ID of the trusted auth token profile to use for attestation.

@@ -325,7 +325,7 @@ class Organization(pydantic.BaseModel):
       - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length. Wherever an organization_id is expected in a path or request parameter, you may also use the organization_slug as a convenience.
       - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
 
-      `ALL_ALLOWED` – new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
+      `ALL_ALLOWED` – the default setting, new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
 
       `RESTRICTED` – only new Members with SSO logins that comply with `sso_jit_provisioning_allowed_connections` can be provisioned upon authentication.
 
@@ -342,7 +342,7 @@ class Organization(pydantic.BaseModel):
 
       `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
 
-      `NOT_ALLOWED` – disable JIT provisioning via Email Magic Link and OAuth.
+      `NOT_ALLOWED` – the default setting, disables JIT provisioning via Email Magic Link and OAuth.
 
       - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
 
@@ -379,12 +379,12 @@ class Organization(pydantic.BaseModel):
 
       `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
 
-      `NOT_ALLOWED` – disable JIT provisioning by OAuth Tenant.
+      `NOT_ALLOWED` – the default setting, disables JIT provisioning by OAuth Tenant.
 
       - claimed_email_domains: (no documentation yet)
       - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
 
-      `ALL_ALLOWED` – any first party Connected App in the Project is permitted for use by Members.
+      `ALL_ALLOWED` – the default setting, any first party Connected App in the Project is permitted for use by Members.
 
       `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
 
@@ -393,7 +393,7 @@ class Organization(pydantic.BaseModel):
       - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
       - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
 
-      `ALL_ALLOWED` – any third party Connected App in the Project is permitted for use by Members.
+      `ALL_ALLOWED` – the default setting, any third party Connected App in the Project is permitted for use by Members.
 
       `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
 

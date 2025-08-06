@@ -14,17 +14,47 @@ from stytch.core.response_base import ResponseBase
 
 
 class PolicyResource(pydantic.BaseModel):
+    """
+    Fields:
+      - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
+
+      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s.
+
+      - description: The description of the RBAC Resource.
+      - actions: A list of all possible actions for a provided Resource.
+    """  # noqa
+
     resource_id: str
     description: str
     actions: List[str]
 
 
 class PolicyRolePermission(pydantic.BaseModel):
+    """
+    Fields:
+      - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
+
+      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s.
+
+      - actions: A list of permitted actions the Role is authorized to take with the provided Resource. You can use `*` as a wildcard to grant a Role permission to use all possible actions related to the Resource.
+    """  # noqa
+
     resource_id: str
     actions: List[str]
 
 
 class PolicyRole(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
+
+      The `stytch_user` `role_id` is predefined by Stytch.
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/guides/rbac/stytch-default) for a more detailed explanation.
+
+      - description: The description of the RBAC Role.
+      - permissions: A list of permissions that link a [Resource](https://stytch.com/docs/api/rbac-resource-object) to a list of actions.
+    """  # noqa
+
     role_id: str
     description: str
     permissions: List[PolicyRolePermission]
@@ -42,10 +72,22 @@ class PolicyScope(pydantic.BaseModel):
 
 
 class Policy(pydantic.BaseModel):
+    """
+    Fields:
+      - roles: An array of [Role objects](https://stytch.com/docs/api/rbac-role-object).
+      - resources: An array of [Resource objects](https://stytch.com/docs/api/rbac-resource-object).
+      - scopes: (no documentation yet)
+    """  # noqa
+
     roles: List[PolicyRole]
     resources: List[PolicyResource]
     scopes: List[PolicyScope]
 
 
 class PolicyResponse(ResponseBase):
+    """Response type for `RBAC.policy`.
+    Fields:
+      - policy: The RBAC Policy document that contains all defined Roles and Resources – which are managed in the [Dashboard](https://stytch.com/dashboard/rbac). Read more about these entities and how they work in our [RBAC overview](https://stytch.com/docs/guides/rbac/overview).
+    """  # noqa
+
     policy: Optional[Policy] = None

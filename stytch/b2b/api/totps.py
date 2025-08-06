@@ -36,7 +36,9 @@ class TOTPs:
     ) -> CreateResponse:
         """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
-        Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
+        If the Member already has an active MFA factor, then passing an intermediate session token, session token, or session JWT with the existing MFA factor on it is required to prevent bypassing MFA.
+
+        Otherwise, passing an intermediate session token, session token, or session JWT is not required, but if passed must match the `member_id` passed.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -75,7 +77,9 @@ class TOTPs:
     ) -> CreateResponse:
         """Create a new TOTP instance for a Member. The Member can use the authenticator application of their choice to scan the QR code or enter the secret.
 
-        Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
+        If the Member already has an active MFA factor, then passing an intermediate session token, session token, or session JWT with the existing MFA factor on it is required to prevent bypassing MFA.
+
+        Otherwise, passing an intermediate session token, session token, or session JWT is not required, but if passed must match the `member_id` passed.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.

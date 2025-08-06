@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import unittest
-from unittest.mock import Mock, patch, MagicMock, AsyncMock
-from typing import List, Optional
+from typing import List
+from unittest.mock import AsyncMock, Mock, patch
 
 from stytch.consumer.models.rbac import (
     Policy,
@@ -11,9 +11,10 @@ from stytch.consumer.models.rbac import (
     PolicyScope,
     PolicyScopePermission,
 )
-from stytch.consumer.models.sessions import AuthorizationCheck as ConsumerAuthorizationCheck
+from stytch.consumer.models.sessions import (
+    AuthorizationCheck as ConsumerAuthorizationCheck,
+)
 from stytch.shared.rbac_local import (
-    RBACPermissionError,
     RBACConsumerPermissionError,
     perform_consumer_scope_authorization_check,
 )
@@ -46,7 +47,7 @@ class TestConsumerIDP(unittest.TestCase):
                 PolicyRolePermission(actions=["read"], resource_id="bar"),
             ],
         )
-        
+
         self.read_scope = PolicyScope(
             scope="read:documents",
             description="Read documents",
@@ -71,7 +72,7 @@ class TestConsumerIDP(unittest.TestCase):
                 PolicyScopePermission(actions=["*"], resource_id="bar"),
             ],
         )
-        
+
         self.policy = Policy(
             resources=[],
             roles=[self.admin_role, self.writer_role, self.reader_role],
@@ -86,7 +87,7 @@ class TestConsumerIDP(unittest.TestCase):
             resource_id="foo",
             action="write",
         )
-        
+
         # Act & Assert - should not raise an exception
         perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
@@ -98,7 +99,7 @@ class TestConsumerIDP(unittest.TestCase):
             resource_id="foo",
             action="delete",  # Action not explicitly defined but covered by wildcard
         )
-        
+
         # Act & Assert - should not raise an exception
         perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
@@ -110,7 +111,7 @@ class TestConsumerIDP(unittest.TestCase):
             resource_id="baz",  # Resource not in scope
             action="write",
         )
-        
+
         # Act & Assert
         with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
@@ -123,7 +124,7 @@ class TestConsumerIDP(unittest.TestCase):
             resource_id="foo",
             action="write",  # Action not in read scope
         )
-        
+
         # Act & Assert
         with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
@@ -136,7 +137,7 @@ class TestConsumerIDP(unittest.TestCase):
             resource_id="foo",
             action="read",
         )
-        
+
         # Act & Assert
         with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
@@ -149,7 +150,7 @@ class TestConsumerIDP(unittest.TestCase):
             resource_id="foo",
             action="read",
         )
-        
+
         # Act & Assert
         with self.assertRaises(RBACConsumerPermissionError):
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
@@ -162,12 +163,16 @@ class TestConsumerIDP(unittest.TestCase):
             resource_id="foo",
             action="read",
         )
-        
+
         # Act & Assert - should not raise an exception
         perform_consumer_scope_authorization_check(self.policy, scopes, req)
 
-    @patch('stytch.consumer.api.idp.rbac_local.perform_consumer_scope_authorization_check')
-    def test_introspect_token_network_with_authorization_check(self, mock_auth_check) -> None:
+    @patch(
+        "stytch.consumer.api.idp.rbac_local.perform_consumer_scope_authorization_check"
+    )
+    def test_introspect_token_network_with_authorization_check(
+        self, mock_auth_check
+    ) -> None:
         """Test that introspect_token_network calls authorization check when provided."""
         # Arrange
         mock_api_base = Mock()
@@ -176,7 +181,7 @@ class TestConsumerIDP(unittest.TestCase):
         mock_jwks_client = Mock()
         mock_policy_cache = Mock()
         mock_policy_cache.get.return_value = self.policy
-        
+
         # Mock the response with proper structure
         mock_response = Mock()
         mock_response.response.status_code = 200
@@ -194,9 +199,10 @@ class TestConsumerIDP(unittest.TestCase):
             "token_type": "access_token",
         }
         mock_sync_client.post_form.return_value = mock_response
-        
+
         # Create IDP instance with policy cache
         from stytch.consumer.api.idp import IDP
+
         idp = IDP(
             api_base=mock_api_base,
             sync_client=mock_sync_client,
@@ -205,19 +211,19 @@ class TestConsumerIDP(unittest.TestCase):
             project_id="test_project",
             policy_cache=mock_policy_cache,
         )
-        
+
         auth_check = ConsumerAuthorizationCheck(
             resource_id="foo",
             action="write",
         )
-        
+
         # Act
         result = idp.introspect_token_network(
             token="test_token",
             client_id="test_client",
             authorization_check=auth_check,
         )
-        
+
         # Assert
         mock_auth_check.assert_called_once_with(
             policy=self.policy,
@@ -226,8 +232,12 @@ class TestConsumerIDP(unittest.TestCase):
         )
         self.assertIsNotNone(result)
 
-    @patch('stytch.consumer.api.idp.rbac_local.perform_consumer_scope_authorization_check')
-    def test_introspect_token_network_async_with_authorization_check(self, mock_auth_check) -> None:
+    @patch(
+        "stytch.consumer.api.idp.rbac_local.perform_consumer_scope_authorization_check"
+    )
+    def test_introspect_token_network_async_with_authorization_check(
+        self, mock_auth_check
+    ) -> None:
         """Test that introspect_token_network_async calls authorization check when provided."""
         # Arrange
         mock_api_base = Mock()
@@ -236,7 +246,7 @@ class TestConsumerIDP(unittest.TestCase):
         mock_jwks_client = Mock()
         mock_policy_cache = Mock()
         mock_policy_cache.get.return_value = self.policy
-        
+
         # Mock the response with proper structure
         mock_response = Mock()
         mock_response.response.status = 200
@@ -254,9 +264,10 @@ class TestConsumerIDP(unittest.TestCase):
             "token_type": "access_token",
         }
         mock_async_client.post_form.return_value = mock_response
-        
+
         # Create IDP instance with policy cache
         from stytch.consumer.api.idp import IDP
+
         idp = IDP(
             api_base=mock_api_base,
             sync_client=mock_sync_client,
@@ -265,20 +276,23 @@ class TestConsumerIDP(unittest.TestCase):
             project_id="test_project",
             policy_cache=mock_policy_cache,
         )
-        
+
         auth_check = ConsumerAuthorizationCheck(
             resource_id="foo",
             action="write",
         )
-        
+
         # Act
         import asyncio
-        result = asyncio.run(idp.introspect_token_network_async(
-            token="test_token",
-            client_id="test_client",
-            authorization_check=auth_check,
-        ))
-        
+
+        result = asyncio.run(
+            idp.introspect_token_network_async(
+                token="test_token",
+                client_id="test_client",
+                authorization_check=auth_check,
+            )
+        )
+
         # Assert
         mock_auth_check.assert_called_once_with(
             policy=self.policy,
@@ -295,7 +309,7 @@ class TestConsumerIDP(unittest.TestCase):
         mock_async_client = Mock()
         mock_jwks_client = Mock()
         mock_policy_cache = Mock()
-        
+
         # Mock the response with proper structure
         mock_response = Mock()
         mock_response.response.status_code = 200
@@ -313,9 +327,10 @@ class TestConsumerIDP(unittest.TestCase):
             "token_type": "access_token",
         }
         mock_sync_client.post_form.return_value = mock_response
-        
+
         # Create IDP instance
         from stytch.consumer.api.idp import IDP
+
         idp = IDP(
             api_base=mock_api_base,
             sync_client=mock_sync_client,
@@ -324,13 +339,13 @@ class TestConsumerIDP(unittest.TestCase):
             project_id="test_project",
             policy_cache=mock_policy_cache,
         )
-        
+
         # Act
         result = idp.introspect_token_network(
             token="test_token",
             client_id="test_client",
         )
-        
+
         # Assert
         self.assertIsNotNone(result)
         # Lint requires us to be sure this isn't None, in a way that tests doesn't check.
@@ -346,7 +361,7 @@ class TestConsumerIDP(unittest.TestCase):
         mock_async_client = Mock()
         mock_jwks_client = Mock()
         mock_policy_cache = Mock()
-        
+
         # Mock the response with inactive token and proper structure
         mock_response = Mock()
         mock_response.response.status_code = 200
@@ -358,9 +373,10 @@ class TestConsumerIDP(unittest.TestCase):
             "scope": "write:documents",
         }
         mock_sync_client.post_form.return_value = mock_response
-        
+
         # Create IDP instance
         from stytch.consumer.api.idp import IDP
+
         idp = IDP(
             api_base=mock_api_base,
             sync_client=mock_sync_client,
@@ -369,16 +385,16 @@ class TestConsumerIDP(unittest.TestCase):
             project_id="test_project",
             policy_cache=mock_policy_cache,
         )
-        
+
         # Act
         result = idp.introspect_token_network(
             token="test_token",
             client_id="test_client",
         )
-        
+
         # Assert
         self.assertIsNone(result)
 
 
 if __name__ == "__main__":
-    unittest.main() 
+    unittest.main()

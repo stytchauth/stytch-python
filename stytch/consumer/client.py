@@ -20,13 +20,13 @@ from stytch.consumer.api.magic_links import MagicLinks
 from stytch.consumer.api.oauth import OAuth
 from stytch.consumer.api.otp import OTPs
 from stytch.consumer.api.passwords import Passwords
+from stytch.consumer.api.policy_cache import PolicyCache
 from stytch.consumer.api.project import Project
 from stytch.consumer.api.rbac import RBAC
 from stytch.consumer.api.sessions import Sessions
 from stytch.consumer.api.totps import TOTPs
 from stytch.consumer.api.users import Users
 from stytch.consumer.api.webauthn import WebAuthn
-from stytch.consumer.api.policy_cache import PolicyCache
 from stytch.core.client_base import ClientBase
 
 
