@@ -18,7 +18,7 @@ class PolicyResource(pydantic.BaseModel):
     Fields:
       - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
 
-      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved  `resource_id`s. These include:
+      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s. These include:
 
       * `stytch.organization`
       * `stytch.member`
@@ -83,14 +83,14 @@ class PolicyRolePermission(pydantic.BaseModel):
     Fields:
       - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
 
-      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved  `resource_id`s. These include:
+      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s. These include:
 
       * `stytch.organization`
       * `stytch.member`
       * `stytch.sso`
       * `stytch.self`
 
-      Check out the [guide on Stytch default Resources](https://stytch.com/docs/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
+      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
 
 
       - actions: A list of permitted actions the Scope is required to take with the provided Resource. You can use `*` as a wildcard to require a Scope permission to use all possible actions related to the Resource.
@@ -149,7 +149,7 @@ class Policy(pydantic.BaseModel):
 class PolicyResponse(ResponseBase):
     """Response type for `RBAC.policy`.
     Fields:
-      - policy: The RBAC Policy document that contains all defined Roles and Resources – which are managed in the [Dashboard](https://stytch.com/docs/dashboard/rbac). Read more about these entities and how they work in our [RBAC overview](https://stytch.com/docs/b2b/guides/rbac/overview).
+      - policy: The RBAC Policy document that contains all defined Roles and Resources – which are managed in the [Dashboard](https://stytch.com/dashboard/rbac). Read more about these entities and how they work in our [RBAC overview](https://stytch.com/docs/b2b/guides/rbac/overview).
     """  # noqa
 
     policy: Optional[Policy] = None

@@ -46,14 +46,16 @@ class Sms:
 
         If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
 
-        Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
+        If the Member already has an active MFA factor, then passing an intermediate session token, session token, or session JWT with the existing MFA factor on it is required to prevent bypassing MFA.
+
+        Otherwise, passing an intermediate session token, session token, or session JWT is not required, but if passed must match the `member_id` passed.
 
         ### Cost to send SMS OTP
         Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
 
         Even when international SMS is enabled, we do not support sending SMS to countries on our [Unsupported countries list](https://stytch.com/docs/guides/passcodes/unsupported-countries).
 
-        __Note:__ SMS to phone numbers outside of the US and Canada is disabled by default for customers who did not use SMS prior to October 2023. If you're interested in sending international SMS, please add those countries to your Project's allowlist via [the API](https://stytch.com/docs/workspace-management/pwa/country-code-allowlist-object), and [add credit card details](https://stytch.com/docs/dashboard/settings/billing) to your account.
+        __Note:__ SMS to phone numbers outside of the US and Canada is disabled by default for customers who did not use SMS prior to October 2023. If you're interested in sending international SMS, please add those countries to your Project's allowlist via the [Dashboard](https://stytch.com/dashboard/country-code-allowlists) or [Programmatic Workspace Actions](https://stytch.com/docs/workspace-management/pwa/set-allowed-country-codes), and [add credit card details](https://stytch.com/dashboard/settings/billing) to your account.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
@@ -110,14 +112,16 @@ class Sms:
 
         If a Member has a phone number and is enrolled in MFA, then after a successful primary authentication event (e.g. [email magic link](https://stytch.com/docs/b2b/api/authenticate-magic-link) or [SSO](https://stytch.com/docs/b2b/api/sso-authenticate) login is complete), an SMS OTP will automatically be sent to their phone number. In that case, this endpoint should only be used for subsequent authentication events, such as prompting a Member for an OTP again after a period of inactivity.
 
-        Passing an intermediate session token, session token, or session JWT is not required, but if passed must match the Member ID passed.
+        If the Member already has an active MFA factor, then passing an intermediate session token, session token, or session JWT with the existing MFA factor on it is required to prevent bypassing MFA.
+
+        Otherwise, passing an intermediate session token, session token, or session JWT is not required, but if passed must match the `member_id` passed.
 
         ### Cost to send SMS OTP
         Before configuring SMS or WhatsApp OTPs, please review how Stytch [bills the costs of international OTPs](https://stytch.com/pricing) and understand how to protect your app against [toll fraud](https://stytch.com/docs/guides/passcodes/toll-fraud/overview).
 
         Even when international SMS is enabled, we do not support sending SMS to countries on our [Unsupported countries list](https://stytch.com/docs/guides/passcodes/unsupported-countries).
 
-        __Note:__ SMS to phone numbers outside of the US and Canada is disabled by default for customers who did not use SMS prior to October 2023. If you're interested in sending international SMS, please add those countries to your Project's allowlist via [the API](https://stytch.com/docs/workspace-management/pwa/country-code-allowlist-object), and [add credit card details](https://stytch.com/docs/dashboard/settings/billing) to your account.
+        __Note:__ SMS to phone numbers outside of the US and Canada is disabled by default for customers who did not use SMS prior to October 2023. If you're interested in sending international SMS, please add those countries to your Project's allowlist via the [Dashboard](https://stytch.com/dashboard/country-code-allowlists) or [Programmatic Workspace Actions](https://stytch.com/docs/workspace-management/pwa/set-allowed-country-codes), and [add credit card details](https://stytch.com/dashboard/settings/billing) to your account.
 
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.

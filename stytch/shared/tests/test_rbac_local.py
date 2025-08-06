@@ -8,11 +8,13 @@ from stytch.b2b.models.rbac import (
     PolicyScopePermission,
 )
 from stytch.b2b.models.sessions import AuthorizationCheck as B2BAuthorizationCheck
+from stytch.consumer.models.rbac import Policy as ConsumerPolicy
+from stytch.consumer.models.rbac import PolicyRole as ConsumerPolicyRole
 from stytch.consumer.models.rbac import (
-    Policy as ConsumerPolicy,
-    PolicyRole as ConsumerPolicyRole,
     PolicyRolePermission as ConsumerPolicyRolePermission,
-    PolicyScope as ConsumerPolicyScope,
+)
+from stytch.consumer.models.rbac import PolicyScope as ConsumerPolicyScope
+from stytch.consumer.models.rbac import (
     PolicyScopePermission as ConsumerPolicyScopePermission,
 )
 from stytch.consumer.models.sessions import (
@@ -238,8 +240,12 @@ class TestRbacLocalConsumer(unittest.TestCase):
             role_id="global_writer",
             description="Global writer role",
             permissions=[
-                ConsumerPolicyRolePermission(actions=["write", "read"], resource_id="foo"),
-                ConsumerPolicyRolePermission(actions=["write", "read"], resource_id="bar"),
+                ConsumerPolicyRolePermission(
+                    actions=["write", "read"], resource_id="foo"
+                ),
+                ConsumerPolicyRolePermission(
+                    actions=["write", "read"], resource_id="bar"
+                ),
             ],
         )
         self.global_reader = ConsumerPolicyRole(
@@ -254,7 +260,9 @@ class TestRbacLocalConsumer(unittest.TestCase):
             role_id="bar_writer",
             description="Bar writer role",
             permissions=[
-                ConsumerPolicyRolePermission(actions=["write", "read"], resource_id="bar")
+                ConsumerPolicyRolePermission(
+                    actions=["write", "read"], resource_id="bar"
+                )
             ],
         )
         self.read_scope = ConsumerPolicyScope(
@@ -269,8 +277,12 @@ class TestRbacLocalConsumer(unittest.TestCase):
             scope="write:documents",
             description="Write documents",
             permissions=[
-                ConsumerPolicyScopePermission(actions=["write", "read"], resource_id="foo"),
-                ConsumerPolicyScopePermission(actions=["write", "read"], resource_id="bar"),
+                ConsumerPolicyScopePermission(
+                    actions=["write", "read"], resource_id="foo"
+                ),
+                ConsumerPolicyScopePermission(
+                    actions=["write", "read"], resource_id="bar"
+                ),
             ],
         )
         self.wildcard_scope = ConsumerPolicyScope(

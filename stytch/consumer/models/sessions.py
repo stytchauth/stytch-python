@@ -103,11 +103,26 @@ class AuthenticatorAppFactor(pydantic.BaseModel):
 
 
 class AuthorizationCheck(pydantic.BaseModel):
+    """
+    Fields:
+      - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
+
+      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s.
+
+      - action: An action to take on a Resource.
+    """  # noqa
+
     resource_id: str
     action: str
 
 
 class AuthorizationVerdict(pydantic.BaseModel):
+    """
+    Fields:
+      - authorized: Whether the User was authorized to perform the specified action on the specified Resource. Always true if the request succeeds.
+      - granting_roles: The complete list of Roles that gave the User permission to perform the specified action on the specified Resource.
+    """  # noqa
+
     authorized: bool
     granting_roles: List[str]
 
@@ -174,16 +189,33 @@ class GitLabOAuthFactor(pydantic.BaseModel):
 
 
 class GithubOAuthExchangeFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - email_id: The globally unique UUID of the Member's email.
+    """  # noqa
+
     email_id: str
 
 
 class GithubOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique ID of an OAuth registration.
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - email_id: The globally unique UUID of the Member's email.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class GoogleOAuthExchangeFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - email_id: The globally unique UUID of the Member's email.
+    """  # noqa
+
     email_id: str
 
 
@@ -201,10 +233,22 @@ class GoogleOAuthFactor(pydantic.BaseModel):
 
 
 class HubspotOAuthExchangeFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - email_id: The globally unique UUID of the Member's email.
+    """  # noqa
+
     email_id: str
 
 
 class HubspotOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique ID of an OAuth registration.
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - email_id: The globally unique UUID of the Member's email.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -259,6 +303,11 @@ class MicrosoftOAuthFactor(pydantic.BaseModel):
 
 
 class OAuthAccessTokenExchangeFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - client_id: The ID of the Connected App client.
+    """  # noqa
+
     client_id: str
 
 
@@ -316,10 +365,22 @@ class ShopifyOAuthFactor(pydantic.BaseModel):
 
 
 class SlackOAuthExchangeFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - email_id: The globally unique UUID of the Member's email.
+    """  # noqa
+
     email_id: str
 
 
 class SlackOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique ID of an OAuth registration.
+      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
+      - email_id: The globally unique UUID of the Member's email.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -350,6 +411,11 @@ class TikTokOAuthFactor(pydantic.BaseModel):
 
 
 class TrustedAuthTokenFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - token_id: The ID of the trusted auth token.
+    """  # noqa
+
     token_id: str
 
 
@@ -380,19 +446,39 @@ class YahooOAuthFactor(pydantic.BaseModel):
 class AuthenticationFactor(pydantic.BaseModel):
     """
     Fields:
-      - type: The type of authentication factor. The possible values are: `magic_link`, `otp`,
-           `oauth`, `password`, `email_otp`, or `sso` .
+      - type: The type of authentication factor. The possible values are: `email_otp`, `impersonated`, `imported`,
+           `magic_link`, `oauth`, `otp`, `password`, `recovery_codes`, `sso`, `trusted_auth_token`, or `totp`.
       - delivery_method: The method that was used to deliver the authentication factor. The possible values depend on the `type`:
+
+          `email_otp` – Only `email`.
+
+          `impersonated` – Only `impersonation`.
+
+          `imported` – Only `imported_auth0`.
 
           `magic_link` – Only `email`.
 
-          `otp` –  Either `sms` or `email` .
+          `oauth` – The delivery method is determined by the specific OAuth provider used. The possible values are `oauth_google`, `oauth_microsoft`, `oauth_hubspot`, `oauth_slack`, or `oauth_github`.
 
-          `oauth` – Either `oauth_google` or `oauth_microsoft`.
+            In addition, you may see an 'exchange' delivery method when a non-email-verifying OAuth factor originally authenticated in one organization is exchanged for a factor in another organization.
+            This can happen during authentication flows such as [session exchange](https://stytch.com/docs/b2b/api/exchange-session).
+            The non-email-verifying OAuth providers are Hubspot, Slack, and Github.
+            Google is also considered non-email-verifying when the HD claim is empty.
+            The possible exchange values are `oauth_exchange_google`, `oauth_exchange_hubspot`, `oauth_exchange_slack`, or `oauth_exchange_github`.
+
+            The final possible value is `oauth_access_token_exchange`, if this factor came from an [access token exchange flow](https://stytch.com/docs/b2b/api/connected-app-access-token-exchange).
+
+          `otp` –  Only `sms`.
 
           `password` – Only `knowledge`.
 
+          `recovery_codes` – Only `recovery_code`.
+
           `sso` – Either `sso_saml` or `sso_oidc`.
+
+          `trusted_auth_token` – Only `trusted_token_exchange`.
+
+          `totp` – Only `authenticator_app`.
 
       - last_authenticated_at: The timestamp when the factor was last authenticated.
       - created_at: The timestamp when the factor was initially authenticated.
@@ -404,7 +490,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - apple_oauth_factor: (no documentation yet)
       - webauthn_factor: (no documentation yet)
       - authenticator_app_factor: Information about the TOTP-backed Authenticator App factor, if one is present.
-      - github_oauth_factor: (no documentation yet)
+      - github_oauth_factor: Information about the Github OAuth factor, if one is present.
       - recovery_code_factor: (no documentation yet)
       - facebook_oauth_factor: (no documentation yet)
       - crypto_wallet_factor: (no documentation yet)
@@ -417,7 +503,7 @@ class AuthenticationFactor(pydantic.BaseModel):
       - instagram_oauth_factor: (no documentation yet)
       - linked_in_oauth_factor: (no documentation yet)
       - shopify_oauth_factor: (no documentation yet)
-      - slack_oauth_factor: (no documentation yet)
+      - slack_oauth_factor: Information about the Slack OAuth factor, if one is present.
       - snapchat_oauth_factor: (no documentation yet)
       - spotify_oauth_factor: (no documentation yet)
       - steam_oauth_factor: (no documentation yet)
@@ -430,14 +516,14 @@ class AuthenticationFactor(pydantic.BaseModel):
       - oidc_sso_factor: Information about the OIDC SSO factor, if one is present.
       - salesforce_oauth_factor: (no documentation yet)
       - yahoo_oauth_factor: (no documentation yet)
-      - hubspot_oauth_factor: (no documentation yet)
-      - slack_oauth_exchange_factor: (no documentation yet)
-      - hubspot_oauth_exchange_factor: (no documentation yet)
-      - github_oauth_exchange_factor: (no documentation yet)
-      - google_oauth_exchange_factor: (no documentation yet)
+      - hubspot_oauth_factor: Information about the Hubspot OAuth factor, if one is present.
+      - slack_oauth_exchange_factor: Information about the Slack OAuth Exchange factor, if one is present.
+      - hubspot_oauth_exchange_factor: Information about the Hubspot OAuth Exchange factor, if one is present.
+      - github_oauth_exchange_factor: Information about the Github OAuth Exchange factor, if one is present.
+      - google_oauth_exchange_factor: Information about the Google OAuth Exchange factor, if one is present.
       - impersonated_factor: Information about the impersonated factor, if one is present.
-      - oauth_access_token_exchange_factor: (no documentation yet)
-      - trusted_auth_token_factor: (no documentation yet)
+      - oauth_access_token_exchange_factor: Information about the access token exchange factor, if one is present.
+      - trusted_auth_token_factor: Information about the trusted auth token factor, if one is present.
     """  # noqa
 
     type: AuthenticationFactorType
@@ -541,7 +627,8 @@ class AuthenticateResponse(ResponseBase):
       - session_token: A secret token for a given Stytch Session.
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
-      - verdict: (no documentation yet)
+      - verdict: If an `authorization_check` is provided in the request and the check succeeds, this field will return
+      information about why the User was granted permission.
     """  # noqa
 
     session: Session

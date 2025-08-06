@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import base64
-import warnings
 from typing import Any, Dict, Optional
 
 import aiohttp
@@ -67,6 +65,7 @@ class SamlShieldAsyncClient(AsyncClient):
         }
         # Keep auth but override with Bearer in headers
         self.timeout = timeout or 600
+
 
 class SamlShieldClient:
     """

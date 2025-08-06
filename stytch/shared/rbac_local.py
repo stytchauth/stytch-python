@@ -38,7 +38,8 @@ class RBACConsumerPermissionError(ValueError):
 
     def __str__(self):
         return f"Permission denied for {self.authorization_check}"
-    
+
+
 class PolicyResource(pydantic.BaseModel):
     resource_id: str
     description: str
@@ -72,56 +73,90 @@ class Policy(pydantic.BaseModel):
     resources: List[PolicyResource]
     scopes: List[PolicyScope]
 
+
 def policy_from_b2b_policy(policy: B2BPolicy) -> Policy:
     roles = []
     for role in policy.roles:
-        roles.append(PolicyRole(
-            role_id=role.role_id,
-            description=role.description,
-            permissions=[PolicyRolePermission(resource_id=permission.resource_id, actions=permission.actions) for permission in role.permissions],
-        ))
+        roles.append(
+            PolicyRole(
+                role_id=role.role_id,
+                description=role.description,
+                permissions=[
+                    PolicyRolePermission(
+                        resource_id=permission.resource_id, actions=permission.actions
+                    )
+                    for permission in role.permissions
+                ],
+            )
+        )
     resources = []
     for resource in policy.resources:
-        resources.append(PolicyResource(
-            resource_id=resource.resource_id,
-            description=resource.description,
-            actions=resource.actions,
-        ))
+        resources.append(
+            PolicyResource(
+                resource_id=resource.resource_id,
+                description=resource.description,
+                actions=resource.actions,
+            )
+        )
     scopes = []
     for scope in policy.scopes:
-        scopes.append(PolicyScope(
-            scope=scope.scope,
-            description=scope.description,
-            permissions=[PolicyScopePermission(resource_id=permission.resource_id, actions=permission.actions) for permission in scope.permissions],
-        ))
+        scopes.append(
+            PolicyScope(
+                scope=scope.scope,
+                description=scope.description,
+                permissions=[
+                    PolicyScopePermission(
+                        resource_id=permission.resource_id, actions=permission.actions
+                    )
+                    for permission in scope.permissions
+                ],
+            )
+        )
     return Policy(
         roles=roles,
         resources=resources,
         scopes=scopes,
     )
 
+
 def policy_from_consumer_policy(policy: ConsumerPolicy) -> Policy:
     roles = []
     for role in policy.roles:
-        roles.append(PolicyRole(
-            role_id=role.role_id,
-            description=role.description,
-            permissions=[PolicyRolePermission(resource_id=permission.resource_id, actions=permission.actions) for permission in role.permissions],
-        ))
+        roles.append(
+            PolicyRole(
+                role_id=role.role_id,
+                description=role.description,
+                permissions=[
+                    PolicyRolePermission(
+                        resource_id=permission.resource_id, actions=permission.actions
+                    )
+                    for permission in role.permissions
+                ],
+            )
+        )
     resources = []
     for resource in policy.resources:
-        resources.append(PolicyResource(
-            resource_id=resource.resource_id,
-            description=resource.description,
-            actions=resource.actions,
-        ))
+        resources.append(
+            PolicyResource(
+                resource_id=resource.resource_id,
+                description=resource.description,
+                actions=resource.actions,
+            )
+        )
     scopes = []
     for scope in policy.scopes:
-        scopes.append(PolicyScope(
-            scope=scope.scope,
-            description=scope.description,
-            permissions=[PolicyScopePermission(resource_id=permission.resource_id, actions=permission.actions) for permission in scope.permissions],
-        ))
+        scopes.append(
+            PolicyScope(
+                scope=scope.scope,
+                description=scope.description,
+                permissions=[
+                    PolicyScopePermission(
+                        resource_id=permission.resource_id, actions=permission.actions
+                    )
+                    for permission in scope.permissions
+                ],
+            )
+        )
     return Policy(
         roles=roles,
         resources=resources,
@@ -143,9 +178,12 @@ def perform_authorization_check(
     if subject_org_id != authorization_check.organization_id:
         raise TenancyError(subject_org_id, authorization_check.organization_id)
 
-    if not is_authorized(policy_from_b2b_policy(policy), subject_roles, authorization_check):
+    if not is_authorized(
+        policy_from_b2b_policy(policy), subject_roles, authorization_check
+    ):
         raise RBACPermissionError(authorization_check)
     return
+
 
 def perform_consumer_authorization_check(
     policy: ConsumerPolicy,
@@ -156,9 +194,12 @@ def perform_consumer_authorization_check(
     succeeds, this method will return. If the check fails, a PermissionError will be
     raised.
     """
-    if not is_authorized(policy_from_consumer_policy(policy), subject_roles, authorization_check):
+    if not is_authorized(
+        policy_from_consumer_policy(policy), subject_roles, authorization_check
+    ):
         raise RBACConsumerPermissionError(authorization_check)
     return
+
 
 def is_authorized(
     policy: Policy,
@@ -197,9 +238,15 @@ def perform_scope_authorization_check(
     if subject_org_id != authorization_check.organization_id:
         raise TenancyError(subject_org_id, authorization_check.organization_id)
 
-    if scope_authorization_check(policy_from_b2b_policy(policy), token_scopes, authorization_check.resource_id, authorization_check.action):
+    if scope_authorization_check(
+        policy_from_b2b_policy(policy),
+        token_scopes,
+        authorization_check.resource_id,
+        authorization_check.action,
+    ):
         return
     raise RBACPermissionError(authorization_check)
+
 
 def perform_consumer_scope_authorization_check(
     policy: ConsumerPolicy,
@@ -210,9 +257,15 @@ def perform_consumer_scope_authorization_check(
     succeeds, this method will return. If the check fails, a PermissionError will be
     raised.
     """
-    if not scope_authorization_check(policy_from_consumer_policy(policy), token_scopes, authorization_check.resource_id, authorization_check.action):
+    if not scope_authorization_check(
+        policy_from_consumer_policy(policy),
+        token_scopes,
+        authorization_check.resource_id,
+        authorization_check.action,
+    ):
         raise RBACConsumerPermissionError(authorization_check)
     return
+
 
 def scope_authorization_check(
     policy: Policy,
@@ -224,12 +277,9 @@ def scope_authorization_check(
         if scope.scope in token_scopes:
             for permission in scope.permissions:
                 has_matching_action = (
-                    "*" in permission.actions
-                    or action in permission.actions
+                    "*" in permission.actions or action in permission.actions
                 )
-                has_matching_resource = (
-                    resource_id == permission.resource_id
-                )
+                has_matching_resource = resource_id == permission.resource_id
                 if has_matching_action and has_matching_resource:
                     # All good, we found a matching permission
                     return True
