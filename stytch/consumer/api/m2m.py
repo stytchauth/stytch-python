@@ -59,7 +59,7 @@ class M2M:
         """  # noqa
 
         data: Dict[str, Any] = {
-            **extra,
+            **(extra or {}),
             "grant_type": "client_credentials",
             "client_id": client_id,
             "client_secret": client_secret,
@@ -90,7 +90,7 @@ class M2M:
         """  # noqa
 
         data: Dict[str, Any] = {
-            **extra,
+            **(extra or {}),
             "grant_type": "client_credentials",
             "client_id": client_id,
             "client_secret": client_secret,
