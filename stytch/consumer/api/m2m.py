@@ -45,6 +45,7 @@ class M2M:
         client_id: str,
         client_secret: str,
         scopes: Optional[List[str]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> GetTokenResponse:
         """Retrieves an access token for the given M2M Client.
         Access tokens are JWTs signed with the project's JWKs, and are valid for one hour after issuance.
@@ -54,9 +55,11 @@ class M2M:
           - client_id: The ID of the client.
           - client_secret: The secret of the client.
           - scopes: An array of scopes requested. If omitted, all scopes assigned to the client will be returned.
+          - extra: A map of extra parameters to be passed in the body of the request to the token endpoint
         """  # noqa
 
         data: Dict[str, Any] = {
+            **(extra or {}),
             "grant_type": "client_credentials",
             "client_id": client_id,
             "client_secret": client_secret,
@@ -73,6 +76,7 @@ class M2M:
         client_id: str,
         client_secret: str,
         scopes: Optional[List[str]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> GetTokenResponse:
         """Retrieves an access token for the given M2M Client.
         Access tokens are JWTs signed with the project's JWKs, and are valid for one hour after issuance.
@@ -82,9 +86,11 @@ class M2M:
           - client_id: The ID of the client.
           - client_secret: The secret of the client.
           - scopes: An array scopes requested. If omitted, all scopes assigned to the client will be returned.
+          - extra: A map of extra parameters to be passed in the body of the request to the token endpoint
         """  # noqa
 
         data: Dict[str, Any] = {
+            **(extra or {}),
             "grant_type": "client_credentials",
             "client_id": client_id,
             "client_secret": client_secret,
