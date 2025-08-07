@@ -94,7 +94,7 @@ class M2M:
 
         url = self.api_base.url_for(f"/v1/public/{self.project_id}/oauth2/token", data)
         res = await self.async_client.post(url, data)
-        return GetTokenResponse.from_json(res.response.status_code, res.json)
+        return GetTokenResponse.from_json(res.response.status, res.json)
 
     # ENDMANUAL(m2m.token)
 
