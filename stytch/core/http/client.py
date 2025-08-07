@@ -33,12 +33,26 @@ class ClientBase:
 
 
 class SyncClient(ClientBase):
-    def __init__(self, project_id: str, secret: str) -> None:
+    def __init__(
+        self,
+        project_id: str,
+        secret: str,
+        session: Optional[requests.Session] = None,
+    ) -> None:
         super().__init__(project_id, secret)
         self.auth = requests.auth.HTTPBasicAuth(project_id, secret)
+        self.__session = session
+
+    @property
+    def _session(self) -> requests.Session:
+        if self.__session is None:
+            self.__session = requests.Session()
+        return self.__session
 
     @classmethod
-    def _response_from_request(cls, r: requests.Response) -> ResponseWithJson:
+    def _response_from_request(
+        cls, r: requests.Response
+    ) -> ResponseWithJson[requests.Response]:
         try:
             resp_json = r.json()
         except Exception:
@@ -50,10 +64,12 @@ class SyncClient(ClientBase):
         url: str,
         params: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[requests.Response]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        resp = requests.get(url, params=params, headers=final_headers, auth=self.auth)
+        resp = self._session.get(
+            url, params=params, headers=final_headers, auth=self.auth
+        )
         return self._response_from_request(resp)
 
     def post(
@@ -61,10 +77,10 @@ class SyncClient(ClientBase):
         url: str,
         json: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[requests.Response]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        resp = requests.post(url, json=json, headers=final_headers, auth=self.auth)
+        resp = self._session.post(url, json=json, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
     def post_form(
@@ -72,10 +88,10 @@ class SyncClient(ClientBase):
         url: str,
         form: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[requests.Response]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        resp = requests.post(url, data=form, headers=final_headers, auth=self.auth)
+        resp = self._session.post(url, data=form, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
     def put(
@@ -83,18 +99,18 @@ class SyncClient(ClientBase):
         url: str,
         json: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[requests.Response]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        resp = requests.put(url, json=json, headers=final_headers, auth=self.auth)
+        resp = self._session.put(url, json=json, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
     def delete(
         self, url: str, headers: Optional[Dict[str, str]] = None
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[requests.Response]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
-        resp = requests.delete(url, headers=final_headers, auth=self.auth)
+        resp = self._session.delete(url, headers=final_headers, auth=self.auth)
         return self._response_from_request(resp)
 
 
@@ -133,20 +149,21 @@ class AsyncClient(ClientBase):
     @classmethod
     async def _response_from_request(
         cls, r: aiohttp.ClientResponse
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
         try:
             resp_json = await r.json()
         except Exception:
             resp_json = {}
         return ResponseWithJson(response=r, json=resp_json)
 
+    @classmethod
     async def _response_from_post_form_request(
         cls, r: aiohttp.ClientResponse
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
         try:
             content = await r.content.read()
             resp_json = json.loads(content.decode())
-        except Exception as e:
+        except Exception:
             resp_json = {}
         return ResponseWithJson(response=r, json=resp_json)
 
@@ -155,7 +172,7 @@ class AsyncClient(ClientBase):
         url: str,
         params: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
         resp = await self._session.get(
@@ -168,7 +185,7 @@ class AsyncClient(ClientBase):
         url: str,
         json: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
         resp = await self._session.post(
@@ -181,7 +198,7 @@ class AsyncClient(ClientBase):
         url: str,
         form: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
         resp = await self._session.post(
@@ -194,7 +211,7 @@ class AsyncClient(ClientBase):
         url: str,
         json: Optional[Dict[str, Any]],
         headers: Optional[Dict[str, str]] = None,
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
         resp = await self._session.put(
@@ -204,7 +221,7 @@ class AsyncClient(ClientBase):
 
     async def delete(
         self, url: str, headers: Optional[Dict[str, str]] = None
-    ) -> ResponseWithJson:
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
         final_headers = self.headers.copy()
         final_headers.update(headers or {})
         resp = await self._session.delete(url, headers=final_headers, auth=self.auth)
