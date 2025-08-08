@@ -36,7 +36,7 @@ class Sessions:
         Note that a successful password reset via an existing session will revoke all active sessions for the `member_id`, except for the one used during the reset flow.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: A secret token for a given Stytch Session.
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
@@ -96,7 +96,7 @@ class Sessions:
         Note that a successful password reset via an existing session will revoke all active sessions for the `member_id`, except for the one used during the reset flow.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: A secret token for a given Stytch Session.
           - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.

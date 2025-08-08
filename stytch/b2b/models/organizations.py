@@ -319,7 +319,7 @@ class OIDCProviderInfo(pydantic.BaseModel):
 class Organization(pydantic.BaseModel):
     """
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
       - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
       - organization_logo_url: The image URL of the Organization logo.
       - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length. Wherever an organization_id is expected in a path or request parameter, you may also use the organization_slug as a convenience.
@@ -403,6 +403,7 @@ class Organization(pydantic.BaseModel):
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
       - created_at: The timestamp of the Organization's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - updated_at: The timestamp of when the Organization was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - organization_external_id: A unique identifier for the organization.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
       - scim_active_connection: An active [SCIM Connection references](https://stytch.com/docs/b2b/api/scim-connection-object).
       - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
@@ -433,6 +434,7 @@ class Organization(pydantic.BaseModel):
     trusted_metadata: Optional[Dict[str, Any]] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
+    organization_external_id: Optional[str] = None
     sso_default_connection_id: Optional[str] = None
     scim_active_connection: Optional[ActiveSCIMConnection] = None
     allowed_oauth_tenants: Optional[Dict[str, Any]] = None
@@ -512,7 +514,7 @@ class SSORegistration(pydantic.BaseModel):
 class Member(pydantic.BaseModel):
     """
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
       - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
       - email_address: The email address of the Member.
       - status: The status of the Member. The possible values are: `pending`, `invited`, `active`, or `deleted`.

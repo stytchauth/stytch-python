@@ -176,7 +176,7 @@ class Passwords:
     ) -> AuthenticateResponse:
         """Authenticate a user with their email address and password. This endpoint verifies that the user has a password currently set, and that the entered password is correct. There are two instances where the endpoint will return a `reset_password` error even if they enter their previous password:
 
-        **One:** The user’s credentials appeared in the HaveIBeenPwned dataset. We force a password reset to ensure that the user is the legitimate owner of the email address, and not a malicious actor abusing the compromised credentials.
+        **One:** The user's credentials appeared in the HaveIBeenPwned dataset. We force a password reset to ensure that the user is the legitimate owner of the email address, and not a malicious actor abusing the compromised credentials.
 
         **Two:** A user that has previously authenticated with email/password uses a passwordless authentication method tied to the same email address (e.g. Magic Links, Google OAuth) for the first time. Any subsequent email/password authentication attempt will result in this error. We force a password reset in this instance in order to safely deduplicate the account by email address, without introducing the risk of a pre-hijack account takeover attack.
 
@@ -229,7 +229,7 @@ class Passwords:
     ) -> AuthenticateResponse:
         """Authenticate a user with their email address and password. This endpoint verifies that the user has a password currently set, and that the entered password is correct. There are two instances where the endpoint will return a `reset_password` error even if they enter their previous password:
 
-        **One:** The user’s credentials appeared in the HaveIBeenPwned dataset. We force a password reset to ensure that the user is the legitimate owner of the email address, and not a malicious actor abusing the compromised credentials.
+        **One:** The user's credentials appeared in the HaveIBeenPwned dataset. We force a password reset to ensure that the user is the legitimate owner of the email address, and not a malicious actor abusing the compromised credentials.
 
         **Two:** A user that has previously authenticated with email/password uses a passwordless authentication method tied to the same email address (e.g. Magic Links, Google OAuth) for the first time. Any subsequent email/password authentication attempt will result in this error. We force a password reset in this instance in order to safely deduplicate the account by email address, without introducing the risk of a pre-hijack account takeover attack.
 

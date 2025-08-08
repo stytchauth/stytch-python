@@ -47,7 +47,7 @@ class Email:
         The OTP is valid for 10 minutes. Only the most recently sent OTP is valid: when an OTP is sent, all OTPs previously sent to the same email address are invalidated, even if unused or unexpired.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Login.
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Signup.
@@ -95,7 +95,7 @@ class Email:
         The OTP is valid for 10 minutes. Only the most recently sent OTP is valid: when an OTP is sent, all OTPs previously sent to the same email address are invalidated, even if unused or unexpired.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Login.
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for OTP - Signup.
@@ -141,7 +141,7 @@ class Email:
         locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
-        OTPs have a default expiry of 10 minutes. If the Member’s status is `pending` or `invited`, they will be updated to `active`.
+        OTPs have a default expiry of 10 minutes. If the Member's status is `pending` or `invited`, they will be updated to `active`.
         Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
         If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
@@ -153,7 +153,7 @@ class Email:
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - code: The code to authenticate.
           - session_token: A secret token for a given Stytch Session.
@@ -216,7 +216,7 @@ class Email:
         locale: Optional[AuthenticateRequestLocale] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
-        OTPs have a default expiry of 10 minutes. If the Member’s status is `pending` or `invited`, they will be updated to `active`.
+        OTPs have a default expiry of 10 minutes. If the Member's status is `pending` or `invited`, they will be updated to `active`.
         Provide the `session_duration_minutes` parameter to set the lifetime of the session. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration.
 
         If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
@@ -228,7 +228,7 @@ class Email:
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - code: The code to authenticate.
           - session_token: A secret token for a given Stytch Session.

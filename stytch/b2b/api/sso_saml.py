@@ -48,7 +48,7 @@ class SAML:
         """Create a new SAML Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - display_name: A human-readable display name for the connection.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
 
@@ -79,7 +79,7 @@ class SAML:
         """Create a new SAML Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - display_name: A human-readable display name for the connection.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
 
@@ -134,7 +134,7 @@ class SAML:
         * `x509_certificate`
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
           - idp_entity_id: A globally unique name for the IdP. This will be provided by the IdP.
           - display_name: A human-readable display name for the connection.
@@ -234,7 +234,7 @@ class SAML:
         * `x509_certificate`
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
           - idp_entity_id: A globally unique name for the IdP. This will be provided by the IdP.
           - display_name: A human-readable display name for the connection.
@@ -318,7 +318,7 @@ class SAML:
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
           - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
         """  # noqa
@@ -353,7 +353,7 @@ class SAML:
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
           - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
         """  # noqa
@@ -384,7 +384,7 @@ class SAML:
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
 
         Fields:
-          - organization_id: The organization ID that the SAML connection belongs to. You may also use the organization_slug here as a convenience.
+          - organization_id: The organization ID that the SAML connection belongs to. You may also use the organization_slug or organization_external_id here as a convenience.
           - connection_id: The ID of the SAML connection.
           - certificate_id: The ID of the certificate to be deleted.
         """  # noqa
@@ -418,7 +418,7 @@ class SAML:
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
 
         Fields:
-          - organization_id: The organization ID that the SAML connection belongs to. You may also use the organization_slug here as a convenience.
+          - organization_id: The organization ID that the SAML connection belongs to. You may also use the organization_slug or organization_external_id here as a convenience.
           - connection_id: The ID of the SAML connection.
           - certificate_id: The ID of the certificate to be deleted.
         """  # noqa

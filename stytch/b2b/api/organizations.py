@@ -52,6 +52,7 @@ class Organizations:
         organization_slug: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
+        organization_external_id: Optional[str] = None,
         sso_jit_provisioning: Optional[str] = None,
         email_allowed_domains: Optional[List[str]] = None,
         email_jit_provisioning: Optional[str] = None,
@@ -87,6 +88,7 @@ class Organizations:
           - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length. Wherever an organization_id is expected in a path or request parameter, you may also use the organization_slug as a convenience.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
+          - organization_external_id: An identifier that can be used in API calls wherever a organization_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within a project, but may be reused across different projects in the same workspace.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
 
           `ALL_ALLOWED` – the default setting, new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
@@ -178,6 +180,8 @@ class Organizations:
             data["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
+        if organization_external_id is not None:
+            data["organization_external_id"] = organization_external_id
         if sso_jit_provisioning is not None:
             data["sso_jit_provisioning"] = sso_jit_provisioning
         if email_allowed_domains is not None:
@@ -234,6 +238,7 @@ class Organizations:
         organization_slug: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
+        organization_external_id: Optional[str] = None,
         sso_jit_provisioning: Optional[str] = None,
         email_allowed_domains: Optional[List[str]] = None,
         email_jit_provisioning: Optional[str] = None,
@@ -269,6 +274,7 @@ class Organizations:
           - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length. Wherever an organization_id is expected in a path or request parameter, you may also use the organization_slug as a convenience.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
+          - organization_external_id: An identifier that can be used in API calls wherever a organization_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within a project, but may be reused across different projects in the same workspace.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
 
           `ALL_ALLOWED` – the default setting, new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
@@ -360,6 +366,8 @@ class Organizations:
             data["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
+        if organization_external_id is not None:
+            data["organization_external_id"] = organization_external_id
         if sso_jit_provisioning is not None:
             data["sso_jit_provisioning"] = sso_jit_provisioning
         if email_allowed_domains is not None:
@@ -417,7 +425,7 @@ class Organizations:
         """Returns an Organization specified by `organization_id`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -435,7 +443,7 @@ class Organizations:
         """Returns an Organization specified by `organization_id`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -453,6 +461,7 @@ class Organizations:
         organization_slug: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
+        organization_external_id: Optional[str] = None,
         sso_default_connection_id: Optional[str] = None,
         sso_jit_provisioning: Optional[str] = None,
         sso_jit_provisioning_allowed_connections: Optional[List[str]] = None,
@@ -485,7 +494,7 @@ class Organizations:
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.organization` Resource.
@@ -498,6 +507,7 @@ class Organizations:
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
                   If a session header is passed into the request, this field may **not** be passed into the request. You cannot
                   update trusted metadata when acting as a Member.
+          - organization_external_id: An identifier that can be used in API calls wherever a organization_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within a project, but may be reused across different projects in the same workspace.
           - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-sso-connection` action on the `stytch.organization` Resource.
@@ -624,6 +634,8 @@ class Organizations:
             data["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
+        if organization_external_id is not None:
+            data["organization_external_id"] = organization_external_id
         if sso_default_connection_id is not None:
             data["sso_default_connection_id"] = sso_default_connection_id
         if sso_jit_provisioning is not None:
@@ -687,6 +699,7 @@ class Organizations:
         organization_slug: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
+        organization_external_id: Optional[str] = None,
         sso_default_connection_id: Optional[str] = None,
         sso_jit_provisioning: Optional[str] = None,
         sso_jit_provisioning_allowed_connections: Optional[List[str]] = None,
@@ -719,7 +732,7 @@ class Organizations:
         *See the [Organization authentication settings](https://stytch.com/docs/b2b/api/org-auth-settings) resource to learn more about fields like `email_jit_provisioning`, `email_invites`, `sso_jit_provisioning`, etc., and their behaviors.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.organization` Resource.
@@ -732,6 +745,7 @@ class Organizations:
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
                   If a session header is passed into the request, this field may **not** be passed into the request. You cannot
                   update trusted metadata when acting as a Member.
+          - organization_external_id: An identifier that can be used in API calls wherever a organization_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within a project, but may be reused across different projects in the same workspace.
           - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-sso-connection` action on the `stytch.organization` Resource.
@@ -858,6 +872,8 @@ class Organizations:
             data["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
             data["trusted_metadata"] = trusted_metadata
+        if organization_external_id is not None:
+            data["organization_external_id"] = organization_external_id
         if sso_default_connection_id is not None:
             data["sso_default_connection_id"] = sso_default_connection_id
         if sso_jit_provisioning is not None:
@@ -922,7 +938,7 @@ class Organizations:
         """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -943,7 +959,7 @@ class Organizations:
         """Deletes an Organization specified by `organization_id`. All Members of the Organization will also be deleted.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -1050,7 +1066,7 @@ class Organizations:
         or `third_party_connected_apps_allowed_type` policies.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -1077,7 +1093,7 @@ class Organizations:
         or `third_party_connected_apps_allowed_type` policies.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -1103,7 +1119,7 @@ class Organizations:
         authorization with the App.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - connected_app_id: The ID of the Connected App.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -1132,7 +1148,7 @@ class Organizations:
         authorization with the App.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - connected_app_id: The ID of the Connected App.
         """  # noqa
         headers: Dict[str, str] = {}
