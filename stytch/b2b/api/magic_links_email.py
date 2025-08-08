@@ -51,7 +51,7 @@ class Email:
         The magic link is valid for 60 minutes.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
           verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
@@ -117,7 +117,7 @@ class Email:
         The magic link is valid for 60 minutes.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
           verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
@@ -189,7 +189,7 @@ class Email:
         To revoke an existing invite, use the [Delete Member](https://stytch.com/docs/b2b/api/delete-member) endpoint. This will both delete the invited Member from the target Organization and revoke all existing invite emails.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - invite_redirect_url: The URL that the Member clicks from the invite Email Magic Link. This URL should be an endpoint in the backend server that verifies
           the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
@@ -266,7 +266,7 @@ class Email:
         To revoke an existing invite, use the [Delete Member](https://stytch.com/docs/b2b/api/delete-member) endpoint. This will both delete the invited Member from the target Organization and revoke all existing invite emails.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - email_address: The email address of the Member.
           - invite_redirect_url: The URL that the Member clicks from the invite Email Magic Link. This URL should be an endpoint in the backend server that verifies
           the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
