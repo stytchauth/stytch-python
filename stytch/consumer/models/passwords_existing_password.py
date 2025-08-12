@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Optional
 
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.consumer.models.sessions import Session
 from stytch.consumer.models.users import User
 from stytch.core.response_base import ResponseBase
@@ -24,6 +25,7 @@ class ResetResponse(ResponseBase):
 
       See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
+      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -31,3 +33,4 @@ class ResetResponse(ResponseBase):
     session_jwt: str
     user: User
     session: Optional[Session] = None
+    user_device: Optional[DeviceInfo] = None

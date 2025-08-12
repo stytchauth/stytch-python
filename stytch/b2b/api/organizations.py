@@ -978,7 +978,10 @@ class Organizations:
         limit: Optional[int] = None,
         query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
-        """Search for Organizations. If you send a request with no body params, no filtering will be applied and the endpoint will return all Organizations. All fuzzy search filters require a minimum of three characters.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/second.
+
+        Search across your Organizations. Returns an array of Organization objects.
 
         Fields:
           - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
@@ -1004,7 +1007,10 @@ class Organizations:
         limit: Optional[int] = None,
         query: Optional[SearchQuery] = None,
     ) -> SearchResponse:
-        """Search for Organizations. If you send a request with no body params, no filtering will be applied and the endpoint will return all Organizations. All fuzzy search filters require a minimum of three characters.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/second.
+
+        Search across your Organizations. Returns an array of Organization objects.
 
         Fields:
           - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.

@@ -512,9 +512,12 @@ class Members:
         query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
         method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
-        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/second.
 
-        *All fuzzy search filters require a minimum of three characters.
+        Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+
+        All fuzzy search filters require a minimum of three characters.
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
@@ -547,9 +550,12 @@ class Members:
         query: Optional[SearchQuery] = None,
         method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
-        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/second.
 
-        *All fuzzy search filters require a minimum of three characters.
+        Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+
+        All fuzzy search filters require a minimum of three characters.
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
