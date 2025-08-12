@@ -101,6 +101,7 @@ class OAuth:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         code_verifier: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a User given a `token`. This endpoint verifies that the user completed the OAuth flow by verifying that the token is valid and hasn't expired. To initiate a Stytch session for the user while authenticating their OAuth token, include `session_duration_minutes`; a session with the identity provider, e.g. Google or Facebook, will always be initiated upon successful authentication.
 
@@ -125,6 +126,7 @@ class OAuth:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -140,6 +142,8 @@ class OAuth:
             data["session_custom_claims"] = session_custom_claims
         if code_verifier is not None:
             data["code_verifier"] = code_verifier
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/oauth/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -153,6 +157,7 @@ class OAuth:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         code_verifier: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a User given a `token`. This endpoint verifies that the user completed the OAuth flow by verifying that the token is valid and hasn't expired. To initiate a Stytch session for the user while authenticating their OAuth token, include `session_duration_minutes`; a session with the identity provider, e.g. Google or Facebook, will always be initiated upon successful authentication.
 
@@ -177,6 +182,7 @@ class OAuth:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -192,6 +198,8 @@ class OAuth:
             data["session_custom_claims"] = session_custom_claims
         if code_verifier is not None:
             data["code_verifier"] = code_verifier
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/oauth/authenticate", data)
         res = await self.async_client.post(url, data, headers)

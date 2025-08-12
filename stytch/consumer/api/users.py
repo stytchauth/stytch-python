@@ -187,7 +187,10 @@ class Users:
         limit: Optional[int] = None,
         query: Optional[Union[SearchUsersQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
-        """Search for Users within your Stytch Project.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 150 requests/second.
+
+        Search for Users within your Stytch Project.
 
         Use the `query` object to filter by different fields. See the `query.operands.filter_value` documentation below for a list of available filters.
 
@@ -221,7 +224,10 @@ class Users:
         limit: Optional[int] = None,
         query: Optional[SearchUsersQuery] = None,
     ) -> SearchResponse:
-        """Search for Users within your Stytch Project.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 150 requests/second.
+
+        Search for Users within your Stytch Project.
 
         Use the `query` object to filter by different fields. See the `query.operands.filter_value` documentation below for a list of available filters.
 

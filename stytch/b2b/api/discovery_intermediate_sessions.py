@@ -31,6 +31,7 @@ class IntermediateSessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[Union[ExchangeRequestLocale, str]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeResponse:
         """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) for the [Organization](https://stytch.com/docs/b2b/api/organization-object) that the user wishes to log into.
 
@@ -73,6 +74,7 @@ class IntermediateSessions:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -85,6 +87,8 @@ class IntermediateSessions:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for(
             "/v1/b2b/discovery/intermediate_sessions/exchange", data
@@ -99,6 +103,7 @@ class IntermediateSessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[ExchangeRequestLocale] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeResponse:
         """Exchange an Intermediate Session for a fully realized [Member Session](https://stytch.com/docs/b2b/api/session-object) for the [Organization](https://stytch.com/docs/b2b/api/organization-object) that the user wishes to log into.
 
@@ -141,6 +146,7 @@ class IntermediateSessions:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -153,6 +159,8 @@ class IntermediateSessions:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for(
             "/v1/b2b/discovery/intermediate_sessions/exchange", data

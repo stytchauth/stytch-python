@@ -307,6 +307,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[Union[ExchangeRequestLocale, str]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 
@@ -351,6 +352,7 @@ class Sessions:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -366,6 +368,8 @@ class Sessions:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = self.sync_client.post(url, data, headers)
@@ -379,6 +383,7 @@ class Sessions:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[ExchangeRequestLocale] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeResponse:
         """Use this endpoint to exchange a Member's existing session for another session in a different Organization. This can be used to accept an invite, but not to create a new member via domain matching.
 
@@ -423,6 +428,7 @@ class Sessions:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -438,6 +444,8 @@ class Sessions:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange", data)
         res = await self.async_client.post(url, data, headers)
@@ -448,6 +456,7 @@ class Sessions:
         access_token: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeAccessTokenResponse:
         """Use this endpoint to exchange a Connected Apps Access Token back into a Member Session for the underlying Member.
         This session can be used with the Stytch SDKs and APIs.
@@ -474,6 +483,7 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -483,6 +493,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange_access_token", data)
         res = self.sync_client.post(url, data, headers)
@@ -493,6 +505,7 @@ class Sessions:
         access_token: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeAccessTokenResponse:
         """Use this endpoint to exchange a Connected Apps Access Token back into a Member Session for the underlying Member.
         This session can be used with the Stytch SDKs and APIs.
@@ -519,6 +532,7 @@ class Sessions:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -528,6 +542,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/exchange_access_token", data)
         res = await self.async_client.post(url, data, headers)
@@ -542,6 +558,7 @@ class Sessions:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AttestResponse:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens).  If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
@@ -565,6 +582,7 @@ class Sessions:
           Total custom claims size cannot exceed four kilobytes.
           - session_token: The `session_token` for the session that you wish to add the trusted auth token authentication factor to.
           - session_jwt: The `session_jwt` for the session that you wish to add the trusted auth token authentication factor to.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -580,6 +598,8 @@ class Sessions:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/attest", data)
         res = self.sync_client.post(url, data, headers)
@@ -594,6 +614,7 @@ class Sessions:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AttestResponse:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens).  If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
@@ -617,6 +638,7 @@ class Sessions:
           Total custom claims size cannot exceed four kilobytes.
           - session_token: The `session_token` for the session that you wish to add the trusted auth token authentication factor to.
           - session_jwt: The `session_jwt` for the session that you wish to add the trusted auth token authentication factor to.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -632,6 +654,8 @@ class Sessions:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/sessions/attest", data)
         res = await self.async_client.post(url, data, headers)

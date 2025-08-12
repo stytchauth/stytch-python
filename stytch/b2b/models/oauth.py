@@ -15,6 +15,7 @@ import pydantic
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.core.response_base import ResponseBase
 
 
@@ -66,6 +67,7 @@ class AuthenticateResponse(ResponseBase):
       Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft. Google One Tap does not return access tokens or refresh tokens.
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
       - primary_required: Information about the primary authentication requirements of the Organization.
+      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
     """  # noqa
 
     member_id: str
@@ -83,3 +85,4 @@ class AuthenticateResponse(ResponseBase):
     provider_values: Optional[ProviderValues] = None
     mfa_required: Optional[MfaRequired] = None
     primary_required: Optional[PrimaryRequired] = None
+    member_device: Optional[DeviceInfo] = None

@@ -169,6 +169,7 @@ class Sms:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         set_mfa_enrollment: Optional[str] = None,
         set_default_mfa: Optional[bool] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """SMS OTPs may not be used as a primary authentication mechanism. They can be used to complete an MFA requirement, or they can be used as a step-up factor to be added to an existing session.
 
@@ -217,6 +218,7 @@ class Sms:
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
           - set_default_mfa: (no documentation yet)
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -238,6 +240,8 @@ class Sms:
             data["set_mfa_enrollment"] = set_mfa_enrollment
         if set_default_mfa is not None:
             data["set_default_mfa"] = set_default_mfa
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -255,6 +259,7 @@ class Sms:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         set_mfa_enrollment: Optional[str] = None,
         set_default_mfa: Optional[bool] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """SMS OTPs may not be used as a primary authentication mechanism. They can be used to complete an MFA requirement, or they can be used as a step-up factor to be added to an existing session.
 
@@ -303,6 +308,7 @@ class Sms:
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
           - set_default_mfa: (no documentation yet)
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -324,6 +330,8 @@ class Sms:
             data["set_mfa_enrollment"] = set_mfa_enrollment
         if set_default_mfa is not None:
             data["set_default_mfa"] = set_default_mfa
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/otps/sms/authenticate", data)
         res = await self.async_client.post(url, data, headers)
