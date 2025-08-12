@@ -58,6 +58,7 @@ class Organizations:
             Union[CreateRequestThirdPartyConnectedAppsAllowedType, str]
         ] = None,
         allowed_third_party_connected_apps: Optional[List[str]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> CreateResponse:
         """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a Discovery authentication flow to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object) and log the user in. If the user wants to log into an existing Organization, use the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) instead.
@@ -174,6 +175,7 @@ class Organizations:
           `NOT_ALLOWED` – no third party Connected Apps are permitted.
 
           - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -234,6 +236,8 @@ class Organizations:
             data["allowed_third_party_connected_apps"] = (
                 allowed_third_party_connected_apps
             )
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = self.sync_client.post(url, data, headers)
@@ -270,6 +274,7 @@ class Organizations:
             CreateRequestThirdPartyConnectedAppsAllowedType
         ] = None,
         allowed_third_party_connected_apps: Optional[List[str]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> CreateResponse:
         """This endpoint allows you to exchange the `intermediate_session_token` returned when the user successfully completes a Discovery authentication flow to create a new
         [Organization](https://stytch.com/docs/b2b/api/organization-object) and [Member](https://stytch.com/docs/b2b/api/member-object) and log the user in. If the user wants to log into an existing Organization, use the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) instead.
@@ -386,6 +391,7 @@ class Organizations:
           `NOT_ALLOWED` – no third party Connected Apps are permitted.
 
           - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -446,6 +452,8 @@ class Organizations:
             data["allowed_third_party_connected_apps"] = (
                 allowed_third_party_connected_apps
             )
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/discovery/organizations/create", data)
         res = await self.async_client.post(url, data, headers)

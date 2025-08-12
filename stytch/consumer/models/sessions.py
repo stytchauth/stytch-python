@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional
 import pydantic
 
 from stytch.consumer.models.attribute import Attributes
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.consumer.models.users import User
 from stytch.core.response_base import ResponseBase
 
@@ -608,6 +609,7 @@ class AttestResponse(ResponseBase):
 
       See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
+      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -615,6 +617,7 @@ class AttestResponse(ResponseBase):
     session_jwt: str
     user: User
     session: Optional[Session] = None
+    user_device: Optional[DeviceInfo] = None
 
 
 class AuthenticateResponse(ResponseBase):
@@ -649,6 +652,7 @@ class ExchangeAccessTokenResponse(ResponseBase):
 
       See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
+      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -656,6 +660,7 @@ class ExchangeAccessTokenResponse(ResponseBase):
     session_jwt: str
     user: User
     session: Optional[Session] = None
+    user_device: Optional[DeviceInfo] = None
 
 
 class GetJWKSResponse(ResponseBase):
@@ -687,6 +692,7 @@ class MigrateResponse(ResponseBase):
 
       See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
+      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -694,6 +700,7 @@ class MigrateResponse(ResponseBase):
     session_jwt: str
     user: User
     session: Optional[Session] = None
+    user_device: Optional[DeviceInfo] = None
 
 
 class RevokeResponse(ResponseBase):

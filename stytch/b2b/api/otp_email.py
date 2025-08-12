@@ -139,6 +139,7 @@ class Email:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
         OTPs have a default expiry of 10 minutes. If the Member's status is `pending` or `invited`, they will be updated to `active`.
@@ -179,6 +180,7 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -198,6 +200,8 @@ class Email:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/otps/email/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -214,6 +218,7 @@ class Email:
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[AuthenticateRequestLocale] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member with a one-time passcode (OTP). This endpoint requires an OTP that is not expired or previously used.
         OTPs have a default expiry of 10 minutes. If the Member's status is `pending` or `invited`, they will be updated to `active`.
@@ -254,6 +259,7 @@ class Email:
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -273,6 +279,8 @@ class Email:
             data["session_custom_claims"] = session_custom_claims
         if locale is not None:
             data["locale"] = locale
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/otps/email/authenticate", data)
         res = await self.async_client.post(url, data, headers)
