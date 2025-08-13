@@ -551,9 +551,9 @@ class Sessions:
 
     def attest(
         self,
-        organization_id: str,
         profile_id: str,
         token: str,
+        organization_id: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         session_token: Optional[str] = None,
@@ -563,9 +563,9 @@ class Sessions:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens).  If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
         Fields:
-          - organization_id: The organization ID that the session should be authenticated in.
           - profile_id: The ID of the trusted auth token profile to use for attestation.
           - token: The trusted auth token to authenticate.
+          - organization_id: The organization ID that the session should be authenticated in.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.
@@ -586,10 +586,11 @@ class Sessions:
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-            "organization_id": organization_id,
             "profile_id": profile_id,
             "token": token,
         }
+        if organization_id is not None:
+            data["organization_id"] = organization_id
         if session_duration_minutes is not None:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
@@ -607,9 +608,9 @@ class Sessions:
 
     async def attest_async(
         self,
-        organization_id: str,
         profile_id: str,
         token: str,
+        organization_id: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         session_token: Optional[str] = None,
@@ -619,9 +620,9 @@ class Sessions:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens).  If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
         Fields:
-          - organization_id: The organization ID that the session should be authenticated in.
           - profile_id: The ID of the trusted auth token profile to use for attestation.
           - token: The trusted auth token to authenticate.
+          - organization_id: The organization ID that the session should be authenticated in.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.
@@ -642,10 +643,11 @@ class Sessions:
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
-            "organization_id": organization_id,
             "profile_id": profile_id,
             "token": token,
         }
+        if organization_id is not None:
+            data["organization_id"] = organization_id
         if session_duration_minutes is not None:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:

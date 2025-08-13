@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional
 
 import jwt
 
+from stytch.b2b.api.idp_oauth import OAuth
 from stytch.b2b.models.sessions import AuthorizationCheck
 from stytch.consumer.models.idp import IDPTokenClaims, IDPTokenResponse
 from stytch.core.api_base import ApiBase
@@ -34,6 +35,11 @@ class IDP:
         self.policy_cache = policy_cache
         self.jwks_client = jwks_client
         self.project_id = project_id
+        self.oauth = OAuth(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     # MANUAL(IDP)(SERVICE_METHOD)
     # ADDIMPORT: from stytch.b2b.models.sessions import AuthorizationCheck

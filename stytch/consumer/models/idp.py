@@ -14,6 +14,13 @@ from stytch.core.response_base import ResponseBase
 
 
 class ScopeResult(pydantic.BaseModel):
+    """
+    Fields:
+      - scope: The name of the scope.
+      - description: A human-readable description of the scope, taken from the RBAC Policy.
+      - is_grantable: Indicates whether the scope can be granted. Users can only grant scopes if they have the required permissions.
+    """  # noqa
+
     scope: str
     description: str
     is_grantable: bool

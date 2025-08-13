@@ -119,7 +119,7 @@ class Members:
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
-          - email_address: Updates the Member's `email_address`, if provided.
+          - email_address: Updates the Member's `email_address`, if provided. This will clear any existing passwords and require re-verification of the new email address.
                 If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
                 A Member's email address can only be useable again by other Members if the Member is deleted.
 
@@ -224,7 +224,7 @@ class Members:
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
-          - email_address: Updates the Member's `email_address`, if provided.
+          - email_address: Updates the Member's `email_address`, if provided. This will clear any existing passwords and require re-verification of the new email address.
                 If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
                 A Member's email address can only be useable again by other Members if the Member is deleted.
 
