@@ -273,14 +273,14 @@ class Clients:
     def create(
         self,
         client_type: Union[CreateRequestClientType, str],
-        redirect_urls: List[str],
-        full_access_allowed: bool,
-        post_logout_redirect_urls: List[str],
         client_name: Optional[str] = None,
         client_description: Optional[str] = None,
+        redirect_urls: Optional[List[str]] = None,
+        full_access_allowed: Optional[bool] = None,
         access_token_expiry_minutes: Optional[int] = None,
         access_token_custom_audience: Optional[str] = None,
         access_token_template_content: Optional[str] = None,
+        post_logout_redirect_urls: Optional[List[str]] = None,
         logo_url: Optional[str] = None,
         bypass_consent_for_offline_access: Optional[bool] = None,
     ) -> CreateResponse:
@@ -290,34 +290,37 @@ class Clients:
 
         Fields:
           - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
-          - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
-          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
+          - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
+          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
           - access_token_expiry_minutes: The number of minutes before the access token expires. The default is 60 minutes.
           - access_token_custom_audience: The custom audience for the access token.
           - access_token_template_content: The content of the access token custom claims template. The template must be a valid JSON object.
+          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - logo_url: The logo URL of the Connected App, if any.
           - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_type": client_type,
-            "redirect_urls": redirect_urls,
-            "full_access_allowed": full_access_allowed,
-            "post_logout_redirect_urls": post_logout_redirect_urls,
         }
         if client_name is not None:
             data["client_name"] = client_name
         if client_description is not None:
             data["client_description"] = client_description
+        if redirect_urls is not None:
+            data["redirect_urls"] = redirect_urls
+        if full_access_allowed is not None:
+            data["full_access_allowed"] = full_access_allowed
         if access_token_expiry_minutes is not None:
             data["access_token_expiry_minutes"] = access_token_expiry_minutes
         if access_token_custom_audience is not None:
             data["access_token_custom_audience"] = access_token_custom_audience
         if access_token_template_content is not None:
             data["access_token_template_content"] = access_token_template_content
+        if post_logout_redirect_urls is not None:
+            data["post_logout_redirect_urls"] = post_logout_redirect_urls
         if logo_url is not None:
             data["logo_url"] = logo_url
         if bypass_consent_for_offline_access is not None:
@@ -332,14 +335,14 @@ class Clients:
     async def create_async(
         self,
         client_type: CreateRequestClientType,
-        redirect_urls: List[str],
-        full_access_allowed: bool,
-        post_logout_redirect_urls: List[str],
         client_name: Optional[str] = None,
         client_description: Optional[str] = None,
+        redirect_urls: Optional[List[str]] = None,
+        full_access_allowed: Optional[bool] = None,
         access_token_expiry_minutes: Optional[int] = None,
         access_token_custom_audience: Optional[str] = None,
         access_token_template_content: Optional[str] = None,
+        post_logout_redirect_urls: Optional[List[str]] = None,
         logo_url: Optional[str] = None,
         bypass_consent_for_offline_access: Optional[bool] = None,
     ) -> CreateResponse:
@@ -349,34 +352,37 @@ class Clients:
 
         Fields:
           - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
-          - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
-          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
+          - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
+          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
           - access_token_expiry_minutes: The number of minutes before the access token expires. The default is 60 minutes.
           - access_token_custom_audience: The custom audience for the access token.
           - access_token_template_content: The content of the access token custom claims template. The template must be a valid JSON object.
+          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - logo_url: The logo URL of the Connected App, if any.
           - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "client_type": client_type,
-            "redirect_urls": redirect_urls,
-            "full_access_allowed": full_access_allowed,
-            "post_logout_redirect_urls": post_logout_redirect_urls,
         }
         if client_name is not None:
             data["client_name"] = client_name
         if client_description is not None:
             data["client_description"] = client_description
+        if redirect_urls is not None:
+            data["redirect_urls"] = redirect_urls
+        if full_access_allowed is not None:
+            data["full_access_allowed"] = full_access_allowed
         if access_token_expiry_minutes is not None:
             data["access_token_expiry_minutes"] = access_token_expiry_minutes
         if access_token_custom_audience is not None:
             data["access_token_custom_audience"] = access_token_custom_audience
         if access_token_template_content is not None:
             data["access_token_template_content"] = access_token_template_content
+        if post_logout_redirect_urls is not None:
+            data["post_logout_redirect_urls"] = post_logout_redirect_urls
         if logo_url is not None:
             data["logo_url"] = logo_url
         if bypass_consent_for_offline_access is not None:

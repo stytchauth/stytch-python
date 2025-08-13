@@ -393,7 +393,8 @@ class Passwords:
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
            the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: (no documentation yet)
+          - roles: Roles to explicitly assign to this User.
+           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -488,7 +489,8 @@ class Passwords:
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
            the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: (no documentation yet)
+          - roles: Roles to explicitly assign to this User.
+           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

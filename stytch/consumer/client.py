@@ -13,7 +13,6 @@ import jwt
 from stytch.consumer.api.connected_apps import ConnectedApp
 from stytch.consumer.api.crypto_wallets import CryptoWallets
 from stytch.consumer.api.fraud import Fraud
-from stytch.consumer.api.idp import IDP
 from stytch.consumer.api.impersonation import Impersonation
 from stytch.consumer.api.m2m import M2M
 from stytch.consumer.api.magic_links import MagicLinks
@@ -144,14 +143,6 @@ class Client(ClientBase):
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
-        )
-        self.idp = IDP(
-            api_base=self.api_base,
-            sync_client=self.sync_client,
-            async_client=self.async_client,
-            jwks_client=self.jwks_client,
-            project_id=project_id,
-            policy_cache=policy_cache,
         )
 
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
