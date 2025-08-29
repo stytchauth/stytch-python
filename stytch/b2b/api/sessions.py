@@ -564,8 +564,8 @@ class Sessions:
 
         Fields:
           - profile_id: The ID of the trusted auth token profile to use for attestation.
-          - token: The trusted auth token to authenticate.
-          - organization_id: The organization ID that the session should be authenticated in.
+          - token: The trusted auth token to authenticate. The token must have an organization ID claim if JIT provisioning is enabled.
+          - organization_id: The organization ID that the session should be authenticated in. Must be provided if the trusted auth token does not have an organization ID claim.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.
@@ -621,8 +621,8 @@ class Sessions:
 
         Fields:
           - profile_id: The ID of the trusted auth token profile to use for attestation.
-          - token: The trusted auth token to authenticate.
-          - organization_id: The organization ID that the session should be authenticated in.
+          - token: The trusted auth token to authenticate. The token must have an organization ID claim if JIT provisioning is enabled.
+          - organization_id: The organization ID that the session should be authenticated in. Must be provided if the trusted auth token does not have an organization ID claim.
           - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
           returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
           five minutes regardless of the underlying session duration, and will need to be refreshed over time.

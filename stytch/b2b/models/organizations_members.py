@@ -313,7 +313,7 @@ class ReactivateResponse(ResponseBase):
 class SearchResponse(ResponseBase):
     """Response type for `Members.search`.
     Fields:
-      - members: An array of [Member objects](member-object).
+      - members: An array of [Member objects](https://stytch.com/docs/b2b/api/member-object).
       - results_metadata: The search `results_metadata` object contains metadata relevant to your specific query like `total` and `next_cursor`.
       - organizations: A map from `organization_id` to [Organization object](https://stytch.com/docs/b2b/api/organization-object). The map only contains the Organizations that the Members belongs to.
     """  # noqa

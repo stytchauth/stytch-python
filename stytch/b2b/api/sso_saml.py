@@ -16,6 +16,8 @@ from stytch.b2b.models.sso_saml import (
     CreateConnectionRequestIdentityProvider,
     CreateConnectionRequestOptions,
     CreateConnectionResponse,
+    DeleteEncryptionPrivateKeyRequestOptions,
+    DeleteEncryptionPrivateKeyResponse,
     DeleteVerificationCertificateRequestOptions,
     DeleteVerificationCertificateResponse,
     UpdateByURLRequestOptions,
@@ -123,6 +125,7 @@ class SAML:
         nameid_format: Optional[str] = None,
         alternative_acs_url: Optional[str] = None,
         idp_initiated_auth_disabled: Optional[bool] = None,
+        saml_encryption_private_key: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -155,6 +158,7 @@ class SAML:
           - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
           - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
+          - saml_encryption_private_key: A PKCS1 format RSA private key used to decrypt encrypted SAML assertions. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -195,6 +199,8 @@ class SAML:
             data["alternative_acs_url"] = alternative_acs_url
         if idp_initiated_auth_disabled is not None:
             data["idp_initiated_auth_disabled"] = idp_initiated_auth_disabled
+        if saml_encryption_private_key is not None:
+            data["saml_encryption_private_key"] = saml_encryption_private_key
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
@@ -223,6 +229,7 @@ class SAML:
         nameid_format: Optional[str] = None,
         alternative_acs_url: Optional[str] = None,
         idp_initiated_auth_disabled: Optional[bool] = None,
+        saml_encryption_private_key: Optional[str] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -255,6 +262,7 @@ class SAML:
           - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
           - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
+          - saml_encryption_private_key: A PKCS1 format RSA private key used to decrypt encrypted SAML assertions. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -295,6 +303,8 @@ class SAML:
             data["alternative_acs_url"] = alternative_acs_url
         if idp_initiated_auth_disabled is not None:
             data["idp_initiated_auth_disabled"] = idp_initiated_auth_disabled
+        if saml_encryption_private_key is not None:
+            data["saml_encryption_private_key"] = saml_encryption_private_key
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
@@ -437,5 +447,69 @@ class SAML:
         )
         res = await self.async_client.delete(url, headers)
         return DeleteVerificationCertificateResponse.from_json(
+            res.response.status, res.json
+        )
+
+    def delete_encryption_private_key(
+        self,
+        organization_id: str,
+        connection_id: str,
+        private_key_id: str,
+        method_options: Optional[DeleteEncryptionPrivateKeyRequestOptions] = None,
+    ) -> DeleteEncryptionPrivateKeyResponse:
+        """Delete a SAML encryption private key.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - private_key_id: The ID of the encryption private key to be deleted.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+            "private_key_id": private_key_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/encryption_private_keys/{private_key_id}",
+            data,
+        )
+        res = self.sync_client.delete(url, headers)
+        return DeleteEncryptionPrivateKeyResponse.from_json(
+            res.response.status_code, res.json
+        )
+
+    async def delete_encryption_private_key_async(
+        self,
+        organization_id: str,
+        connection_id: str,
+        private_key_id: str,
+        method_options: Optional[DeleteEncryptionPrivateKeyRequestOptions] = None,
+    ) -> DeleteEncryptionPrivateKeyResponse:
+        """Delete a SAML encryption private key.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - private_key_id: The ID of the encryption private key to be deleted.
+        """  # noqa
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+            "connection_id": connection_id,
+            "private_key_id": private_key_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}/encryption_private_keys/{private_key_id}",
+            data,
+        )
+        res = await self.async_client.delete(url, headers)
+        return DeleteEncryptionPrivateKeyResponse.from_json(
             res.response.status, res.json
         )
