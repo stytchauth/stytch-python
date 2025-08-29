@@ -65,6 +65,12 @@ class DeleteConnectionRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class EncryptionPrivateKey(pydantic.BaseModel):
+    private_key_id: str
+    private_key: str
+    created_at: Optional[datetime.datetime] = None
+
+
 class GetConnectionsRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -190,6 +196,7 @@ class SAMLConnection(pydantic.BaseModel):
     audience_uri: str
     signing_certificates: List[X509Certificate]
     verification_certificates: List[X509Certificate]
+    encryption_private_keys: List[EncryptionPrivateKey]
     saml_connection_implicit_role_assignments: List[
         SAMLConnectionImplicitRoleAssignment
     ]

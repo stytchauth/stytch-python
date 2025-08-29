@@ -118,8 +118,8 @@ class StrengthCheckResponse(ResponseBase):
     """Response type for `Passwords.strength_check`.
     Fields:
       - valid_password: Returns `true` if the password passes our password validation. We offer two validation options,
-      [zxcvbn](https://stytch.com/docs/passwords#strength-requirements) is the default option which offers a high level of sophistication.
-      We also offer [LUDS](https://stytch.com/docs/passwords#strength-requirements). If an email address is included in the call we also
+      [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy) is the default option which offers a high level of sophistication.
+      We also offer [LUDS](https://stytch.com/docs/b2b/guides/passwords/strength-policy). If an email address is included in the call we also
       require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/)
       - score: The score of the password determined by [zxcvbn](https://github.com/dropbox/zxcvbn). Values will be between 1 and 4, a 3 or greater is required to pass validation.
       - breached_password: Returns `true` if the password has been breached. Powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
@@ -127,8 +127,8 @@ class StrengthCheckResponse(ResponseBase):
       - breach_detection_on_create: Will return `true` if breach detection will be evaluated. By default this option is enabled.
       This option can be disabled by contacting [support@stytch.com](mailto:support@stytch.com?subject=Password%20strength%20configuration).
       If this value is false then `breached_password` will always be `false` as well.
-      - luds_feedback: Feedback for how to improve the password's strength using [luds](https://stytch.com/docs/passwords#strength-requirements).
-      - zxcvbn_feedback: Feedback for how to improve the password's strength using [zxcvbn](https://stytch.com/docs/passwords#strength-requirements).
+      - luds_feedback: Feedback for how to improve the password's strength using [luds](https://stytch.com/docs/guides/passwords/strength-policy).
+      - zxcvbn_feedback: Feedback for how to improve the password's strength using [zxcvbn](https://stytch.com/docs/b2b/guides/passwords/strength-policy).
     """  # noqa
 
     valid_password: bool

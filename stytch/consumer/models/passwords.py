@@ -196,7 +196,7 @@ class MigrateResponse(ResponseBase):
 class StrengthCheckResponse(ResponseBase):
     """Response type for `Passwords.strength_check`.
     Fields:
-      - valid_password: Returns `true` if the password passes our password validation. We offer two validation options, [zxcvbn](https://stytch.com/docs/passwords#strength-requirements) is the default option which offers a high level of sophistication. We also offer [LUDS](https://stytch.com/docs/passwords#strength-requirements). If an email address is included in the call we also require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
+      - valid_password: Returns `true` if the password passes our password validation. We offer two validation options, [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy) is the default option which offers a high level of sophistication. We also offer [LUDS](https://stytch.com/docs/guides/passwords/strength-policy). If an email address is included in the call we also require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
       - score: The score of the password determined by [zxcvbn](https://github.com/dropbox/zxcvbn). Values will be between 1 and 4, a 3 or greater is required to pass validation.
       - breached_password: Returns `true` if the password has been breached. Powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
       - strength_policy: The strength policy type enforced, either `zxcvbn` or `luds`.
