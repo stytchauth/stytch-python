@@ -104,7 +104,9 @@ class IntegrationTestBase(unittest.TestCase):
         test_user = self.__get_temporary_test_user()
         if create:
             if via_magic_link:
-                users_resp = self.b2c_client.users.create(email=test_user.email)
+                users_resp = self.b2c_client.users.create(
+                    roles=[], email=test_user.email
+                )
                 user_id = users_resp.user_id
             else:
                 pw_resp = self.b2c_client.passwords.create(
@@ -125,7 +127,7 @@ class IntegrationTestBase(unittest.TestCase):
         if create:
             if via_magic_link:
                 users_resp = await self.b2c_client.users.create_async(
-                    email=test_user.email
+                    roles=[], email=test_user.email
                 )
                 user_id = users_resp.user_id
             else:
