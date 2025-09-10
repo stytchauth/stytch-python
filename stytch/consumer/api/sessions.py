@@ -230,6 +230,7 @@ class Sessions:
         session_token: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> MigrateResponse:
         """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
 
@@ -247,6 +248,7 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -256,6 +258,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/sessions/migrate", data)
         res = self.sync_client.post(url, data, headers)
@@ -266,6 +270,7 @@ class Sessions:
         session_token: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> MigrateResponse:
         """Migrate a session from an external OIDC compliant endpoint. Stytch will call the external UserInfo endpoint defined in your Stytch Project settings in the [Dashboard](https://stytch.com/dashboard), and then perform a lookup using the `session_token`. If the response contains a valid email address, Stytch will attempt to match that email address with an existing User and create a Stytch Session. You will need to create the user before using this endpoint.
 
@@ -283,6 +288,7 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -292,6 +298,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/sessions/migrate", data)
         res = await self.async_client.post(url, data, headers)
@@ -302,6 +310,7 @@ class Sessions:
         access_token: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeAccessTokenResponse:
         """Use this endpoint to exchange a Connected Apps Access Token back into a Stytch Session for the underlying User.
         This session can be used with the Stytch SDKs and APIs.
@@ -324,6 +333,7 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -333,6 +343,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/sessions/exchange_access_token", data)
         res = self.sync_client.post(url, data, headers)
@@ -343,6 +355,7 @@ class Sessions:
         access_token: str,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ExchangeAccessTokenResponse:
         """Use this endpoint to exchange a Connected Apps Access Token back into a Stytch Session for the underlying User.
         This session can be used with the Stytch SDKs and APIs.
@@ -365,6 +378,7 @@ class Sessions:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -374,6 +388,8 @@ class Sessions:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/sessions/exchange_access_token", data)
         res = await self.async_client.post(url, data, headers)
@@ -443,6 +459,7 @@ class Sessions:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AttestResponse:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
@@ -463,6 +480,7 @@ class Sessions:
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - session_token: The `session_token` for the session that you wish to add the trusted auth token authentication factor to.
           - session_jwt: The `session_jwt` for the session that you wish to add the trusted auth token authentication factor to.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -477,6 +495,8 @@ class Sessions:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/sessions/attest", data)
         res = self.sync_client.post(url, data, headers)
@@ -490,6 +510,7 @@ class Sessions:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         session_token: Optional[str] = None,
         session_jwt: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AttestResponse:
         """Exchange an auth token issued by a trusted identity provider for a Stytch session. You must first register a Trusted Auth Token profile in the Stytch dashboard [here](https://stytch.com/dashboard/trusted-auth-tokens). If a session token or session JWT is provided, it will add the trusted auth token as an authentication factor to the existing session.
 
@@ -510,6 +531,7 @@ class Sessions:
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - session_token: The `session_token` for the session that you wish to add the trusted auth token authentication factor to.
           - session_jwt: The `session_jwt` for the session that you wish to add the trusted auth token authentication factor to.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -524,6 +546,8 @@ class Sessions:
             data["session_token"] = session_token
         if session_jwt is not None:
             data["session_jwt"] = session_jwt
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/sessions/attest", data)
         res = await self.async_client.post(url, data, headers)

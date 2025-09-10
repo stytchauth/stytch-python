@@ -94,7 +94,7 @@ class Members:
           for complete field behavior details.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.untrusted-metadata` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.untrusted-metadata` action on the `stytch.self` Resource.
-          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.is-breakglass` action on the `stytch.member` Resource.
           - mfa_phone_number: Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-mfa-phone-number) to delete the Member's existing phone number first.
@@ -119,12 +119,12 @@ class Members:
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
-          - email_address: Updates the Member's `email_address`, if provided.
+          - email_address: Updates the Member's `email_address`, if provided. This will clear any existing passwords and require re-verification of the new email address.
                 If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
                 A Member's email address can only be useable again by other Members if the Member is deleted.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
           - unlink_email: If `unlink_email` is `true` and an `email_address` is provided, the Member's previous email will be deleted instead of retired. Defaults to `false`.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -199,7 +199,7 @@ class Members:
           for complete field behavior details.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.untrusted-metadata` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.untrusted-metadata` action on the `stytch.self` Resource.
-          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.is-breakglass` action on the `stytch.member` Resource.
           - mfa_phone_number: Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-mfa-phone-number) to delete the Member's existing phone number first.
@@ -224,12 +224,12 @@ class Members:
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
-          - email_address: Updates the Member's `email_address`, if provided.
+          - email_address: Updates the Member's `email_address`, if provided. This will clear any existing passwords and require re-verification of the new email address.
                 If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
                 A Member's email address can only be useable again by other Members if the Member is deleted.
 
         If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
           - unlink_email: If `unlink_email` is `true` and an `email_address` is provided, the Member's previous email will be deleted instead of retired. Defaults to `false`.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -330,9 +330,11 @@ class Members:
     ) -> ReactivateResponse:
         """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`. This endpoint will only work for Members with at least one verified email where their `email_address_verified` is `true`.
 
+        Note that this endpoint does not accept an `external_id`. The Stytch `member_id` must be provided.
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -357,9 +359,11 @@ class Members:
     ) -> ReactivateResponse:
         """Reactivates a deleted Member's status and its associated email status (if applicable) to active, specified by `organization_id` and `member_id`. This endpoint will only work for Members with at least one verified email where their `email_address_verified` is `true`.
 
+        Note that this endpoint does not accept an `external_id`. The Stytch `member_id` must be provided.
+
         Fields:
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -512,9 +516,12 @@ class Members:
         query: Optional[Union[SearchQuery, Dict[str, Any]]] = None,
         method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
-        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/second.
 
-        *All fuzzy search filters require a minimum of three characters.
+        Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+
+        All fuzzy search filters require a minimum of three characters.
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
@@ -547,9 +554,12 @@ class Members:
         query: Optional[SearchQuery] = None,
         method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
-        """Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+        """
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/second.
 
-        *All fuzzy search filters require a minimum of three characters.
+        Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
+
+        All fuzzy search filters require a minimum of three characters.
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
@@ -1044,12 +1054,12 @@ class Members:
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
-          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -1109,12 +1119,12 @@ class Members:
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
-          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
+          - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
           - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
            for more information about role assignment.
-          - external_id: An identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+          - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

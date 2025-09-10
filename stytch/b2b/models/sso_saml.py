@@ -68,6 +68,22 @@ class CreateConnectionRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class DeleteEncryptionPrivateKeyRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
 class DeleteVerificationCertificateRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -123,6 +139,15 @@ class CreateConnectionResponse(ResponseBase):
     """  # noqa
 
     connection: Optional[SAMLConnection] = None
+
+
+class DeleteEncryptionPrivateKeyResponse(ResponseBase):
+    """Response type for `SAML.delete_encryption_private_key`.
+    Fields:
+      - private_key_id: The ID of the encryption private key.
+    """  # noqa
+
+    private_key_id: str
 
 
 class DeleteVerificationCertificateResponse(ResponseBase):

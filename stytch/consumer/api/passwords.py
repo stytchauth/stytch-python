@@ -60,6 +60,7 @@ class Passwords:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         name: Optional[Union[Name, Dict[str, Any]]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> CreateResponse:
         """Create a new user with a password. If `session_duration_minutes` is specified, a new session will be started as well.
 
@@ -87,6 +88,7 @@ class Passwords:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - name: The name of the user. Each field in the name object is optional.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -103,6 +105,8 @@ class Passwords:
             data["untrusted_metadata"] = untrusted_metadata
         if name is not None:
             data["name"] = name if isinstance(name, dict) else name.dict()
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/passwords", data)
         res = self.sync_client.post(url, data, headers)
@@ -117,6 +121,7 @@ class Passwords:
         trusted_metadata: Optional[Dict[str, Any]] = None,
         untrusted_metadata: Optional[Dict[str, Any]] = None,
         name: Optional[Name] = None,
+        telemetry_id: Optional[str] = None,
     ) -> CreateResponse:
         """Create a new user with a password. If `session_duration_minutes` is specified, a new session will be started as well.
 
@@ -144,6 +149,7 @@ class Passwords:
           - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - name: The name of the user. Each field in the name object is optional.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -160,6 +166,8 @@ class Passwords:
             data["untrusted_metadata"] = untrusted_metadata
         if name is not None:
             data["name"] = name if isinstance(name, dict) else name.dict()
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/passwords", data)
         res = await self.async_client.post(url, data, headers)
@@ -173,6 +181,7 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a user with their email address and password. This endpoint verifies that the user has a password currently set, and that the entered password is correct. There are two instances where the endpoint will return a `reset_password` error even if they enter their previous password:
 
@@ -199,6 +208,7 @@ class Passwords:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -213,6 +223,8 @@ class Passwords:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/passwords/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -226,6 +238,7 @@ class Passwords:
         session_duration_minutes: Optional[int] = None,
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a user with their email address and password. This endpoint verifies that the user has a password currently set, and that the entered password is correct. There are two instances where the endpoint will return a `reset_password` error even if they enter their previous password:
 
@@ -252,6 +265,7 @@ class Passwords:
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -266,6 +280,8 @@ class Passwords:
             data["session_jwt"] = session_jwt
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/passwords/authenticate", data)
         res = await self.async_client.post(url, data, headers)
@@ -377,7 +393,8 @@ class Passwords:
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
            the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: (no documentation yet)
+          - roles: Roles to explicitly assign to this User.
+           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -472,7 +489,8 @@ class Passwords:
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
            the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: (no documentation yet)
+          - roles: Roles to explicitly assign to this User.
+           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

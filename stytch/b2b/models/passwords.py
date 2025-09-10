@@ -14,6 +14,7 @@ import pydantic
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.core.response_base import ResponseBase
 
 
@@ -81,6 +82,7 @@ class AuthenticateResponse(ResponseBase):
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
       - primary_required: Information about the primary authentication requirements of the Organization.
+      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
     """  # noqa
 
     member_id: str
@@ -94,6 +96,7 @@ class AuthenticateResponse(ResponseBase):
     member_session: Optional[MemberSession] = None
     mfa_required: Optional[MfaRequired] = None
     primary_required: Optional[PrimaryRequired] = None
+    member_device: Optional[DeviceInfo] = None
 
 
 class MigrateResponse(ResponseBase):
@@ -115,8 +118,8 @@ class StrengthCheckResponse(ResponseBase):
     """Response type for `Passwords.strength_check`.
     Fields:
       - valid_password: Returns `true` if the password passes our password validation. We offer two validation options,
-      [zxcvbn](https://stytch.com/docs/passwords#strength-requirements) is the default option which offers a high level of sophistication.
-      We also offer [LUDS](https://stytch.com/docs/passwords#strength-requirements). If an email address is included in the call we also
+      [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy) is the default option which offers a high level of sophistication.
+      We also offer [LUDS](https://stytch.com/docs/b2b/guides/passwords/strength-policy). If an email address is included in the call we also
       require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/)
       - score: The score of the password determined by [zxcvbn](https://github.com/dropbox/zxcvbn). Values will be between 1 and 4, a 3 or greater is required to pass validation.
       - breached_password: Returns `true` if the password has been breached. Powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
@@ -124,8 +127,8 @@ class StrengthCheckResponse(ResponseBase):
       - breach_detection_on_create: Will return `true` if breach detection will be evaluated. By default this option is enabled.
       This option can be disabled by contacting [support@stytch.com](mailto:support@stytch.com?subject=Password%20strength%20configuration).
       If this value is false then `breached_password` will always be `false` as well.
-      - luds_feedback: Feedback for how to improve the password's strength using [luds](https://stytch.com/docs/passwords#strength-requirements).
-      - zxcvbn_feedback: Feedback for how to improve the password's strength using [zxcvbn](https://stytch.com/docs/passwords#strength-requirements).
+      - luds_feedback: Feedback for how to improve the password's strength using [luds](https://stytch.com/docs/guides/passwords/strength-policy).
+      - zxcvbn_feedback: Feedback for how to improve the password's strength using [zxcvbn](https://stytch.com/docs/b2b/guides/passwords/strength-policy).
     """  # noqa
 
     valid_password: bool

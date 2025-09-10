@@ -10,6 +10,7 @@ from typing import List, Optional
 
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.core.response_base import ResponseBase
 
 
@@ -38,6 +39,7 @@ class RecoverResponse(ResponseBase):
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - recovery_codes_remaining: The number of recovery codes remaining for a Member.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
     """  # noqa
 
     member_id: str
@@ -47,6 +49,7 @@ class RecoverResponse(ResponseBase):
     session_jwt: str
     recovery_codes_remaining: int
     member_session: Optional[MemberSession] = None
+    member_device: Optional[DeviceInfo] = None
 
 
 class RotateResponse(ResponseBase):

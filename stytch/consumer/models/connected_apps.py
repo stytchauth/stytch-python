@@ -48,6 +48,14 @@ class ConnectedApp(pydantic.BaseModel):
     logo_url: Optional[str] = None
 
 
+class ConnectedAppPublic(pydantic.BaseModel):
+    client_id: str
+    client_name: str
+    client_description: str
+    client_type: str
+    logo_url: Optional[str] = None
+
+
 class ConnectedAppWithClientSecret(pydantic.BaseModel):
     """
     Fields:

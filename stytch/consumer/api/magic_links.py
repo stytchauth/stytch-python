@@ -42,6 +42,7 @@ class MagicLinks:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         code_verifier: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a User given a Magic Link. This endpoint verifies that the Magic Link token is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied.
 
@@ -68,6 +69,7 @@ class MagicLinks:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -89,6 +91,8 @@ class MagicLinks:
             data["session_custom_claims"] = session_custom_claims
         if code_verifier is not None:
             data["code_verifier"] = code_verifier
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/magic_links/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -104,6 +108,7 @@ class MagicLinks:
         session_jwt: Optional[str] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
         code_verifier: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a User given a Magic Link. This endpoint verifies that the Magic Link token is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied.
 
@@ -130,6 +135,7 @@ class MagicLinks:
 
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -151,6 +157,8 @@ class MagicLinks:
             data["session_custom_claims"] = session_custom_claims
         if code_verifier is not None:
             data["code_verifier"] = code_verifier
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/magic_links/authenticate", data)
         res = await self.async_client.post(url, data, headers)

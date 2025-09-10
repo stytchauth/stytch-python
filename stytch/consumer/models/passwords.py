@@ -11,6 +11,7 @@ from typing import List, Optional
 
 import pydantic
 
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.consumer.models.sessions import Session
 from stytch.consumer.models.users import User
 from stytch.core.response_base import ResponseBase
@@ -142,6 +143,7 @@ class AuthenticateResponse(ResponseBase):
 
       See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
+      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -149,6 +151,7 @@ class AuthenticateResponse(ResponseBase):
     session_jwt: str
     user: User
     session: Optional[Session] = None
+    user_device: Optional[DeviceInfo] = None
 
 
 class CreateResponse(ResponseBase):
@@ -163,6 +166,7 @@ class CreateResponse(ResponseBase):
 
       See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
 
+      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -171,6 +175,7 @@ class CreateResponse(ResponseBase):
     session_jwt: str
     user: User
     session: Optional[Session] = None
+    user_device: Optional[DeviceInfo] = None
 
 
 class MigrateResponse(ResponseBase):
@@ -191,7 +196,7 @@ class MigrateResponse(ResponseBase):
 class StrengthCheckResponse(ResponseBase):
     """Response type for `Passwords.strength_check`.
     Fields:
-      - valid_password: Returns `true` if the password passes our password validation. We offer two validation options, [zxcvbn](https://stytch.com/docs/passwords#strength-requirements) is the default option which offers a high level of sophistication. We also offer [LUDS](https://stytch.com/docs/passwords#strength-requirements). If an email address is included in the call we also require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
+      - valid_password: Returns `true` if the password passes our password validation. We offer two validation options, [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy) is the default option which offers a high level of sophistication. We also offer [LUDS](https://stytch.com/docs/guides/passwords/strength-policy). If an email address is included in the call we also require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
       - score: The score of the password determined by [zxcvbn](https://github.com/dropbox/zxcvbn). Values will be between 1 and 4, a 3 or greater is required to pass validation.
       - breached_password: Returns `true` if the password has been breached. Powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
       - strength_policy: The strength policy type enforced, either `zxcvbn` or `luds`.

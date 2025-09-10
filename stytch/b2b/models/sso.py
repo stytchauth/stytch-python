@@ -15,6 +15,7 @@ import pydantic
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
 from stytch.b2b.models.sessions import MemberSession, PrimaryRequired
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
 
@@ -62,6 +63,12 @@ class DeleteConnectionRequestOptions(pydantic.BaseModel):
         if self.authorization is not None:
             headers = self.authorization.add_headers(headers)
         return headers
+
+
+class EncryptionPrivateKey(pydantic.BaseModel):
+    private_key_id: str
+    private_key: str
+    created_at: Optional[datetime.datetime] = None
 
 
 class GetConnectionsRequestOptions(pydantic.BaseModel):
@@ -189,6 +196,7 @@ class SAMLConnection(pydantic.BaseModel):
     audience_uri: str
     signing_certificates: List[X509Certificate]
     verification_certificates: List[X509Certificate]
+    encryption_private_keys: List[EncryptionPrivateKey]
     saml_connection_implicit_role_assignments: List[
         SAMLConnectionImplicitRoleAssignment
     ]
@@ -216,6 +224,7 @@ class AuthenticateResponse(ResponseBase):
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
       - primary_required: (no documentation yet)
+      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
     """  # noqa
 
     member_id: str
@@ -230,6 +239,7 @@ class AuthenticateResponse(ResponseBase):
     member_session: Optional[MemberSession] = None
     mfa_required: Optional[MfaRequired] = None
     primary_required: Optional[PrimaryRequired] = None
+    member_device: Optional[DeviceInfo] = None
 
 
 class DeleteConnectionResponse(ResponseBase):

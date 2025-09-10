@@ -14,6 +14,7 @@ import pydantic
 
 from stytch.b2b.models.mfa import MfaRequired
 from stytch.b2b.models.organizations import Member, Organization
+from stytch.consumer.models.device_history import DeviceInfo
 from stytch.consumer.models.sessions import JWK, AuthenticationFactor
 from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
@@ -126,6 +127,7 @@ class AttestResponse(ResponseBase):
       - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
     """  # noqa
 
     member_id: str
@@ -134,6 +136,7 @@ class AttestResponse(ResponseBase):
     session_jwt: str
     member: Member
     organization: Organization
+    member_device: Optional[DeviceInfo] = None
 
 
 class AuthenticateResponse(ResponseBase):
@@ -165,6 +168,7 @@ class ExchangeAccessTokenResponse(ResponseBase):
       - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
     """  # noqa
 
     member_id: str
@@ -173,6 +177,7 @@ class ExchangeAccessTokenResponse(ResponseBase):
     member: Member
     organization: Organization
     member_session: Optional[MemberSession] = None
+    member_device: Optional[DeviceInfo] = None
 
 
 class ExchangeResponse(ResponseBase):
@@ -188,6 +193,7 @@ class ExchangeResponse(ResponseBase):
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
       - primary_required: Information about the primary authentication requirements of the Organization.
+      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
     """  # noqa
 
     member_id: str
@@ -200,6 +206,7 @@ class ExchangeResponse(ResponseBase):
     member_session: Optional[MemberSession] = None
     mfa_required: Optional[MfaRequired] = None
     primary_required: Optional[PrimaryRequired] = None
+    member_device: Optional[DeviceInfo] = None
 
 
 class GetJWKSResponse(ResponseBase):

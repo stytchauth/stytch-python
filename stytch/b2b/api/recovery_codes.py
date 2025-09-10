@@ -35,6 +35,7 @@ class RecoveryCodes:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> RecoverResponse:
         """Allows a Member to complete an MFA flow by consuming a recovery code. This consumes the recovery code and returns a session token that can be used to authenticate the Member.
 
@@ -59,6 +60,7 @@ class RecoveryCodes:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -76,6 +78,8 @@ class RecoveryCodes:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/recovery_codes/recover", data)
         res = self.sync_client.post(url, data, headers)
@@ -91,6 +95,7 @@ class RecoveryCodes:
         session_jwt: Optional[str] = None,
         session_duration_minutes: Optional[int] = None,
         session_custom_claims: Optional[Dict[str, Any]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> RecoverResponse:
         """Allows a Member to complete an MFA flow by consuming a recovery code. This consumes the recovery code and returns a session token that can be used to authenticate the Member.
 
@@ -115,6 +120,7 @@ class RecoveryCodes:
           `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
           delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
           Total custom claims size cannot exceed four kilobytes.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -132,6 +138,8 @@ class RecoveryCodes:
             data["session_duration_minutes"] = session_duration_minutes
         if session_custom_claims is not None:
             data["session_custom_claims"] = session_custom_claims
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/recovery_codes/recover", data)
         res = await self.async_client.post(url, data, headers)

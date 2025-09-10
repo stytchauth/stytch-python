@@ -119,6 +119,7 @@ class TOTPs:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         set_mfa_enrollment: Optional[str] = None,
         set_default_mfa: Optional[bool] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member provided TOTP.
 
@@ -150,6 +151,7 @@ class TOTPs:
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
           - set_default_mfa: If passed will set the authenticated method to the default MFA method. Completing an MFA authentication flow for the first time for a Member will implicitly set the method to the default MFA method. This option can be used to update the default MFA method if multiple are being used.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -171,6 +173,8 @@ class TOTPs:
             data["set_mfa_enrollment"] = set_mfa_enrollment
         if set_default_mfa is not None:
             data["set_default_mfa"] = set_default_mfa
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/totp/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -188,6 +192,7 @@ class TOTPs:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         set_mfa_enrollment: Optional[str] = None,
         set_default_mfa: Optional[bool] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a Member provided TOTP.
 
@@ -219,6 +224,7 @@ class TOTPs:
           `unenroll` –  sets the Member's `mfa_enrolled` boolean to `false`. The Member will no longer be required to complete MFA steps when logging in to the Organization.
 
           - set_default_mfa: If passed will set the authenticated method to the default MFA method. Completing an MFA authentication flow for the first time for a Member will implicitly set the method to the default MFA method. This option can be used to update the default MFA method if multiple are being used.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -240,6 +246,8 @@ class TOTPs:
             data["set_mfa_enrollment"] = set_mfa_enrollment
         if set_default_mfa is not None:
             data["set_default_mfa"] = set_default_mfa
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/totp/authenticate", data)
         res = await self.async_client.post(url, data, headers)

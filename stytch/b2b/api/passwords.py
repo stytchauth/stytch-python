@@ -146,7 +146,10 @@ class Passwords:
         set_phone_number_verified: Optional[bool] = None,
         external_id: Optional[str] = None,
     ) -> MigrateResponse:
-        """Adds an existing password to a Member's email that doesn't have a password yet.
+        """
+        **Warning:** This endpoint marks the Member's email address as verified. Do **not** use this endpoint unless the user has already verified their email address in your application.
+
+        Adds an existing password to a Member's email that doesn't have a password yet.
 
         We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -183,7 +186,7 @@ class Passwords:
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
            the user owns the phone number in question.
-          - external_id: If a new member is created, this will set an identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
+          - external_id: If a new member is created, this will set an identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -259,7 +262,10 @@ class Passwords:
         set_phone_number_verified: Optional[bool] = None,
         external_id: Optional[str] = None,
     ) -> MigrateResponse:
-        """Adds an existing password to a Member's email that doesn't have a password yet.
+        """
+        **Warning:** This endpoint marks the Member's email address as verified. Do **not** use this endpoint unless the user has already verified their email address in your application.
+
+        Adds an existing password to a Member's email that doesn't have a password yet.
 
         We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
@@ -296,7 +302,7 @@ class Passwords:
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
            the user owns the phone number in question.
-          - external_id: If a new member is created, this will set an identifier that can be used in API calls wherever a member_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
+          - external_id: If a new member is created, this will set an identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -363,10 +369,11 @@ class Passwords:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[Union[AuthenticateRequestLocale, str]] = None,
         intermediate_session_token: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a member with their email address and password. This endpoint verifies that the member has a password currently set, and that the entered password is correct.
 
-        If you have breach detection during authentication enabled in your [password strength policy](https://stytch.com/docs/b2b/guides/passwords/strength-policies) and the member's credentials have appeared in the HaveIBeenPwned dataset, this endpoint will return a `member_reset_password` error even if the member enters a correct password. We force a password reset in this case to ensure that the member is the legitimate owner of the email address and not a malicious actor abusing the compromised credentials.
+        If you have breach detection during authentication enabled in your [password strength policy](https://stytch.com/docs/b2b/guides/passwords/strength-policy) and the member's credentials have appeared in the HaveIBeenPwned dataset, this endpoint will return a `member_reset_password` error even if the member enters a correct password. We force a password reset in this case to ensure that the member is the legitimate owner of the email address and not a malicious actor abusing the compromised credentials.
 
         If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
@@ -403,6 +410,7 @@ class Passwords:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -422,6 +430,8 @@ class Passwords:
             data["locale"] = locale
         if intermediate_session_token is not None:
             data["intermediate_session_token"] = intermediate_session_token
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
         res = self.sync_client.post(url, data, headers)
@@ -438,10 +448,11 @@ class Passwords:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         locale: Optional[AuthenticateRequestLocale] = None,
         intermediate_session_token: Optional[str] = None,
+        telemetry_id: Optional[str] = None,
     ) -> AuthenticateResponse:
         """Authenticate a member with their email address and password. This endpoint verifies that the member has a password currently set, and that the entered password is correct.
 
-        If you have breach detection during authentication enabled in your [password strength policy](https://stytch.com/docs/b2b/guides/passwords/strength-policies) and the member's credentials have appeared in the HaveIBeenPwned dataset, this endpoint will return a `member_reset_password` error even if the member enters a correct password. We force a password reset in this case to ensure that the member is the legitimate owner of the email address and not a malicious actor abusing the compromised credentials.
+        If you have breach detection during authentication enabled in your [password strength policy](https://stytch.com/docs/b2b/guides/passwords/strength-policy) and the member's credentials have appeared in the HaveIBeenPwned dataset, this endpoint will return a `member_reset_password` error even if the member enters a correct password. We force a password reset in this case to ensure that the member is the legitimate owner of the email address and not a malicious actor abusing the compromised credentials.
 
         If the Member is required to complete MFA to log in to the Organization, the returned value of `member_authenticated` will be `false`, and an `intermediate_session_token` will be returned.
         The `intermediate_session_token` can be passed into the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms) to complete the MFA step and acquire a full member session.
@@ -478,6 +489,7 @@ class Passwords:
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -497,6 +509,8 @@ class Passwords:
             data["locale"] = locale
         if intermediate_session_token is not None:
             data["intermediate_session_token"] = intermediate_session_token
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/b2b/passwords/authenticate", data)
         res = await self.async_client.post(url, data, headers)

@@ -164,6 +164,7 @@ class Email:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
         options: Optional[Union[Options, Dict[str, Any]]] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ResetResponse:
         """Reset the user's password and authenticate them. This endpoint checks that the magic link `token` is valid, hasn't expired, or already been used – and can optionally require additional security settings, such as the IP address and user agent matching the initial reset request.
 
@@ -195,6 +196,7 @@ class Email:
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -217,6 +219,8 @@ class Email:
             )
         if options is not None:
             data["options"] = options if isinstance(options, dict) else options.dict()
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/passwords/email/reset", data)
         res = self.sync_client.post(url, data, headers)
@@ -233,6 +237,7 @@ class Email:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         attributes: Optional[Attributes] = None,
         options: Optional[Options] = None,
+        telemetry_id: Optional[str] = None,
     ) -> ResetResponse:
         """Reset the user's password and authenticate them. This endpoint checks that the magic link `token` is valid, hasn't expired, or already been used – and can optionally require additional security settings, such as the IP address and user agent matching the initial reset request.
 
@@ -264,6 +269,7 @@ class Email:
           Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
+          - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -286,6 +292,8 @@ class Email:
             )
         if options is not None:
             data["options"] = options if isinstance(options, dict) else options.dict()
+        if telemetry_id is not None:
+            data["telemetry_id"] = telemetry_id
 
         url = self.api_base.url_for("/v1/passwords/email/reset", data)
         res = await self.async_client.post(url, data, headers)
