@@ -267,7 +267,7 @@ class AsyncIntegrationTest(IntegrationTestBase, unittest.IsolatedAsyncioTestCase
         api = self.b2c_client.users
 
         async with self._get_temporary_user_async(create=False) as user:
-            create_resp = await api.create_async(email=user.email)
+            create_resp = await api.create_async(roles=[], email=user.email)
             self.assertTrue(create_resp.is_success)
             self.assertTrue((await api.search_async(limit=10)).is_success)
             self.assertTrue(

@@ -194,7 +194,7 @@ class SyncIntegrationTest(IntegrationTestBase, unittest.TestCase):
         api = self.b2c_client.users
 
         with self._get_temporary_user(create=False) as user:
-            create_resp = api.create(email=user.email)
+            create_resp = api.create(roles=[], email=user.email)
             self.assertTrue(create_resp.is_success)
             self.assertTrue(api.search(limit=10).is_success)
             self.assertTrue(

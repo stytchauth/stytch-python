@@ -126,6 +126,7 @@ class SAML:
         alternative_acs_url: Optional[str] = None,
         idp_initiated_auth_disabled: Optional[bool] = None,
         saml_encryption_private_key: Optional[str] = None,
+        allow_gateway_callback: Optional[bool] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -159,6 +160,7 @@ class SAML:
           - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
           - saml_encryption_private_key: A PKCS1 format RSA private key used to decrypt encrypted SAML assertions. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported.
+          - allow_gateway_callback: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -201,6 +203,8 @@ class SAML:
             data["idp_initiated_auth_disabled"] = idp_initiated_auth_disabled
         if saml_encryption_private_key is not None:
             data["saml_encryption_private_key"] = saml_encryption_private_key
+        if allow_gateway_callback is not None:
+            data["allow_gateway_callback"] = allow_gateway_callback
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
@@ -230,6 +234,7 @@ class SAML:
         alternative_acs_url: Optional[str] = None,
         idp_initiated_auth_disabled: Optional[bool] = None,
         saml_encryption_private_key: Optional[str] = None,
+        allow_gateway_callback: Optional[bool] = None,
         method_options: Optional[UpdateConnectionRequestOptions] = None,
     ) -> UpdateConnectionResponse:
         """Updates an existing SAML connection.
@@ -263,6 +268,7 @@ class SAML:
           - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
           - saml_encryption_private_key: A PKCS1 format RSA private key used to decrypt encrypted SAML assertions. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported.
+          - allow_gateway_callback: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -305,6 +311,8 @@ class SAML:
             data["idp_initiated_auth_disabled"] = idp_initiated_auth_disabled
         if saml_encryption_private_key is not None:
             data["saml_encryption_private_key"] = saml_encryption_private_key
+        if allow_gateway_callback is not None:
+            data["allow_gateway_callback"] = allow_gateway_callback
 
         url = self.api_base.url_for(
             "/v1/b2b/sso/saml/{organization_id}/connections/{connection_id}", data
