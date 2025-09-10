@@ -11,7 +11,9 @@ class ApiBase:
     def url_for(self, route: str, data: Dict[str, Any]) -> str:
         url = urllib.parse.urljoin(self.base_url, route)
         # URL-encode path parameters to handle special characters like + in email addresses
-        encoded_data = {key: urllib.parse.quote(str(value), safe='') for key, value in data.items()}
+        encoded_data = {
+            key: urllib.parse.quote(str(value), safe="") for key, value in data.items()
+        }
         return url.format(**encoded_data)
 
     def route_with_sub_url(self, sub_url: str, route: Optional[str] = None) -> str:

@@ -206,6 +206,7 @@ class SAMLConnection(pydantic.BaseModel):
     nameid_format: str
     alternative_acs_url: str
     idp_initiated_auth_disabled: bool
+    allow_gateway_callback: bool
     attribute_mapping: Optional[Dict[str, Any]] = None
 
 
