@@ -12,6 +12,7 @@ import jwt
 
 from stytch.consumer.api.connected_apps import ConnectedApp
 from stytch.consumer.api.crypto_wallets import CryptoWallets
+from stytch.consumer.api.debug import Debug
 from stytch.consumer.api.fraud import Fraud
 from stytch.consumer.api.idp import IDP
 from stytch.consumer.api.impersonation import Impersonation
@@ -71,6 +72,11 @@ class Client(ClientBase):
             async_client=self.async_client,
         )
         self.crypto_wallets = CryptoWallets(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.debug = Debug(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
