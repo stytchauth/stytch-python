@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import datetime
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from stytch.consumer.models.fraud import Fingerprints, Metadata, Properties, Verdict
 from stytch.core.response_base import ResponseBase
@@ -23,6 +23,7 @@ class LookupResponse(ResponseBase):
       - created_at: The time when the fingerprint was taken. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - expires_at: The timestamp when the fingerprint expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - properties: Additional information about the user's browser and network.
+      - raw_signals: The raw device attributes, such as screen size, that were collected by the Device Fingerprinting product to generate the fingerprints and verdict. You must be specifically enabled for the raw signals feature to see this field. You can find documentation for the specific fields in the [guides](https://stytch.com/docs/fraud/guides/device-fingerprinting/reference/raw-signals).
     """  # noqa
 
     telemetry_id: str
@@ -32,3 +33,4 @@ class LookupResponse(ResponseBase):
     created_at: datetime.datetime
     expires_at: datetime.datetime
     properties: Optional[Properties] = None
+    raw_signals: Optional[Dict[str, Any]] = None
