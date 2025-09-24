@@ -29,6 +29,7 @@ class ConnectedApp(pydantic.BaseModel):
       - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
       - access_token_custom_audience: (no documentation yet)
       - logo_url: The logo URL of the Connected App, if any.
+      - client_id_metadata_url: (no documentation yet)
     """  # noqa
 
     client_id: str
@@ -46,6 +47,7 @@ class ConnectedApp(pydantic.BaseModel):
     next_client_secret_last_four: Optional[str] = None
     access_token_custom_audience: Optional[str] = None
     logo_url: Optional[str] = None
+    client_id_metadata_url: Optional[str] = None
 
 
 class ConnectedAppPublic(pydantic.BaseModel):
@@ -75,6 +77,7 @@ class ConnectedAppWithClientSecret(pydantic.BaseModel):
       - client_secret: The secret of the Connected App client. **Required for confidential clients**
       - access_token_custom_audience: (no documentation yet)
       - logo_url: The logo URL of the Connected App, if any.
+      - client_id_metadata_url: (no documentation yet)
     """  # noqa
 
     client_id: str
@@ -93,6 +96,7 @@ class ConnectedAppWithClientSecret(pydantic.BaseModel):
     client_secret: Optional[str] = None
     access_token_custom_audience: Optional[str] = None
     logo_url: Optional[str] = None
+    client_id_metadata_url: Optional[str] = None
 
 
 class ConnectedAppWithNextClientSecret(pydantic.BaseModel):
@@ -114,6 +118,7 @@ class ConnectedAppWithNextClientSecret(pydantic.BaseModel):
       - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
       - access_token_custom_audience: (no documentation yet)
       - logo_url: The logo URL of the Connected App, if any.
+      - client_id_metadata_url: (no documentation yet)
     """  # noqa
 
     client_id: str
@@ -132,6 +137,7 @@ class ConnectedAppWithNextClientSecret(pydantic.BaseModel):
     next_client_secret_last_four: Optional[str] = None
     access_token_custom_audience: Optional[str] = None
     logo_url: Optional[str] = None
+    client_id_metadata_url: Optional[str] = None
 
 
 class ResultsMetadata(pydantic.BaseModel):
