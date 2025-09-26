@@ -22,6 +22,11 @@ from stytch.core.response_base import ResponseBase
 from stytch.shared.method_options import Authorization
 
 
+class StartEmailUpdateRequestDeliveryMethod(str, enum.Enum):
+    EMAIL_MAGIC_LINK = "EMAIL_MAGIC_LINK"
+    EMAIL_OTP = "EMAIL_OTP"
+
+
 class StartEmailUpdateRequestLocale(str, enum.Enum):
     EN = "en"
     ES = "es"
