@@ -704,6 +704,7 @@ class Sessions:
             started_at=claim["started_at"],
             user_id=generic_claims.reserved_claims["sub"],
             custom_claims=custom_claims,
+            roles=claim["roles"],
         )
 
     # ENDMANUAL(authenticate_jwt_local)
