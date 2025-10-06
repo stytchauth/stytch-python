@@ -581,6 +581,7 @@ class Session(pydantic.BaseModel):
       - session_id: A unique identifier for a specific Session.
       - user_id: The unique ID of the affected User.
       - authentication_factors: An array of different authentication factors that comprise a Session.
+      - roles: (no documentation yet)
       - started_at: The timestamp when the Session was created. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - last_accessed_at: The timestamp when the Session was last accessed. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - expires_at: The timestamp when the Session expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
@@ -591,6 +592,7 @@ class Session(pydantic.BaseModel):
     session_id: str
     user_id: str
     authentication_factors: List[AuthenticationFactor]
+    roles: List[str]
     started_at: Optional[datetime.datetime] = None
     last_accessed_at: Optional[datetime.datetime] = None
     expires_at: Optional[datetime.datetime] = None
