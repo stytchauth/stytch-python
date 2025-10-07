@@ -34,6 +34,7 @@ class Organizations:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         organization_name: Optional[str] = None,
         organization_slug: Optional[str] = None,
+        organization_external_id: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         sso_jit_provisioning: Optional[str] = None,
@@ -94,6 +95,7 @@ class Organizations:
           Total custom claims size cannot exceed four kilobytes.
           - organization_name: The name of the Organization. If the name is not specified, a default name will be created based on the email used to initiate the discovery flow. If the email domain is a common email provider such as gmail.com, or if the email is a .edu email, the organization name will be generated based on the name portion of the email. Otherwise, the organization name will be generated based on the email domain.
           - organization_slug: The unique URL slug of the Organization. A minimum of two characters is required. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. If the slug is not specified, a default slug will be created based on the email used to initiate the discovery flow. If the email domain is a common email provider such as gmail.com, or if the email is a .edu email, the organization slug will be generated based on the name portion of the email. Otherwise, the organization slug will be generated based on the email domain.
+          - organization_external_id: An identifier that can be used in API calls wherever a organization_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within a project, but may be reused across different projects in the same workspace.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
@@ -189,6 +191,8 @@ class Organizations:
             data["organization_name"] = organization_name
         if organization_slug is not None:
             data["organization_slug"] = organization_slug
+        if organization_external_id is not None:
+            data["organization_external_id"] = organization_external_id
         if organization_logo_url is not None:
             data["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
@@ -250,6 +254,7 @@ class Organizations:
         session_custom_claims: Optional[Dict[str, Any]] = None,
         organization_name: Optional[str] = None,
         organization_slug: Optional[str] = None,
+        organization_external_id: Optional[str] = None,
         organization_logo_url: Optional[str] = None,
         trusted_metadata: Optional[Dict[str, Any]] = None,
         sso_jit_provisioning: Optional[str] = None,
@@ -310,6 +315,7 @@ class Organizations:
           Total custom claims size cannot exceed four kilobytes.
           - organization_name: The name of the Organization. If the name is not specified, a default name will be created based on the email used to initiate the discovery flow. If the email domain is a common email provider such as gmail.com, or if the email is a .edu email, the organization name will be generated based on the name portion of the email. Otherwise, the organization name will be generated based on the email domain.
           - organization_slug: The unique URL slug of the Organization. A minimum of two characters is required. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. If the slug is not specified, a default slug will be created based on the email used to initiate the discovery flow. If the email domain is a common email provider such as gmail.com, or if the email is a .edu email, the organization slug will be generated based on the name portion of the email. Otherwise, the organization slug will be generated based on the email domain.
+          - organization_external_id: An identifier that can be used in API calls wherever a organization_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within a project, but may be reused across different projects in the same workspace.
           - organization_logo_url: The image URL of the Organization logo.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
           - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
@@ -405,6 +411,8 @@ class Organizations:
             data["organization_name"] = organization_name
         if organization_slug is not None:
             data["organization_slug"] = organization_slug
+        if organization_external_id is not None:
+            data["organization_external_id"] = organization_external_id
         if organization_logo_url is not None:
             data["organization_logo_url"] = organization_logo_url
         if trusted_metadata is not None:
