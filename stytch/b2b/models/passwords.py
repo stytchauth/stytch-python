@@ -31,6 +31,7 @@ class MigrateRequestHashType(str, enum.Enum):
     ARGON_2I = "argon_2i"
     ARGON_2ID = "argon_2id"
     SHA_1 = "sha_1"
+    SHA_512 = "sha_512"
     SCRYPT = "scrypt"
     PHPASS = "phpass"
     PBKDF_2 = "pbkdf_2"

@@ -168,6 +168,7 @@ class OAuth:
         state: Optional[str] = None,
         nonce: Optional[str] = None,
         code_challenge: Optional[str] = None,
+        resources: Optional[List[str]] = None,
     ) -> AuthorizeResponse:
         """Completes a request for authorization of a Connected App to access a Member's account.
 
@@ -201,6 +202,7 @@ class OAuth:
           - state: An opaque value used to maintain state between the request and callback.
           - nonce: A string used to associate a client session with an ID token to mitigate replay attacks.
           - code_challenge: A base64url encoded challenge derived from the code verifier for PKCE flows.
+          - resources: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -226,6 +228,8 @@ class OAuth:
             data["nonce"] = nonce
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
+        if resources is not None:
+            data["resources"] = resources
 
         url = self.api_base.url_for("/v1/b2b/idp/oauth/authorize", data)
         res = self.sync_client.post(url, data, headers)
@@ -246,6 +250,7 @@ class OAuth:
         state: Optional[str] = None,
         nonce: Optional[str] = None,
         code_challenge: Optional[str] = None,
+        resources: Optional[List[str]] = None,
     ) -> AuthorizeResponse:
         """Completes a request for authorization of a Connected App to access a Member's account.
 
@@ -279,6 +284,7 @@ class OAuth:
           - state: An opaque value used to maintain state between the request and callback.
           - nonce: A string used to associate a client session with an ID token to mitigate replay attacks.
           - code_challenge: A base64url encoded challenge derived from the code verifier for PKCE flows.
+          - resources: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -304,6 +310,8 @@ class OAuth:
             data["nonce"] = nonce
         if code_challenge is not None:
             data["code_challenge"] = code_challenge
+        if resources is not None:
+            data["resources"] = resources
 
         url = self.api_base.url_for("/v1/b2b/idp/oauth/authorize", data)
         res = await self.async_client.post(url, data, headers)

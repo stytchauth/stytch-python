@@ -25,6 +25,7 @@ from stytch.consumer.models.passwords import (
     PBKDF2Config,
     ScryptConfig,
     SHA1Config,
+    SHA512Config,
 )
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -135,6 +136,7 @@ class Passwords:
         md_5_config: Optional[Union[MD5Config, Dict[str, Any]]] = None,
         argon_2_config: Optional[Union[Argon2Config, Dict[str, Any]]] = None,
         sha_1_config: Optional[Union[SHA1Config, Dict[str, Any]]] = None,
+        sha_512_config: Optional[Union[SHA512Config, Dict[str, Any]]] = None,
         scrypt_config: Optional[Union[ScryptConfig, Dict[str, Any]]] = None,
         pbkdf_2_config: Optional[Union[PBKDF2Config, Dict[str, Any]]] = None,
         name: Optional[str] = None,
@@ -151,7 +153,7 @@ class Passwords:
 
         Adds an existing password to a Member's email that doesn't have a password yet.
 
-        We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
+        We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, SHA-512, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
         The Member's email will be marked as verified when you use this endpoint.
 
@@ -160,11 +162,12 @@ class Passwords:
         Fields:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
-          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
+          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, `sha_512`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
+          - sha_512_config: Optional parameters for SHA-512 hash types.
           - scrypt_config: Required parameters if the scrypt is not provided in a **PHC encoded form**.
           - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys. Note that we use the SHA-256 by default, please contact [support@stytch.com](mailto:support@stytch.com) if you use another hashing function.
           - name: The name of the Member. Each field in the name object is optional.
@@ -208,6 +211,12 @@ class Passwords:
         if sha_1_config is not None:
             data["sha_1_config"] = (
                 sha_1_config if isinstance(sha_1_config, dict) else sha_1_config.dict()
+            )
+        if sha_512_config is not None:
+            data["sha_512_config"] = (
+                sha_512_config
+                if isinstance(sha_512_config, dict)
+                else sha_512_config.dict()
             )
         if scrypt_config is not None:
             data["scrypt_config"] = (
@@ -251,6 +260,7 @@ class Passwords:
         md_5_config: Optional[MD5Config] = None,
         argon_2_config: Optional[Argon2Config] = None,
         sha_1_config: Optional[SHA1Config] = None,
+        sha_512_config: Optional[SHA512Config] = None,
         scrypt_config: Optional[ScryptConfig] = None,
         pbkdf_2_config: Optional[PBKDF2Config] = None,
         name: Optional[str] = None,
@@ -267,7 +277,7 @@ class Passwords:
 
         Adds an existing password to a Member's email that doesn't have a password yet.
 
-        We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
+        We support migrating members from passwords stored with bcrypt, scrypt, argon2, MD-5, SHA-1, SHA-512, and PBKDF2. This endpoint has a rate limit of 100 requests per second.
 
         The Member's email will be marked as verified when you use this endpoint.
 
@@ -276,11 +286,12 @@ class Passwords:
         Fields:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
-          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, and `pbkdf_2` are supported.
+          - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, `sha_512`, and `pbkdf_2` are supported.
           - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
           - md_5_config: Optional parameters for MD-5 hash types.
           - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
           - sha_1_config: Optional parameters for SHA-1 hash types.
+          - sha_512_config: Optional parameters for SHA-512 hash types.
           - scrypt_config: Required parameters if the scrypt is not provided in a **PHC encoded form**.
           - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys. Note that we use the SHA-256 by default, please contact [support@stytch.com](mailto:support@stytch.com) if you use another hashing function.
           - name: The name of the Member. Each field in the name object is optional.
@@ -324,6 +335,12 @@ class Passwords:
         if sha_1_config is not None:
             data["sha_1_config"] = (
                 sha_1_config if isinstance(sha_1_config, dict) else sha_1_config.dict()
+            )
+        if sha_512_config is not None:
+            data["sha_512_config"] = (
+                sha_512_config
+                if isinstance(sha_512_config, dict)
+                else sha_512_config.dict()
             )
         if scrypt_config is not None:
             data["scrypt_config"] = (
