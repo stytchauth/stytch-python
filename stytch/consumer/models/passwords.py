@@ -23,6 +23,7 @@ class MigrateRequestHashType(str, enum.Enum):
     ARGON_2I = "argon_2i"
     ARGON_2ID = "argon_2id"
     SHA_1 = "sha_1"
+    SHA_512 = "sha_512"
     SCRYPT = "scrypt"
     PHPASS = "phpass"
     PBKDF_2 = "pbkdf_2"
@@ -104,6 +105,17 @@ class PBKDF2Config(pydantic.BaseModel):
 
 
 class SHA1Config(pydantic.BaseModel):
+    """
+    Fields:
+      - prepend_salt: The salt that should be prepended to the migrated password.
+      - append_salt: The salt that should be appended to the migrated password.
+    """  # noqa
+
+    prepend_salt: str
+    append_salt: str
+
+
+class SHA512Config(pydantic.BaseModel):
     """
     Fields:
       - prepend_salt: The salt that should be prepended to the migrated password.
