@@ -3,4 +3,4 @@
 aiohttp~=3.8
 requests~=2.7
 pydantic~=2.0
-pyjwt[crypto]~=2.10
+pyjwt[crypto]~=2.9
