@@ -56,6 +56,6 @@ setup(
         "aiohttp>=3.8.3",
         "requests>=2.7.0",
         "pydantic>=1.10.2",
-        "pyjwt[crypto]>=2.4.0",
+        "pyjwt[crypto]>=2.10.1",
     ],
 )
