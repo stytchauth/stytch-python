@@ -13,6 +13,18 @@ import pydantic
 
 
 class Address(pydantic.BaseModel):
+    """
+    Fields:
+      - formatted: A fully formatted string representation of a SCIM attribute, such as a complete mailing address.
+      - street_address: The street address component of a SCIM user's address attribute.
+      - locality: The city or locality component of a SCIM user's address attribute.
+      - region: The region component of a SCIM user's address attribute (state/province).
+      - postal_code: The postal code or ZIP code component of a SCIM user's address attribute.
+      - country: The country component of a SCIM user's address attribute or a country code.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     formatted: str
     street_address: str
     locality: str
@@ -24,35 +36,79 @@ class Address(pydantic.BaseModel):
 
 
 class Email(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     value: str
     type: str
     primary: bool
 
 
 class Entitlement(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     value: str
     type: str
     primary: bool
 
 
 class Group(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - display: A human-readable display string for a SCIM attribute or reference.
+    """  # noqa
+
     value: str
     display: str
 
 
 class IMs(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     value: str
     type: str
     primary: bool
 
 
 class Manager(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - ref: A reference identifier pointing to another resource or entity.
+      - display_name: A human-readable display name for the connection.
+    """  # noqa
+
     value: str
     ref: str
     display_name: str
 
 
 class EnterpriseExtension(pydantic.BaseModel):
+    """
+    Fields:
+      - employee_number: The SCIM user's employee number or identifier within the organization.
+      - cost_center: The cost center or budget code associated with a SCIM user for organizational accounting purposes.
+      - division: The SCIM user's division within the organization hierarchy.
+      - department: The SCIM user's department within the organization.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - manager: The manager or supervisor of a SCIM user, typically containing an ID reference to another user.
+    """  # noqa
+
     employee_number: str
     cost_center: str
     division: str
@@ -62,6 +118,16 @@ class EnterpriseExtension(pydantic.BaseModel):
 
 
 class Name(pydantic.BaseModel):
+    """
+    Fields:
+      - formatted: A fully formatted string representation of a SCIM attribute, such as a complete mailing address.
+      - family_name: The family name (last name or surname) of a SCIM user.
+      - given_name: The given name (first name) of a SCIM user.
+      - middle_name: The middle name of a SCIM user.
+      - honorific_prefix: The honorific prefix (e.g., Mr., Ms., Mx., Dr.) for a SCIM user's name.
+      - honorific_suffix: The honorific suffix (e.g., Jr., Sr., PhD) for a SCIM user's name.
+    """  # noqa
+
     formatted: str
     family_name: str
     given_name: str
@@ -71,18 +137,39 @@ class Name(pydantic.BaseModel):
 
 
 class PhoneNumber(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     value: str
     type: str
     primary: bool
 
 
 class Photo(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     value: str
     type: str
     primary: bool
 
 
 class Role(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     value: str
     type: str
     primary: bool
@@ -91,9 +178,9 @@ class Role(pydantic.BaseModel):
 class SCIMGroup(pydantic.BaseModel):
     """
     Fields:
-      - group_id: Stytch-issued, globally unique UUID that identifies a specific SCIM Group. The entity `id` in the SCIM specification is issued by the Service Provider (SP) and returned to the Identity Provider (IdP) to store and use for uniquely identify and updating the Group moving forward.
-      - group_name: The displayName of the SCIM group, sent from the Identity Provider (IdP).
-      - organization_id: Globally unique UUID that identifies a specific Organization. The organization_id is critical to perform operations on an Organization, so be sure to preserve this value.
+      - group_id: The unique identifier for a SCIM or authorization group.
+      - group_name: The name of a SCIM or authorization group.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
       - connection_id: The ID of the SCIM connection.
     """  # noqa
 
@@ -104,12 +191,35 @@ class SCIMGroup(pydantic.BaseModel):
 
 
 class SCIMGroupImplicitRoleAssignments(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier for an RBAC role.
+      - group_id: The unique identifier for a SCIM or authorization group.
+      - group_name: The name of a SCIM or authorization group.
+    """  # noqa
+
     role_id: str
     group_id: str
     group_name: str
 
 
 class SCIMConnection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - connection_id: The ID of the SCIM connection.
+      - status: The status of the entity.
+      - display_name: A human-readable display name for the connection.
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
+      - base_url: The base URL for the API endpoint or service.
+      - bearer_token_last_four: The last four characters of the SCIM bearer token, used for identification without exposing the full token.
+      - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
+      - next_bearer_token_last_four: The last four characters of the next SCIM bearer token during rotation.
+      - bearer_token_expires_at: The timestamp when the SCIM bearer token will expire.
+      - next_bearer_token_expires_at: The expiration timestamp for the next SCIM bearer token during rotation.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -124,6 +234,22 @@ class SCIMConnection(pydantic.BaseModel):
 
 
 class SCIMConnectionWithNextToken(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - connection_id: The ID of the SCIM connection.
+      - status: The status of the entity.
+      - display_name: A human-readable display name for the connection.
+      - base_url: The base URL for the API endpoint or service.
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
+      - bearer_token_last_four: The last four characters of the SCIM bearer token, used for identification without exposing the full token.
+      - next_bearer_token: The next SCIM bearer token to be used after rotation is complete.
+      - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
+      - bearer_token_expires_at: The timestamp when the SCIM bearer token will expire.
+      - next_bearer_token_expires_at: The expiration timestamp for the next SCIM bearer token during rotation.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -138,6 +264,20 @@ class SCIMConnectionWithNextToken(pydantic.BaseModel):
 
 
 class SCIMConnectionWithToken(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - connection_id: The ID of the SCIM connection.
+      - status: The status of the entity.
+      - display_name: A human-readable display name for the connection.
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
+      - base_url: The base URL for the API endpoint or service.
+      - bearer_token: A bearer token used for SCIM API authentication.
+      - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
+      - bearer_token_expires_at: The timestamp when the SCIM bearer token will expire.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -150,12 +290,49 @@ class SCIMConnectionWithToken(pydantic.BaseModel):
 
 
 class X509Certificate(pydantic.BaseModel):
+    """
+    Fields:
+      - value: A generic value field containing data specific to the context.
+      - type: The type or category of the resource, method, or entity.
+      - primary: Boolean flag indicating whether this is the primary instance of a multi-valued SCIM attribute (e.g., primary email, primary phone number).
+    """  # noqa
+
     value: str
     type: str
     primary: bool
 
 
 class SCIMAttributes(pydantic.BaseModel):
+    """
+    Fields:
+      - user_name: The username or SCIM userName field used for identification.
+      - id: The unique identifier for the resource.
+      - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+      - active: A boolean indicating whether the resource is currently active.
+      - groups: A list of groups the member belongs to, used for access control and role assignment.
+      - display_name: A human-readable display name for the connection.
+      - nick_name: A nickname or informal name for the user.
+      - profile_url: The URL of the member's profile on an external service.
+      - user_type: The type or category of user (e.g., admin, standard, guest).
+      - title: A title or heading for display purposes.
+      - preferred_language: The user's preferred language for communications and UI.
+      - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+    Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
+    Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
+      - timezone: The timezone of the user or organization (e.g., 'America/New_York').
+      - emails: An array of email objects for the User.
+      - phone_numbers: An array of phone number objects linked to the User.
+      - addresses: Physical addresses associated with the user (SCIM field).
+      - ims: Instant messaging addresses for the user (SCIM field).
+      - photos: A list of photo URLs associated with the user's profile.
+      - entitlements: Entitlements or permissions granted to the member or application.
+      - roles: Roles to explicitly assign to this Member.
+    See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+      - x509certificates: X.509 certificates used for SAML authentication and signature verification.
+      - name: The `name` of the WebAuthn registration or Passkey.
+      - enterprise_extension: Enterprise-specific SCIM schema extensions.
+    """  # noqa
+
     user_name: str
     id: str
     external_id: str

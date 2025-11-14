@@ -16,14 +16,11 @@ from stytch.core.response_base import ResponseBase
 class AuthenticateResponse(ResponseBase):
     """Response type for `Impersonation.authenticate`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
     """  # noqa
 
     user_id: str

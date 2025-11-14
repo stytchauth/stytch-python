@@ -79,7 +79,7 @@ class Passwords:
         If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), the feedback object will contain a collection of fields that the user failed or passed. You'll want to prompt the user to create a password that meets all requirements that they failed.
 
         Fields:
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+          - password: The password for the Member. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -113,7 +113,7 @@ class Passwords:
         If you're using [LUDS](https://stytch.com/docs/guides/passwords/strength-policy), the feedback object will contain a collection of fields that the user failed or passed. You'll want to prompt the user to create a password that meets all requirements that they failed.
 
         Fields:
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+          - password: The password for the Member. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -163,33 +163,24 @@ class Passwords:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, `sha_512`, and `pbkdf_2` are supported.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - md_5_config: Optional parameters for MD-5 hash types.
-          - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
-          - sha_1_config: Optional parameters for SHA-1 hash types.
-          - sha_512_config: Optional parameters for SHA-512 hash types.
-          - scrypt_config: Required parameters if the scrypt is not provided in a **PHC encoded form**.
-          - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys. Note that we use the SHA-256 by default, please contact [support@stytch.com](mailto:support@stytch.com) if you use another hashing function.
-          - name: The name of the Member. Each field in the name object is optional.
-          - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - md_5_config: Configuration parameters for MD5 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - argon_2_config: Configuration parameters for Argon2 password hashing when migrating passwords. This includes settings like memory cost, time cost, and parallelism.
+          - sha_1_config: Configuration parameters for SHA-1 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - sha_512_config: Configuration parameters for SHA-512 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - scrypt_config: Required parameters if the scrypt is not provided in a [PHC encoded form](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md#phc-string-format).
+          - pbkdf_2_config: Configuration parameters for PBKDF2 password hashing when migrating passwords. This includes settings like iteration count and the underlying hash function.
+          - name: The name of the Member.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - roles: Roles to explicitly assign to this Member.
-         Will completely replace any existing explicitly assigned roles. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
-
-           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
-           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
-           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
-           `preserve_existing_sessions` parameter with a value of `true`.
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
+        by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+        authentication factors with the affected SSO connection IDs will be revoked.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
-          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
-           the user owns the phone number in question.
-          - external_id: If a new member is created, this will set an identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
+          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
+        the user owns the phone number in question.
+          - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -287,33 +278,24 @@ class Passwords:
           - email_address: The email address of the Member.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, `sha_512`, and `pbkdf_2` are supported.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - md_5_config: Optional parameters for MD-5 hash types.
-          - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
-          - sha_1_config: Optional parameters for SHA-1 hash types.
-          - sha_512_config: Optional parameters for SHA-512 hash types.
-          - scrypt_config: Required parameters if the scrypt is not provided in a **PHC encoded form**.
-          - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys. Note that we use the SHA-256 by default, please contact [support@stytch.com](mailto:support@stytch.com) if you use another hashing function.
-          - name: The name of the Member. Each field in the name object is optional.
-          - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - md_5_config: Configuration parameters for MD5 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - argon_2_config: Configuration parameters for Argon2 password hashing when migrating passwords. This includes settings like memory cost, time cost, and parallelism.
+          - sha_1_config: Configuration parameters for SHA-1 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - sha_512_config: Configuration parameters for SHA-512 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - scrypt_config: Required parameters if the scrypt is not provided in a [PHC encoded form](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md#phc-string-format).
+          - pbkdf_2_config: Configuration parameters for PBKDF2 password hashing when migrating passwords. This includes settings like iteration count and the underlying hash function.
+          - name: The name of the Member.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - roles: Roles to explicitly assign to this Member.
-         Will completely replace any existing explicitly assigned roles. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
-
-           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
-           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
-           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
-           `preserve_existing_sessions` parameter with a value of `true`.
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
+        by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+        authentication factors with the affected SSO connection IDs will be revoked.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
-          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field. This flag should only be set if you can attest that
-           the user owns the phone number in question.
-          - external_id: If a new member is created, this will set an identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project. Note that if a member already exists, this field will be ignored.
+          - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
+        the user owns the phone number in question.
+          - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -399,34 +381,18 @@ class Passwords:
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - session_token: A secret token for a given Stytch Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-          to use the Stytch session product, you can ignore the session fields in the response.
-          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-          Total custom claims size cannot exceed four kilobytes.
-          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
-
-        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
+          - password: The password for the Member. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+          - session_token: The `session_token` associated with a Member's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you do not wish to use Stytch's session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
+          - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -478,34 +444,18 @@ class Passwords:
         If a valid `session_token` or `session_jwt` is passed in, the Member will not be required to complete an MFA step.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - session_token: A secret token for a given Stytch Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-          to use the Stytch session product, you can ignore the session fields in the response.
-          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-          Total custom claims size cannot exceed four kilobytes.
-          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
-
-        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
+          - password: The password for the Member. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+          - session_token: The `session_token` associated with a Member's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you do not wish to use Stytch's session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
+          - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}

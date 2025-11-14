@@ -44,24 +44,25 @@ class Email:
         You may update your password strength configuration on the [Passwords Policy page](https://stytch.com/dashboard/password-strength-config) in the Stytch Dashboard.
 
         Fields:
-          - email_address: The email address of the Member to start the email reset process for.
-          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
-          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
-          If you have not set a default `reset_password_redirect_url`, an error is returned.
+          - email_address: The email address.
+          - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
+        This should be a url that your app receives and parses before showing your app's reset password page.
+        After the user submits a new password to your app, it should send an API request to complete the password reset process.
+        If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
+        If you have not set a default reset password redirect URL, an error is returned.
           - discovery_redirect_url: The URL that the end user clicks from the discovery Magic Link. This URL should be an endpoint in the backend server that
-          verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
-          discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
-          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Reset Password.
-          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid. The minimum allowed expiration is 5 minutes and the maximum is 10080 minutes (7 days). By default, the expiration is 30 minutes.
-          - pkce_code_challenge: (no documentation yet)
+        verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
+        discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
+          - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
+        The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
+          - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
+        The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - pkce_code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
           - verify_email_template_id: Use a custom template for verification emails sent during password reset flows. When cross-organization passwords are enabled for your Project, this template will be used the first time a user sets a password via a
-          password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
+        password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -110,24 +111,25 @@ class Email:
         You may update your password strength configuration on the [Passwords Policy page](https://stytch.com/dashboard/password-strength-config) in the Stytch Dashboard.
 
         Fields:
-          - email_address: The email address of the Member to start the email reset process for.
-          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
-          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
-          If you have not set a default `reset_password_redirect_url`, an error is returned.
+          - email_address: The email address.
+          - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
+        This should be a url that your app receives and parses before showing your app's reset password page.
+        After the user submits a new password to your app, it should send an API request to complete the password reset process.
+        If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
+        If you have not set a default reset password redirect URL, an error is returned.
           - discovery_redirect_url: The URL that the end user clicks from the discovery Magic Link. This URL should be an endpoint in the backend server that
-          verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
-          discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
-          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Reset Password.
-          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid. The minimum allowed expiration is 5 minutes and the maximum is 10080 minutes (7 days). By default, the expiration is 30 minutes.
-          - pkce_code_challenge: (no documentation yet)
+        verifies the request by querying Stytch's discovery authenticate endpoint and continues the flow. If this value is not passed, the default
+        discovery redirect URL that you set in your Dashboard is used. If you have not set a default discovery redirect URL, an error is returned.
+          - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
+        The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
+          - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
+        The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - pkce_code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
           - verify_email_template_id: Use a custom template for verification emails sent during password reset flows. When cross-organization passwords are enabled for your Project, this template will be used the first time a user sets a password via a
-          password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
+        password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -169,9 +171,9 @@ class Email:
         Resetting a password will start an intermediate session and return a list of discovered organizations the session can be exchanged into.
 
         Fields:
-          - password_reset_token: The password reset token to authenticate.
+          - password_reset_token: The password reset token from the `?token=` query parameter in the password reset URL.
           - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - pkce_code_verifier: (no documentation yet)
+          - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -198,9 +200,9 @@ class Email:
         Resetting a password will start an intermediate session and return a list of discovered organizations the session can be exchanged into.
 
         Fields:
-          - password_reset_token: The password reset token to authenticate.
+          - password_reset_token: The password reset token from the `?token=` query parameter in the password reset URL.
           - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - pkce_code_verifier: (no documentation yet)
+          - pkce_code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

@@ -49,10 +49,10 @@ class UpdateRequestThirdPartyConnectedAppsAllowedType(str, enum.Enum):
 class ActiveSCIMConnection(pydantic.BaseModel):
     """
     Fields:
-      - connection_id: The ID of the SCIM connection.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
       - display_name: A human-readable display name for the connection.
-      - bearer_token_last_four: (no documentation yet)
-      - bearer_token_expires_at: (no documentation yet)
+      - bearer_token_last_four: The last four characters of the SCIM bearer token, used for identification without exposing the full token.
+      - bearer_token_expires_at: The timestamp when the SCIM bearer token will expire.
     """  # noqa
 
     connection_id: str
@@ -64,9 +64,10 @@ class ActiveSCIMConnection(pydantic.BaseModel):
 class ActiveSSOConnection(pydantic.BaseModel):
     """
     Fields:
-      - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
       - display_name: A human-readable display name for the connection.
-      - identity_provider: (no documentation yet)
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
     """  # noqa
 
     connection_id: str
@@ -109,17 +110,8 @@ class DeleteRequestOptions(pydantic.BaseModel):
 class EmailImplicitRoleAssignment(pydantic.BaseModel):
     """
     Fields:
-      - domain: Email domain that grants the specified Role.
-      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
-
-      Reserved `role_id`s that are predefined by Stytch include:
-
-      * `stytch_member`
-      * `stytch_admin`
-
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
-
-
+      - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
+      - role_id: The unique identifier for an RBAC role.
     """  # noqa
 
     domain: str
@@ -145,10 +137,10 @@ class GetConnectedAppRequestOptions(pydantic.BaseModel):
 class GithubProviderInfo(pydantic.BaseModel):
     """
     Fields:
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - provider_tenant_ids: All tenant IDs returned by the OAuth provider. These is typically used to identify organizations or groups within the provider's domain. For example, in HubSpot this is a Hub ID, in Slack this is the Workspace ID, and in GitHub this is an organization ID. Some OAuth providers do not return tenant IDs, some providers are guaranteed to return one, and some may return multiple. This field will always be populated if at least one tenant ID was returned from the OAuth provider and developers should prefer this field over `provider_tenant_id`.
-      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - provider_tenant_ids: A list of tenant IDs within a multi-tenant OAuth provider that the member has access to.
+      - access_token: The access token to exchange for a Stytch Session. Must be granted the `full_access` scope.
+      - scopes: An array of scopes requested by the client.
     """  # noqa
 
     provider_subject: str
@@ -160,12 +152,12 @@ class GithubProviderInfo(pydantic.BaseModel):
 class HubspotProviderInfo(pydantic.BaseModel):
     """
     Fields:
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - provider_tenant_id: The tenant ID returned by the OAuth provider. This is typically used to identify an organization or group within the provider's domain. For example, in HubSpot this is a Hub ID, in Slack this is the Workspace ID, and in GitHub this is an organization ID. This field will only be populated if exactly one tenant ID is returned from a successful OAuth authentication and developers should prefer `provider_tenant_ids` over this since it accounts for the possibility of an OAuth provider yielding multiple tenant IDs.
-      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - provider_tenant_id: The identifier of the tenant within a multi-tenant OAuth provider (e.g., Microsoft tenant ID, Slack workspace ID).
+      - access_token: The `access_token` that you may use to access the Member's data in the provider's API for B2B organization authentication flows.
       - access_token_expires_in: The number of seconds until the access token expires.
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
-      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
+      - scopes: An array of scopes requested by the client.
+      - refresh_token: An OAuth refresh token that can be used to obtain new access tokens without requiring re-authentication.
     """  # noqa
 
     provider_subject: str
@@ -183,8 +175,8 @@ class MemberConnectedApp(pydantic.BaseModel):
       - name: The name of the Connected App.
       - description: A description of the Connected App.
       - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
-      - scopes_granted: The scopes granted to the Connected App at the completion of the last authorization flow.
-      - logo_url: The logo URL of the Connected App, if any.
+      - scopes_granted: The list of OAuth scopes that were actually granted to the access token, which may be a subset of requested scopes.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
     """  # noqa
 
     connected_app_id: str
@@ -198,60 +190,8 @@ class MemberConnectedApp(pydantic.BaseModel):
 class MemberRoleSource(pydantic.BaseModel):
     """
     Fields:
-      - type: The type of role assignment. The possible values are:
-
-      `direct_assignment` – an explicitly assigned Role.
-
-      Directly assigned roles can be updated by passing in the `roles` argument to the
-      [Update Member](https://stytch.com/docs/b2b/api/update-member) endpoint.
-
-      `email_assignment` – an implicit Role granted by the Member's email domain, regardless of their login method.
-
-      Email implicit role assignments can be updated by passing in the `rbac_email_implicit_role_assignments` argument to
-      the [Update Organization](https://stytch.com/docs/b2b/api/update-organization) endpoint.
-
-      `sso_connection` – an implicit Role granted by the Member's SSO connection. This is currently only available
-      for SAML connections and not for OIDC. If the Member has a SAML Member registration with the given connection, this
-      role assignment will appear in the list. However, for authorization check purposes (in
-      [sessions authenticate](https://stytch.com/docs/b2b/api/authenticate-session) or in any endpoint that enforces RBAC with session
-      headers), the Member will only be granted the Role if their session contains an authentication factor with the
-      specified SAML connection.
-
-      SAML connection implicit role assignments can be updated by passing in the
-      `saml_connection_implicit_role_assignments` argument to the
-      [Update SAML connection](https://stytch.com/docs/b2b/api/update-saml-connection) endpoint.
-
-      `sso_connection_group` – an implicit Role granted by the Member's SSO connection and group. This is currently only
-      available for SAML connections and not for OIDC. If the Member has a SAML Member registration with the given
-      connection, and belongs to a specific group within the IdP, this role assignment will appear in the list. However,
-      for authorization check purposes (in [sessions authenticate](https://stytch.com/docs/b2b/api/authenticate-session) or in any endpoint
-      that enforces RBAC with session headers), the Member will only be granted the role if their session contains an
-      authentication factor with the specified SAML connection.
-
-      SAML group implicit role assignments can be updated by passing in the `saml_group_implicit_role_assignments`
-      argument to the [Update SAML connection](https://stytch.com/docs/b2b/api/update-saml-connection) endpoint.
-
-        `scim_connection_group` – an implicit Role granted by the Member's SCIM connection and group. If the Member has
-      a SCIM Member registration with the given connection, and belongs to a specific group within the IdP, this role assignment will appear in the list.
-
-      SCIM group implicit role assignments can be updated by passing in the `scim_group_implicit_role_assignments`
-      argument to the [Update SCIM connection](https://stytch.com/docs/b2b/api/update-scim-connection) endpoint.
-
-      - details: An object containing additional metadata about the source assignment. The fields will vary depending
-      on the role assignment type as follows:
-
-      `direct_assignment` – no additional details.
-
-      `email_assignment` – will contain the email domain that granted the assignment.
-
-      `sso_connection` – will contain the `connection_id` of the SAML connection that granted the assignment.
-
-      `sso_connection_group` – will contain the `connection_id` of the SAML connection and the name of the `group`
-      that granted the assignment.
-
-      `scim_connection_group` – will contain the `connection_id` of the SAML connection and the `group_id`
-      that granted the assignment.
-
+      - type: The source type that describes how a member received their role assignment, such as direct assignment, group inheritance, or SSO connection implicit role mapping.
+      - details: Additional contextual information or metadata providing further details about the response or error.
     """  # noqa
 
     type: str
@@ -261,17 +201,8 @@ class MemberRoleSource(pydantic.BaseModel):
 class MemberRole(pydantic.BaseModel):
     """
     Fields:
-      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
-
-      Reserved `role_id`s that are predefined by Stytch include:
-
-      * `stytch_member`
-      * `stytch_admin`
-
-      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
-
-
-      - sources: A list of sources for this role assignment. A role assignment can come from multiple sources - for example, the Role could be both explicitly assigned and implicitly granted from the Member's email domain.
+      - role_id: The unique identifier for an RBAC role.
+      - sources: The list of authentication sources or methods used to establish the current session or identity.
     """  # noqa
 
     role_id: str
@@ -281,11 +212,11 @@ class MemberRole(pydantic.BaseModel):
 class OAuthRegistration(pydantic.BaseModel):
     """
     Fields:
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - member_oauth_registration_id: The unique ID of an OAuth registration.
-      - profile_picture_url: If available, the `profile_picture_url` is a URL of the User's profile picture set in OAuth identity the provider that the User has authenticated with, e.g. Google profile picture.
-      - locale: If available, the `locale` is the Member's locale set in the OAuth identity provider that the user has authenticated with.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - member_oauth_registration_id: The unique identifier linking a member to their OAuth provider registration.
+      - profile_picture_url: The URL of the member's profile picture, typically retrieved from OAuth providers.
+      - locale: If available, the locale set in the OAuth identity provider.
     """  # noqa
 
     provider_type: str
@@ -298,13 +229,13 @@ class OAuthRegistration(pydantic.BaseModel):
 class OIDCProviderInfo(pydantic.BaseModel):
     """
     Fields:
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
-      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - id_token: An OpenID Connect ID token containing identity claims about the authenticated user.
+      - access_token: The access token to exchange for a Stytch Session. Must be granted the `full_access` scope.
       - access_token_expires_in: The number of seconds until the access token expires.
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
-      - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
-      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
+      - scopes: An array of scopes requested by the client.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
+      - refresh_token: An OAuth refresh token that can be used to obtain new access tokens without requiring re-authentication.
     """  # noqa
 
     provider_subject: str
@@ -319,94 +250,81 @@ class OIDCProviderInfo(pydantic.BaseModel):
 class Organization(pydantic.BaseModel):
     """
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
       - organization_name: The name of the Organization. Must be between 1 and 128 characters in length.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.organization` Resource.
       - organization_logo_url: The image URL of the Organization logo.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.logo-url` action on the `stytch.organization` Resource.
       - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length. Wherever an organization_id is expected in a path or request parameter, you may also use the organization_slug as a convenience.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.slug` action on the `stytch.organization` Resource.
       - sso_jit_provisioning: The authentication setting that controls the JIT provisioning of Members when authenticating via SSO. The accepted values are:
-
-      `ALL_ALLOWED` – the default setting, new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
-
-      `RESTRICTED` – only new Members with SSO logins that comply with `sso_jit_provisioning_allowed_connections` can be provisioned upon authentication.
-
-      `NOT_ALLOWED` – disable JIT provisioning via SSO.
-
+    `ALL_ALLOWED` – the default setting, new Members will be automatically provisioned upon successful authentication via any of the Organization's `sso_active_connections`.
+    `RESTRICTED` – only new Members with SSO logins that comply with `sso_jit_provisioning_allowed_connections` can be provisioned upon authentication.
+    `NOT_ALLOWED` – disable JIT provisioning via SSO.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.sso-jit-provisioning` action on the `stytch.organization` Resource.
       - sso_jit_provisioning_allowed_connections: An array of `connection_id`s that reference [SAML Connection objects](https://stytch.com/docs/b2b/api/saml-connection-object).
-      Only these connections will be allowed to JIT provision Members via SSO when `sso_jit_provisioning` is set to `RESTRICTED`.
-      - sso_active_connections: An array of active [SAML Connection references](https://stytch.com/docs/b2b/api/saml-connection-object) or [OIDC Connection references](https://stytch.com/docs/b2b/api/oidc-connection-object).
+    Only these connections will be allowed to JIT provision Members via SSO when `sso_jit_provisioning` is set to `RESTRICTED`.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.sso-jit-provisioning` action on the `stytch.organization` Resource.
+      - sso_active_connections: A list of currently active SSO connections configured for the organization.
       - email_allowed_domains: An array of email domains that allow invites or JIT provisioning for new Members. This list is enforced when either `email_invites` or `email_jit_provisioning` is set to `RESTRICTED`.
-
-
-        Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
+    Common domains such as `gmail.com` are not allowed. See the [common email domains resource](https://stytch.com/docs/b2b/api/common-email-domains) for the full list.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-domains` action on the `stytch.organization` Resource.
       - email_jit_provisioning: The authentication setting that controls how a new Member can be provisioned by authenticating via Email Magic Link or OAuth. The accepted values are:
-
-      `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
-
-      `NOT_ALLOWED` – the default setting, disables JIT provisioning via Email Magic Link and OAuth.
-
+    `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be provisioned upon authentication via Email Magic Link or OAuth.
+    `NOT_ALLOWED` – the default setting, disables JIT provisioning via Email Magic Link and OAuth.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.email-jit-provisioning` action on the `stytch.organization` Resource.
       - email_invites: The authentication setting that controls how a new Member can be invited to an organization by email. The accepted values are:
-
-      `ALL_ALLOWED` – any new Member can be invited to join via email.
-
-      `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be invited via email.
-
-      `NOT_ALLOWED` – disable email invites.
-
+    `ALL_ALLOWED` – any new Member can be invited to join via email.
+    `RESTRICTED` – only new Members with verified emails that comply with `email_allowed_domains` can be invited via email.
+    `NOT_ALLOWED` – disable email invites.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.email-invites` action on the `stytch.organization` Resource.
       - auth_methods: The setting that controls which authentication methods can be used by Members of an Organization. The accepted values are:
-
-      `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
-
-      `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
-
+    `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+    `RESTRICTED` – only methods that comply with `allowed_auth_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
       - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
-      The list's accepted values are: `sso`, `magic_link`, `email_otp`, `password`, `google_oauth`, `microsoft_oauth`, `slack_oauth`, `github_oauth`, and `hubspot_oauth`.
-
-      - mfa_policy: (no documentation yet)
+    The list's accepted values are: `sso`, `magic_link`, `email_otp`, `password`, `google_oauth`, `microsoft_oauth`, `slack_oauth`, `github_oauth`, and `hubspot_oauth`.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
+      - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+    `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
+    `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-policy` action on the `stytch.organization` Resource.
       - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
-      For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
-      associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
-      for more information about role assignment.
+    For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
+    associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
+    for more information about role assignment.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.implicit-roles` action on the `stytch.organization` Resource.
       - mfa_methods: The setting that controls which MFA methods can be used by Members of an Organization. The accepted values are:
-
-      `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
-
-      `RESTRICTED` – only methods that comply with `allowed_mfa_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
-
+    `ALL_ALLOWED` – the default setting which allows all authentication methods to be used.
+    `RESTRICTED` – only methods that comply with `allowed_mfa_methods` can be used for authentication. This setting does not apply to Members with `is_breakglass` set to `true`.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
       - allowed_mfa_methods: An array of allowed MFA authentication methods. This list is enforced when `mfa_methods` is set to `RESTRICTED`.
-      The list's accepted values are: `sms_otp` and `totp`.
-
+    The list's accepted values are: `sms_otp` and `totp`.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-mfa-methods` action on the `stytch.organization` Resource.
       - oauth_tenant_jit_provisioning: The authentication setting that controls how a new Member can JIT provision into an organization by tenant. The accepted values are:
-
-      `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
-
-      `NOT_ALLOWED` – the default setting, disables JIT provisioning by OAuth Tenant.
-
-      - claimed_email_domains: (no documentation yet)
+    `RESTRICTED` – only new Members with tenants in `allowed_oauth_tenants` can JIT provision via tenant.
+    `NOT_ALLOWED` – the default setting, disables JIT provisioning by OAuth Tenant.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.oauth-tenant-jit-provisioning` action on the `stytch.organization` Resource.
+      - claimed_email_domains: An array of email domains that have been claimed by this Organization. When a domain is claimed, only this Organization can invite or JIT provision Members with email addresses on that domain.
       - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
-
-      `ALL_ALLOWED` – the default setting, any first party Connected App in the Project is permitted for use by Members.
-
-      `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
-
-      `NOT_ALLOWED` – no first party Connected Apps are permitted.
-
+    `ALL_ALLOWED` – the default setting, any first party Connected App in the Project is permitted for use by Members.
+    `RESTRICTED` – only first party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+    `NOT_ALLOWED` – no first party Connected Apps are permitted.
       - allowed_first_party_connected_apps: An array of first party Connected App IDs that are allowed for the Organization. Only used when the Organization's `first_party_connected_apps_allowed_type` is `RESTRICTED`.
       - third_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards third party Connected Apps. The accepted values are:
-
-      `ALL_ALLOWED` – the default setting, any third party Connected App in the Project is permitted for use by Members.
-
-      `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
-
-      `NOT_ALLOWED` – no third party Connected Apps are permitted.
-
+    `ALL_ALLOWED` – the default setting, any third party Connected App in the Project is permitted for use by Members.
+    `RESTRICTED` – only third party Connected Apps with IDs in `allowed_first_party_connected_apps` can be used by Members.
+    `NOT_ALLOWED` – no third party Connected Apps are permitted.
       - allowed_third_party_connected_apps: An array of third party Connected App IDs that are allowed for the Organization. Only used when the Organization's `third_party_connected_apps_allowed_type` is `RESTRICTED`.
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-      - created_at: The timestamp of the Organization's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - updated_at: The timestamp of when the Organization was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - organization_external_id: A unique identifier for the organization.
+      - created_at: The timestamp indicating when the resource was created.
+      - updated_at: The timestamp indicating when the resource was last updated.
+      - organization_external_id: An identifier that can be used in API calls wherever a organization_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within a project, but may be reused across different projects in the same workspace.
       - sso_default_connection_id: The default connection used for SSO when there are multiple active connections.
-      - scim_active_connection: An active [SCIM Connection references](https://stytch.com/docs/b2b/api/scim-connection-object).
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-sso-connection` action on the `stytch.organization` Resource.
+      - scim_active_connection: The currently active SCIM connection for the organization.
       - allowed_oauth_tenants: A map of allowed OAuth tenants. If this field is not passed in, the Organization will not allow JIT provisioning by OAuth Tenant. Allowed keys are "slack", "hubspot", and "github".
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-oauth-tenants` action on the `stytch.organization` Resource.
     """  # noqa
 
     organization_id: str
@@ -441,6 +359,15 @@ class Organization(pydantic.BaseModel):
 
 
 class OrganizationConnectedApp(pydantic.BaseModel):
+    """
+    Fields:
+      - connected_app_id: The ID of the Connected App.
+      - name: The name of the Connected App.
+      - description: A description of the Connected App.
+      - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+    """  # noqa
+
     connected_app_id: str
     name: str
     description: str
@@ -451,8 +378,8 @@ class OrganizationConnectedApp(pydantic.BaseModel):
 class OrganizationConnectedAppActiveMember(pydantic.BaseModel):
     """
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - granted_scopes: Scopes that were granted at the completion of the last authorization flow.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - granted_scopes: OAuth scopes that were granted during authorization.
     """  # noqa
 
     member_id: str
@@ -462,8 +389,8 @@ class OrganizationConnectedAppActiveMember(pydantic.BaseModel):
 class ResultsMetadata(pydantic.BaseModel):
     """
     Fields:
-      - total: The total number of results returned by your search query. If totals have been disabled for your Stytch Workspace to improve search performance, the value will always be -1.
-      - next_cursor: The `next_cursor` string is returned when your search result contains more than one page of results. This value is passed into your next search call in the `cursor` field.
+      - total: The total count of items or results in a paginated response or collection.
+      - next_cursor: A cursor value for fetching the next page of paginated results.
     """  # noqa
 
     total: int
@@ -473,7 +400,7 @@ class ResultsMetadata(pydantic.BaseModel):
 class RetiredEmail(pydantic.BaseModel):
     """
     Fields:
-      - email_id: The globally unique UUID of a Member's email.
+      - email_id: The unique ID of a specific email address.
       - email_address: The email address of the Member.
     """  # noqa
 
@@ -484,10 +411,10 @@ class RetiredEmail(pydantic.BaseModel):
 class SCIMRegistration(pydantic.BaseModel):
     """
     Fields:
-      - connection_id: The ID of the SCIM connection.
-      - registration_id: The unique ID of a SCIM Registration.
-      - external_id: The ID of the member given by the identity provider.
-      - scim_attributes: An object for storing SCIM attributes brought over from the identity provider.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
+      - registration_id: The unique identifier for an authentication method registration (e.g., OAuth, SSO, SCIM).
+      - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+      - scim_attributes: Attributes from the SCIM identity provider, following the SCIM 2.0 schema.
     """  # noqa
 
     connection_id: str
@@ -499,10 +426,10 @@ class SCIMRegistration(pydantic.BaseModel):
 class SSORegistration(pydantic.BaseModel):
     """
     Fields:
-      - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
-      - external_id: The ID of the member given by the identity provider.
-      - registration_id: The unique ID of an SSO Registration.
-      - sso_attributes: An object for storing SSO attributes brought over from the identity provider.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
+      - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+      - registration_id: The unique identifier for an authentication method registration (e.g., OAuth, SSO, SCIM).
+      - sso_attributes: Attributes and claims received from the SSO identity provider during authentication.
     """  # noqa
 
     connection_id: str
@@ -514,48 +441,34 @@ class SSORegistration(pydantic.BaseModel):
 class Member(pydantic.BaseModel):
     """
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-      - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
       - email_address: The email address of the Member.
-      - status: The status of the Member. The possible values are: `pending`, `invited`, `active`, or `deleted`.
+      - status: The status of the entity.
       - name: The name of the Member.
-      - sso_registrations: An array of registered [SAML Connection](https://stytch.com/docs/b2b/api/saml-connection-object) or [OIDC Connection](https://stytch.com/docs/b2b/api/oidc-connection-object) objects the Member has authenticated with.
+      - sso_registrations: A list of SSO registrations linking the member to external identity providers.
       - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
-      - member_password_id: Globally unique UUID that identifies a Member's password.
-      - oauth_registrations: A list of OAuth registrations for this member.
-      - email_address_verified: Whether or not the Member's email address is verified.
-      - mfa_phone_number_verified: Whether or not the Member's phone number is verified.
-      - is_admin: Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
-      who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
-      [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
-      - totp_registration_id: (no documentation yet)
-      - retired_email_addresses:
-      A list of retired email addresses for this member.
-      A previously active email address can be marked as retired in one of two ways:
-      - It's replaced with a new primary email address during an explicit Member update.
-      - A new email address is surfaced by an OAuth, SAML or OIDC provider. In this case the new email address becomes the
-      Member's primary email address and the old primary email address is retired.
-
-      A retired email address cannot be used by other Members in the same Organization. However, unlinking retired email
-      addresses allows them to be subsequently re-used by other Organization Members. Retired email addresses can be unlinked
-      using the [Unlink Retired Email endpoint](https://stytch.com/docs/b2b/api/unlink-retired-member-email).
-
-      - is_locked: (no documentation yet)
+      - member_password_id: The unique identifier for a Member's password. Each Member can have only one password at a time.
+      - oauth_registrations: A list of OAuth provider registrations linked to the member account.
+      - email_address_verified: A boolean indicating whether the member's email address has been verified.
+      - mfa_phone_number_verified: A boolean indicating whether the member's MFA phone number has been verified.
+      - is_admin: A boolean indicating whether the member has admin privileges (deprecated, use RBAC roles instead).
+      - totp_registration_id: The unique identifier for the TOTP registration, linking a member to their authenticator app.
+      - retired_email_addresses: A list of previous email addresses that are no longer the member's primary email but remain in history.
+      - is_locked: A boolean indicating whether the member's account is currently locked.
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
-      - default_mfa_method: (no documentation yet)
-      - roles: Explicit or implicit Roles assigned to this Member, along with details about the role assignment source.
-       See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+      - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
+      - roles: Explicit or implicit Roles assigned to this Member.
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-      - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-      frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-      for complete field behavior details.
-      - created_at: The timestamp of the Member's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - updated_at: The timestamp of when the Member was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - scim_registration: A scim member registration, referencing a [SCIM Connection](https://stytch.com/docs/b2b/api/scim-connection-object) object in use for the Member creation.
-      - external_id: The ID of the member given by the identity provider.
-      - lock_created_at: (no documentation yet)
-      - lock_expires_at: (no documentation yet)
+      - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+      - created_at: The timestamp indicating when the resource was created.
+      - updated_at: The timestamp indicating when the resource was last updated.
+      - scim_registration: A SCIM registration object linking the member to their SCIM identity.
+      - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
+      - lock_created_at: The timestamp when the member's account was locked due to security concerns or policy violations.
+      - lock_expires_at: The timestamp when the member's account lock will automatically expire.
     """  # noqa
 
     organization_id: str
@@ -590,11 +503,7 @@ class Member(pydantic.BaseModel):
 class SearchQuery(pydantic.BaseModel):
     """
     Fields:
-      - operator: The action to perform on the operands. The accepted values are:
-
-      `AND` – all the operand values provided must match.
-
-      `OR` – **[DEPRECATED]** the operator will return any matches to at least one of the operand values you supply. This parameter is retained for legacy use cases only and is no longer supported. We strongly recommend breaking down complex queries into multiple search queries instead.
+      - operator: The action to perform on the operands, either `AND` or `OR`.
       - operands: An array of operand objects that contains all of the filters and values to apply to your search query.
     """  # noqa
 
@@ -605,12 +514,12 @@ class SearchQuery(pydantic.BaseModel):
 class SlackProviderInfo(pydantic.BaseModel):
     """
     Fields:
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - provider_tenant_id: The tenant ID returned by the OAuth provider. This is typically used to identify an organization or group within the provider's domain. For example, in HubSpot this is a Hub ID, in Slack this is the Workspace ID, and in GitHub this is an organization ID. This field will only be populated if exactly one tenant ID is returned from a successful OAuth authentication and developers should prefer `provider_tenant_ids` over this since it accounts for the possibility of an OAuth provider yielding multiple tenant IDs.
-      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
-      - bot_access_token: The `access_token` that you may use to access data as a bot application in Slack. Use in conjunction with `bot_scopes`.
-      - bot_scopes: The scopes that the bot application has access to in Slack.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - provider_tenant_id: The identifier of the tenant within a multi-tenant OAuth provider (e.g., Microsoft tenant ID, Slack workspace ID).
+      - access_token: The access token to exchange for a Stytch Session. Must be granted the `full_access` scope.
+      - scopes: An array of scopes requested by the client.
+      - bot_access_token: An access token for bot or automation purposes, particularly for Slack integrations.
+      - bot_scopes: OAuth scopes granted to a bot access token, particularly for Slack integrations.
     """  # noqa
 
     provider_subject: str
@@ -640,7 +549,7 @@ class UpdateRequestOptions(pydantic.BaseModel):
 class ConnectedAppsResponse(ResponseBase):
     """Response type for `Organizations.connected_apps`.
     Fields:
-      - connected_apps: (no documentation yet)
+      - connected_apps: A list of connected applications that the member or organization has authorized.
     """  # noqa
 
     connected_apps: List[OrganizationConnectedApp]
@@ -649,7 +558,7 @@ class ConnectedAppsResponse(ResponseBase):
 class CreateResponse(ResponseBase):
     """Response type for `Organizations.create`.
     Fields:
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     organization: Organization
@@ -658,7 +567,7 @@ class CreateResponse(ResponseBase):
 class DeleteResponse(ResponseBase):
     """Response type for `Organizations.delete`.
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
     """  # noqa
 
     organization_id: str
@@ -671,8 +580,8 @@ class GetConnectedAppResponse(ResponseBase):
       - name: The name of the Connected App.
       - description: A description of the Connected App.
       - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
-      - active_members: Details about Members who has installed a Connected App.
-      - logo_url: (no documentation yet)
+      - active_members: A list of active members who have authorized a connected application.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
     """  # noqa
 
     connected_app_id: str
@@ -686,21 +595,26 @@ class GetConnectedAppResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Organizations.get`.
     Fields:
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     organization: Organization
 
 
 class MetricsResponse(ResponseBase):
+    """Response type for `Organizations.metrics`.
+    Fields:
+      - member_count: The total number of members in the organization.
+    """  # noqa
+
     member_count: int
 
 
 class SearchResponse(ResponseBase):
     """Response type for `Organizations.search`.
     Fields:
-      - organizations: An array of [Organization objects](https://stytch.com/docs/b2b/api/organization-object).
-      - results_metadata: The search `results_metadata` object contains metadata relevant to your specific query like `total` and `next_cursor`.
+      - organizations: A list of Organization objects or IDs.
+      - results_metadata: Metadata about paginated search results, including total count and cursor for fetching the next page.
     """  # noqa
 
     organizations: List[Organization]
@@ -710,7 +624,7 @@ class SearchResponse(ResponseBase):
 class UpdateResponse(ResponseBase):
     """Response type for `Organizations.update`.
     Fields:
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     organization: Organization

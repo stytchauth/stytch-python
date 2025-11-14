@@ -41,7 +41,7 @@ class Clients:
         """Retrieve details of a specific Connected App by `client_id`.
 
         Fields:
-          - client_id: The ID of the Connected App client.
+          - client_id: The ID of the client.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -59,7 +59,7 @@ class Clients:
         """Retrieve details of a specific Connected App by `client_id`.
 
         Fields:
-          - client_id: The ID of the Connected App client.
+          - client_id: The ID of the client.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -91,13 +91,13 @@ class Clients:
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
           - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
-          - access_token_expiry_minutes: The number of minutes before the access token expires. The default is 60 minutes.
-          - access_token_custom_audience: The custom audience for the access token.
-          - access_token_template_content: The content of the access token custom claims template. The template must be a valid JSON object.
-          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
-          - logo_url: The logo URL of the Connected App, if any.
-          - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this client can be exchanged for a full Stytch Session.
+          - access_token_expiry_minutes: The number of minutes until the access token expires.
+          - access_token_custom_audience: A custom audience (aud) claim value to include in the generated access token JWT.
+          - access_token_template_content: A template string defining the structure and custom claims to include in generated access tokens.
+          - post_logout_redirect_urls: A list of allowed URLs to which users can be redirected after logging out.
+          - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+          - bypass_consent_for_offline_access: A boolean flag indicating whether to skip the consent screen when requesting offline_access scope for refresh tokens.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -151,13 +151,13 @@ class Clients:
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
           - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
-          - access_token_expiry_minutes: The number of minutes before the access token expires. The default is 60 minutes.
-          - access_token_custom_audience: The custom audience for the access token.
-          - access_token_template_content: The content of the access token custom claims template. The template must be a valid JSON object.
-          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
-          - logo_url: The logo URL of the Connected App, if any.
-          - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this client can be exchanged for a full Stytch Session.
+          - access_token_expiry_minutes: The number of minutes until the access token expires.
+          - access_token_custom_audience: A custom audience (aud) claim value to include in the generated access token JWT.
+          - access_token_template_content: A template string defining the structure and custom claims to include in generated access tokens.
+          - post_logout_redirect_urls: A list of allowed URLs to which users can be redirected after logging out.
+          - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+          - bypass_consent_for_offline_access: A boolean flag indicating whether to skip the consent screen when requesting offline_access scope for refresh tokens.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -234,8 +234,8 @@ class Clients:
         """Search for Connected Apps. Supports cursor-based pagination. Specific filters coming soon.
 
         Fields:
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -256,8 +256,8 @@ class Clients:
         """Search for Connected Apps. Supports cursor-based pagination. Specific filters coming soon.
 
         Fields:
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -293,13 +293,13 @@ class Clients:
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
           - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
-          - access_token_expiry_minutes: The number of minutes before the access token expires. The default is 60 minutes.
-          - access_token_custom_audience: The custom audience for the access token.
-          - access_token_template_content: The content of the access token custom claims template. The template must be a valid JSON object.
-          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
-          - logo_url: The logo URL of the Connected App, if any.
-          - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this client can be exchanged for a full Stytch Session.
+          - access_token_expiry_minutes: The number of minutes until the access token expires.
+          - access_token_custom_audience: A custom audience (aud) claim value to include in the generated access token JWT.
+          - access_token_template_content: A template string defining the structure and custom claims to include in generated access tokens.
+          - post_logout_redirect_urls: A list of allowed URLs to which users can be redirected after logging out.
+          - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+          - bypass_consent_for_offline_access: A boolean flag indicating whether to skip the consent screen when requesting offline_access scope for refresh tokens.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -355,13 +355,13 @@ class Clients:
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
           - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
-          - access_token_expiry_minutes: The number of minutes before the access token expires. The default is 60 minutes.
-          - access_token_custom_audience: The custom audience for the access token.
-          - access_token_template_content: The content of the access token custom claims template. The template must be a valid JSON object.
-          - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
-          - logo_url: The logo URL of the Connected App, if any.
-          - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this client can be exchanged for a full Stytch Session.
+          - access_token_expiry_minutes: The number of minutes until the access token expires.
+          - access_token_custom_audience: A custom audience (aud) claim value to include in the generated access token JWT.
+          - access_token_template_content: A template string defining the structure and custom claims to include in generated access tokens.
+          - post_logout_redirect_urls: A list of allowed URLs to which users can be redirected after logging out.
+          - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+          - bypass_consent_for_offline_access: A boolean flag indicating whether to skip the consent screen when requesting offline_access scope for refresh tokens.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

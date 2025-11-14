@@ -183,7 +183,7 @@ class CreateResponse(ResponseBase):
 class DeleteResponse(ResponseBase):
     """Response type for `Connection.delete`.
     Fields:
-      - connection_id: The `connection_id` that was deleted as part of the delete request.
+      - connection_id: The ID of the SCIM connection.
     """  # noqa
 
     connection_id: str
@@ -203,7 +203,7 @@ class GetGroupsResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Connection.get`.
     Fields:
-      - connection: A [SCIM Connection](https://stytch.com/docs/b2b/api/scim-connection-object) connection belonging to the organization (currently limited to one).
+      - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
     """  # noqa
 
     connection: Optional[SCIMConnection] = None
@@ -239,7 +239,7 @@ class RotateStartResponse(ResponseBase):
 class UpdateResponse(ResponseBase):
     """Response type for `Connection.update`.
     Fields:
-      - connection: The `SAML Connection` object affected by this API call. See the [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object) for complete response field details.
+      - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
     """  # noqa
 
     connection: Optional[SCIMConnection] = None

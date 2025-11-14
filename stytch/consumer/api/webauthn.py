@@ -49,16 +49,15 @@ class WebAuthn:
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the user.
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the client.
-          - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
-
-          - override_id: (no documentation yet)
-          - override_name: (no documentation yet)
-          - override_display_name: (no documentation yet)
-          - use_base64_url_encoding: (no documentation yet)
+          - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are `platform` and `cross-platform`. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
+          - override_id: The ID field override for specifying custom identifiers.
+          - override_name: The name field override for customizing display values.
+          - override_display_name: The display name override for customizing how names are shown to users.
+          - use_base64_url_encoding: A boolean flag indicating whether to use base64url encoding instead of standard base64.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -107,16 +106,15 @@ class WebAuthn:
         If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the user.
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
           - user_agent: The user agent of the client.
-          - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are platform and cross-platform. If no value passed, we assume both values are allowed.
-          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `residentKey` set to `"required"` and `userVerification` set to `"preferred"`.
-
-          - override_id: (no documentation yet)
-          - override_name: (no documentation yet)
-          - override_display_name: (no documentation yet)
-          - use_base64_url_encoding: (no documentation yet)
+          - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are `platform` and `cross-platform`. If no value passed, we assume both values are allowed.
+          - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
+          - override_id: The ID field override for specifying custom identifiers.
+          - override_name: The name field override for customizing display values.
+          - override_display_name: The display name override for customizing how names are shown to users.
+          - use_base64_url_encoding: A boolean flag indicating whether to use base64url encoding instead of standard base64.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -159,22 +157,12 @@ class WebAuthn:
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the user.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -212,22 +200,12 @@ class WebAuthn:
         If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
+          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the user.
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -266,9 +244,8 @@ class WebAuthn:
 
         Fields:
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
-
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -301,9 +278,8 @@ class WebAuthn:
 
         Fields:
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
-
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -336,19 +312,10 @@ class WebAuthn:
         Fields:
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -386,19 +353,10 @@ class WebAuthn:
         Fields:
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -470,7 +428,7 @@ class WebAuthn:
         """List the public key credentials of the WebAuthn Registrations or Passkeys registered to a specific User.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -491,7 +449,7 @@ class WebAuthn:
         """List the public key credentials of the WebAuthn Registrations or Passkeys registered to a specific User.
 
         Fields:
-          - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
         """  # noqa
         headers: Dict[str, str] = {}

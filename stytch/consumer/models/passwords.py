@@ -32,7 +32,7 @@ class MigrateRequestHashType(str, enum.Enum):
 class Argon2Config(pydantic.BaseModel):
     """
     Fields:
-      - salt: The salt value.
+      - salt: The base64-encoded salt value.
       - iteration_amount: The iteration amount.
       - memory: The memory in kibibytes.
       - threads: The thread value, also known as the parallelism factor.
@@ -52,7 +52,7 @@ class LUDSRequirements(pydantic.BaseModel):
       - has_lower_case: For LUDS validation, whether the password contains at least one lowercase letter.
       - has_upper_case: For LUDS validation, whether the password contains at least one uppercase letter.
       - has_digit: For LUDS validation, whether the password contains at least one digit.
-      - has_symbol: For LUDS validation, whether the password contains at least one symbol. Any UTF8 character outside of a-z or A-Z may count as a valid symbol.
+      - has_symbol: For LUDS validation, whether the password contains at least one symbol. Any UTF8 character outside of a-z, A-Z, or 0-9 is considered a symbol.
       - missing_complexity: For LUDS validation, the number of complexity requirements that are missing from the password. Check the complexity fields to see which requirements are missing.
       - missing_characters: For LUDS validation, this is the required length of the password that you've set minus the length of the password being checked. The user will need to add this many characters to the password to make it valid.
     """  # noqa
@@ -92,10 +92,10 @@ class MD5Config(pydantic.BaseModel):
 class PBKDF2Config(pydantic.BaseModel):
     """
     Fields:
-      - salt: The salt value, which should be in a base64 encoded string form.
+      - salt: The base64-encoded salt value.
       - iteration_amount: The iteration amount.
       - key_length: The key length, also known as the hash length.
-      - algorithm: The algorithm that was used to generate the HMAC hash. Accepted values are "sha512" and sha256". Defaults to sha256.
+      - algorithm: The algorithm that was used to generate the HMAC hash. Accepted values are `sha512` and `sha256`. Defaults to sha256.
     """  # noqa
 
     salt: str
@@ -129,9 +129,8 @@ class SHA512Config(pydantic.BaseModel):
 class ScryptConfig(pydantic.BaseModel):
     """
     Fields:
-      - salt: The salt value, which should be in a base64 encoded string form.
-      - n_parameter: The N value, also known as the iterations count. It must be a power of two greater than 1 and less than 262,145.
-          If your application's N parameter is larger than 262,144, please reach out to [support@stytch.com](mailto:support@stytch.com)
+      - salt: The base64-encoded salt value.
+      - n_parameter: The N value, also known as the iterations count. It must be a power of two greater than 1 and less than 262,145. If your application's N parameter is larger than 262,144, please reach out to support@stytch.com
       - r_parameter: The r parameter, also known as the block size.
       - p_parameter: The p parameter, also known as the parallelism factor.
       - key_length: The key length, also known as the hash length.
@@ -147,15 +146,12 @@ class ScryptConfig(pydantic.BaseModel):
 class AuthenticateResponse(ResponseBase):
     """Response type for `Passwords.authenticate`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -169,16 +165,13 @@ class AuthenticateResponse(ResponseBase):
 class CreateResponse(ResponseBase):
     """Response type for `Passwords.create`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - email_id: The unique ID of a specific email address.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -193,10 +186,10 @@ class CreateResponse(ResponseBase):
 class MigrateResponse(ResponseBase):
     """Response type for `Passwords.migrate`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - email_id: The unique ID of a specific email address.
-      - user_created: In `login_or_create` endpoints, this field indicates whether or not a User was just created.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_created: A boolean indicating whether a new user was created as part of the authentication flow (true) or an existing user was authenticated (false).
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -208,12 +201,12 @@ class MigrateResponse(ResponseBase):
 class StrengthCheckResponse(ResponseBase):
     """Response type for `Passwords.strength_check`.
     Fields:
-      - valid_password: Returns `true` if the password passes our password validation. We offer two validation options, [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy) is the default option which offers a high level of sophistication. We also offer [LUDS](https://stytch.com/docs/guides/passwords/strength-policy). If an email address is included in the call we also require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
-      - score: The score of the password determined by [zxcvbn](https://github.com/dropbox/zxcvbn). Values will be between 1 and 4, a 3 or greater is required to pass validation.
-      - breached_password: Returns `true` if the password has been breached. Powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
+      - valid_password: A boolean indicating whether the provided password is valid.
+      - score: A numerical score representing the strength or quality of a password. Values will be between 1 and 4, a 3 or greater is required to pass `zxcvbn` validation.
+      - breached_password: A boolean indicating whether the password has been found in known data breaches.
       - strength_policy: The strength policy type enforced, either `zxcvbn` or `luds`.
-      - breach_detection_on_create: Will return `true` if breach detection will be evaluated. By default this option is enabled. This option can be disabled by contacting [support@stytch.com](mailto:support@stytch.com?subject=Password%20strength%20configuration). If this value is `false` then `breached_password` will always be `false` as well.
-      - feedback: Feedback for how to improve the password's strength [HaveIBeenPwned](https://haveibeenpwned.com/).
+      - breach_detection_on_create: A boolean flag to enable checking passwords against breach databases during creation.
+      - feedback: Feedback for how to improve the password's strength.
     """  # noqa
 
     valid_password: bool

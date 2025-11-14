@@ -82,49 +82,26 @@ class Members:
         """Updates a Member specified by `organization_id` and `member_id`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
           - name: The name of the Member.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.name` action on the `stytch.self` Resource.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-                  If a session header is passed into the request, this field may **not** be passed into the request. You cannot
-                  update trusted metadata when acting as a Member.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.untrusted-metadata` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.untrusted-metadata` action on the `stytch.self` Resource.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.is-breakglass` action on the `stytch.member` Resource.
           - mfa_phone_number: Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-mfa-phone-number) to delete the Member's existing phone number first.
+        When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.mfa-phone` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.mfa-phone` action on the `stytch.self` Resource.
 
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.mfa-phone` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.mfa-phone` action on the `stytch.self` Resource.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-enrolled` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.mfa-enrolled` action on the `stytch.self` Resource.
           - roles: Roles to explicitly assign to this Member.
-         Will completely replace any existing explicitly assigned roles. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
-
-           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
-           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
-           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
-           `preserve_existing_sessions` parameter with a value of `true`.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.roles` action on the `stytch.member` Resource.
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
+        by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+        authentication factors with the affected SSO connection IDs will be revoked.
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
+        When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
           - email_address: Updates the Member's `email_address`, if provided. This will clear any existing passwords and require re-verification of the new email address.
-                If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
-                A Member's email address can only be useable again by other Members if the Member is deleted.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
+        If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
+        A Member's email address can only be useable again by other Members if the Member is deleted.
+        When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
           - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
           - unlink_email: If `unlink_email` is `true` and an `email_address` is provided, the Member's previous email will be deleted instead of retired. Defaults to `false`.
         """  # noqa
@@ -187,49 +164,26 @@ class Members:
         """Updates a Member specified by `organization_id` and `member_id`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
           - name: The name of the Member.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.name` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.name` action on the `stytch.self` Resource.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-                  If a session header is passed into the request, this field may **not** be passed into the request. You cannot
-                  update trusted metadata when acting as a Member.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.untrusted-metadata` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.untrusted-metadata` action on the `stytch.self` Resource.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.is-breakglass` action on the `stytch.member` Resource.
           - mfa_phone_number: Sets the Member's phone number. Throws an error if the Member already has a phone number. To change the Member's phone number, use the [Delete member phone number endpoint](https://stytch.com/docs/b2b/api/delete-member-mfa-phone-number) to delete the Member's existing phone number first.
+        When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.mfa-phone` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.mfa-phone` action on the `stytch.self` Resource.
 
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.mfa-phone` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.info.mfa-phone` action on the `stytch.self` Resource.
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.mfa-enrolled` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.mfa-enrolled` action on the `stytch.self` Resource.
           - roles: Roles to explicitly assign to this Member.
-         Will completely replace any existing explicitly assigned roles. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
-
-           If a Role is removed from a Member, and the Member is also implicitly assigned this Role from an SSO connection
-           or an SSO group, we will by default revoke any existing sessions for the Member that contain any SSO
-           authentication factors with the affected connection ID. You can preserve these sessions by passing in the
-           `preserve_existing_sessions` parameter with a value of `true`.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.roles` action on the `stytch.member` Resource.
           - preserve_existing_sessions: Whether to preserve existing sessions when explicit Roles that are revoked are also implicitly assigned
-          by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
-          authentication factors with the affected SSO connection IDs will be revoked.
+        by SSO connection or SSO group. Defaults to `false` - that is, existing Member Sessions that contain SSO
+        authentication factors with the affected SSO connection IDs will be revoked.
           - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
+        When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.default-mfa-method` action on the `stytch.member` Resource. Alternatively, if the Member Session matches the Member associated with the `member_id` passed in the request, the authorization check will also allow a Member Session that has permission to perform the `update.settings.default-mfa-method` action on the `stytch.self` Resource.
           - email_address: Updates the Member's `email_address`, if provided. This will clear any existing passwords and require re-verification of the new email address.
-                If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
-                A Member's email address can only be useable again by other Members if the Member is deleted.
-
-        If this field is provided and a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
+        If a Member's email address is changed, other Members in the same Organization cannot use the old email address, although the Member may update back to their old email address.
+        A Member's email address can only be useable again by other Members if the Member is deleted.
+        When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.email` action on the `stytch.member` Resource. Members cannot update their own email address.
           - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
           - unlink_email: If `unlink_email` is `true` and an `email_address` is provided, the Member's previous email will be deleted instead of retired. Defaults to `false`.
         """  # noqa
@@ -280,8 +234,8 @@ class Members:
         """Deletes a Member specified by `organization_id` and `member_id`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -306,8 +260,8 @@ class Members:
         """Deletes a Member specified by `organization_id` and `member_id`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -334,8 +288,8 @@ class Members:
         Note that this endpoint does not accept an `external_id`. The Stytch `member_id` must be provided.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -363,8 +317,8 @@ class Members:
         Note that this endpoint does not accept an `external_id`. The Stytch `member_id` must be provided.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -396,8 +350,8 @@ class Members:
         and calling the [OTP SMS send](https://stytch.com/docs/b2b/api/otp-sms-send) endpoint, then calling the [OTP SMS Authenticate](https://stytch.com/docs/b2b/api/authenticate-otp-sms) endpoint.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -431,8 +385,8 @@ class Members:
         and calling the [OTP SMS send](https://stytch.com/docs/b2b/api/otp-sms-send) endpoint, then calling the [OTP SMS Authenticate](https://stytch.com/docs/b2b/api/authenticate-otp-sms) endpoint.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -462,8 +416,8 @@ class Members:
         Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -492,8 +446,8 @@ class Members:
         Existing Member Sessions that include the TOTP authentication factor will not be revoked if the registration is deleted, and MFA will not be enforced until the Member logs in again.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -518,7 +472,7 @@ class Members:
         method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
         """
-        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/minute.
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary depending on query complexity and the endpoint has restrictive rate limits.
 
         Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
@@ -526,9 +480,9 @@ class Members:
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
-          - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all Members with no filtering applied.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -556,7 +510,7 @@ class Members:
         method_options: Optional[SearchRequestOptions] = None,
     ) -> SearchResponse:
         """
-        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 100 requests/minute.
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary depending on query complexity and the endpoint has restrictive rate limits.
 
         Search for Members within specified Organizations. An array with at least one `organization_id` is required. Submitting an empty `query` returns all non-deleted Members within the specified Organizations.
 
@@ -564,9 +518,9 @@ class Members:
 
         Fields:
           - organization_ids: An array of organization_ids. At least one value is required.
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
-          - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all Members with no filtering applied.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -596,8 +550,8 @@ class Members:
         This endpoint only works for Organization-scoped passwords. For cross-org password Projects, use [Require Password Reset By Email](https://stytch.com/docs/b2b/api/passwords-require-reset-by-email) instead.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_password_id: Globally unique UUID that identifies a Member's password.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_password_id: The unique identifier for a Member's password. Each Member can have only one password at a time.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -625,8 +579,8 @@ class Members:
         This endpoint only works for Organization-scoped passwords. For cross-org password Projects, use [Require Password Reset By Email](https://stytch.com/docs/b2b/api/passwords-require-reset-by-email) instead.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_password_id: Globally unique UUID that identifies a Member's password.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_password_id: The unique identifier for a Member's password. Each Member can have only one password at a time.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -651,8 +605,8 @@ class Members:
         """Get a Member by `member_id`. This endpoint does not require an `organization_id`, enabling you to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
 
         Fields:
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - include_deleted: Whether to include deleted Members in the response. Defaults to false.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - include_deleted: If set to `true`, the response will include deleted Members. If set to `false` or not provided, only active Members will be returned.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -675,8 +629,8 @@ class Members:
         """Get a Member by `member_id`. This endpoint does not require an `organization_id`, enabling you to get members across organizations. This is a dangerous operation. Incorrect use may open you up to indirect object reference (IDOR) attacks. We recommend using the [Get Member](https://stytch.com/docs/b2b/api/get-member) API instead.
 
         Fields:
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value.
-          - include_deleted: Whether to include deleted Members in the response. Defaults to false.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - include_deleted: If set to `true`, the response will include deleted Members. If set to `false` or not provided, only active Members will be returned.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -702,8 +656,8 @@ class Members:
         access token automatically.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
           - include_refresh_token: Whether to return the refresh token Stytch has stored for the OAuth Provider. Defaults to false. **Important:** If your application exchanges the refresh token, Stytch may not be able to automatically refresh access tokens in the future.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -732,8 +686,8 @@ class Members:
         access token automatically.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
           - include_refresh_token: Whether to return the refresh token Stytch has stored for the OAuth Provider. Defaults to false. **Important:** If your application exchanges the refresh token, Stytch may not be able to automatically refresh access tokens in the future.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -774,9 +728,9 @@ class Members:
         on the [Member object](https://stytch.com/docs/b2b/api/member-object).
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - email_id: The globally unique UUID of a Member's email.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - email_id: The unique ID of a specific email address.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -821,9 +775,9 @@ class Members:
         on the [Member object](https://stytch.com/docs/b2b/api/member-object).
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - email_id: The globally unique UUID of a Member's email.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - email_id: The unique ID of a specific email address.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -874,20 +828,14 @@ class Members:
         If using Email OTP Codes, you should invoke the [Authenticate Email OTP Code](https://stytch.com/docs/b2b/api/authenticate-email-otp) endpoint as normal to complete the flow. Make sure to pass the new email address to the endpoint.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - email_address: The new email address for the Member.
-          - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
-          verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
-          redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - email_address: The email address of the Member.
+          - login_redirect_url: The URL that Members are redirected to upon clicking the Email Magic Link. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Login.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
           - delivery_method: The method that should be used to verify a member's new email address. The options are `EMAIL_MAGIC_LINK` or `EMAIL_OTP`. This field is optional, if no value is provided, `EMAIL_MAGIC_LINK` will be used.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -941,20 +889,14 @@ class Members:
         If using Email OTP Codes, you should invoke the [Authenticate Email OTP Code](https://stytch.com/docs/b2b/api/authenticate-email-otp) endpoint as normal to complete the flow. Make sure to pass the new email address to the endpoint.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - email_address: The new email address for the Member.
-          - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
-          verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
-          redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - email_address: The email address of the Member.
+          - login_redirect_url: The URL that Members are redirected to upon clicking the Email Magic Link. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Login.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
           - delivery_method: The method that should be used to verify a member's new email address. The options are `EMAIL_MAGIC_LINK` or `EMAIL_OTP`. This field is optional, if no value is provided, `EMAIL_MAGIC_LINK` will be used.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -994,8 +936,8 @@ class Members:
         App policy changes.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -1025,8 +967,8 @@ class Members:
         App policy changes.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -1061,19 +1003,16 @@ class Members:
         """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
           - name: The name of the Member.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
-          - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
-           for more information about role assignment.
+          - roles: Roles to explicitly assign to this Member.
           - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -1126,19 +1065,16 @@ class Members:
         """Creates a Member. An `organization_id` and `email_address` are required.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
           - name: The name of the Member.
           - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - create_member_as_pending: Flag for whether or not to save a Member as `pending` or `active` in Stytch. It defaults to false. If true, new Members will be created with status `pending` in Stytch's backend. Their status will remain `pending` and they will continue to receive signup email templates for every Email Magic Link until that Member authenticates and becomes `active`. If false, new Members will be created with status `active`.
           - is_breakglass: Identifies the Member as a break glass user - someone who has permissions to authenticate into an Organization by bypassing the Organization's settings. A break glass account is typically used for emergency purposes to gain access outside of normal authentication procedures. Refer to the [Organization object](https://stytch.com/docs/b2b/api/organization-object) and its `auth_methods` and `allowed_auth_methods` fields for more details.
           - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
           - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
-          - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
-           for more information about role assignment.
+          - roles: Roles to explicitly assign to this Member.
           - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within an organization, but may be reused across different organizations in the same project.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -1182,8 +1118,8 @@ class Members:
         """Get a Member by `member_id` or `email_address`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -1210,8 +1146,8 @@ class Members:
         """Get a Member by `member_id` or `email_address`.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
           - email_address: The email address of the Member.
         """  # noqa
         headers: Dict[str, str] = {}

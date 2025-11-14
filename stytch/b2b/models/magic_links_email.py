@@ -49,9 +49,9 @@ class InviteRequestOptions(pydantic.BaseModel):
 class InviteResponse(ResponseBase):
     """Response type for `Email.invite`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -62,10 +62,10 @@ class InviteResponse(ResponseBase):
 class LoginOrSignupResponse(ResponseBase):
     """Response type for `Email.login_or_signup`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member_created: A flag indicating `true` if a new Member object was created and `false` if the Member object already existed.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member_created: A boolean indicating whether a new member was created during the authentication flow (true) or an existing member was authenticated (false).
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str

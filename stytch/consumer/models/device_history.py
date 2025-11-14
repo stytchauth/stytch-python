@@ -15,9 +15,9 @@ import pydantic
 class DeviceAttributeDetails(pydantic.BaseModel):
     """
     Fields:
-      - is_new: Whether this `ip_geo_country` has been seen before for this user.
-      - first_seen_at: When this `ip_geo_country` was first seen for this user. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - last_seen_at: When this `ip_geo_country` was last seen for this user. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - is_new: Whether this device attribute has been seen before for this user.
+      - first_seen_at: When this device attribute was first seen for this user. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - last_seen_at: When this device attribute was last seen for this user. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
     """  # noqa
 
     is_new: bool
@@ -28,14 +28,14 @@ class DeviceAttributeDetails(pydantic.BaseModel):
 class DeviceInfo(pydantic.BaseModel):
     """
     Fields:
-      - visitor_id: The `visitor_id` (a unique identifier) of the user's device. See the [Device Fingerprinting documentation](https://stytch.com/docs/fraud/guides/device-fingerprinting/fingerprints) for more details on the `visitor_id`.
-      - visitor_id_details: Information about the `visitor_id`.
-      - ip_address: The IP address of the user's device.
-      - ip_address_details: Information about the `ip_address`.
-      - ip_geo_city: The city where the IP address is located.
-      - ip_geo_region: The region where the IP address is located.
-      - ip_geo_country: The country code where the IP address is located.
-      - ip_geo_country_details: Information about the `ip_geo_country`.
+      - visitor_id: The cookie stored on the user's device that uniquely identifies them. See the Device Fingerprinting documentation for more details on the visitor_id.
+      - visitor_id_details: Detailed information about the visitor ID used for fraud detection and device tracking.
+      - ip_address: The IP address from which the request originated.
+      - ip_address_details: Detailed information about the IP address including geolocation and ISP data.
+      - ip_geo_city: The city name derived from the IP address.
+      - ip_geo_region: The geographic region derived from the IP address.
+      - ip_geo_country: The country code derived from the IP address.
+      - ip_geo_country_details: Detailed country information derived from the IP address geolocation.
     """  # noqa
 
     visitor_id: str

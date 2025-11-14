@@ -83,12 +83,26 @@ class AuthenticationFactorType(str, enum.Enum):
 
 
 class AmazonOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class AppleOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -97,7 +111,7 @@ class AppleOAuthFactor(pydantic.BaseModel):
 class AuthenticatorAppFactor(pydantic.BaseModel):
     """
     Fields:
-      - totp_id: Globally unique UUID that identifies a TOTP instance.
+      - totp_id: The unique identifier for the TOTP (Time-based One-Time Password) registration.
     """  # noqa
 
     totp_id: str
@@ -106,11 +120,8 @@ class AuthenticatorAppFactor(pydantic.BaseModel):
 class AuthorizationCheck(pydantic.BaseModel):
     """
     Fields:
-      - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
-
-      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s.
-
-      - action: An action to take on a Resource.
+      - resource_id: The identifier of a specific resource within an RBAC authorization check.
+      - action: An RBAC action that defines what operation is being performed on a resource (e.g., read, write, delete).
     """  # noqa
 
     resource_id: str
@@ -120,8 +131,8 @@ class AuthorizationCheck(pydantic.BaseModel):
 class AuthorizationVerdict(pydantic.BaseModel):
     """
     Fields:
-      - authorized: Whether the User was authorized to perform the specified action on the specified Resource. Always true if the request succeeds.
-      - granting_roles: The complete list of Roles that gave the User permission to perform the specified action on the specified Resource.
+      - authorized: Whether the actor was authorized to perform the specified action on the specified Resource. Always true if the request succeeds.
+      - granting_roles: The complete list of Roles that gave the Member permission to perform the specified action on the specified Resource.
     """  # noqa
 
     authorized: bool
@@ -129,28 +140,61 @@ class AuthorizationVerdict(pydantic.BaseModel):
 
 
 class BiometricFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - biometric_registration_id: The `biometric_registration_id` to be deleted.
+    """  # noqa
+
     biometric_registration_id: str
 
 
 class BitbucketOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class CoinbaseOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class CryptoWalletFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - crypto_wallet_id: The unique identifier for a cryptocurrency wallet registration.
+      - crypto_wallet_address: The blockchain address of the cryptocurrency wallet used for Web3 authentication.
+      - crypto_wallet_type: The type of wallet to authenticate. Currently `ethereum` and `solana` are supported. Wallets for any EVM-compatible chains (such as Polygon or BSC) are also supported and are grouped under the `ethereum` type.
+    """  # noqa
+
     crypto_wallet_id: str
     crypto_wallet_address: str
     crypto_wallet_type: str
 
 
 class DiscordOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -159,8 +203,8 @@ class DiscordOAuthFactor(pydantic.BaseModel):
 class EmailFactor(pydantic.BaseModel):
     """
     Fields:
-      - email_id: The globally unique UUID of the Member's email.
-      - email_address: The email address of the Member.
+      - email_id: The unique ID of a specific email address.
+      - email_address: The email address to exchange to.
     """  # noqa
 
     email_id: str
@@ -172,18 +216,39 @@ class EmbeddableMagicLinkFactor(pydantic.BaseModel):
 
 
 class FacebookOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class FigmaOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class GitLabOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -192,7 +257,7 @@ class GitLabOAuthFactor(pydantic.BaseModel):
 class GithubOAuthExchangeFactor(pydantic.BaseModel):
     """
     Fields:
-      - email_id: The globally unique UUID of the Member's email.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     email_id: str
@@ -201,9 +266,9 @@ class GithubOAuthExchangeFactor(pydantic.BaseModel):
 class GithubOAuthFactor(pydantic.BaseModel):
     """
     Fields:
-      - id: The unique ID of an OAuth registration.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - email_id: The globally unique UUID of the Member's email.
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     id: str
@@ -214,7 +279,7 @@ class GithubOAuthFactor(pydantic.BaseModel):
 class GoogleOAuthExchangeFactor(pydantic.BaseModel):
     """
     Fields:
-      - email_id: The globally unique UUID of the Member's email.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     email_id: str
@@ -223,9 +288,9 @@ class GoogleOAuthExchangeFactor(pydantic.BaseModel):
 class GoogleOAuthFactor(pydantic.BaseModel):
     """
     Fields:
-      - id: The unique ID of an OAuth registration.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - email_id: The globally unique UUID of the Member's email.
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     id: str
@@ -236,7 +301,7 @@ class GoogleOAuthFactor(pydantic.BaseModel):
 class HubspotOAuthExchangeFactor(pydantic.BaseModel):
     """
     Fields:
-      - email_id: The globally unique UUID of the Member's email.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     email_id: str
@@ -245,9 +310,9 @@ class HubspotOAuthExchangeFactor(pydantic.BaseModel):
 class HubspotOAuthFactor(pydantic.BaseModel):
     """
     Fields:
-      - id: The unique ID of an OAuth registration.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - email_id: The globally unique UUID of the Member's email.
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     id: str
@@ -258,7 +323,7 @@ class HubspotOAuthFactor(pydantic.BaseModel):
 class ImpersonatedFactor(pydantic.BaseModel):
     """
     Fields:
-      - impersonator_id: For impersonated sessions initiated via the Stytch Dashboard, the `impersonator_id` will be the impersonator's Stytch Dashboard `member_id`.
+      - impersonator_id: For impersonated sessions initiated via the Stytch Dashboard, the impersonator_id will be the impersonator's Stytch Dashboard member_id.
       - impersonator_email_address: The email address of the impersonator.
     """  # noqa
 
@@ -267,6 +332,13 @@ class ImpersonatedFactor(pydantic.BaseModel):
 
 
 class InstagramOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -285,6 +357,13 @@ class JWK(pydantic.BaseModel):
 
 
 class LinkedInOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -293,9 +372,9 @@ class LinkedInOAuthFactor(pydantic.BaseModel):
 class MicrosoftOAuthFactor(pydantic.BaseModel):
     """
     Fields:
-      - id: The unique ID of an OAuth registration.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - email_id: The globally unique UUID of the Member's email.
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     id: str
@@ -306,7 +385,7 @@ class MicrosoftOAuthFactor(pydantic.BaseModel):
 class OAuthAccessTokenExchangeFactor(pydantic.BaseModel):
     """
     Fields:
-      - client_id: The ID of the Connected App client.
+      - client_id: The ID of the client.
     """  # noqa
 
     client_id: str
@@ -315,9 +394,9 @@ class OAuthAccessTokenExchangeFactor(pydantic.BaseModel):
 class OIDCSSOFactor(pydantic.BaseModel):
     """
     Fields:
-      - id: The unique ID of an SSO Registration.
-      - provider_id: Globally unique UUID that identifies a specific OIDC Connection.
-      - external_id: The ID of the member given by the identity provider.
+      - id: The unique identifier for the resource.
+      - provider_id: The unique identifier for an identity provider configuration.
+      - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
     """  # noqa
 
     id: str
@@ -328,8 +407,8 @@ class OIDCSSOFactor(pydantic.BaseModel):
 class PhoneNumberFactor(pydantic.BaseModel):
     """
     Fields:
-      - phone_id: The globally unique UUID of the Member's phone number.
-      - phone_number: The phone number of the Member.
+      - phone_id: The unique ID for the phone number.
+      - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
     """  # noqa
 
     phone_id: str
@@ -343,9 +422,9 @@ class RecoveryCodeFactor(pydantic.BaseModel):
 class SAMLSSOFactor(pydantic.BaseModel):
     """
     Fields:
-      - id: The unique ID of an SSO Registration.
-      - provider_id: Globally unique UUID that identifies a specific SAML Connection.
-      - external_id: The ID of the member given by the identity provider.
+      - id: The unique identifier for the resource.
+      - provider_id: The unique identifier for an identity provider configuration.
+      - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
     """  # noqa
 
     id: str
@@ -354,12 +433,26 @@ class SAMLSSOFactor(pydantic.BaseModel):
 
 
 class SalesforceOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class ShopifyOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -368,7 +461,7 @@ class ShopifyOAuthFactor(pydantic.BaseModel):
 class SlackOAuthExchangeFactor(pydantic.BaseModel):
     """
     Fields:
-      - email_id: The globally unique UUID of the Member's email.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     email_id: str
@@ -377,9 +470,9 @@ class SlackOAuthExchangeFactor(pydantic.BaseModel):
 class SlackOAuthFactor(pydantic.BaseModel):
     """
     Fields:
-      - id: The unique ID of an OAuth registration.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - email_id: The globally unique UUID of the Member's email.
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
     """  # noqa
 
     id: str
@@ -388,24 +481,52 @@ class SlackOAuthFactor(pydantic.BaseModel):
 
 
 class SnapchatOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class SpotifyOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class SteamOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class TikTokOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -421,24 +542,52 @@ class TrustedAuthTokenFactor(pydantic.BaseModel):
 
 
 class TwitchOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class TwitterOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
 
 
 class WebAuthnFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
+      - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
+      - user_agent: The user agent of the client.
+    """  # noqa
+
     webauthn_registration_id: str
     domain: str
     user_agent: Optional[str] = None
 
 
 class YahooOAuthFactor(pydantic.BaseModel):
+    """
+    Fields:
+      - id: The unique identifier for the resource.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - email_id: The unique ID of a specific email address.
+    """  # noqa
+
     id: str
     provider_subject: str
     email_id: Optional[str] = None
@@ -447,84 +596,52 @@ class YahooOAuthFactor(pydantic.BaseModel):
 class AuthenticationFactor(pydantic.BaseModel):
     """
     Fields:
-      - type: The type of authentication factor. The possible values are: `email_otp`, `impersonated`, `imported`,
-           `magic_link`, `oauth`, `otp`, `password`, `recovery_codes`, `sso`, `trusted_auth_token`, or `totp`.
-      - delivery_method: The method that was used to deliver the authentication factor. The possible values depend on the `type`:
-
-          `email_otp` – Only `email`.
-
-          `impersonated` – Only `impersonation`.
-
-          `imported` – Only `imported_auth0`.
-
-          `magic_link` – Only `email`.
-
-          `oauth` – The delivery method is determined by the specific OAuth provider used. The possible values are `oauth_google`, `oauth_microsoft`, `oauth_hubspot`, `oauth_slack`, or `oauth_github`.
-
-            In addition, you may see an 'exchange' delivery method when a non-email-verifying OAuth factor originally authenticated in one organization is exchanged for a factor in another organization.
-            This can happen during authentication flows such as [session exchange](https://stytch.com/docs/b2b/api/exchange-session).
-            The non-email-verifying OAuth providers are Hubspot, Slack, and Github.
-            Google is also considered non-email-verifying when the HD claim is empty.
-            The possible exchange values are `oauth_exchange_google`, `oauth_exchange_hubspot`, `oauth_exchange_slack`, or `oauth_exchange_github`.
-
-            The final possible value is `oauth_access_token_exchange`, if this factor came from an [access token exchange flow](https://stytch.com/docs/b2b/api/connected-app-access-token-exchange).
-
-          `otp` –  Only `sms`.
-
-          `password` – Only `knowledge`.
-
-          `recovery_codes` – Only `recovery_code`.
-
-          `sso` – Either `sso_saml` or `sso_oidc`.
-
-          `trusted_auth_token` – Only `trusted_token_exchange`.
-
-          `totp` – Only `authenticator_app`.
-
-      - last_authenticated_at: The timestamp when the factor was last authenticated.
-      - created_at: The timestamp when the factor was initially authenticated.
-      - updated_at: The timestamp when the factor was last updated.
-      - email_factor: Information about the email factor, if one is present.
-      - phone_number_factor: Information about the phone number factor, if one is present.
-      - google_oauth_factor: Information about the Google OAuth factor, if one is present.
-      - microsoft_oauth_factor: Information about the Microsoft OAuth factor, if one is present.
-      - apple_oauth_factor: (no documentation yet)
-      - webauthn_factor: (no documentation yet)
-      - authenticator_app_factor: Information about the TOTP-backed Authenticator App factor, if one is present.
-      - github_oauth_factor: Information about the Github OAuth factor, if one is present.
-      - recovery_code_factor: (no documentation yet)
-      - facebook_oauth_factor: (no documentation yet)
-      - crypto_wallet_factor: (no documentation yet)
-      - amazon_oauth_factor: (no documentation yet)
-      - bitbucket_oauth_factor: (no documentation yet)
-      - coinbase_oauth_factor: (no documentation yet)
-      - discord_oauth_factor: (no documentation yet)
-      - figma_oauth_factor: (no documentation yet)
-      - git_lab_oauth_factor: (no documentation yet)
-      - instagram_oauth_factor: (no documentation yet)
-      - linked_in_oauth_factor: (no documentation yet)
-      - shopify_oauth_factor: (no documentation yet)
-      - slack_oauth_factor: Information about the Slack OAuth factor, if one is present.
-      - snapchat_oauth_factor: (no documentation yet)
-      - spotify_oauth_factor: (no documentation yet)
-      - steam_oauth_factor: (no documentation yet)
-      - tik_tok_oauth_factor: (no documentation yet)
-      - twitch_oauth_factor: (no documentation yet)
-      - twitter_oauth_factor: (no documentation yet)
-      - embeddable_magic_link_factor: (no documentation yet)
-      - biometric_factor: (no documentation yet)
-      - saml_sso_factor: Information about the SAML SSO factor, if one is present.
-      - oidc_sso_factor: Information about the OIDC SSO factor, if one is present.
-      - salesforce_oauth_factor: (no documentation yet)
-      - yahoo_oauth_factor: (no documentation yet)
-      - hubspot_oauth_factor: Information about the Hubspot OAuth factor, if one is present.
-      - slack_oauth_exchange_factor: Information about the Slack OAuth Exchange factor, if one is present.
-      - hubspot_oauth_exchange_factor: Information about the Hubspot OAuth Exchange factor, if one is present.
-      - github_oauth_exchange_factor: Information about the Github OAuth Exchange factor, if one is present.
-      - google_oauth_exchange_factor: Information about the Google OAuth Exchange factor, if one is present.
-      - impersonated_factor: Information about the impersonated factor, if one is present.
-      - oauth_access_token_exchange_factor: Information about the access token exchange factor, if one is present.
-      - trusted_auth_token_factor: Information about the trusted auth token factor, if one is present.
+      - type: The type or category of the resource, method, or entity.
+      - delivery_method: The method that should be used to verify a member's new email address. The options are `EMAIL_MAGIC_LINK` or `EMAIL_OTP`. This field is optional, if no value is provided, `EMAIL_MAGIC_LINK` will be used.
+      - last_authenticated_at: The timestamp when the member last successfully authenticated.
+      - created_at: The timestamp indicating when the resource was created.
+      - updated_at: The timestamp indicating when the resource was last updated.
+      - email_factor: An authentication factor object representing email-based authentication (magic links or OTP).
+      - phone_number_factor: An authentication factor object representing SMS-based phone number authentication.
+      - google_oauth_factor: An authentication factor object representing Google OAuth authentication.
+      - microsoft_oauth_factor: An authentication factor object representing Microsoft OAuth authentication.
+      - apple_oauth_factor: An authentication factor object representing Apple OAuth authentication.
+      - webauthn_factor: An authentication factor object representing WebAuthn/passkey authentication.
+      - authenticator_app_factor: An authentication factor object representing TOTP authenticator app authentication.
+      - github_oauth_factor: An authentication factor object representing GitHub OAuth authentication.
+      - recovery_code_factor: An authentication factor object representing recovery code authentication.
+      - facebook_oauth_factor: An authentication factor object representing Facebook OAuth authentication.
+      - crypto_wallet_factor: An authentication factor object representing Web3 cryptocurrency wallet authentication.
+      - amazon_oauth_factor: An authentication factor object representing Amazon OAuth authentication.
+      - bitbucket_oauth_factor: An authentication factor object representing Bitbucket OAuth authentication.
+      - coinbase_oauth_factor: An authentication factor object representing Coinbase OAuth authentication.
+      - discord_oauth_factor: An authentication factor object representing Discord OAuth authentication.
+      - figma_oauth_factor: An authentication factor object representing Figma OAuth authentication.
+      - git_lab_oauth_factor: An authentication factor object representing GitLab OAuth authentication.
+      - instagram_oauth_factor: An authentication factor object representing Instagram OAuth authentication.
+      - linked_in_oauth_factor: An authentication factor object representing LinkedIn OAuth authentication.
+      - shopify_oauth_factor: An authentication factor object representing Shopify OAuth authentication.
+      - slack_oauth_factor: An authentication factor object representing Slack OAuth authentication.
+      - snapchat_oauth_factor: An authentication factor object representing Snapchat OAuth authentication.
+      - spotify_oauth_factor: An authentication factor object representing Spotify OAuth authentication.
+      - steam_oauth_factor: An authentication factor object representing Steam OAuth authentication.
+      - tik_tok_oauth_factor: An authentication factor object representing TikTok OAuth authentication.
+      - twitch_oauth_factor: An authentication factor object representing Twitch OAuth authentication.
+      - twitter_oauth_factor: An authentication factor object representing Twitter OAuth authentication.
+      - embeddable_magic_link_factor: An authentication factor object representing embeddable magic link authentication.
+      - biometric_factor: An authentication factor object representing biometric authentication (fingerprint, face, etc.).
+      - saml_sso_factor: An authentication factor object representing SAML SSO authentication.
+      - oidc_sso_factor: An authentication factor object representing OIDC (OpenID Connect) SSO authentication.
+      - salesforce_oauth_factor: An authentication factor object representing Salesforce OAuth authentication.
+      - yahoo_oauth_factor: An authentication factor object representing Yahoo OAuth authentication.
+      - hubspot_oauth_factor: An authentication factor object representing HubSpot OAuth authentication.
+      - slack_oauth_exchange_factor: An authentication factor object representing Slack OAuth token exchange authentication.
+      - hubspot_oauth_exchange_factor: An authentication factor object representing HubSpot OAuth token exchange.
+      - github_oauth_exchange_factor: An authentication factor object representing GitHub OAuth token exchange.
+      - google_oauth_exchange_factor: An authentication factor object representing Google OAuth token exchange.
+      - impersonated_factor: An authentication factor object indicating that authentication was performed via impersonation.
+      - oauth_access_token_exchange_factor: An authentication factor object representing OAuth access token exchange.
+      - trusted_auth_token_factor: An authentication factor object representing authentication via a trusted third-party token.
     """  # noqa
 
     type: AuthenticationFactorType
@@ -578,15 +695,16 @@ class AuthenticationFactor(pydantic.BaseModel):
 class Session(pydantic.BaseModel):
     """
     Fields:
-      - session_id: A unique identifier for a specific Session.
-      - user_id: The unique ID of the affected User.
-      - authentication_factors: An array of different authentication factors that comprise a Session.
-      - roles: (no documentation yet)
-      - started_at: The timestamp when the Session was created. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - last_accessed_at: The timestamp when the Session was last accessed. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - expires_at: The timestamp when the Session expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - attributes: Provided attributes help with fraud detection.
-      - custom_claims: The custom claims map for a Session. Claims can be added to a session during a Sessions authenticate call.
+      - session_id: Globally unique UUID that identifies a specific Session in the Stytch API.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - authentication_factors: A list of authentication factors used during the session, including type, timestamp, and delivery method.
+      - roles: Roles to explicitly assign to this Member.
+    See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+      - started_at: The timestamp when the session or process was initiated.
+      - last_accessed_at: The timestamp when the session was last accessed or refreshed.
+      - expires_at: The timestamp indicating when the session, token, lock, or other resource will expire.
+      - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
+      - custom_claims: A JSON object containing custom claims to include in tokens or sessions.
     """  # noqa
 
     session_id: str
@@ -603,15 +721,12 @@ class Session(pydantic.BaseModel):
 class AttestResponse(ResponseBase):
     """Response type for `Sessions.attest`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -626,14 +741,10 @@ class AuthenticateResponse(ResponseBase):
     """Response type for `Sessions.authenticate`.
     Fields:
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
-      - verdict: If an `authorization_check` is provided in the request and the check succeeds, this field will return
-      information about why the User was granted permission.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
+      - verdict: The result of an authorization check, indicating whether the member is authorized to perform the requested action.
     """  # noqa
 
     session: Session
@@ -646,15 +757,12 @@ class AuthenticateResponse(ResponseBase):
 class ExchangeAccessTokenResponse(ResponseBase):
     """Response type for `Sessions.exchange_access_token`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -668,7 +776,7 @@ class ExchangeAccessTokenResponse(ResponseBase):
 class GetJWKSResponse(ResponseBase):
     """Response type for `Sessions.get_jwks`.
     Fields:
-      - keys: The list of JWKs associated with the project.
+      - keys: Cryptographic keys used for signing, encryption, or verification.
     """  # noqa
 
     keys: List[JWK]
@@ -677,7 +785,7 @@ class GetJWKSResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Sessions.get`.
     Fields:
-      - sessions: An array of [Session objects](https://stytch.com/docs/api/session-object).
+      - sessions: A list of session objects.
     """  # noqa
 
     sessions: List[Session]
@@ -686,15 +794,12 @@ class GetResponse(ResponseBase):
 class MigrateResponse(ResponseBase):
     """Response type for `Sessions.migrate`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str

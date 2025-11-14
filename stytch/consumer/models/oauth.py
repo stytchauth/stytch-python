@@ -22,9 +22,9 @@ class ProviderValues(pydantic.BaseModel):
     Fields:
       - access_token: The `access_token` that you may use to access the User's data in the provider's API.
       - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
-      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
-      - expires_at: The timestamp when the Session expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the OpenID Connect specification, which is based on OAuth
+      - scopes: The OAuth scopes included for a given provider.
+      - expires_at: The timestamp indicating when the session, token, lock, or other resource will expire.
     """  # noqa
 
     access_token: str
@@ -46,22 +46,17 @@ class AttachResponse(ResponseBase):
 class AuthenticateResponse(ResponseBase):
     """Response type for `OAuth.authenticate`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the "sub" or "Subject field" in OAuth protocols.
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Facebook, GitHub etc.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - provider_values: The `provider_values` object lists relevant identifiers, values, and scopes for a given OAuth provider. For example this object will include a provider's `access_token` that you can use to access the provider's API for a given user.
-
-      Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by OIDC compliant identity providers.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - provider_values: Values or configuration settings specific to an identity provider.
+      - user: The `user` object affected by this API call.
       - reset_sessions: Indicates if all other of the User's Sessions need to be reset. You should check this field if you aren't using Stytch's Session product. If you are using Stytch's Session product, we revoke the User's other sessions for you.
-      - oauth_user_registration_id: The unique ID for an OAuth registration.
-      - user_session: A `Session` object. For backwards compatibility reasons, the session from an OAuth authenticate call is labeled as `user_session`, but is otherwise just a standard stytch `Session` object.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - oauth_user_registration_id: The unique identifier for the OAuth provider registration linking the user to their provider account.
+      - user_session: A session object for consumer (B2C) users.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str

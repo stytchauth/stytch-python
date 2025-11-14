@@ -30,17 +30,17 @@ class ExchangeRequestLocale(str, enum.Enum):
 class ExchangeResponse(ResponseBase):
     """Response type for `IntermediateSessions.exchange`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
-      - intermediate_session_token: The returned Intermediate Session Token is identical to the one that was originally passed in to the request. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: Information about the primary authentication requirements of the Organization.
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - member_authenticated: A boolean indicating whether the member has been fully authenticated (true) or if additional steps like MFA are still required (false).
+      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - mfa_required: An object indicating whether multi-factor authentication is required, and which MFA methods are available to complete the authentication flow.
+      - primary_required: An object indicating that a primary authentication factor is required, containing the list of allowed authentication methods.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str

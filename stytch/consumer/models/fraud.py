@@ -79,7 +79,7 @@ class Fingerprints(pydantic.BaseModel):
       - hardware_fingerprint: Combinations of signals to identify an operating system and architecture.
       - browser_fingerprint: Combination of signals to identify a browser and its specific version.
       - visitor_fingerprint: Cookie-less way of identifying a unique user.
-      - visitor_id: The cookie stored on the user's device that uniquely identifies them.
+      - visitor_id: The cookie stored on the user's device that uniquely identifies them. See the Device Fingerprinting documentation for more details on the visitor_id.
       - browser_id: Combination of VisitorID and NetworkFingerprint to create a clear identifier of a browser.
     """  # noqa
 
@@ -120,11 +120,11 @@ class Metadata(pydantic.BaseModel):
 class NetworkProperties(pydantic.BaseModel):
     """
     Fields:
-      - ip_address: The IP address of the client.
-      - asn: Information about the network's ASN (Autonomous System Number).
-      - ip_geolocation: Information about the geolocation of the user's IP address.
-      - is_proxy: Whether the user is using a proxy.
-      - is_vpn: Whether the user is using a VPN.
+      - ip_address: The IP address from which the request originated.
+      - asn: The Autonomous System Number of the user's network.
+      - ip_geolocation: Geographic location data derived from the IP address.
+      - is_proxy: A boolean indicating whether the request came through a proxy server.
+      - is_vpn: A boolean indicating whether the request originated from a VPN or proxy network.
     """  # noqa
 
     ip_address: str
@@ -137,8 +137,8 @@ class NetworkProperties(pydantic.BaseModel):
 class Properties(pydantic.BaseModel):
     """
     Fields:
-      - network_properties: (no documentation yet)
-      - browser_properties: (no documentation yet)
+      - network_properties: Network properties including IP address, ASN information, geolocation, and proxy/VPN detection.
+      - browser_properties: Browser properties including user agent and other browser-specific information.
     """  # noqa
 
     network_properties: NetworkProperties
@@ -148,21 +148,21 @@ class Properties(pydantic.BaseModel):
 class Rule(pydantic.BaseModel):
     """
     Fields:
-      - rule_type: The rule type. The possible values are `VISITOR_ID`, `BROWSER_ID`, `VISITOR_FINGERPRINT`, `BROWSER_FINGERPRINT`, `HARDWARE_FINGERPRINT`, `NETWORK_FINGERPRINT`, `CIDR_BLOCK`, `ASN`, or `COUNTRY_CODE`.
-      - action: The action (`ALLOW`, `BLOCK`, or `CHALLENGE`) that will be returned for this rule.
-      - created_at: The time when the rule was created. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - visitor_id: The visitor ID that a rule was set for.
-      - browser_id: The browser ID that a rule was set for.
-      - visitor_fingerprint: The visitor fingerprint that a rule was set for.
-      - browser_fingerprint: The browser fingerprint that a rule was set for.
-      - hardware_fingerprint: The hardware fingerprint that a rule was set for.
-      - network_fingerprint: The network fingerprint that a rule was set for.
+      - rule_type: The rule type. The possible values are `VISITOR_ID`, `BROWSER_ID`, `VISITOR_FINGERPRINT`, `BROWSER_FINGERPRINT`,`HARDWARE_FINGERPRINT`, `NETWORK_FINGERPRINT`, `CIDR_BLOCK`, `ASN`, or `COUNTRY_CODE`.
+      - action: The action that should be returned by a fingerprint lookup for that identifier with a `RULE_MATCH` reason. The following values are valid: `ALLOW` (This is a known valid device grouping or device profile that is part of the default ALLOW listed set of known devices by Stytch), `BLOCK` (This is a known bad or malicious device profile that is undesirable and should be blocked from completing the privileged action), `CHALLENGE` (This is an unknown or potentially malicious device that should be put through increased friction such as 2FA or other forms of extended user verification before allowing the privileged action), or `NONE`. For country codes, `ALLOW` actions are not allowed. If a `NONE` action is specified, it will clear the stored rule.
+      - created_at: The timestamp indicating when the resource was created.
+      - visitor_id: The cookie stored on the user's device that uniquely identifies them. See the Device Fingerprinting documentation for more details on the visitor_id.
+      - browser_id: Combination of VisitorID and NetworkFingerprint to create a clear identifier of a browser.
+      - visitor_fingerprint: Cookie-less way of identifying a unique user.
+      - browser_fingerprint: Combination of signals to identify a browser and its specific version.
+      - hardware_fingerprint: Combinations of signals to identify an operating system and architecture.
+      - network_fingerprint: Combination of signals associated with a specific network commonly known as TLS fingerprinting.
       - cidr_block: The CIDR block that a rule was set for. If an end user's IP address is within this CIDR block, this rule will be applied.
-      - country_code: The country code that a rule was set for.
-      - asn: The ASN that a rule was set for.
-      - description: A description for the rule.
-      - expires_at: The timestamp when the rule expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - last_updated_at: The time when the rule was last updated. Will be null if the rule has never been updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - country_code: The country code we want to set a rule for. The country code must be a valid ISO 3166-1 alpha-2 code. You may not set `ALLOW` rules for country codes. Only one identifier can be specified in the request.
+      - asn: The Autonomous System Number of the user's network.
+      - description: An optional description for the rule.
+      - expires_at: The timestamp when the rule expires.
+      - last_updated_at: The timestamp when the resource was last updated.
     """  # noqa
 
     rule_type: RuleType
@@ -185,10 +185,10 @@ class Rule(pydantic.BaseModel):
 class VerdictReasonAction(pydantic.BaseModel):
     """
     Fields:
-      - verdict_reason: The verdict reason.
+      - verdict_reason: A human-readable explanation of why an authorization decision was made.
       - default_action: The default action returned for the specified verdict reason in a fingerprint lookup when no overrides are specified.
       - override_action: If not null, this action will be returned for the specified verdict reason in a fingerprint lookup, in place of the default action.
-      - override_created_at: The time when the override was created, if one exists. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - override_created_at: The time when the override was created, if one exists.
       - override_description: A description of the override, if one exists.
     """  # noqa
 
@@ -202,7 +202,7 @@ class VerdictReasonAction(pydantic.BaseModel):
 class VerdictReasonOverride(pydantic.BaseModel):
     """
     Fields:
-      - verdict_reason: The verdict reason that was overridden.
+      - verdict_reason: A human-readable explanation of why an authorization decision was made.
       - override_action: The action that was applied for the given verdict reason.
     """  # noqa
 
@@ -213,14 +213,10 @@ class VerdictReasonOverride(pydantic.BaseModel):
 class Verdict(pydantic.BaseModel):
     """
     Fields:
-      - action: The suggested action based on the fingerprint review. The available actions are:
-      * `ALLOW` - This is a known valid device grouping or device profile that is part of the default ALLOW listed set of known devices by Stytch. This grouping is made up of verified device profiles that match the characteristics of known/authentic traffic origins
-      * `BLOCK` - This is a known bad or malicious device profile that is undesirable and should be blocked from completing the privileged action in question
-      * `CHALLENGE` - This is an unknown or potentially malicious device that should be put through increased friction such as 2FA or other forms of extended user verification before allowing the privileged action to proceed
-
-      - reasons: A set of contextual clues to inform why a `CHALLENGE` or `BLOCK` action was suggested. For a list of possible Reasons, see [Warning Flags (Verdict Reasons)](https://stytch.com/docs/docs/fraud/guides/device-fingerprinting/reference/warning-flags-verdict-reasons).
-      - detected_device_type: The operating system and architecture that took the fingerprint.
-      - is_authentic_device: The assessment of whether this is an authentic device. It will be false if hardware or browser deception is detected.
+      - action: The action that should be returned by a fingerprint lookup for that identifier with a `RULE_MATCH` reason. The following values are valid: `ALLOW` (This is a known valid device grouping or device profile that is part of the default ALLOW listed set of known devices by Stytch), `BLOCK` (This is a known bad or malicious device profile that is undesirable and should be blocked from completing the privileged action), `CHALLENGE` (This is an unknown or potentially malicious device that should be put through increased friction such as 2FA or other forms of extended user verification before allowing the privileged action), or `NONE`. For country codes, `ALLOW` actions are not allowed. If a `NONE` action is specified, it will clear the stored rule.
+      - reasons: A set of contextual clues to inform why a `CHALLENGE` or `BLOCK` action was suggested. For a list of possible reasons, see [Warning Flags (Verdict Reasons)](https://stytch.com/docs/docs/fraud/guides/device-fingerprinting/reference/warning-flags-verdict-reasons).
+      - detected_device_type: The operating system and architecture tha took the fingerprint.
+      - is_authentic_device: A boolean indicating whether the device has been verified as authentic and trustworthy. It will be false if hardware or browser deception is detected.
       - verdict_reason_overrides: A list of verdict reason overrides that were applied, if any.
       - rule_match_type: The type of rule match that was applied (e.g. `VISITOR_ID`), if any. This field will only be present if there is a `RULE_MATCH` reason in the list of verdict reasons.
       - rule_match_identifier: The rule that was applied (e.g. a specific visitor ID value), if any. This field will only be present if there is a `RULE_MATCH` reason in the list of verdict reasons.

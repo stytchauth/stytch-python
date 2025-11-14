@@ -15,7 +15,7 @@ class Attributes(pydantic.BaseModel):
     """
     Fields:
       - ip_address: The IP address of the user.
-      - user_agent: The user agent of the User.
+      - user_agent: The user agent of the user's browser.
     """  # noqa
 
     ip_address: Optional[str] = None

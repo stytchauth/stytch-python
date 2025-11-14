@@ -13,7 +13,7 @@ from stytch.core.response_base import ResponseBase
 class RotateCancelResponse(ResponseBase):
     """Response type for `Secrets.rotate_cancel`.
     Fields:
-      - m2m_client: The M2M Client affected by this operation.
+      - m2m_client: A machine-to-machine (M2M) client object used for service-to-service authentication.
     """  # noqa
 
     m2m_client: M2MClient
@@ -22,7 +22,7 @@ class RotateCancelResponse(ResponseBase):
 class RotateResponse(ResponseBase):
     """Response type for `Secrets.rotate`.
     Fields:
-      - m2m_client: The M2M Client affected by this operation.
+      - m2m_client: A machine-to-machine (M2M) client object used for service-to-service authentication.
     """  # noqa
 
     m2m_client: M2MClient
@@ -31,7 +31,7 @@ class RotateResponse(ResponseBase):
 class RotateStartResponse(ResponseBase):
     """Response type for `Secrets.rotate_start`.
     Fields:
-      - m2m_client: The M2M Client affected by this operation.
+      - m2m_client: A machine-to-machine (M2M) client object used for service-to-service authentication.
     """  # noqa
 
     m2m_client: M2MClientWithNextClientSecret

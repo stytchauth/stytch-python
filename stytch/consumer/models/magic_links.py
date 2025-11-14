@@ -30,17 +30,14 @@ class Options(pydantic.BaseModel):
 class AuthenticateResponse(ResponseBase):
     """Response type for `MagicLinks.authenticate`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - method_id: The `email_id` or `phone_id` involved in the given authentication.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - method_id: The unique identifier for a specific authentication method instance (e.g., an email ID, password, TOTP, or phone number).
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - reset_sessions: Indicates if all other of the User's Sessions need to be reset. You should check this field if you aren't using Stytch's Session product. If you are using Stytch's Session product, we revoke the User's other sessions for you.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -56,8 +53,8 @@ class AuthenticateResponse(ResponseBase):
 class CreateResponse(ResponseBase):
     """Response type for `MagicLinks.create`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - token: The Magic Link `token` that you'll include in your contact method of choice, e.g. email or SMS.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - token: The Magic Link token from the `?token=` query parameter in the URL that you'll include in your contact method of choice, e.g. email or SMS. The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7` In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/workspace-management/redirect-urls) for more detail.
     """  # noqa
 
     user_id: str

@@ -17,13 +17,13 @@ from stytch.core.response_base import ResponseBase
 class AuthenticateResponse(ResponseBase):
     """Response type for `TOTPs.authenticate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str
@@ -38,13 +38,13 @@ class AuthenticateResponse(ResponseBase):
 class CreateResponse(ResponseBase):
     """Response type for `TOTPs.create`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - totp_registration_id: The unique ID for a TOTP instance.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - totp_registration_id: The unique identifier for the TOTP registration, linking a member to their authenticator app.
       - secret: The TOTP secret key shared between the authenticator app and the server used to generate TOTP codes.
-      - qr_code: The QR code image encoded in base64.
-      - recovery_codes: An array of recovery codes that can be used to recover a Member's account.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - qr_code: A base64-encoded QR code image.
+      - recovery_codes: The recovery codes used to authenticate the user without an authenticator app.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -59,11 +59,11 @@ class CreateResponse(ResponseBase):
 class MigrateResponse(ResponseBase):
     """Response type for `TOTPs.migrate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - totp_registration_id: The unique ID for a TOTP instance.
-      - recovery_codes: An array of recovery codes that can be used to recover a Member's account.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - totp_registration_id: The unique identifier for the TOTP registration, linking a member to their authenticator app.
+      - recovery_codes: The recovery codes used to authenticate the user without an authenticator app.
     """  # noqa
 
     member_id: str

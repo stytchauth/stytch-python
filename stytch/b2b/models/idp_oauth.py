@@ -17,8 +17,8 @@ from stytch.core.response_base import ResponseBase
 class AuthorizeResponse(ResponseBase):
     """Response type for `OAuth.authorize`.
     Fields:
-      - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow.  This field is required when using the `authorization_code` grant.
-      - authorization_code: A one-time use code that can be exchanged for tokens.
+      - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow. This field is required when using the `authorization_code` grant.
+      - authorization_code: An OAuth authorization code that can be exchanged for access and refresh tokens.
     """  # noqa
 
     redirect_uri: str
@@ -28,12 +28,12 @@ class AuthorizeResponse(ResponseBase):
 class AuthorizeStartResponse(ResponseBase):
     """Response type for `OAuth.authorize_start`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - client: (no documentation yet)
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - client: An OAuth client or connected application object.
       - consent_required: Whether the user must provide explicit consent for the authorization request.
-      - scope_results: Details about each requested scope.
+      - scope_results: Details about which requested scopes were granted or denied during OAuth authorization.
     """  # noqa
 
     member_id: str

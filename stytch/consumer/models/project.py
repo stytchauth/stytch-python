@@ -28,5 +28,11 @@ class ProjectMetric(pydantic.BaseModel):
 
 
 class MetricsResponse(ResponseBase):
+    """Response type for `Project.metrics`.
+    Fields:
+      - project_id: The project ID related to the returned metrics.
+      - metrics: Metrics and analytics data about the resource.
+    """  # noqa
+
     project_id: str
     metrics: List[ProjectMetric]

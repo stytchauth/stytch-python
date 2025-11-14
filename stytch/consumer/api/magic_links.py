@@ -47,27 +47,14 @@ class MagicLinks:
         """Authenticate a User given a Magic Link. This endpoint verifies that the Magic Link token is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied.
 
         Fields:
-          - token: The Magic Link `token` from the `?token=` query parameter in the URL.
-
-              The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7`
-
-              In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/workspace-management/redirect-urls) for more detail.
+          - token: The Magic Link token from the `?token=` query parameter in the URL that you'll include in your contact method of choice, e.g. email or SMS. The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7` In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/workspace-management/redirect-urls) for more detail.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - options: Specify optional security settings.
+          - options: Configuration options or parameters for the request or resource.
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
@@ -113,27 +100,14 @@ class MagicLinks:
         """Authenticate a User given a Magic Link. This endpoint verifies that the Magic Link token is valid, hasn't expired or been previously used, and any optional security settings such as IP match or user agent match are satisfied.
 
         Fields:
-          - token: The Magic Link `token` from the `?token=` query parameter in the URL.
-
-              The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7`
-
-              In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/workspace-management/redirect-urls) for more detail.
+          - token: The Magic Link token from the `?token=` query parameter in the URL that you'll include in your contact method of choice, e.g. email or SMS. The redirect URL will look like `https://example.com/authenticate?stytch_token_type=magic_links&token=rM_kw42CWBhsHLF62V75jELMbvJ87njMe3tFVj7Qupu7` In the redirect URL, the `stytch_token_type` will be `magic_link`. See [here](https://stytch.com/docs/workspace-management/redirect-urls) for more detail.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - options: Specify optional security settings.
+          - options: Configuration options or parameters for the request or resource.
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
@@ -178,8 +152,8 @@ class MagicLinks:
         **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
-          - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+          - expiration_minutes: Set the expiration for the Magic Link token in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -211,8 +185,8 @@ class MagicLinks:
         **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
-          - expiration_minutes: Set the expiration for the Magic Link `token` in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+          - expiration_minutes: Set the expiration for the Magic Link token in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
         """  # noqa
         headers: Dict[str, str] = {}

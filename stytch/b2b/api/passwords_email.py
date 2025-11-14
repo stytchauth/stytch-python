@@ -49,25 +49,24 @@ class Email:
         You may update your password strength configuration on the [Passwords Policy page](https://stytch.com/dashboard/password-strength-config) in the Stytch Dashboard.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - email_address: The email address of the Member to start the email reset process for.
-          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
-          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
-          If you have not set a default `reset_password_redirect_url`, an error is returned.
-          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid. The minimum allowed expiration is 5 minutes and the maximum is 10080 minutes (7 days). By default, the expiration is 30 minutes.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - email_address: The email address of the Member.
+          - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
+        This should be a url that your app receives and parses before showing your app's reset password page.
+        After the user submits a new password to your app, it should send an API request to complete the password reset process.
+        If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
+        If you have not set a default reset password redirect URL, an error is returned.
+          - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
+        The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - login_redirect_url: The URL that Members are redirected to upon clicking the "Log in without password" button in password reset emails.
-
-              After Members are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the Member in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
+          - login_redirect_url: The URL that Members are redirected to upon clicking the Email Magic Link. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Reset Password.
+          - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
+        The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
           - verify_email_template_id: Use a custom template for verification emails sent during password reset flows. When cross-organization passwords are enabled for your Project, this template will be used the first time a user sets a password via a
-          password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
+        password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -116,25 +115,24 @@ class Email:
         You may update your password strength configuration on the [Passwords Policy page](https://stytch.com/dashboard/password-strength-config) in the Stytch Dashboard.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - email_address: The email address of the Member to start the email reset process for.
-          - reset_password_redirect_url: The URL that the Member clicks from the reset password link. This URL should be an endpoint in the backend server that verifies the request by querying
-          Stytch's authenticate endpoint and finishes the reset password flow. If this value is not passed, the default `reset_password_redirect_url` that you set in your Dashboard is used.
-          If you have not set a default `reset_password_redirect_url`, an error is returned.
-          - reset_password_expiration_minutes: Sets a time limit after which the email link to reset the member's password will no longer be valid. The minimum allowed expiration is 5 minutes and the maximum is 10080 minutes (7 days). By default, the expiration is 30 minutes.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - email_address: The email address of the Member.
+          - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
+        This should be a url that your app receives and parses before showing your app's reset password page.
+        After the user submits a new password to your app, it should send an API request to complete the password reset process.
+        If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
+        If you have not set a default reset password redirect URL, an error is returned.
+          - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
+        The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - login_redirect_url: The URL that Members are redirected to upon clicking the "Log in without password" button in password reset emails.
-
-              After Members are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the Member in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
+          - login_redirect_url: The URL that Members are redirected to upon clicking the Email Magic Link. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - reset_password_template_id: Use a custom template for reset password emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Reset Password.
+          - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
+        The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
           - verify_email_template_id: Use a custom template for verification emails sent during password reset flows. When cross-organization passwords are enabled for your Project, this template will be used the first time a user sets a password via a
-          password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
+        password reset flow. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Passwords - Email Verification.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -188,38 +186,18 @@ class Email:
         Note that a successful password reset by email will revoke all active sessions for the `member_id`.
 
         Fields:
-          - password_reset_token: The password reset token to authenticate.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
-              If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
-              both `session_token` and `session_jwt` are provided.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-          to use the Stytch session product, you can ignore the session fields in the response.
-          - session_jwt: Reuse an existing session instead of creating a new one. If you provide a `session_jwt`, Stytch will update the session. If the `session_jwt`
-              and `magic_links_token` belong to different Members, the `session_jwt` will be ignored. This endpoint will error if both `session_token` and `session_jwt`
-              are provided.
+          - password_reset_token: The password reset token from the `?token=` query parameter in the password reset URL.
+          - password: The password for the Member. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session. If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if both `session_token` and `session_jwt` are provided.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you do not wish to use Stytch's session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
-          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-          Total custom claims size cannot exceed four kilobytes.
-          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
-
-        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
+          - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -274,38 +252,18 @@ class Email:
         Note that a successful password reset by email will revoke all active sessions for the `member_id`.
 
         Fields:
-          - password_reset_token: The password reset token to authenticate.
-          - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session.
-              If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if
-              both `session_token` and `session_jwt` are provided.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you don't want
-          to use the Stytch session product, you can ignore the session fields in the response.
-          - session_jwt: Reuse an existing session instead of creating a new one. If you provide a `session_jwt`, Stytch will update the session. If the `session_jwt`
-              and `magic_links_token` belong to different Members, the `session_jwt` will be ignored. This endpoint will error if both `session_token` and `session_jwt`
-              are provided.
+          - password_reset_token: The password reset token from the `?token=` query parameter in the password reset URL.
+          - password: The password for the Member. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+          - session_token: Reuse an existing session instead of creating a new one. If you provide a `session_token`, Stytch will update the session. If the `session_token` and `magic_links_token` belong to different Members, the `session_token` will be ignored. This endpoint will error if both `session_token` and `session_jwt` are provided.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will be created with a 60 minute duration. If you do not wish to use Stytch's session product, you can ignore the session fields in the response.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
-          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in
-          `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To
-          delete a key, supply a null value. Custom claims made with reserved claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) will be ignored.
-          Total custom claims size cannot exceed four kilobytes.
-          - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
-
-        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
-        Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
+          - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - intermediate_session_token: Adds this primary authentication factor to the intermediate session token. If the resulting set of factors satisfies the organization's primary authentication requirements and MFA requirements, the intermediate session token will be consumed and converted to a member session. If not, the same intermediate session token will be returned.
+          - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the Member. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -346,9 +304,9 @@ class Email:
         If there are is only one active Member using the associated email address in the Project, the password will be deleted.
 
         Fields:
-          - email_address: The email address of the Member to start the email reset process for.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - email_address: The email address of the Member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -377,9 +335,9 @@ class Email:
         If there are is only one active Member using the associated email address in the Project, the password will be deleted.
 
         Fields:
-          - email_address: The email address of the Member to start the email reset process for.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
+          - email_address: The email address of the Member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

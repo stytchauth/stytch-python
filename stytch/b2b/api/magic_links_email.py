@@ -51,27 +51,20 @@ class Email:
         The magic link is valid for 60 minutes.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
-          - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
-          verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
-          redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
+          - login_redirect_url: The URL that Members are redirected to upon clicking the Email Magic Link. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - signup_redirect_url: The URL the Member clicks from the signup Email Magic Link. This URL should be an endpoint in the backend server that verifies
-          the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default sign-up redirect URL
-          that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
+        the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default sign-up redirect URL
+        that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - pkce_code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Login.
-          - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Signup.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
+          - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - login_expiration_minutes: The expiration time, in minutes, for a login Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
-          - signup_expiration_minutes: The expiration time, in minutes, for a signup Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
+          - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -117,27 +110,20 @@ class Email:
         The magic link is valid for 60 minutes.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
-          - login_redirect_url: The URL that the Member clicks from the login Email Magic Link. This URL should be an endpoint in the backend server that
-          verifies the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default login
-          redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
+          - login_redirect_url: The URL that Members are redirected to upon clicking the Email Magic Link. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - signup_redirect_url: The URL the Member clicks from the signup Email Magic Link. This URL should be an endpoint in the backend server that verifies
-          the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default sign-up redirect URL
-          that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
+        the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default sign-up redirect URL
+        that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - pkce_code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Login.
-          - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Signup.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
+          - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - login_expiration_minutes: The expiration time, in minutes, for a login Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
-          - signup_expiration_minutes: The expiration time, in minutes, for a signup Email Magic Link. If not authenticated within this time frame, the email will need to be resent. Defaults to 60 (1 hour) with a minimum of 5 and a maximum of 10080 (1 week).
+          - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -189,28 +175,21 @@ class Email:
         To revoke an existing invite, use the [Delete Member](https://stytch.com/docs/b2b/api/delete-member) endpoint. This will both delete the invited Member from the target Organization and revoke all existing invite emails.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
           - invite_redirect_url: The URL that the Member clicks from the invite Email Magic Link. This URL should be an endpoint in the backend server that verifies
-          the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
-          that you set in your Dashboard is used. If you have not set a default `invite_redirect_url`, an error is returned.
+        the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
+        that you set in your Dashboard is used. If you have not set a default `invite_redirect_url`, an error is returned.
           - invited_by_member_id: The `member_id` of the Member who sends the invite.
           - name: The name of the Member.
-          - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
-          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template
-          using our built-in customizations or a custom HTML email for Magic Links - Invite.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Invite.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
-           for more information about role assignment.
-          - invite_expiration_minutes: The expiration time, in minutes, for an invite email. If not accepted within this time frame, the invite will need to be resent. Defaults to 10080 (1 week) with a minimum of 5 and a maximum of 10080.
+          - roles: Roles to explicitly assign to this Member.
+          - invite_expiration_minutes: Set the expiration for the invite, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -266,28 +245,21 @@ class Email:
         To revoke an existing invite, use the [Delete Member](https://stytch.com/docs/b2b/api/delete-member) endpoint. This will both delete the invited Member from the target Organization and revoke all existing invite emails.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - email_address: The email address of the Member.
           - invite_redirect_url: The URL that the Member clicks from the invite Email Magic Link. This URL should be an endpoint in the backend server that verifies
-          the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
-          that you set in your Dashboard is used. If you have not set a default `invite_redirect_url`, an error is returned.
+        the request by querying Stytch's authenticate endpoint and finishes the invite flow. If this value is not passed, the default `invite_redirect_url`
+        that you set in your Dashboard is used. If you have not set a default `invite_redirect_url`, an error is returned.
           - invited_by_member_id: The `member_id` of the Member who sends the invite.
           - name: The name of the Member.
-          - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
-          - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
-          frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
-          for complete field behavior details.
-          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template
-          using our built-in customizations or a custom HTML email for Magic Links - Invite.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Invite.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - roles: Roles to explicitly assign to this Member. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
-           for more information about role assignment.
-          - invite_expiration_minutes: The expiration time, in minutes, for an invite email. If not accepted within this time frame, the invite will need to be resent. Defaults to 10080 (1 week) with a minimum of 5 and a maximum of 10080.
+          - roles: Roles to explicitly assign to this Member.
+          - invite_expiration_minutes: Set the expiration for the invite, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

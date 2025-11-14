@@ -27,7 +27,7 @@ class CreateRequestClientType(str, enum.Enum):
 class CreateResponse(ResponseBase):
     """Response type for `Clients.create`.
     Fields:
-      - connected_app: The Connected App created by this API call.
+      - connected_app: The Connected App affected by this operation.
     """  # noqa
 
     connected_app: ConnectedAppWithClientSecret
@@ -54,8 +54,8 @@ class GetResponse(ResponseBase):
 class SearchResponse(ResponseBase):
     """Response type for `Clients.search`.
     Fields:
-      - connected_apps: (no documentation yet)
-      - results_metadata: The search `results_metadata` object contains metadata relevant to your specific query like total and `next_cursor`.
+      - connected_apps: A list of connected applications that the member or organization has authorized.
+      - results_metadata: Metadata about paginated search results, including total count and cursor for fetching the next page.
     """  # noqa
 
     connected_apps: List[ConnectedApp]

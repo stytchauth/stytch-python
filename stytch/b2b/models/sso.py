@@ -32,6 +32,11 @@ class AuthenticateRequestLocale(str, enum.Enum):
 
 
 class ConnectionImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier for an RBAC role.
+    """  # noqa
+
     role_id: str
 
 
@@ -52,6 +57,13 @@ class DeleteConnectionRequestOptions(pydantic.BaseModel):
 
 
 class EncryptionPrivateKey(pydantic.BaseModel):
+    """
+    Fields:
+      - private_key_id: The ID of the encryption private key to be deleted.
+      - private_key: A private cryptographic key used for signing or decryption.
+      - created_at: The timestamp indicating when the resource was created.
+    """  # noqa
+
     private_key_id: str
     private_key: str
     created_at: Optional[datetime.datetime] = None
@@ -74,11 +86,34 @@ class GetConnectionsRequestOptions(pydantic.BaseModel):
 
 
 class GroupImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier for an RBAC role.
+      - group: A group object from an identity provider (SCIM, SAML, OIDC) used for role-based access control and provisioning.
+    """  # noqa
+
     role_id: str
     group: str
 
 
 class Connection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
+      - external_organization_id: Globally unique UUID that identifies a different Organization within your Project.
+      - external_connection_id: Globally unique UUID that identifies a specific SSO connection configured for a different Organization in your Project.
+      - display_name: A human-readable display name for the connection.
+      - status: The status of the entity.
+      - external_connection_implicit_role_assignments: All Members who log in with this External connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Implicit role assignments are not supported for External connections if the underlying SSO connection is an OIDC connection.
+      - external_group_implicit_role_assignments: Defines the names of the groups
+    that grant specific role assignments. For each group-Role pair, if a Member logs in with this external connection and
+    belongs to the specified group, they will be granted the associated Role. See the
+    [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments to an external connection, you must add a "groups" key to the underlying SAML connection's
+    `attribute_mapping`. Make sure that the SAML connection IdP is configured to correctly send the group information. Implicit role assignments are not supported
+    for External connections if the underlying SSO connection is an OIDC connection.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     external_organization_id: str
@@ -92,6 +127,26 @@ class Connection(pydantic.BaseModel):
 
 
 class OIDCConnection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
+      - status: The status of the entity.
+      - display_name: A human-readable display name for the connection.
+      - redirect_url: The URL to redirect the user to after completing an authentication flow.
+      - client_id: The ID of the client.
+      - client_secret: The secret belonging to the OAuth2.0 client used to authenticate login attempts. This will be provided by the IdP.
+      - issuer: A case-sensitive `https://` URL that uniquely identifies the IdP. This will be provided by the IdP.
+      - authorization_url: The location of the URL that starts an OAuth login at the IdP. This will be provided by the IdP.
+      - token_url: The location of the URL that issues OAuth2.0 access tokens and OIDC ID tokens. This will be provided by the IdP.
+      - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
+      - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
+      - custom_scopes: Include a space-separated list of custom scopes that you'd like to include. Note that this list must be URL encoded, e.g. the spaces must be expressed as %20.
+      - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined Member attributes to Stytch-specific values, which will appear on the member's Trusted Metadata. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -110,15 +165,36 @@ class OIDCConnection(pydantic.BaseModel):
 
 
 class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier for an RBAC role.
+    """  # noqa
+
     role_id: str
 
 
 class SAMLGroupImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier for an RBAC role.
+      - group: A group object from an identity provider (SCIM, SAML, OIDC) used for role-based access control and provisioning.
+    """  # noqa
+
     role_id: str
     group: str
 
 
 class X509Certificate(pydantic.BaseModel):
+    """
+    Fields:
+      - certificate_id: The ID of the certificate to be deleted.
+      - certificate: An X.509 certificate used for cryptographic operations and verification.
+      - issuer: A case-sensitive `https://` URL that uniquely identifies the IdP. This will be provided by the IdP.
+      - created_at: The timestamp indicating when the resource was created.
+      - expires_at: The timestamp indicating when the session, token, lock, or other resource will expire.
+      - updated_at: The timestamp indicating when the resource was last updated.
+    """  # noqa
+
     certificate_id: str
     certificate: str
     issuer: str
@@ -128,6 +204,35 @@ class X509Certificate(pydantic.BaseModel):
 
 
 class SAMLConnection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
+      - status: The status of the entity.
+      - idp_entity_id: The entity ID for the identity provider's SAML configuration. This is a unique identifier for the identity provider, typically a URL.
+      - display_name: A human-readable display name for the connection.
+      - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
+      - acs_url: The Assertion Consumer Service (ACS) URL where SAML responses are sent.
+      - audience_uri: The expected audience URI for SAML authentication, typically the SP entity ID.
+      - signing_certificates: Certificates used for signing SAML assertions or other cryptographic operations.
+      - verification_certificates: Certificates used to verify digital signatures in SAML responses.
+      - encryption_private_keys: Private keys used for encryption operations.
+      - saml_connection_implicit_role_assignments: All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+      - saml_group_implicit_role_assignments: Defines the names of the SAML groups
+    that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
+    belongs to the specified SAML group, they will be granted the associated Role. See the
+    [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
+    `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
+      - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
+      - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
+      - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
+      - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
+      - allow_gateway_callback: If set to `true`, the SAML connection will allow gateway callback URLs. This is typically used for advanced integration scenarios.
+      - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined Member attributes to Stytch-specific values, which will appear on the member's Trusted Metadata. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -155,19 +260,19 @@ class SAMLConnection(pydantic.BaseModel):
 class AuthenticateResponse(ResponseBase):
     """Response type for `SSO.authenticate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - reset_session: This field is deprecated.
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - intermediate_session_token: The returned Intermediate Session Token contains an SSO factor associated with the Member. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. SSO factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
-      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: (no documentation yet)
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - reset_session: A boolean flag indicating whether to invalidate the current session.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
+      - member_authenticated: A boolean indicating whether the member has been fully authenticated (true) or if additional steps like MFA are still required (false).
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - mfa_required: An object indicating whether multi-factor authentication is required, and which MFA methods are available to complete the authentication flow.
+      - primary_required: An object indicating that a primary authentication factor is required, containing the list of allowed authentication methods.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str
@@ -188,7 +293,7 @@ class AuthenticateResponse(ResponseBase):
 class DeleteConnectionResponse(ResponseBase):
     """Response type for `SSO.delete_connection`.
     Fields:
-      - connection_id: The `connection_id` that was deleted as part of the delete request.
+      - connection_id: Globally unique UUID that identifies a specific SSO connection.
     """  # noqa
 
     connection_id: str
@@ -197,9 +302,9 @@ class DeleteConnectionResponse(ResponseBase):
 class GetConnectionsResponse(ResponseBase):
     """Response type for `SSO.get_connections`.
     Fields:
-      - saml_connections: The list of [SAML Connections](https://stytch.com/docs/b2b/api/saml-connection-object) owned by this organization.
-      - oidc_connections: The list of [OIDC Connections](https://stytch.com/docs/b2b/api/oidc-connection-object) owned by this organization.
-      - external_connections: The list of [External Connections](https://stytch.com/docs/b2b/api/external-connection-object) owned by this organization.
+      - saml_connections: A list of SAML SSO connections configured for the organization.
+      - oidc_connections: A list of OIDC SSO connections configured for the organization.
+      - external_connections: A list of external SSO or identity provider connections.
     """  # noqa
 
     saml_connections: List[SAMLConnection]

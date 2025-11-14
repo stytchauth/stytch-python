@@ -43,11 +43,9 @@ class LudsFeedback(pydantic.BaseModel):
       - has_lower_case: For LUDS validation, whether the password contains at least one lowercase letter.
       - has_upper_case: For LUDS validation, whether the password contains at least one uppercase letter.
       - has_digit: For LUDS validation, whether the password contains at least one digit.
-      - has_symbol: For LUDS validation, whether the password contains at least one symbol. Any UTF8 character outside of a-z or A-Z may count as a valid symbol.
-      - missing_complexity: For LUDS validation, the number of complexity requirements that are missing from the password.
-          Check the complexity fields to see which requirements are missing.
-      - missing_characters: For LUDS validation, this is the required length of the password that you've set minus the length of the password being checked.
-          The user will need to add this many characters to the password to make it valid.
+      - has_symbol: For LUDS validation, whether the password contains at least one symbol. Any UTF8 character outside of a-z, A-Z, or 0-9 is considered a symbol.
+      - missing_complexity: For LUDS validation, the number of complexity requirements that are missing from the password. Check the complexity fields to see which requirements are missing.
+      - missing_characters: For LUDS validation, this is the required length of the password that you've set minus the length of the password being checked. The user will need to add this many characters to the password to make it valid.
     """  # noqa
 
     has_lower_case: bool
@@ -61,8 +59,8 @@ class LudsFeedback(pydantic.BaseModel):
 class ZxcvbnFeedback(pydantic.BaseModel):
     """
     Fields:
-      - warning: For zxcvbn validation, contains an end user consumable warning if the password is valid but not strong enough.
-      - suggestions: For zxcvbn validation, contains end user consumable suggestions on how to improve the strength of the password.
+      - warning: A warning message providing additional context or alerting to potential issues.
+      - suggestions: A list of suggested improvements or recommendations, typically for password strength or security policies.
     """  # noqa
 
     warning: str
@@ -72,18 +70,18 @@ class ZxcvbnFeedback(pydantic.BaseModel):
 class AuthenticateResponse(ResponseBase):
     """Response type for `Passwords.authenticate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - intermediate_session_token: The returned Intermediate Session Token contains a password factor associated with the Member. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. Password factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
-      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: Information about the primary authentication requirements of the Organization.
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
+      - member_authenticated: A boolean indicating whether the member has been fully authenticated (true) or if additional steps like MFA are still required (false).
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - mfa_required: An object indicating whether multi-factor authentication is required, and which MFA methods are available to complete the authentication flow.
+      - primary_required: An object indicating that a primary authentication factor is required, containing the list of allowed authentication methods.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str
@@ -103,10 +101,10 @@ class AuthenticateResponse(ResponseBase):
 class MigrateResponse(ResponseBase):
     """Response type for `Passwords.migrate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member_created: A flag indicating `true` if a new Member object was created and `false` if the Member object already existed.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member_created: A boolean indicating whether a new member was created during the authentication flow (true) or an existing member was authenticated (false).
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -118,18 +116,13 @@ class MigrateResponse(ResponseBase):
 class StrengthCheckResponse(ResponseBase):
     """Response type for `Passwords.strength_check`.
     Fields:
-      - valid_password: Returns `true` if the password passes our password validation. We offer two validation options,
-      [zxcvbn](https://stytch.com/docs/guides/passwords/strength-policy) is the default option which offers a high level of sophistication.
-      We also offer [LUDS](https://stytch.com/docs/b2b/guides/passwords/strength-policy). If an email address is included in the call we also
-      require that the password hasn't been compromised using built-in breach detection powered by [HaveIBeenPwned](https://haveibeenpwned.com/)
-      - score: The score of the password determined by [zxcvbn](https://github.com/dropbox/zxcvbn). Values will be between 1 and 4, a 3 or greater is required to pass validation.
-      - breached_password: Returns `true` if the password has been breached. Powered by [HaveIBeenPwned](https://haveibeenpwned.com/).
+      - valid_password: A boolean indicating whether the provided password is valid.
+      - score: A numerical score representing the strength or quality of a password. Values will be between 1 and 4, a 3 or greater is required to pass `zxcvbn` validation.
+      - breached_password: A boolean indicating whether the password has been found in known data breaches.
       - strength_policy: The strength policy type enforced, either `zxcvbn` or `luds`.
-      - breach_detection_on_create: Will return `true` if breach detection will be evaluated. By default this option is enabled.
-      This option can be disabled by contacting [support@stytch.com](mailto:support@stytch.com?subject=Password%20strength%20configuration).
-      If this value is false then `breached_password` will always be `false` as well.
-      - luds_feedback: Feedback for how to improve the password's strength using [luds](https://stytch.com/docs/guides/passwords/strength-policy).
-      - zxcvbn_feedback: Feedback for how to improve the password's strength using [zxcvbn](https://stytch.com/docs/b2b/guides/passwords/strength-policy).
+      - breach_detection_on_create: A boolean flag to enable checking passwords against breach databases during creation.
+      - luds_feedback: Feedback from the LUDS (leaked username database) password strength checker.
+      - zxcvbn_feedback: Feedback from the zxcvbn password strength estimation algorithm, providing suggestions for improvement.
     """  # noqa
 
     valid_password: bool

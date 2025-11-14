@@ -85,8 +85,8 @@ class Clients:
         - `scopes`: Search for clients assigned a specific scope
 
         Fields:
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -116,8 +116,8 @@ class Clients:
         - `scopes`: Search for clients assigned a specific scope
 
         Fields:
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -151,9 +151,9 @@ class Clients:
           - client_id: The ID of the client.
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
-          - status: The status of the client - either `active` or `inactive`.
+          - status: The status of the entity.
           - scopes: An array of scopes assigned to the client.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -192,9 +192,9 @@ class Clients:
           - client_id: The ID of the client.
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
-          - status: The status of the client - either `active` or `inactive`.
+          - status: The status of the entity.
           - scopes: An array of scopes assigned to the client.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -272,11 +272,11 @@ class Clients:
 
         Fields:
           - scopes: An array of scopes assigned to the client.
-          - client_id: If provided, the ID of the client to create. If not provided, Stytch will generate this value for you. The `client_id` must be unique within your project.
-          - client_secret: If provided, the stored secret of the client to create. If not provided, Stytch will generate this value for you. If provided, the `client_secret` must be at least 8 characters long and pass entropy requirements.
+          - client_id: The ID of the client.
+          - client_secret: If provided, the stored secret of the client to create. If not provided, Stytch will generate this value for you. If provided, this must be at least 8 chasracters long and pass entropy requirements.
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -312,11 +312,11 @@ class Clients:
 
         Fields:
           - scopes: An array of scopes assigned to the client.
-          - client_id: If provided, the ID of the client to create. If not provided, Stytch will generate this value for you. The `client_id` must be unique within your project.
-          - client_secret: If provided, the stored secret of the client to create. If not provided, Stytch will generate this value for you. If provided, the `client_secret` must be at least 8 characters long and pass entropy requirements.
+          - client_id: The ID of the client.
+          - client_secret: If provided, the stored secret of the client to create. If not provided, Stytch will generate this value for you. If provided, this must be at least 8 chasracters long and pass entropy requirements.
           - client_name: A human-readable name for the client.
           - client_description: A human-readable description for the client.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

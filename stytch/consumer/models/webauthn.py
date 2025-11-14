@@ -19,10 +19,10 @@ from stytch.core.response_base import ResponseBase
 class WebAuthnCredential(pydantic.BaseModel):
     """
     Fields:
-      - credential_id: The unique, public ID of the WebAuthn credential.
-      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
-      - type: The type of the WebAuthn credential. Examples include `public-key`.
-      - public_key: The public key for the WebAuthn credential in base64 format.
+      - credential_id: The unique identifier for a WebAuthn credential or passkey.
+      - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
+      - type: The type or category of the resource, method, or entity.
+      - public_key: A public cryptographic key (in base64 format) used for signature verification or encryption.
     """  # noqa
 
     credential_id: str
@@ -34,16 +34,13 @@ class WebAuthnCredential(pydantic.BaseModel):
 class AuthenticateResponse(ResponseBase):
     """Response type for `WebAuthn.authenticate`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -58,8 +55,8 @@ class AuthenticateResponse(ResponseBase):
 class AuthenticateStartResponse(ResponseBase):
     """Response type for `WebAuthn.authenticate_start`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - public_key_credential_request_options: Options used for Passkey or WebAuthn authentication.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - public_key_credential_request_options: Credential request options for authenticating with WebAuthn or passkeys.
     """  # noqa
 
     user_id: str
@@ -78,16 +75,13 @@ class ListCredentialsResponse(ResponseBase):
 class RegisterResponse(ResponseBase):
     """Response type for `WebAuthn.register`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: (no documentation yet)
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -102,7 +96,7 @@ class RegisterResponse(ResponseBase):
 class RegisterStartResponse(ResponseBase):
     """Response type for `WebAuthn.register_start`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - public_key_credential_creation_options: Options used for Passkey or WebAuthn registration.
     """  # noqa
 

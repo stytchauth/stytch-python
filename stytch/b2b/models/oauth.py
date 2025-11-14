@@ -33,11 +33,11 @@ class AuthenticateRequestLocale(str, enum.Enum):
 class ProviderValues(pydantic.BaseModel):
     """
     Fields:
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
+      - scopes: An array of scopes requested by the client.
       - access_token: The `access_token` that you may use to access the User's data in the provider's API.
-      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
-      - expires_at: (no documentation yet)
-      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
+      - refresh_token: An OAuth refresh token that can be used to obtain new access tokens without requiring re-authentication.
+      - expires_at: The timestamp indicating when the session, token, lock, or other resource will expire.
+      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the OpenID Connect specification, which is based on OAuth
     """  # noqa
 
     scopes: List[str]
@@ -50,24 +50,22 @@ class ProviderValues(pydantic.BaseModel):
 class AuthenticateResponse(ResponseBase):
     """Response type for `OAuth.authenticate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - reset_sessions: This field is deprecated.
-      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
-      - intermediate_session_token: The returned Intermediate Session Token contains an OAuth factor associated with the Member's email address. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - provider_values: The `provider_values` object lists relevant identifiers, values, and scopes for a given OAuth provider. For example this object will include a provider's `access_token` that you can use to access the provider's API for a given user.
-
-      Note that these values will vary based on the OAuth provider in question, e.g. `id_token` is only returned by Microsoft. Google One Tap does not return access tokens or refresh tokens.
-      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: Information about the primary authentication requirements of the Organization.
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - reset_sessions: Deprecated: this field is no longer in use.
+      - member_authenticated: A boolean indicating whether the member has been fully authenticated (true) or if additional steps like MFA are still required (false).
+      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - provider_values: Values or configuration settings specific to an identity provider.
+      - mfa_required: An object indicating whether multi-factor authentication is required, and which MFA methods are available to complete the authentication flow.
+      - primary_required: An object indicating that a primary authentication factor is required, containing the list of allowed authentication methods.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str

@@ -40,10 +40,9 @@ class OIDC:
         """Create a new OIDC Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - display_name: A human-readable display name for the connection.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -71,10 +70,9 @@ class OIDC:
         """Create a new OIDC Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - display_name: A human-readable display name for the connection.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -131,10 +129,10 @@ class OIDC:
         * `jwks_url`
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - display_name: A human-readable display name for the connection.
-          - client_id: The OAuth2.0 client ID used to authenticate login attempts. This will be provided by the IdP.
+          - client_id: The ID of the client.
           - client_secret: The secret belonging to the OAuth2.0 client used to authenticate login attempts. This will be provided by the IdP.
           - issuer: A case-sensitive `https://` URL that uniquely identifies the IdP. This will be provided by the IdP.
           - authorization_url: The location of the URL that starts an OAuth login at the IdP. This will be provided by the IdP.
@@ -142,10 +140,9 @@ class OIDC:
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
           - custom_scopes: Include a space-separated list of custom scopes that you'd like to include. Note that this list must be URL encoded, e.g. the spaces must be expressed as %20.
-          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values, which will appear on the member's Trusted Metadata.
+          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined Member attributes to Stytch-specific values, which will appear on the member's Trusted Metadata. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -220,10 +217,10 @@ class OIDC:
         * `jwks_url`
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - display_name: A human-readable display name for the connection.
-          - client_id: The OAuth2.0 client ID used to authenticate login attempts. This will be provided by the IdP.
+          - client_id: The ID of the client.
           - client_secret: The secret belonging to the OAuth2.0 client used to authenticate login attempts. This will be provided by the IdP.
           - issuer: A case-sensitive `https://` URL that uniquely identifies the IdP. This will be provided by the IdP.
           - authorization_url: The location of the URL that starts an OAuth login at the IdP. This will be provided by the IdP.
@@ -231,10 +228,9 @@ class OIDC:
           - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
           - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
           - custom_scopes: Include a space-separated list of custom scopes that you'd like to include. Note that this list must be URL encoded, e.g. the spaces must be expressed as %20.
-          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values, which will appear on the member's Trusted Metadata.
+          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined Member attributes to Stytch-specific values, which will appear on the member's Trusted Metadata. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

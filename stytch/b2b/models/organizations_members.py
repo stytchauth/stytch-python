@@ -213,9 +213,9 @@ class UpdateRequestOptions(pydantic.BaseModel):
 class CreateResponse(ResponseBase):
     """Response type for `Members.create`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -226,9 +226,9 @@ class CreateResponse(ResponseBase):
 class DeleteMFAPhoneNumberResponse(ResponseBase):
     """Response type for `Members.delete_mfa_phone_number`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -239,9 +239,9 @@ class DeleteMFAPhoneNumberResponse(ResponseBase):
 class DeletePasswordResponse(ResponseBase):
     """Response type for `Members.delete_password`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -252,7 +252,7 @@ class DeletePasswordResponse(ResponseBase):
 class DeleteResponse(ResponseBase):
     """Response type for `Members.delete`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
     """  # noqa
 
     member_id: str
@@ -261,9 +261,9 @@ class DeleteResponse(ResponseBase):
 class DeleteTOTPResponse(ResponseBase):
     """Response type for `Members.delete_totp`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -274,7 +274,7 @@ class DeleteTOTPResponse(ResponseBase):
 class GetConnectedAppsResponse(ResponseBase):
     """Response type for `Members.get_connected_apps`.
     Fields:
-      - connected_apps: An array of Connected Apps with which the Member has successfully completed an authorization flow.
+      - connected_apps: A list of connected applications that the member or organization has authorized.
     """  # noqa
 
     connected_apps: List[MemberConnectedApp]
@@ -283,9 +283,9 @@ class GetConnectedAppsResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Members.dangerously_get`, `Members.get`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -296,7 +296,7 @@ class GetResponse(ResponseBase):
 class OIDCProvidersResponse(ResponseBase):
     """Response type for `Members.oidc_providers`.
     Fields:
-      - registrations: A list of tokens the member is registered with.
+      - registrations: A list of authentication method registrations (e.g., OAuth, SSO, TOTP) associated with the member.
     """  # noqa
 
     registrations: List[OIDCProviderInfo]
@@ -305,9 +305,9 @@ class OIDCProvidersResponse(ResponseBase):
 class ReactivateResponse(ResponseBase):
     """Response type for `Members.reactivate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -318,9 +318,9 @@ class ReactivateResponse(ResponseBase):
 class SearchResponse(ResponseBase):
     """Response type for `Members.search`.
     Fields:
-      - members: An array of [Member objects](https://stytch.com/docs/b2b/api/member-object).
-      - results_metadata: The search `results_metadata` object contains metadata relevant to your specific query like `total` and `next_cursor`.
-      - organizations: A map from `organization_id` to [Organization object](https://stytch.com/docs/b2b/api/organization-object). The map only contains the Organizations that the Members belongs to.
+      - members: A list of Member objects in the organization.
+      - results_metadata: Metadata about paginated search results, including total count and cursor for fetching the next page.
+      - organizations: A list of Organization objects or IDs.
     """  # noqa
 
     members: List[Member]
@@ -331,9 +331,9 @@ class SearchResponse(ResponseBase):
 class StartEmailUpdateResponse(ResponseBase):
     """Response type for `Members.start_email_update`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -344,10 +344,10 @@ class StartEmailUpdateResponse(ResponseBase):
 class UnlinkRetiredEmailResponse(ResponseBase):
     """Response type for `Members.unlink_retired_email`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str
@@ -359,9 +359,9 @@ class UnlinkRetiredEmailResponse(ResponseBase):
 class UpdateResponse(ResponseBase):
     """Response type for `Members.update`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: str

@@ -16,8 +16,8 @@ from stytch.core.response_base import ResponseBase
 class ListResponse(ResponseBase):
     """Response type for `Rules.list`.
     Fields:
-      - next_cursor: The `next_cursor` string is returned when your result contains more than one page of results. This value is passed into your next request in the `cursor` field.
-      - rules: A list of rules for the project
+      - next_cursor: A cursor value for fetching the next page of paginated results.
+      - rules: A list of authorization or validation rules to be evaluated.
     """  # noqa
 
     next_cursor: str
@@ -34,7 +34,7 @@ class SetResponse(ResponseBase):
       - browser_fingerprint: The browser fingerprint that a rule was set for.
       - hardware_fingerprint: The hardware fingerprint that a rule was set for.
       - network_fingerprint: The network fingerprint that a rule was set for.
-      - expires_at: The timestamp when the rule expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - expires_at: The timestamp when the rule expires.
       - cidr_block: The CIDR block that a rule was set for. If an end user's IP address is within this CIDR block, this rule will be applied.
       - country_code: The country code that a rule was set for.
       - asn: The ASN that a rule was set for.

@@ -25,7 +25,7 @@ class UpdateRequestStatus(str, enum.Enum):
 class CreateResponse(ResponseBase):
     """Response type for `Clients.create`.
     Fields:
-      - m2m_client: The M2M Client created by this API call.
+      - m2m_client: A machine-to-machine (M2M) client object used for service-to-service authentication.
     """  # noqa
 
     m2m_client: M2MClientWithClientSecret
@@ -43,7 +43,7 @@ class DeleteResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Clients.get`.
     Fields:
-      - m2m_client: The M2M Client affected by this operation.
+      - m2m_client: A machine-to-machine (M2M) client object used for service-to-service authentication.
     """  # noqa
 
     m2m_client: M2MClient
@@ -52,8 +52,8 @@ class GetResponse(ResponseBase):
 class SearchResponse(ResponseBase):
     """Response type for `Clients.search`.
     Fields:
-      - m2m_clients: An array of M2M Clients that match your search query.
-      - results_metadata: The search `results_metadata` object contains metadata relevant to your specific query like total and `next_cursor`.
+      - m2m_clients: A list of machine-to-machine (M2M) clients for service authentication.
+      - results_metadata: Metadata about paginated search results, including total count and cursor for fetching the next page.
     """  # noqa
 
     m2m_clients: List[M2MClient]
@@ -63,7 +63,7 @@ class SearchResponse(ResponseBase):
 class UpdateResponse(ResponseBase):
     """Response type for `Clients.update`.
     Fields:
-      - m2m_client: The M2M Client affected by this operation.
+      - m2m_client: A machine-to-machine (M2M) client object used for service-to-service authentication.
     """  # noqa
 
     m2m_client: M2MClient

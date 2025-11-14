@@ -48,13 +48,13 @@ class Rules:
         - Among equivalent size blocks, `BLOCK` takes precedence over `CHALLENGE`, which takes precedence over `ALLOW`. For example, if an `ip_address` overlaps with two `cidr_block` rules with blocks of the same size that return `CHALLENGE` and `ALLOW`, the rule match verdict will be `CHALLENGE`.
 
         Fields:
-          - action: The action that should be returned by a fingerprint lookup for that identifier with a `RULE_MATCH` reason. The following values are valid: `ALLOW`, `BLOCK`, `CHALLENGE`, or `NONE`. For country codes, `ALLOW` actions are not allowed. If a `NONE` action is specified, it will clear the stored rule.
-          - visitor_id: The visitor ID we want to set a rule for. Only one identifier can be specified in the request.
-          - browser_id: The browser ID we want to set a rule for. Only one identifier can be specified in the request.
-          - visitor_fingerprint: The visitor fingerprint we want to set a rule for. Only one identifier can be specified in the request.
-          - browser_fingerprint: The browser fingerprint we want to set a rule for. Only one identifier can be specified in the request.
-          - hardware_fingerprint: The hardware fingerprint we want to set a rule for. Only one identifier can be specified in the request.
-          - network_fingerprint: The network fingerprint we want to set a rule for. Only one identifier can be specified in the request.
+          - action: The action that should be returned by a fingerprint lookup for that identifier with a `RULE_MATCH` reason. The following values are valid: `ALLOW` (This is a known valid device grouping or device profile that is part of the default ALLOW listed set of known devices by Stytch), `BLOCK` (This is a known bad or malicious device profile that is undesirable and should be blocked from completing the privileged action), `CHALLENGE` (This is an unknown or potentially malicious device that should be put through increased friction such as 2FA or other forms of extended user verification before allowing the privileged action), or `NONE`. For country codes, `ALLOW` actions are not allowed. If a `NONE` action is specified, it will clear the stored rule.
+          - visitor_id: The cookie stored on the user's device that uniquely identifies them. See the Device Fingerprinting documentation for more details on the visitor_id.
+          - browser_id: Combination of VisitorID and NetworkFingerprint to create a clear identifier of a browser.
+          - visitor_fingerprint: Cookie-less way of identifying a unique user.
+          - browser_fingerprint: Combination of signals to identify a browser and its specific version.
+          - hardware_fingerprint: Combinations of signals to identify an operating system and architecture.
+          - network_fingerprint: Combination of signals associated with a specific network commonly known as TLS fingerprinting.
           - expires_in_minutes: The number of minutes until this rule expires. If no `expires_in_minutes` is specified, then the rule is kept permanently.
           - description: An optional description for the rule.
           - cidr_block: The CIDR block we want to set a rule for. You may pass either an IP address or a CIDR block. The CIDR block prefix must be between 16 and 32, inclusive. If an end user's IP address is within this CIDR block, this rule will be applied. Only one identifier can be specified in the request.
@@ -118,13 +118,13 @@ class Rules:
         - Among equivalent size blocks, `BLOCK` takes precedence over `CHALLENGE`, which takes precedence over `ALLOW`. For example, if an `ip_address` overlaps with two `cidr_block` rules with blocks of the same size that return `CHALLENGE` and `ALLOW`, the rule match verdict will be `CHALLENGE`.
 
         Fields:
-          - action: The action that should be returned by a fingerprint lookup for that identifier with a `RULE_MATCH` reason. The following values are valid: `ALLOW`, `BLOCK`, `CHALLENGE`, or `NONE`. For country codes, `ALLOW` actions are not allowed. If a `NONE` action is specified, it will clear the stored rule.
-          - visitor_id: The visitor ID we want to set a rule for. Only one identifier can be specified in the request.
-          - browser_id: The browser ID we want to set a rule for. Only one identifier can be specified in the request.
-          - visitor_fingerprint: The visitor fingerprint we want to set a rule for. Only one identifier can be specified in the request.
-          - browser_fingerprint: The browser fingerprint we want to set a rule for. Only one identifier can be specified in the request.
-          - hardware_fingerprint: The hardware fingerprint we want to set a rule for. Only one identifier can be specified in the request.
-          - network_fingerprint: The network fingerprint we want to set a rule for. Only one identifier can be specified in the request.
+          - action: The action that should be returned by a fingerprint lookup for that identifier with a `RULE_MATCH` reason. The following values are valid: `ALLOW` (This is a known valid device grouping or device profile that is part of the default ALLOW listed set of known devices by Stytch), `BLOCK` (This is a known bad or malicious device profile that is undesirable and should be blocked from completing the privileged action), `CHALLENGE` (This is an unknown or potentially malicious device that should be put through increased friction such as 2FA or other forms of extended user verification before allowing the privileged action), or `NONE`. For country codes, `ALLOW` actions are not allowed. If a `NONE` action is specified, it will clear the stored rule.
+          - visitor_id: The cookie stored on the user's device that uniquely identifies them. See the Device Fingerprinting documentation for more details on the visitor_id.
+          - browser_id: Combination of VisitorID and NetworkFingerprint to create a clear identifier of a browser.
+          - visitor_fingerprint: Cookie-less way of identifying a unique user.
+          - browser_fingerprint: Combination of signals to identify a browser and its specific version.
+          - hardware_fingerprint: Combinations of signals to identify an operating system and architecture.
+          - network_fingerprint: Combination of signals associated with a specific network commonly known as TLS fingerprinting.
           - expires_in_minutes: The number of minutes until this rule expires. If no `expires_in_minutes` is specified, then the rule is kept permanently.
           - description: An optional description for the rule.
           - cidr_block: The CIDR block we want to set a rule for. You may pass either an IP address or a CIDR block. The CIDR block prefix must be between 16 and 32, inclusive. If an end user's IP address is within this CIDR block, this rule will be applied. Only one identifier can be specified in the request.

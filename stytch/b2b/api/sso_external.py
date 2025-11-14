@@ -49,12 +49,12 @@ class External:
         """Create a new External SSO Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - external_organization_id: Globally unique UUID that identifies a different Organization within your Project.
           - external_connection_id: Globally unique UUID that identifies a specific SSO connection configured for a different Organization in your Project.
           - display_name: A human-readable display name for the connection.
-          - connection_implicit_role_assignments: (no documentation yet)
-          - group_implicit_role_assignments: (no documentation yet)
+          - connection_implicit_role_assignments: An array of role assignments that are automatically applied to Members when they authenticate via this external SSO connection. Each entry must include a `role_id`.
+          - group_implicit_role_assignments: An array of role assignments based on group membership from the external SSO connection. Members that authenticate with specific groups will automatically be assigned the associated roles. Each entry must include a `group` and `role_id`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -98,12 +98,12 @@ class External:
         """Create a new External SSO Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - external_organization_id: Globally unique UUID that identifies a different Organization within your Project.
           - external_connection_id: Globally unique UUID that identifies a specific SSO connection configured for a different Organization in your Project.
           - display_name: A human-readable display name for the connection.
-          - connection_implicit_role_assignments: (no documentation yet)
-          - group_implicit_role_assignments: (no documentation yet)
+          - connection_implicit_role_assignments: An array of role assignments that are automatically applied to Members when they authenticate via this external SSO connection. Each entry must include a `role_id`.
+          - group_implicit_role_assignments: An array of role assignments based on group membership from the external SSO connection. Members that authenticate with specific groups will automatically be assigned the associated roles. Each entry must include a `group` and `role_id`.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -146,16 +146,16 @@ class External:
         """Updates an existing External SSO connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific External SSO Connection.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - display_name: A human-readable display name for the connection.
           - external_connection_implicit_role_assignments: All Members who log in with this External connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Implicit role assignments are not supported for External connections if the underlying SSO connection is an OIDC connection.
           - external_group_implicit_role_assignments: Defines the names of the groups
-         that grant specific role assignments. For each group-Role pair, if a Member logs in with this external connection and
-         belongs to the specified group, they will be granted the associated Role. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments to an external connection, you must add a "groups" key to the underlying SAML connection's
-                 `attribute_mapping`. Make sure that the SAML connection IdP is configured to correctly send the group information. Implicit role assignments are not supported
-                 for External connections if the underlying SSO connection is an OIDC connection.
+        that grant specific role assignments. For each group-Role pair, if a Member logs in with this external connection and
+        belongs to the specified group, they will be granted the associated Role. See the
+        [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments to an external connection, you must add a "groups" key to the underlying SAML connection's
+        `attribute_mapping`. Make sure that the SAML connection IdP is configured to correctly send the group information. Implicit role assignments are not supported
+        for External connections if the underlying SSO connection is an OIDC connection.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -199,16 +199,16 @@ class External:
         """Updates an existing External SSO connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific External SSO Connection.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - display_name: A human-readable display name for the connection.
           - external_connection_implicit_role_assignments: All Members who log in with this External connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Implicit role assignments are not supported for External connections if the underlying SSO connection is an OIDC connection.
           - external_group_implicit_role_assignments: Defines the names of the groups
-         that grant specific role assignments. For each group-Role pair, if a Member logs in with this external connection and
-         belongs to the specified group, they will be granted the associated Role. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments to an external connection, you must add a "groups" key to the underlying SAML connection's
-                 `attribute_mapping`. Make sure that the SAML connection IdP is configured to correctly send the group information. Implicit role assignments are not supported
-                 for External connections if the underlying SSO connection is an OIDC connection.
+        that grant specific role assignments. For each group-Role pair, if a Member logs in with this external connection and
+        belongs to the specified group, they will be granted the associated Role. See the
+        [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments to an external connection, you must add a "groups" key to the underlying SAML connection's
+        `attribute_mapping`. Make sure that the SAML connection IdP is configured to correctly send the group information. Implicit role assignments are not supported
+        for External connections if the underlying SSO connection is an OIDC connection.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

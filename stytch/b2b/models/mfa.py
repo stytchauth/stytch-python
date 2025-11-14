@@ -14,8 +14,8 @@ import pydantic
 class MemberOptions(pydantic.BaseModel):
     """
     Fields:
-      - mfa_phone_number: The Member's MFA phone number.
-      - totp_registration_id: The Member's MFA TOTP registration ID.
+      - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
+      - totp_registration_id: The unique identifier for the TOTP registration, linking a member to their authenticator app.
     """  # noqa
 
     mfa_phone_number: str

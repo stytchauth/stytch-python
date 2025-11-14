@@ -19,8 +19,8 @@ from stytch.core.response_base import ResponseBase
 class GithubResponse(ResponseBase):
     """Response type for `OAuthProviders.github`.
     Fields:
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - registrations: A list of tokens the member is registered with.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - registrations: A list of authentication method registrations (e.g., OAuth, SSO, TOTP) associated with the member.
     """  # noqa
 
     provider_type: str
@@ -30,13 +30,13 @@ class GithubResponse(ResponseBase):
 class GoogleResponse(ResponseBase):
     """Response type for `OAuthProviders.google`.
     Fields:
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
-      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - id_token: An OpenID Connect ID token containing identity claims about the authenticated user.
+      - scopes: An array of scopes requested by the client.
+      - access_token: The `access_token` that you may use to access the Member's data in the provider's API for B2B organization authentication flows.
       - access_token_expires_in: The number of seconds until the access token expires.
-      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
+      - refresh_token: An OAuth refresh token that can be used to obtain new access tokens without requiring re-authentication.
     """  # noqa
 
     provider_type: str
@@ -51,8 +51,8 @@ class GoogleResponse(ResponseBase):
 class HubspotResponse(ResponseBase):
     """Response type for `OAuthProviders.hubspot`.
     Fields:
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - registrations: A list of tokens the member is registered with.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - registrations: A list of authentication method registrations (e.g., OAuth, SSO, TOTP) associated with the member.
     """  # noqa
 
     provider_type: str
@@ -62,13 +62,13 @@ class HubspotResponse(ResponseBase):
 class MicrosoftResponse(ResponseBase):
     """Response type for `OAuthProviders.microsoft`.
     Fields:
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the `sub` or "Subject field" in OAuth protocols.
-      - access_token: The `access_token` that you may use to access the User's data in the provider's API.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - access_token: The `access_token` that you may use to access the Member's data in the provider's API for B2B organization authentication flows.
       - access_token_expires_in: The number of seconds until the access token expires.
-      - id_token: The `id_token` returned by the OAuth provider. ID Tokens are JWTs that contain structured information about a user. The exact content of each ID Token varies from provider to provider. ID Tokens are returned from OAuth providers that conform to the [OpenID Connect](https://openid.net/foundation/) specification, which is based on OAuth.
-      - scopes: The OAuth scopes included for a given provider. See each provider's section above to see which scopes are included by default and how to add custom scopes.
-      - refresh_token: The `refresh_token` that you may use to obtain a new `access_token` for the User within the provider's API.
+      - id_token: An OpenID Connect ID token containing identity claims about the authenticated user.
+      - scopes: An array of scopes requested by the client.
+      - refresh_token: An OAuth refresh token that can be used to obtain new access tokens without requiring re-authentication.
     """  # noqa
 
     provider_type: str
@@ -83,8 +83,8 @@ class MicrosoftResponse(ResponseBase):
 class SlackResponse(ResponseBase):
     """Response type for `OAuthProviders.slack`.
     Fields:
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Microsoft, GitHub etc.
-      - registrations: A list of tokens the member is registered with.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - registrations: A list of authentication method registrations (e.g., OAuth, SSO, TOTP) associated with the member.
     """  # noqa
 
     provider_type: str

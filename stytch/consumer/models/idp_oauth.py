@@ -17,8 +17,8 @@ from stytch.core.response_base import ResponseBase
 class AuthorizeResponse(ResponseBase):
     """Response type for `OAuth.authorize`.
     Fields:
-      - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow.  This field is required when using the `authorization_code` grant.
-      - authorization_code: A one-time use code that can be exchanged for tokens.
+      - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow. This field is required when using the `authorization_code` grant.
+      - authorization_code: An OAuth authorization code that can be exchanged for access and refresh tokens.
     """  # noqa
 
     redirect_uri: str
@@ -28,11 +28,11 @@ class AuthorizeResponse(ResponseBase):
 class AuthorizeStartResponse(ResponseBase):
     """Response type for `OAuth.authorize_start`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
-      - client: (no documentation yet)
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
+      - client: An OAuth client or connected application object.
       - consent_required: Whether the user must provide explicit consent for the authorization request.
-      - scope_results: Details about each requested scope.
+      - scope_results: Details about which requested scopes were granted or denied during OAuth authorization.
     """  # noqa
 
     user_id: str

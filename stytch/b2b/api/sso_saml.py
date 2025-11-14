@@ -50,10 +50,9 @@ class SAML:
         """Create a new SAML Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - display_name: A human-readable display name for the connection.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -81,10 +80,9 @@ class SAML:
         """Create a new SAML Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - display_name: A human-readable display name for the connection.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -138,29 +136,28 @@ class SAML:
         * `x509_certificate`
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
-          - idp_entity_id: A globally unique name for the IdP. This will be provided by the IdP.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
+          - idp_entity_id: The entity ID for the identity provider's SAML configuration. This is a unique identifier for the identity provider, typically a URL.
           - display_name: A human-readable display name for the connection.
-          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
+          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined Member attributes to Stytch-specific values, which will appear on the member's Trusted Metadata. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
           - saml_connection_implicit_role_assignments: All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
           - saml_group_implicit_role_assignments: Defines the names of the SAML groups
-         that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
-         belongs to the specified SAML group, they will be granted the associated Role. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
-                 `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
+        that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
+        belongs to the specified SAML group, they will be granted the associated Role. See the
+        [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
+        `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
           - signing_private_key: A PKCS1 format RSA private key used for signing SAML requests. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported. When provided, Stytch will generate a new x509 certificate from this key and return it in the signing_certificates array.
           - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
           - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
           - saml_encryption_private_key: A PKCS1 format RSA private key used to decrypt encrypted SAML assertions. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported.
-          - allow_gateway_callback: (no documentation yet)
+          - allow_gateway_callback: If set to `true`, the SAML connection will allow gateway callback URLs. This is typically used for advanced integration scenarios.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -246,29 +243,28 @@ class SAML:
         * `x509_certificate`
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
-          - idp_entity_id: A globally unique name for the IdP. This will be provided by the IdP.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
+          - idp_entity_id: The entity ID for the identity provider's SAML configuration. This is a unique identifier for the identity provider, typically a URL.
           - display_name: A human-readable display name for the connection.
-          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
+          - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined Member attributes to Stytch-specific values, which will appear on the member's Trusted Metadata. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
           - x509_certificate: A certificate that Stytch will use to verify the sign-in assertion sent by the IdP, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format. See our [X509 guide](https://stytch.com/docs/b2b/api/saml-certificates) for more info.
           - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
           - saml_connection_implicit_role_assignments: All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
           - saml_group_implicit_role_assignments: Defines the names of the SAML groups
-         that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
-         belongs to the specified SAML group, they will be granted the associated Role. See the
-         [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
-                 `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
+        that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
+        belongs to the specified SAML group, they will be granted the associated Role. See the
+        [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Before adding any group implicit role assignments, you must add a "groups" key to your SAML connection's
+        `attribute_mapping`. Make sure that your IdP is configured to correctly send the group information.
           - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
-
         Specifying a known provider allows Stytch to handle any provider-specific logic.
           - signing_private_key: A PKCS1 format RSA private key used for signing SAML requests. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported. When provided, Stytch will generate a new x509 certificate from this key and return it in the signing_certificates array.
           - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
           - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
           - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
           - saml_encryption_private_key: A PKCS1 format RSA private key used to decrypt encrypted SAML assertions. Only PKCS1 format (starting with "-----BEGIN RSA PRIVATE KEY-----") is supported.
-          - allow_gateway_callback: (no documentation yet)
+          - allow_gateway_callback: If set to `true`, the SAML connection will allow gateway callback URLs. This is typically used for advanced integration scenarios.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -336,9 +332,9 @@ class SAML:
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
-          - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
+          - metadata_url: The URL of the SAML identity provider's metadata document. This XML document contains the configuration details for the identity provider, including certificates and endpoints.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -371,9 +367,9 @@ class SAML:
         * `attribute_mapping` (must be supplied using [Update SAML Connection](update-saml-connection))
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
-          - metadata_url: A URL that points to the IdP metadata. This will be provided by the IdP.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
+          - metadata_url: The URL of the SAML identity provider's metadata document. This XML document contains the configuration details for the identity provider, including certificates and endpoints.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -402,8 +398,8 @@ class SAML:
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
 
         Fields:
-          - organization_id: The organization ID that the SAML connection belongs to. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: The ID of the SAML connection.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - certificate_id: The ID of the certificate to be deleted.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -436,8 +432,8 @@ class SAML:
         You may need to do this when rotating certificates from your IdP, since Stytch allows a maximum of 5 certificates per connection. There must always be at least one certificate per active connection.
 
         Fields:
-          - organization_id: The organization ID that the SAML connection belongs to. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: The ID of the SAML connection.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - certificate_id: The ID of the certificate to be deleted.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -468,8 +464,8 @@ class SAML:
         """Delete a SAML encryption private key.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - private_key_id: The ID of the encryption private key to be deleted.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -500,8 +496,8 @@ class SAML:
         """Delete a SAML encryption private key.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - connection_id: Globally unique UUID that identifies a specific SSO `connection_id` for a Member.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - connection_id: Globally unique UUID that identifies a specific SSO connection.
           - private_key_id: The ID of the encryption private key to be deleted.
         """  # noqa
         headers: Dict[str, str] = {}

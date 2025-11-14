@@ -24,6 +24,10 @@ class Debug:
     def whoami(
         self,
     ) -> WhoamiResponse:
+        """A debugging endpoint that returns basic information about the caller's Project.
+
+        Fields:
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
 
@@ -34,6 +38,10 @@ class Debug:
     async def whoami_async(
         self,
     ) -> WhoamiResponse:
+        """A debugging endpoint that returns basic information about the caller's Project.
+
+        Fields:
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
 

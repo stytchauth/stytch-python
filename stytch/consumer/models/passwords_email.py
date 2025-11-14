@@ -25,15 +25,12 @@ class ResetStartRequestLocale(str, enum.Enum):
 class ResetResponse(ResponseBase):
     """Response type for `Email.reset`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str
@@ -47,7 +44,7 @@ class ResetResponse(ResponseBase):
 class ResetStartResponse(ResponseBase):
     """Response type for `Email.reset_start`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - email_id: The unique ID of a specific email address.
     """  # noqa
 

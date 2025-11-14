@@ -52,9 +52,9 @@ class RequireResetRequestOptions(pydantic.BaseModel):
 class RequireResetResponse(ResponseBase):
     """Response type for `Email.require_reset`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
     """  # noqa
 
     member_id: Optional[str] = None
@@ -65,19 +65,19 @@ class RequireResetResponse(ResponseBase):
 class ResetResponse(ResponseBase):
     """Response type for `Email.reset`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member_email_id: Globally unique UUID that identifies a member's email
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - intermediate_session_token: The returned Intermediate Session Token contains a password factor associated with the Member. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. Password factors are not transferable between Organizations, so the intermediate session token is not valid for use with discovery endpoints.
-      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: Information about the primary authentication requirements of the Organization.
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member_email_id: The unique identifier for a member's email address.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
+      - member_authenticated: A boolean indicating whether the member has been fully authenticated (true) or if additional steps like MFA are still required (false).
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - mfa_required: An object indicating whether multi-factor authentication is required, and which MFA methods are available to complete the authentication flow.
+      - primary_required: An object indicating that a primary authentication factor is required, containing the list of allowed authentication methods.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str
@@ -98,9 +98,9 @@ class ResetResponse(ResponseBase):
 class ResetStartResponse(ResponseBase):
     """Response type for `Email.reset_start`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member_email_id: Globally unique UUID that identifies a member's email
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member_email_id: The unique identifier for a member's email address.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
     """  # noqa
 
     member_id: str

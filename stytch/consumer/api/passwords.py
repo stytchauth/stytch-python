@@ -74,21 +74,12 @@ class Passwords:
         Fields:
           - email: The email address of the end user.
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - name: The name of the user. Each field in the name object is optional.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - name: The name of the User.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -135,21 +126,12 @@ class Passwords:
         Fields:
           - email: The email address of the end user.
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - name: The name of the user. Each field in the name object is optional.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - name: The name of the User.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -196,19 +178,10 @@ class Passwords:
           - email: The email address of the end user.
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -253,19 +226,10 @@ class Passwords:
           - email: The email address of the end user.
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -380,24 +344,23 @@ class Passwords:
           - email: The email address of the end user.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, `sha_512`, and `pbkdf_2` are supported.
-          - md_5_config: Optional parameters for MD-5 hash types.
-          - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
-          - sha_1_config: Optional parameters for SHA-1 hash types.
-          - sha_512_config: Optional parameters for SHA-512 hash types.
+          - md_5_config: Configuration parameters for MD5 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - argon_2_config: Configuration parameters for Argon2 password hashing when migrating passwords. This includes settings like memory cost, time cost, and parallelism.
+          - sha_1_config: Configuration parameters for SHA-1 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - sha_512_config: Configuration parameters for SHA-512 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
           - scrypt_config: Required parameters if the scrypt is not provided in a [PHC encoded form](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md#phc-string-format).
-          - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - pbkdf_2_config: Configuration parameters for PBKDF2 password hashing when migrating passwords. This includes settings like iteration count and the underlying hash function.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - set_email_verified: Whether to set the user's email as verified. This is a dangerous field, incorrect use may lead to users getting erroneously
-                        deduplicated into one User object. This flag should only be set if you can attest that the user owns the email address in question.
-
-          - name: The name of the user. Each field in the name object is optional.
-          - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
+        deduplicated into one User object. This flag should only be set if you can attest that the user owns the email address in question.
+          - name: The name of the User.
+          - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
-           the user owns the phone number in question.
+        the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: Roles to explicitly assign to this User.
-           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+          - roles: Roles to explicitly assign to this Member.
+        See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -484,24 +447,23 @@ class Passwords:
           - email: The email address of the end user.
           - hash: The password hash. For a Scrypt or PBKDF2 hash, the hash needs to be a base64 encoded string.
           - hash_type: The password hash used. Currently `bcrypt`, `scrypt`, `argon_2i`, `argon_2id`, `md_5`, `sha_1`, `sha_512`, and `pbkdf_2` are supported.
-          - md_5_config: Optional parameters for MD-5 hash types.
-          - argon_2_config: Required parameters if the argon2 hex form, as opposed to the encoded form, is supplied.
-          - sha_1_config: Optional parameters for SHA-1 hash types.
-          - sha_512_config: Optional parameters for SHA-512 hash types.
+          - md_5_config: Configuration parameters for MD5 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - argon_2_config: Configuration parameters for Argon2 password hashing when migrating passwords. This includes settings like memory cost, time cost, and parallelism.
+          - sha_1_config: Configuration parameters for SHA-1 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
+          - sha_512_config: Configuration parameters for SHA-512 password hashing when migrating passwords. This includes settings like whether a prepended salt was used.
           - scrypt_config: Required parameters if the scrypt is not provided in a [PHC encoded form](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md#phc-string-format).
-          - pbkdf_2_config: Required additional parameters for PBKDF2 hash keys.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - pbkdf_2_config: Configuration parameters for PBKDF2 password hashing when migrating passwords. This includes settings like iteration count and the underlying hash function.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - set_email_verified: Whether to set the user's email as verified. This is a dangerous field, incorrect use may lead to users getting erroneously
-                        deduplicated into one User object. This flag should only be set if you can attest that the user owns the email address in question.
-
-          - name: The name of the user. Each field in the name object is optional.
-          - phone_number: The phone number of the user. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
+        deduplicated into one User object. This flag should only be set if you can attest that the user owns the email address in question.
+          - name: The name of the User.
+          - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
           - set_phone_number_verified: Whether to set the user's phone number as verified. This is a dangerous field, this flag should only be set if you can attest that
-           the user owns the phone number in question.
+        the user owns the phone number in question.
           - external_id: If a new user is created, this will set an identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: Roles to explicitly assign to this User.
-           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+          - roles: Roles to explicitly assign to this Member.
+        See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

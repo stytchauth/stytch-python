@@ -24,6 +24,10 @@ class Project:
     def metrics(
         self,
     ) -> MetricsResponse:
+        """Retrieve metrics related to the Project.
+
+        Fields:
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
 
@@ -34,6 +38,10 @@ class Project:
     async def metrics_async(
         self,
     ) -> MetricsResponse:
+        """Retrieve metrics related to the Project.
+
+        Fields:
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
 

@@ -14,22 +14,22 @@ import pydantic
 class ConnectedApp(pydantic.BaseModel):
     """
     Fields:
-      - client_id: The ID of the Connected App client.
+      - client_id: The ID of the client.
       - client_name: A human-readable name for the client.
       - client_description: A human-readable description for the client.
-      - status: (no documentation yet)
-      - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
+      - status: The status of the entity.
+      - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this client can be exchanged for a full Stytch Session.
       - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
       - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-      - access_token_expiry_minutes: (no documentation yet)
-      - access_token_template_content: (no documentation yet)
-      - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
-      - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
-      - client_secret_last_four: The last four characters of the client secret.
-      - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
-      - access_token_custom_audience: (no documentation yet)
-      - logo_url: The logo URL of the Connected App, if any.
-      - client_id_metadata_url: (no documentation yet)
+      - access_token_expiry_minutes: The number of minutes until the access token expires.
+      - access_token_template_content: A template string defining the structure and custom claims to include in generated access tokens.
+      - post_logout_redirect_urls: A list of allowed URLs to which users can be redirected after logging out.
+      - bypass_consent_for_offline_access: A boolean flag indicating whether to skip the consent screen when requesting offline_access scope for refresh tokens.
+      - client_secret_last_four: The last four characters of the current client secret, used for identification without exposing the full secret.
+      - next_client_secret_last_four: The last four characters of the next client secret, used during secret rotation.
+      - access_token_custom_audience: A custom audience (aud) claim value to include in the generated access token JWT.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+      - client_id_metadata_url: The URL of the OAuth client metadata endpoint for dynamic client configuration.
     """  # noqa
 
     client_id: str
@@ -51,6 +51,15 @@ class ConnectedApp(pydantic.BaseModel):
 
 
 class ConnectedAppPublic(pydantic.BaseModel):
+    """
+    Fields:
+      - client_id: The ID of the client.
+      - client_name: A human-readable name for the client.
+      - client_description: A human-readable description for the client.
+      - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+    """  # noqa
+
     client_id: str
     client_name: str
     client_description: str
@@ -61,23 +70,23 @@ class ConnectedAppPublic(pydantic.BaseModel):
 class ConnectedAppWithClientSecret(pydantic.BaseModel):
     """
     Fields:
-      - client_id: The ID of the Connected App client.
+      - client_id: The ID of the client.
       - client_name: A human-readable name for the client.
       - client_description: A human-readable description for the client.
-      - status: (no documentation yet)
-      - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
+      - status: The status of the entity.
+      - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this client can be exchanged for a full Stytch Session.
       - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
       - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-      - access_token_expiry_minutes: (no documentation yet)
-      - access_token_template_content: (no documentation yet)
-      - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
-      - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
-      - client_secret_last_four: The last four characters of the client secret.
-      - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
-      - client_secret: The secret of the Connected App client. **Required for confidential clients**
-      - access_token_custom_audience: (no documentation yet)
-      - logo_url: The logo URL of the Connected App, if any.
-      - client_id_metadata_url: (no documentation yet)
+      - access_token_expiry_minutes: The number of minutes until the access token expires.
+      - access_token_template_content: A template string defining the structure and custom claims to include in generated access tokens.
+      - post_logout_redirect_urls: A list of allowed URLs to which users can be redirected after logging out.
+      - bypass_consent_for_offline_access: A boolean flag indicating whether to skip the consent screen when requesting offline_access scope for refresh tokens.
+      - client_secret_last_four: The last four characters of the current client secret, used for identification without exposing the full secret.
+      - next_client_secret_last_four: The last four characters of the next client secret, used during secret rotation.
+      - client_secret: The secret belonging to the OAuth2.0 client used to authenticate login attempts. This will be provided by the IdP.
+      - access_token_custom_audience: A custom audience (aud) claim value to include in the generated access token JWT.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+      - client_id_metadata_url: The URL of the OAuth client metadata endpoint for dynamic client configuration.
     """  # noqa
 
     client_id: str
@@ -102,23 +111,23 @@ class ConnectedAppWithClientSecret(pydantic.BaseModel):
 class ConnectedAppWithNextClientSecret(pydantic.BaseModel):
     """
     Fields:
-      - client_id: The ID of the Connected App client.
+      - client_id: The ID of the client.
       - client_name: A human-readable name for the client.
       - client_description: A human-readable description for the client.
-      - status: (no documentation yet)
-      - client_secret_last_four: The last four characters of the client secret.
-      - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this Client can be exchanged for a full Stytch session.
+      - status: The status of the entity.
+      - client_secret_last_four: The last four characters of the current client secret, used for identification without exposing the full secret.
+      - full_access_allowed: Valid for first party clients only. If `true`, an authorization token granted to this client can be exchanged for a full Stytch Session.
       - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
       - redirect_urls: Array of redirect URI values for use in OAuth Authorization flows.
-      - next_client_secret: (no documentation yet)
-      - access_token_expiry_minutes: (no documentation yet)
-      - access_token_template_content: (no documentation yet)
-      - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
-      - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
-      - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
-      - access_token_custom_audience: (no documentation yet)
-      - logo_url: The logo URL of the Connected App, if any.
-      - client_id_metadata_url: (no documentation yet)
+      - next_client_secret: The next client secret to be used after secret rotation is complete. **Important:** this is the only time you will be able to view the `client_secret`. Be sure to persist its value in a secure location. If the `client_secret` is lost, you will need to trigger a secret rotation flow to receive another one.
+      - access_token_expiry_minutes: The number of minutes until the access token expires.
+      - access_token_template_content: A template string defining the structure and custom claims to include in generated access tokens.
+      - post_logout_redirect_urls: A list of allowed URLs to which users can be redirected after logging out.
+      - bypass_consent_for_offline_access: A boolean flag indicating whether to skip the consent screen when requesting offline_access scope for refresh tokens.
+      - next_client_secret_last_four: The last four characters of the next client secret, used during secret rotation.
+      - access_token_custom_audience: A custom audience (aud) claim value to include in the generated access token JWT.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
+      - client_id_metadata_url: The URL of the OAuth client metadata endpoint for dynamic client configuration.
     """  # noqa
 
     client_id: str
@@ -143,8 +152,8 @@ class ConnectedAppWithNextClientSecret(pydantic.BaseModel):
 class ResultsMetadata(pydantic.BaseModel):
     """
     Fields:
-      - total: The total number of results returned by your search query. If totals have been disabled for your Stytch Workspace to improve search performance, the value will always be -1.
-      - next_cursor: The `next_cursor` string is returned when your search result contains more than one page of results. This value is passed into your next search call in the `cursor` field.
+      - total: The total count of items or results in a paginated response or collection.
+      - next_cursor: A cursor value for fetching the next page of paginated results.
     """  # noqa
 
     total: int

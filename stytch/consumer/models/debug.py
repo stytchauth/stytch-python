@@ -10,5 +10,11 @@ from stytch.core.response_base import ResponseBase
 
 
 class WhoamiResponse(ResponseBase):
+    """Response type for `Debug.whoami`.
+    Fields:
+      - project_id: The caller's project ID.
+      - name: The name of the project that made this API call.
+    """  # noqa
+
     project_id: str
     name: str

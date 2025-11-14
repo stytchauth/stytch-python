@@ -34,20 +34,9 @@ class ExchangeRequestLocale(str, enum.Enum):
 class AuthorizationCheck(pydantic.BaseModel):
     """
     Fields:
-      - organization_id: Globally unique UUID that identifies a specific Organization. The Organization's ID must match the Member's Organization
-      - resource_id: A unique identifier of the RBAC Resource, provided by the developer and intended to be human-readable.
-
-      A `resource_id` is not allowed to start with `stytch`, which is a special prefix used for Stytch default Resources with reserved `resource_id`s. These include:
-
-      * `stytch.organization`
-      * `stytch.member`
-      * `stytch.sso`
-      * `stytch.self`
-
-      Check out the [guide on Stytch default Resources](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
-
-
-      - action: An action to take on a Resource.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - resource_id: The identifier of a specific resource within an RBAC authorization check.
+      - action: The action that should be returned by a fingerprint lookup for that identifier with a `RULE_MATCH` reason. The following values are valid: `ALLOW` (This is a known valid device grouping or device profile that is part of the default ALLOW listed set of known devices by Stytch), `BLOCK` (This is a known bad or malicious device profile that is undesirable and should be blocked from completing the privileged action), `CHALLENGE` (This is an unknown or potentially malicious device that should be put through increased friction such as 2FA or other forms of extended user verification before allowing the privileged action), or `NONE`. For country codes, `ALLOW` actions are not allowed. If a `NONE` action is specified, it will clear the stored rule.
     """  # noqa
 
     organization_id: str
@@ -58,7 +47,7 @@ class AuthorizationCheck(pydantic.BaseModel):
 class AuthorizationVerdict(pydantic.BaseModel):
     """
     Fields:
-      - authorized: Whether the Member was authorized to perform the specified action on the specified Resource. Always true if the request succeeds.
+      - authorized: Whether the actor was authorized to perform the specified action on the specified Resource. Always true if the request succeeds.
       - granting_roles: The complete list of Roles that gave the Member permission to perform the specified action on the specified Resource.
     """  # noqa
 
@@ -69,16 +58,17 @@ class AuthorizationVerdict(pydantic.BaseModel):
 class MemberSession(pydantic.BaseModel):
     """
     Fields:
-      - member_session_id: Globally unique UUID that identifies a specific Session.
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - started_at: The timestamp when the Session was created. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - last_accessed_at: The timestamp when the Session was last accessed. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - expires_at: The timestamp when the Session expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - authentication_factors: An array of different authentication factors that comprise a Session.
-      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value.
-      - roles: (no documentation yet)
+      - member_session_id: Globally unique UUID that identifies a specific Session in the Stytch API.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - started_at: The timestamp when the session or process was initiated.
+      - last_accessed_at: The timestamp when the session was last accessed or refreshed.
+      - expires_at: The timestamp indicating when the session, token, lock, or other resource will expire.
+      - authentication_factors: A list of authentication factors used during the session, including type, timestamp, and delivery method.
+      - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+      - roles: Explicit or implicit Roles assigned to this Member.
       - organization_slug: The unique URL slug of the Organization. The slug only accepts alphanumeric characters and the following reserved characters: `-` `.` `_` `~`. Must be between 2 and 128 characters in length. Wherever an organization_id is expected in a path or request parameter, you may also use the organization_slug as a convenience.
-      - custom_claims: The custom claims map for a Session. Claims can be added to a session during a Sessions authenticate call.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.info.slug` action on the `stytch.organization` Resource.
+      - custom_claims: A JSON object containing custom claims to include in tokens or sessions.
     """  # noqa
 
     member_session_id: str
@@ -96,7 +86,9 @@ class MemberSession(pydantic.BaseModel):
 class PrimaryRequired(pydantic.BaseModel):
     """
     Fields:
-      - allowed_auth_methods: Details the auth method that the member must also complete to fulfill the primary authentication requirements of the Organization. For example, a value of `[magic_link]` indicates that the Member must also complete a magic link authentication step. If you have an intermediate session token, you must pass it into that primary authentication step.
+      - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
+    The list's accepted values are: `sso`, `magic_link`, `email_otp`, `password`, `google_oauth`, `microsoft_oauth`, `slack_oauth`, `github_oauth`, and `hubspot_oauth`.
+    When setting this field, if a session header is passed into the request, the Member Session must have permission to perform the `update.settings.allowed-auth-methods` action on the `stytch.organization` Resource.
     """  # noqa
 
     allowed_auth_methods: List[str]
@@ -121,13 +113,13 @@ class RevokeRequestOptions(pydantic.BaseModel):
 class AttestResponse(ResponseBase):
     """Response type for `Sessions.attest`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str
@@ -142,13 +134,12 @@ class AttestResponse(ResponseBase):
 class AuthenticateResponse(ResponseBase):
     """Response type for `Sessions.authenticate`.
     Fields:
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - verdict: If an `authorization_check` is provided in the request and the check succeeds, this field will return
-      information about why the Member was granted permission.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - verdict: The result of an authorization check, indicating whether the member is authorized to perform the requested action.
     """  # noqa
 
     member_session: MemberSession
@@ -162,13 +153,13 @@ class AuthenticateResponse(ResponseBase):
 class ExchangeAccessTokenResponse(ResponseBase):
     """Response type for `Sessions.exchange_access_token`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str
@@ -183,17 +174,17 @@ class ExchangeAccessTokenResponse(ResponseBase):
 class ExchangeResponse(ResponseBase):
     """Response type for `Sessions.exchange`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - member_authenticated: Indicates whether the Member is fully authenticated. If false, the Member needs to complete an MFA step to log in to the Organization.
-      - intermediate_session_token: The returned Intermediate Session Token contains any Email Magic Link or OAuth factors from the original member session that are valid for the target Organization. If this value is non-empty, the member must complete an MFA step to finish logging in to the Organization. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
-      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
-      - primary_required: Information about the primary authentication requirements of the Organization.
-      - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - member_authenticated: A boolean indicating whether the member has been fully authenticated (true) or if additional steps like MFA are still required (false).
+      - intermediate_session_token: The Intermediate Session Token. This token does not necessarily belong to a specific instance of a Member, but represents a bag of factors that may be converted to a member session. The token can be used with the [OTP SMS Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-otp-sms), [TOTP Authenticate endpoint](https://stytch.com/docs/b2b/api/authenticate-totp), or [Recovery Codes Recover endpoint](https://stytch.com/docs/b2b/api/recovery-codes-recover) to complete an MFA flow and log in to the Organization. The token has a default expiry of 10 minutes. It can also be used with the [Exchange Intermediate Session endpoint](https://stytch.com/docs/b2b/api/exchange-intermediate-session) to join a specific Organization that allows the factors represented by the intermediate session token; or the [Create Organization via Discovery endpoint](https://stytch.com/docs/b2b/api/create-organization-via-discovery) to create a new Organization and Member. Intermediate Session Tokens have a default expiry of 10 minutes.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
+      - mfa_required: An object indicating whether multi-factor authentication is required, and which MFA methods are available to complete the authentication flow.
+      - primary_required: An object indicating that a primary authentication factor is required, containing the list of allowed authentication methods.
+      - member_device: Information about the device used by the member for authentication, including device type, fingerprints, and location data.
     """  # noqa
 
     member_id: str
@@ -212,7 +203,7 @@ class ExchangeResponse(ResponseBase):
 class GetJWKSResponse(ResponseBase):
     """Response type for `Sessions.get_jwks`.
     Fields:
-      - keys: The list of JWKs associated with the project.
+      - keys: Cryptographic keys used for signing, encryption, or verification.
     """  # noqa
 
     keys: List[JWK]
@@ -221,7 +212,7 @@ class GetJWKSResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Sessions.get`.
     Fields:
-      - member_sessions: An array of [Session objects](https://stytch.com/docs/b2b/api/session-object).
+      - member_sessions: A list of active sessions for the member.
     """  # noqa
 
     member_sessions: List[MemberSession]
@@ -230,12 +221,12 @@ class GetResponse(ResponseBase):
 class MigrateResponse(ResponseBase):
     """Response type for `Sessions.migrate`.
     Fields:
-      - member_id: Globally unique UUID that identifies a specific Member.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object)
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
+      - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+      - session_token: The `session_token` associated with a Member's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - member_session: The MemberSession object containing details about an active authenticated session, including timing information, authentication factors used, and associated roles.
     """  # noqa
 
     member_id: str

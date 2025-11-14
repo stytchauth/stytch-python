@@ -36,9 +36,9 @@ class SendRequestLocale(str, enum.Enum):
 class LoginOrCreateResponse(ResponseBase):
     """Response type for `Sms.login_or_create`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - phone_id: The unique ID for the phone number.
-      - user_created: In `login_or_create` endpoints, this field indicates whether or not a User was just created.
+      - user_created: A boolean indicating whether a new user was created as part of the authentication flow (true) or an existing user was authenticated (false).
     """  # noqa
 
     user_id: str
@@ -49,7 +49,7 @@ class LoginOrCreateResponse(ResponseBase):
 class SendResponse(ResponseBase):
     """Response type for `Sms.send`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - phone_id: The unique ID for the phone number.
     """  # noqa
 

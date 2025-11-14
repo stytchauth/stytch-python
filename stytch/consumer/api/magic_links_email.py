@@ -56,23 +56,20 @@ class Email:
         The user is emailed a magic link which redirects them to the provided [redirect URL](https://stytch.com/docs/guides/magic-links/email-magic-links/redirect-routing). Collect the `token` from the URL query parameters, and call [Authenticate magic link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
 
         Fields:
-          - email: The email address of the User to send the Magic Link to.
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Login.
+          - email: The email address of the end user.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - login_magic_link_url: The URL the end user clicks from the login Email Magic Link. This should be a URL that your app receives and parses and subsequently send an API request to authenticate the Magic Link and log in the User. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - signup_magic_link_url: The URL the end user clicks from the sign-up Email Magic Link. This should be a URL that your app receives and parses and subsequently send an API request to authenticate the Magic Link and sign-up the User. If this value is not passed, the default sign-up redirect URL that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
-          - session_token: The `session_token` of the user to associate the email with.
-          - session_jwt: The `session_jwt` of the user to associate the email with.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+          - session_token: The `session_token` associated with a User's existing Session.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
           - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -135,23 +132,20 @@ class Email:
         The user is emailed a magic link which redirects them to the provided [redirect URL](https://stytch.com/docs/guides/magic-links/email-magic-links/redirect-routing). Collect the `token` from the URL query parameters, and call [Authenticate magic link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
 
         Fields:
-          - email: The email address of the User to send the Magic Link to.
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Login.
+          - email: The email address of the end user.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - login_magic_link_url: The URL the end user clicks from the login Email Magic Link. This should be a URL that your app receives and parses and subsequently send an API request to authenticate the Magic Link and log in the User. If this value is not passed, the default login redirect URL that you set in your Dashboard is used. If you have not set a default login redirect URL, an error is returned.
           - signup_magic_link_url: The URL the end user clicks from the sign-up Email Magic Link. This should be a URL that your app receives and parses and subsequently send an API request to authenticate the Magic Link and sign-up the User. If this value is not passed, the default sign-up redirect URL that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
-          - session_token: The `session_token` of the user to associate the email with.
-          - session_jwt: The `session_jwt` of the user to associate the email with.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+          - session_token: The `session_token` associated with a User's existing Session.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
           - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -214,21 +208,18 @@ class Email:
           - signup_magic_link_url: The URL the end user clicks from the sign-up Email Magic Link. This should be a URL that your app receives and parses and subsequently send an API request to authenticate the Magic Link and sign-up the User. If this value is not passed, the default sign-up redirect URL that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Login.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
           - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
-                If true, users will be saved with status pending in Stytch's backend until authenticated.
-                If false, users will be created as active. An example usage of
-                a true flag would be to require users to verify their phone by entering the OTP code before creating
-                an account for them.
+        If true, users will be saved with status pending in Stytch's backend until authenticated.
+        If false, users will be created as active. An example usage of
+        a true flag would be to require users to verify their phone by entering the OTP code before creating
+        an account for them.
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -286,21 +277,18 @@ class Email:
           - signup_magic_link_url: The URL the end user clicks from the sign-up Email Magic Link. This should be a URL that your app receives and parses and subsequently send an API request to authenticate the Magic Link and sign-up the User. If this value is not passed, the default sign-up redirect URL that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - login_expiration_minutes: Set the expiration for the login email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - signup_expiration_minutes: Set the expiration for the sign-up email magic link, in minutes. By default, it expires in 1 week. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Login.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic Links - Login.
           - signup_template_id: Use a custom template for sign-up emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Sign-up.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
-                If true, users will be saved with status pending in Stytch's backend until authenticated.
-                If false, users will be created as active. An example usage of
-                a true flag would be to require users to verify their phone by entering the OTP code before creating
-                an account for them.
+        If true, users will be saved with status pending in Stytch's backend until authenticated.
+        If false, users will be created as active. An example usage of
+        a true flag would be to require users to verify their phone by entering the OTP code before creating
+        an account for them.
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -351,20 +339,17 @@ class Email:
         The User is emailed a Magic Link which redirects them to the provided [redirect URL](https://stytch.com/docs/guides/magic-links/email-magic-links/redirect-routing). Collect the `token` from the URL query parameters and call [Authenticate Magic Link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
 
         Fields:
-          - email: The email address of the User to send the invite Magic Link to.
+          - email: The email address of the end user.
           - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Invite.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - name: The name of the user. Each field in the name object is optional.
+          - name: The name of the User.
           - invite_magic_link_url: The URL the end user clicks from the Email Magic Link. This should be a URL that your app receives and parses and subsequently sends an API request to authenticate the Magic Link and log in the User. If this value is not passed, the default invite redirect URL that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
-          - invite_expiration_minutes: Set the expiration for the email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - invite_expiration_minutes: Set the expiration for the invite, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -411,20 +396,17 @@ class Email:
         The User is emailed a Magic Link which redirects them to the provided [redirect URL](https://stytch.com/docs/guides/magic-links/email-magic-links/redirect-routing). Collect the `token` from the URL query parameters and call [Authenticate Magic Link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
 
         Fields:
-          - email: The email address of the User to send the invite Magic Link to.
+          - email: The email address of the end user.
           - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template using our built-in customizations or a custom HTML email for Magic links - Invite.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - name: The name of the user. Each field in the name object is optional.
+          - name: The name of the User.
           - invite_magic_link_url: The URL the end user clicks from the Email Magic Link. This should be a URL that your app receives and parses and subsequently sends an API request to authenticate the Magic Link and log in the User. If this value is not passed, the default invite redirect URL that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
-          - invite_expiration_minutes: Set the expiration for the email magic link, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+          - invite_expiration_minutes: Set the expiration for the invite, in minutes. By default, it expires in 1 hour. The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -460,7 +442,7 @@ class Email:
         """Revoke a pending invite based on the `email` provided.
 
         Fields:
-          - email: The email of the user.
+          - email: The email address of the end user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -478,7 +460,7 @@ class Email:
         """Revoke a pending invite based on the `email` provided.
 
         Fields:
-          - email: The email of the user.
+          - email: The email address of the end user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

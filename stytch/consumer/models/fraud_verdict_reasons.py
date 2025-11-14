@@ -23,7 +23,7 @@ class OverrideRequestAction(str, enum.Enum):
 class ListResponse(ResponseBase):
     """Response type for `VerdictReasons.list`.
     Fields:
-      - verdict_reason_actions: Information about verdict reasons and any overrides that were set on them.
+      - verdict_reason_actions: Actions associated with different authorization verdict reasons.
     """  # noqa
 
     verdict_reason_actions: List[VerdictReasonAction]
@@ -32,7 +32,7 @@ class ListResponse(ResponseBase):
 class OverrideResponse(ResponseBase):
     """Response type for `VerdictReasons.override`.
     Fields:
-      - verdict_reason_action: Information about the verdict reason override that was just set.
+      - verdict_reason_action: Information about verdict reasons and any overrides set on them.
     """  # noqa
 
     verdict_reason_action: VerdictReasonAction

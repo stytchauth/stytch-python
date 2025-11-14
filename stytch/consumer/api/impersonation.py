@@ -31,7 +31,7 @@ class Impersonation:
         Prior to this step, you can generate an impersonation token by visiting the Stytch Dashboard, viewing a user, and clicking the `Impersonate User` button.
 
         Fields:
-          - impersonation_token: The User Impersonation token to authenticate. Expires in 5 minutes by default.
+          - impersonation_token: The impersonation token to authenticate. Expires in 5 minutes by default.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -52,7 +52,7 @@ class Impersonation:
         Prior to this step, you can generate an impersonation token by visiting the Stytch Dashboard, viewing a user, and clicking the `Impersonate User` button.
 
         Fields:
-          - impersonation_token: The User Impersonation token to authenticate. Expires in 5 minutes by default.
+          - impersonation_token: The impersonation token to authenticate. Expires in 5 minutes by default.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

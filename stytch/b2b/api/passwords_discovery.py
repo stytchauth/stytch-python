@@ -39,7 +39,7 @@ class Discovery:
         If successful, this endpoint will create a new intermediate session and return a list of discovered organizations that can be session exchanged into.
 
         Fields:
-          - email_address: The email address of the Member.
+          - email_address: The email address.
           - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -64,7 +64,7 @@ class Discovery:
         If successful, this endpoint will create a new intermediate session and return a list of discovered organizations that can be session exchanged into.
 
         Fields:
-          - email_address: The email address of the Member.
+          - email_address: The email address.
           - password: The password to authenticate, reset, or set for the first time. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
         """  # noqa
         headers: Dict[str, str] = {}

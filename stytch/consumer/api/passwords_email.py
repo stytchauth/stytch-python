@@ -41,27 +41,23 @@ class Email:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
         Fields:
-          - email: The email of the User that requested the password reset.
+          - email: The email address of the end user.
           - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
-          This should be a url that your app receives and parses before showing your app's reset password page.
-          After the user submits a new password to your app, it should send an API request to complete the password reset process.
-          If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
-          If you have not set a default reset password redirect URL, an error is returned.
+        This should be a url that your app receives and parses before showing your app's reset password page.
+        After the user submits a new password to your app, it should send an API request to complete the password reset process.
+        If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
+        If you have not set a default reset password redirect URL, an error is returned.
           - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
-          The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+        The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - login_redirect_url: The URL that Users are redirected to upon clicking the "Log in without password" button in password reset emails.
-
-              After Users are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the User in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
+          - login_redirect_url: The URL that Users are redirected to upon clicking the Email Magic Link.
+        After Users are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the User in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
           - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
-          The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
+        The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -104,27 +100,23 @@ class Email:
         """Initiates a password reset for the email address provided. This will trigger an email to be sent to the address, containing a magic link that will allow them to set a new password and authenticate.
 
         Fields:
-          - email: The email of the User that requested the password reset.
+          - email: The email address of the end user.
           - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
-          This should be a url that your app receives and parses before showing your app's reset password page.
-          After the user submits a new password to your app, it should send an API request to complete the password reset process.
-          If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
-          If you have not set a default reset password redirect URL, an error is returned.
+        This should be a url that your app receives and parses before showing your app's reset password page.
+        After the user submits a new password to your app, it should send an API request to complete the password reset process.
+        If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
+        If you have not set a default reset password redirect URL, an error is returned.
           - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
-          The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
+        The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - login_redirect_url: The URL that Users are redirected to upon clicking the "Log in without password" button in password reset emails.
-
-              After Users are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the User in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
+          - login_redirect_url: The URL that Users are redirected to upon clicking the Email Magic Link.
+        After Users are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the User in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
           - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
-
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
-
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
-
           - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
-          The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
+        The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -173,27 +165,14 @@ class Email:
         Note that a successful password reset by email will revoke all active sessions for the `user_id`.
 
         Fields:
-          - token: The Passwords `token` from the `?token=` query parameter in the URL.
-
-              In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
-
-              See examples and read more about redirect URLs [here](https://stytch.com/docs/workspace-management/redirect-urls).
+          - token: The Passwords `token` from the `?token=` query parameter in the URL. In the redirect URL, the `stytch_token_type` will be `reset_password`.
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.
@@ -246,27 +225,14 @@ class Email:
         Note that a successful password reset by email will revoke all active sessions for the `user_id`.
 
         Fields:
-          - token: The Passwords `token` from the `?token=` query parameter in the URL.
-
-              In the redirect URL, the `stytch_token_type` will be `login` or `reset_password`.
-
-              See examples and read more about redirect URLs [here](https://stytch.com/docs/workspace-management/redirect-urls).
+          - token: The Passwords `token` from the `?token=` query parameter in the URL. In the redirect URL, the `stytch_token_type` will be `reset_password`.
           - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
           - session_token: The `session_token` associated with a User's existing Session.
-          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist,
-          returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of
-          five minutes regardless of the underlying session duration, and will need to be refreshed over time.
-
-          This value must be a minimum of 5 and a maximum of 527040 minutes (366 days).
-
-          If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes.
-
-          If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
-          - session_jwt: The `session_jwt` associated with a User's existing Session.
+          - session_duration_minutes: Set the session lifetime to be this many minutes from now. This will start a new session if one doesn't already exist, returning both an opaque `session_token` and `session_jwt` for this session. Remember that the `session_jwt` will have a fixed lifetime of five minutes regardless of the underlying session duration, and will need to be refreshed over time. This value must be a minimum of 5 and a maximum of 527040 minutes (366 days). If a `session_token` or `session_jwt` is provided then a successful authentication will continue to extend the session this many minutes. If the `session_duration_minutes` parameter is not specified, a Stytch session will not be created.
+          - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
           - code_verifier: A base64url encoded one time secret used to validate that the request starts and ends on the same device.
           - session_custom_claims: Add a custom claims map to the Session being authenticated. Claims are only created if a Session is initialized by providing a value in `session_duration_minutes`. Claims will be included on the Session object and in the JWT. To update a key in an existing Session, supply a new value. To delete a key, supply a null value.
-
-          Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
+        Custom claims made with reserved claims ("iss", "sub", "aud", "exp", "nbf", "iat", "jti") will be ignored. Total custom claims size cannot exceed four kilobytes.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
           - options: Specify optional security settings.
           - telemetry_id: If the `telemetry_id` is passed, as part of this request, Stytch will call the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) and store the associated fingerprints and IPGEO information for the User. Your workspace must be enabled for Device Fingerprinting to use this feature.

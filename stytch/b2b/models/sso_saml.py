@@ -144,7 +144,7 @@ class CreateConnectionResponse(ResponseBase):
 class DeleteEncryptionPrivateKeyResponse(ResponseBase):
     """Response type for `SAML.delete_encryption_private_key`.
     Fields:
-      - private_key_id: The ID of the encryption private key.
+      - private_key_id: The ID of the encryption private key to be deleted.
     """  # noqa
 
     private_key_id: str
@@ -153,7 +153,7 @@ class DeleteEncryptionPrivateKeyResponse(ResponseBase):
 class DeleteVerificationCertificateResponse(ResponseBase):
     """Response type for `SAML.delete_verification_certificate`.
     Fields:
-      - certificate_id: The ID of the certificate that was deleted.
+      - certificate_id: The ID of the certificate to be deleted.
     """  # noqa
 
     certificate_id: str

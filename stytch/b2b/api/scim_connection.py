@@ -55,10 +55,11 @@ class Connection:
         """Update a SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
           - display_name: A human-readable display name for the connection.
-          - identity_provider: (no documentation yet)
+          - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+        Specifying a known provider allows Stytch to handle any provider-specific logic.
           - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -98,10 +99,11 @@ class Connection:
         """Update a SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
           - display_name: A human-readable display name for the connection.
-          - identity_provider: (no documentation yet)
+          - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+        Specifying a known provider allows Stytch to handle any provider-specific logic.
           - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -136,7 +138,7 @@ class Connection:
         """Deletes a SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -162,7 +164,7 @@ class Connection:
         """Deletes a SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -188,7 +190,7 @@ class Connection:
         """Start a SCIM token rotation.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -215,7 +217,7 @@ class Connection:
         """Start a SCIM token rotation.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -242,7 +244,7 @@ class Connection:
         """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -269,7 +271,7 @@ class Connection:
         """Completes a SCIM token rotation. This will complete the current token rotation process and update the active token to be the new token supplied in the [start SCIM token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start) response.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -296,7 +298,7 @@ class Connection:
         """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -323,7 +325,7 @@ class Connection:
         """Cancel a SCIM token rotation. This will cancel the current token rotation process, keeping the original token active.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -352,10 +354,10 @@ class Connection:
         """Gets a paginated list of all SCIM Groups associated with a given Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -386,10 +388,10 @@ class Connection:
         """Gets a paginated list of all SCIM Groups associated with a given Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - connection_id: The ID of the SCIM connection.
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -419,9 +421,10 @@ class Connection:
         """Create a new SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - display_name: A human-readable display name for the connection.
-          - identity_provider: (no documentation yet)
+          - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+        Specifying a known provider allows Stytch to handle any provider-specific logic.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -448,9 +451,10 @@ class Connection:
         """Create a new SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
           - display_name: A human-readable display name for the connection.
-          - identity_provider: (no documentation yet)
+          - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+        Specifying a known provider allows Stytch to handle any provider-specific logic.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -475,7 +479,7 @@ class Connection:
         """Get SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:
@@ -496,7 +500,7 @@ class Connection:
         """Get SCIM Connection.
 
         Fields:
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
         """  # noqa
         headers: Dict[str, str] = {}
         if method_options is not None:

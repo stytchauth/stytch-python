@@ -22,12 +22,12 @@ class SIWEParams(pydantic.BaseModel):
     Fields:
       - domain: Only required if `siwe_params` is passed. The domain that is requesting the crypto wallet signature. Must be an RFC 3986 authority.
       - uri: Only required if `siwe_params` is passed. An RFC 3986 URI referring to the resource that is the subject of the signing.
-      - resources:  A list of information or references to information the user wishes to have resolved as part of authentication. Every resource must be an RFC 3986 URI.
+      - resources: A list of information or references to information the user wishes to have resolved as part of authentication. Every resource must be an RFC 3986 URI.
       - chain_id: The EIP-155 Chain ID to which the session is bound. Defaults to 1. Must be the string representation of an integer between 1 and 9,223,372,036,854,775,771, inclusive.
       - statement: A human-readable ASCII assertion that the user will sign. The statement may only include reserved, unreserved, or space characters according to RFC 3986 definitions, and must not contain other forms of whitespace such as newlines, tabs, and carriage returns.
-      - issued_at: The time when the message was generated. Defaults to the current time. All timestamps in our API conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - not_before: The time when the signed authentication message will become valid. Defaults to the current time. All timestamps in our API conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - message_request_id: A system-specific identifier that may be used to uniquely refer to the sign-in request. The `message_request_id` must be a valid pchar according to RFC 3986 definitions.
+      - issued_at: The timestamp when a token or credential was issued.
+      - not_before: The timestamp before which a token or credential should not be accepted.
+      - message_request_id: A system-specific identifier that may be used to uniquely refer to the sign-in request. This must be a valid pchar according to RFC 3986 definitions.
     """  # noqa
 
     domain: str
@@ -43,9 +43,9 @@ class SIWEParams(pydantic.BaseModel):
 class AuthenticateStartResponse(ResponseBase):
     """Response type for `CryptoWallets.authenticate_start`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - challenge: A challenge string to be signed by the wallet in order to prove ownership.
-      - user_created: In `login_or_create` endpoints, this field indicates whether or not a User was just created.
+      - user_created: A boolean indicating whether a new user was created as part of the authentication flow (true) or an existing user was authenticated (false).
     """  # noqa
 
     user_id: str
@@ -59,8 +59,8 @@ class SIWEParamsResponse(ResponseBase):
       - domain: The domain that requested the crypto wallet signature.
       - uri: An RFC 3986 URI referring to the resource that is the subject of the signing.
       - chain_id: The EIP-155 Chain ID to which the session is bound.
-      - resources:  A list of information or references to information the user wishes to have resolved as part of authentication. Every resource must be an RFC 3986 URI.
-      - issued_at: The time when the message was generated. All timestamps in our API conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - resources: A list of RBAC resources that define what entities can be accessed or modified, used in authorization policies.
+      - issued_at: The timestamp when a token or credential was issued.
       - message_request_id: A system-specific identifier that may be used to uniquely refer to the sign-in request.
     """  # noqa
 
@@ -75,16 +75,13 @@ class SIWEParamsResponse(ResponseBase):
 class AuthenticateResponse(ResponseBase):
     """Response type for `CryptoWallets.authenticate`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - session_token: A secret token for a given Stytch Session.
-      - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - session_token: The `session_token` associated with a User's existing Session.
+      - session_jwt: The JSON Web Token (JWT) associated with a User's existing Session.
+      - user: The `user` object affected by this API call.
       - session: If you initiate a Session, by including `session_duration_minutes` in your authenticate call, you'll receive a full Session object in the response.
-
-      See [Session object](https://stytch.com/docs/api/session-object) for complete response fields.
-
-      - siwe_params: The parameters of the Sign In With Ethereum (SIWE) message that was signed.
-      - user_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `user_device` response field will contain information about the user's device attributes.
+      - siwe_params: The parameters for a Sign In With Ethereum (SIWE) message. May only be passed if the `crypto_wallet_type` is `ethereum`.
+      - user_device: If a valid `telemetry_id` was passed in the request and the Fingerprint Lookup API returned results, this field will contain information about the user's device attributes.
     """  # noqa
 
     user_id: str

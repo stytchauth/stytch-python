@@ -18,9 +18,9 @@ from stytch.b2b.models.sessions import PrimaryRequired
 class Membership(pydantic.BaseModel):
     """
     Fields:
-      - type: Either `active_member`, `pending_member`, `invited_member`, `eligible_to_join_by_email_domain`, or `eligible_to_join_by_oauth_tenant`
-      - details: An object containing additional metadata about the membership, if available.
-      - member: The [Member object](https://stytch.com/docs/b2b/api/member-object) if one already exists, or null if one does not.
+      - type: The type of membership relationship between the member and the discovered organization. Indicates whether the member is already a member, eligible to join, or has pending access requirements.
+      - details: Additional contextual information or metadata providing further details about the response or error.
+      - member: The Member object representing a user within a B2B organization, containing their profile information, authentication methods, roles, and registration details.
     """  # noqa
 
     type: str
@@ -31,11 +31,11 @@ class Membership(pydantic.BaseModel):
 class DiscoveredOrganization(pydantic.BaseModel):
     """
     Fields:
-      - member_authenticated: Indicates whether the Member has all of the factors needed to fully authenticate to this Organization. If false, the Member may need to complete an MFA step or complete a different primary authentication flow. See the `primary_required` and `mfa_required` fields for more details on each.
-      - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
-      - membership: Information about the membership.
-      - primary_required: Information about the primary authentication requirements of the Organization.
-      - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
+      - member_authenticated: A boolean indicating whether the member has been fully authenticated (true) or if additional steps like MFA are still required (false).
+      - organization: The Organization object containing details about the B2B organization, including settings for SSO, authentication methods, MFA policies, and member management.
+      - membership: A member's organizational membership record containing their role, status, and association details.
+      - primary_required: An object indicating that a primary authentication factor is required, containing the list of allowed authentication methods.
+      - mfa_required: An object indicating whether multi-factor authentication is required, and which MFA methods are available to complete the authentication flow.
     """  # noqa
 
     member_authenticated: bool

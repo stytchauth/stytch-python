@@ -50,7 +50,7 @@ class UpdateConnectionRequestOptions(pydantic.BaseModel):
 class CreateConnectionResponse(ResponseBase):
     """Response type for `External.create_connection`.
     Fields:
-      - connection: The `External Connection` object affected by this API call. See the [External Connection Object](https://stytch.com/docs/b2b/api/external-connection-object) for complete response field details.
+      - connection: An SSO or SCIM connection object containing configuration details for enterprise identity providers.
     """  # noqa
 
     connection: Optional[Connection] = None
@@ -59,7 +59,7 @@ class CreateConnectionResponse(ResponseBase):
 class UpdateConnectionResponse(ResponseBase):
     """Response type for `External.update_connection`.
     Fields:
-      - connection: The `External Connection` object affected by this API call. See the [External Connection Object](https://stytch.com/docs/b2b/api/external-connection-object) for complete response field details.
+      - connection: An SSO or SCIM connection object containing configuration details for enterprise identity providers.
     """  # noqa
 
     connection: Optional[Connection] = None

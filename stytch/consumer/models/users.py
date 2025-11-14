@@ -23,8 +23,8 @@ class SearchUsersQueryOperator(str, enum.Enum):
 class BiometricRegistration(pydantic.BaseModel):
     """
     Fields:
-      - biometric_registration_id: The unique ID for a biometric registration.
-      - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
+      - biometric_registration_id: The `biometric_registration_id` to be deleted.
+      - verified: A boolean indicating whether this contact method has been successfully authenticated by the User.
     """  # noqa
 
     biometric_registration_id: str
@@ -34,10 +34,10 @@ class BiometricRegistration(pydantic.BaseModel):
 class CryptoWallet(pydantic.BaseModel):
     """
     Fields:
-      - crypto_wallet_id: The unique ID for a crypto wallet
-      - crypto_wallet_address: The actual blockchain address of the User's crypto wallet.
-      - crypto_wallet_type: The blockchain that the User's crypto wallet operates on, e.g. Ethereum, Solana, etc.
-      - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
+      - crypto_wallet_id: The unique identifier for a cryptocurrency wallet registration.
+      - crypto_wallet_address: The blockchain address of the cryptocurrency wallet used for Web3 authentication.
+      - crypto_wallet_type: The type of wallet to authenticate. Currently `ethereum` and `solana` are supported. Wallets for any EVM-compatible chains (such as Polygon or BSC) are also supported and are grouped under the `ethereum` type.
+      - verified: A boolean indicating whether this contact method has been successfully authenticated by the User.
     """  # noqa
 
     crypto_wallet_id: str
@@ -50,8 +50,8 @@ class Email(pydantic.BaseModel):
     """
     Fields:
       - email_id: The unique ID of a specific email address.
-      - email: The email address.
-      - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
+      - email: The email address of the end user.
+      - verified: A boolean indicating whether this contact method has been successfully authenticated by the User.
     """  # noqa
 
     email_id: str
@@ -62,9 +62,9 @@ class Email(pydantic.BaseModel):
 class Name(pydantic.BaseModel):
     """
     Fields:
-      - first_name: The first name of the user.
-      - middle_name: The middle name(s) of the user.
-      - last_name: The last name of the user.
+      - first_name: The user's first name.
+      - middle_name: The user's middle name.
+      - last_name: The user's last name.
     """  # noqa
 
     first_name: Optional[str] = None
@@ -75,11 +75,11 @@ class Name(pydantic.BaseModel):
 class OAuthProvider(pydantic.BaseModel):
     """
     Fields:
-      - provider_type: Denotes the OAuth identity provider that the user has authenticated with, e.g. Google, Facebook, GitHub etc.
-      - provider_subject: The unique identifier for the User within a given OAuth provider. Also commonly called the "sub" or "Subject field" in OAuth protocols.
-      - profile_picture_url: If available, the `profile_picture_url` is a url of the User's profile picture set in OAuth identity the provider that the User has authenticated with, e.g. Facebook profile picture.
-      - locale: If available, the `locale` is the User's locale set in the OAuth identity provider that the user has authenticated with.
-      - oauth_user_registration_id: The unique ID for an OAuth registration.
+      - provider_type: The type of OAuth provider (e.g., google, microsoft, slack, github, hubspot) used for authentication.
+      - provider_subject: The unique identifier for the user in the identity provider's system, used to link external provider accounts to Stytch members.
+      - profile_picture_url: The URL of the member's profile picture, typically retrieved from OAuth providers.
+      - locale: If available, the locale set in the OAuth identity provider.
+      - oauth_user_registration_id: The unique identifier for the OAuth provider registration linking the user to their provider account.
     """  # noqa
 
     provider_type: str
@@ -92,8 +92,8 @@ class OAuthProvider(pydantic.BaseModel):
 class Password(pydantic.BaseModel):
     """
     Fields:
-      - password_id: The unique ID of a specific password
-      - requires_reset: Indicates whether this password requires a password reset
+      - password_id: The unique identifier for a password associated with a member or user.
+      - requires_reset: Boolean flag indicating whether a password must be reset before the user can authenticate.
     """  # noqa
 
     password_id: str
@@ -104,8 +104,8 @@ class PhoneNumber(pydantic.BaseModel):
     """
     Fields:
       - phone_id: The unique ID for the phone number.
-      - phone_number: The phone number.
-      - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
+      - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
+      - verified: A boolean indicating whether this contact method has been successfully authenticated by the User.
     """  # noqa
 
     phone_id: str
@@ -116,8 +116,8 @@ class PhoneNumber(pydantic.BaseModel):
 class ResultsMetadata(pydantic.BaseModel):
     """
     Fields:
-      - total: The total number of results returned by your search query. If totals have been disabled for your Stytch Workspace to improve search performance, the value will always be -1.
-      - next_cursor: The `next_cursor` string is returned when your search result contains more than one page of results. This value is passed into your next search call in the `cursor` field.
+      - total: The total count of items or results in a paginated response or collection.
+      - next_cursor: A cursor value for fetching the next page of paginated results.
     """  # noqa
 
     total: int
@@ -127,12 +127,8 @@ class ResultsMetadata(pydantic.BaseModel):
 class SearchUsersQuery(pydantic.BaseModel):
     """
     Fields:
-      - operator: The action to perform on the operands. The accepted values are:
-
-      `AND` – all the operand values provided must match.
-
-      `OR` – **[DEPRECATED]** the operator will return any matches to at least one of the operand values you supply. This parameter is retained for legacy use cases only and is no longer supported. We strongly recommend breaking down complex queries into multiple search queries instead.
-      - operands: An array of operand objects that contains all of the filters and values to apply to your search search query.
+      - operator: The action to perform on the operands, either `AND` or `OR`.
+      - operands: An array of operand objects that contains all of the filters and values to apply to your search query.
     """  # noqa
 
     operator: SearchUsersQueryOperator
@@ -142,8 +138,8 @@ class SearchUsersQuery(pydantic.BaseModel):
 class TOTP(pydantic.BaseModel):
     """
     Fields:
-      - totp_id: The unique ID for a TOTP instance.
-      - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
+      - totp_id: The unique identifier for the TOTP (Time-based One-Time Password) registration.
+      - verified: A boolean indicating whether this contact method has been successfully authenticated by the User.
     """  # noqa
 
     totp_id: str
@@ -154,11 +150,11 @@ class UserConnectedApp(pydantic.BaseModel):
     """
     Fields:
       - connected_app_id: The ID of the Connected App.
-      - name: The name of the Connected App.
-      - description: A description of the Connected App.
+      - name: The `name` of the WebAuthn registration or Passkey.
+      - description: An optional description for the rule.
       - client_type: The type of Connected App. Supported values are `first_party`, `first_party_public`, `third_party`, and `third_party_public`.
-      - scopes_granted: The scopes granted to the Connected App at the completion of the last authorization flow.
-      - logo_url: The logo URL of the Connected App, if any.
+      - scopes_granted: The list of OAuth scopes that were actually granted to the access token, which may be a subset of requested scopes.
+      - logo_url: The URL of the logo image for the organization, SSO connection, or connected application.
     """  # noqa
 
     connected_app_id: str
@@ -172,12 +168,12 @@ class UserConnectedApp(pydantic.BaseModel):
 class WebAuthnRegistration(pydantic.BaseModel):
     """
     Fields:
-      - webauthn_registration_id: The unique ID for the Passkey or WebAuthn registration.
-      - domain: The `domain` on which Passkey or WebAuthn registration was started. This will be the domain of your app.
-      - user_agent: The user agent of the User.
-      - verified: The verified boolean denotes whether or not this send method, e.g. phone number, email address, etc., has been successfully authenticated by the User.
-      - authenticator_type: The `authenticator_type` string displays the requested authenticator type of the Passkey or WebAuthn device. The two valid types are "platform" and "cross-platform". If no value is present, the Passkey or WebAuthn device was created without an authenticator type preference.
-      - name: The `name` of the Passkey or WebAuthn registration.
+      - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
+      - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
+      - user_agent: The user agent of the client.
+      - verified: A boolean indicating whether this contact method has been successfully authenticated by the User.
+      - authenticator_type: The requested authenticator type of the Passkey or WebAuthn device. The two valid values are `platform` and `cross-platform`. If no value passed, we assume both values are allowed.
+      - name: The `name` of the WebAuthn registration or Passkey.
     """  # noqa
 
     webauthn_registration_id: str
@@ -191,26 +187,25 @@ class WebAuthnRegistration(pydantic.BaseModel):
 class User(pydantic.BaseModel):
     """
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - emails: An array of email objects for the User.
-      - status: The status of the User. The possible values are `pending` and `active`.
+      - status: The status of the entity.
       - phone_numbers: An array of phone number objects linked to the User.
-      - webauthn_registrations: An array that contains a list of all Passkey or WebAuthn registrations for a given User in the Stytch API.
+      - webauthn_registrations: An array that contains a list of all Passkey or WebAuthn registrations for a given User.
       - providers: An array of OAuth `provider` objects linked to the User.
-      - totps: An array containing a list of all TOTP instances for a given User in the Stytch API.
-      - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
-      - biometric_registrations: An array that contains a list of all biometric registrations for a given User in the Stytch API.
-      - is_locked: (no documentation yet)
-      - roles: Roles assigned to this User.
-       See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
-      - name: The name of the User. Each field in the `name` object is optional.
-      - created_at: The timestamp of the User's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - password: The password object is returned for users with a password.
-      - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-      - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-      - external_id: (no documentation yet)
-      - lock_created_at: (no documentation yet)
-      - lock_expires_at: (no documentation yet)
+      - totps: An array containing a list of all TOTP instances for a given User.
+      - crypto_wallets: An array of crypto wallet objects linked to the User.
+      - biometric_registrations: A list of biometric registration objects for a given User.
+      - is_locked: A boolean indicating whether the user's account is currently locked.
+      - roles: An array of [Role objects](https://stytch.com/docs/api/rbac-role-object).
+      - name: The name of the User.
+      - created_at: The timestamp indicating when the resource was created.
+      - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+      - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+      - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+      - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+      - lock_created_at: The timestamp when the user's account was locked due to security concerns or policy violations.
+      - lock_expires_at: The timestamp when the user's account lock will automatically expire.
     """  # noqa
 
     user_id: str
@@ -237,7 +232,7 @@ class User(pydantic.BaseModel):
 class ConnectedAppsResponse(ResponseBase):
     """Response type for `Users.connected_apps`.
     Fields:
-      - connected_apps: An array of Connected Apps with which the User has successfully completed an authorization flow.
+      - connected_apps: A list of connected applications that the member or organization has authorized.
     """  # noqa
 
     connected_apps: List[UserConnectedApp]
@@ -246,11 +241,11 @@ class ConnectedAppsResponse(ResponseBase):
 class CreateResponse(ResponseBase):
     """Response type for `Users.create`.
     Fields:
-      - user_id: The unique ID of the affected User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - email_id: The unique ID of a specific email address.
-      - status: The status of the User. The possible values are `pending` and `active`.
+      - status: The status of the entity.
       - phone_id: The unique ID for the phone number.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -263,8 +258,8 @@ class CreateResponse(ResponseBase):
 class DeleteBiometricRegistrationResponse(ResponseBase):
     """Response type for `Users.delete_biometric_registration`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -274,8 +269,8 @@ class DeleteBiometricRegistrationResponse(ResponseBase):
 class DeleteCryptoWalletResponse(ResponseBase):
     """Response type for `Users.delete_crypto_wallet`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -285,8 +280,8 @@ class DeleteCryptoWalletResponse(ResponseBase):
 class DeleteEmailResponse(ResponseBase):
     """Response type for `Users.delete_email`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -296,8 +291,8 @@ class DeleteEmailResponse(ResponseBase):
 class DeleteOAuthRegistrationResponse(ResponseBase):
     """Response type for `Users.delete_oauth_registration`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -307,8 +302,8 @@ class DeleteOAuthRegistrationResponse(ResponseBase):
 class DeletePasswordResponse(ResponseBase):
     """Response type for `Users.delete_password`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -318,8 +313,8 @@ class DeletePasswordResponse(ResponseBase):
 class DeletePhoneNumberResponse(ResponseBase):
     """Response type for `Users.delete_phone_number`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -329,7 +324,7 @@ class DeletePhoneNumberResponse(ResponseBase):
 class DeleteResponse(ResponseBase):
     """Response type for `Users.delete`.
     Fields:
-      - user_id: The unique ID of the deleted User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
     """  # noqa
 
     user_id: str
@@ -338,8 +333,8 @@ class DeleteResponse(ResponseBase):
 class DeleteTOTPResponse(ResponseBase):
     """Response type for `Users.delete_totp`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -349,8 +344,8 @@ class DeleteTOTPResponse(ResponseBase):
 class DeleteWebAuthnRegistrationResponse(ResponseBase):
     """Response type for `Users.delete_webauthn_registration`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -360,8 +355,8 @@ class DeleteWebAuthnRegistrationResponse(ResponseBase):
 class ExchangePrimaryFactorResponse(ResponseBase):
     """Response type for `Users.exchange_primary_factor`.
     Fields:
-      - user_id: The unique ID of the affected User.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str
@@ -371,26 +366,25 @@ class ExchangePrimaryFactorResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Users.get`.
     Fields:
-      - user_id: The unique ID of the returned User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - emails: An array of email objects for the User.
-      - status: The status of the User. The possible values are `pending` and `active`.
+      - status: The status of the entity.
       - phone_numbers: An array of phone number objects linked to the User.
-      - webauthn_registrations: An array that contains a list of all Passkey or WebAuthn registrations for a given User in the Stytch API.
+      - webauthn_registrations: An array that contains a list of all Passkey or WebAuthn registrations for a given User.
       - providers: An array of OAuth `provider` objects linked to the User.
-      - totps: An array containing a list of all TOTP instances for a given User in the Stytch API.
-      - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
-      - biometric_registrations: An array that contains a list of all biometric registrations for a given User in the Stytch API.
-      - is_locked: (no documentation yet)
-      - roles: Roles assigned to this User.
-       See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
-      - name: The name of the User. Each field in the `name` object is optional.
-      - created_at: The timestamp of the User's creation. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - password: The password object is returned for users with a password.
-      - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-      - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-      - external_id: (no documentation yet)
-      - lock_created_at: (no documentation yet)
-      - lock_expires_at: (no documentation yet)
+      - totps: An array containing a list of all TOTP instances for a given User.
+      - crypto_wallets: An array of crypto wallet objects linked to the User.
+      - biometric_registrations: A list of biometric registration objects for a given User.
+      - is_locked: A boolean indicating whether the user's account is currently locked.
+      - roles: An array of [Role objects](https://stytch.com/docs/api/rbac-role-object).
+      - name: The name of the User.
+      - created_at: The timestamp indicating when the resource was created.
+      - password: The password for the user. Any UTF8 character is allowed, e.g. spaces, emojis, non-English characters, etc.
+      - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+      - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+      - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
+      - lock_created_at: The timestamp when the user's account was locked due to security concerns or policy violations.
+      - lock_expires_at: The timestamp when the user's account lock will automatically expire.
     """  # noqa
 
     user_id: str
@@ -423,8 +417,8 @@ class RevokeResponse(ResponseBase):
 class SearchResponse(ResponseBase):
     """Response type for `Users.search`.
     Fields:
-      - results: An array of results that match your search query.
-      - results_metadata: The search `results_metadata` object contains metadata relevant to your specific query like total and `next_cursor`.
+      - results: A list of result objects returned from a search or list operation.
+      - results_metadata: Metadata about paginated search results, including total count and cursor for fetching the next page.
     """  # noqa
 
     results: List[User]
@@ -434,11 +428,11 @@ class SearchResponse(ResponseBase):
 class UpdateResponse(ResponseBase):
     """Response type for `Users.update`.
     Fields:
-      - user_id: The unique ID of the updated User.
+      - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
       - emails: An array of email objects for the User.
       - phone_numbers: An array of phone number objects linked to the User.
-      - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
-      - user: The `user` object affected by this API call. See the [Get user endpoint](https://stytch.com/docs/api/get-user) for complete response field details.
+      - crypto_wallets: An array of crypto wallet objects linked to the User.
+      - user: The `user` object affected by this API call.
     """  # noqa
 
     user_id: str

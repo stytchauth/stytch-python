@@ -57,19 +57,18 @@ class Users:
 
         Fields:
           - email: The email address of the end user.
-          - name: The name of the user. Each field in the name object is optional.
-          - attributes: (no documentation yet)
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - name: The name of the User.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
+          - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
-                If true, users will be saved with status pending in Stytch's backend until authenticated.
-                If false, users will be created as active. An example usage of
-                a true flag would be to require users to verify their phone by entering the OTP code before creating
-                an account for them.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+        If true, users will be saved with status pending in Stytch's backend until authenticated.
+        If false, users will be created as active. An example usage of
+        a true flag would be to require users to verify their phone by entering the OTP code before creating
+        an account for them.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: Roles to explicitly assign to this User.
-           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+          - roles: An array of [Role objects](https://stytch.com/docs/api/rbac-role-object).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -114,19 +113,18 @@ class Users:
 
         Fields:
           - email: The email address of the end user.
-          - name: The name of the user. Each field in the name object is optional.
-          - attributes: (no documentation yet)
-          - phone_number: The phone number to use for one-time passcodes. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX). You may use +10000000000 to test this endpoint, see [Testing](https://stytch.com/docs/home#resources_testing) for more detail.
+          - name: The name of the User.
+          - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
+          - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
           - create_user_as_pending: Flag for whether or not to save a user as pending vs active in Stytch. Defaults to false.
-                If true, users will be saved with status pending in Stytch's backend until authenticated.
-                If false, users will be created as active. An example usage of
-                a true flag would be to require users to verify their phone by entering the OTP code before creating
-                an account for them.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+        If true, users will be saved with status pending in Stytch's backend until authenticated.
+        If false, users will be created as active. An example usage of
+        a true flag would be to require users to verify their phone by entering the OTP code before creating
+        an account for them.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: Roles to explicitly assign to this User.
-           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+          - roles: An array of [Role objects](https://stytch.com/docs/api/rbac-role-object).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -162,7 +160,7 @@ class Users:
         """Get information about a specific User.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -180,7 +178,7 @@ class Users:
         """Get information about a specific User.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -198,7 +196,7 @@ class Users:
         query: Optional[Union[SearchUsersQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
         """
-        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 150 requests/minute.
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary depending on query complexity and the endpoint has restrictive rate limits.
 
         Search for Users within your Stytch Project.
 
@@ -211,8 +209,8 @@ class Users:
         [This Github repository](https://github.com/stytchauth/stytch-node-export-users) contains a utility that leverages the Search Users endpoint to export all of your User data to a CSV or JSON file.
 
         Fields:
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -235,7 +233,7 @@ class Users:
         query: Optional[SearchUsersQuery] = None,
     ) -> SearchResponse:
         """
-        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary from ~150 milliseconds to 9 seconds depending on query complexity and rate limits are set to 150 requests/minute.
+        **Warning**: This endpoint is not recommended for use in login flows. Scaling issues may occur, as search performance may vary depending on query complexity and the endpoint has restrictive rate limits.
 
         Search for Users within your Stytch Project.
 
@@ -248,8 +246,8 @@ class Users:
         [This Github repository](https://github.com/stytchauth/stytch-node-export-users) contains a utility that leverages the Search Users endpoint to export all of your User data to a CSV or JSON file.
 
         Fields:
-          - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
-          - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - cursor: The `cursor` field allows you to paginate through your results. If your query returns more than the size of the page, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
+          - limit: The number of search results to return per page. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
           - query: The optional query object contains the operator, i.e. `AND` or `OR`, and the operands that will filter your results. Only an operator is required. If you include no operands, no filtering will be applied. If you include no query object, it will return all results with no filtering applied.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -280,14 +278,13 @@ class Users:
         **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing User's `user_id` while calling the `/send` endpoint, the new, unverified email address or phone number will be added to the existing User object. If the user successfully authenticates within 5 minutes of the `/send` request, the new email address or phone number will be marked as verified and remain permanently on the existing Stytch User. Otherwise, it will be removed from the User object, and any subsequent login requests using that phone number will create a new User. We require this process to guard against an account takeover vulnerability.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
-          - name: The name of the user. Each field in the name object is optional.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+          - name: The name of the User.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: Roles to explicitly assign to this User.
-           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+          - roles: An array of [Role objects](https://stytch.com/docs/api/rbac-role-object).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -327,14 +324,13 @@ class Users:
         **Note:** In order to add a new email address or phone number to an existing User object, pass the new email address or phone number into the respective `/send` endpoint for the authentication method of your choice. If you specify the existing User's `user_id` while calling the `/send` endpoint, the new, unverified email address or phone number will be added to the existing User object. If the user successfully authenticates within 5 minutes of the `/send` request, the new email address or phone number will be marked as verified and remain permanently on the existing Stytch User. Otherwise, it will be removed from the User object, and any subsequent login requests using that phone number will create a new User. We require this process to guard against an account takeover vulnerability.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
-          - name: The name of the user. Each field in the name object is optional.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
+          - name: The name of the User.
           - attributes: Provided attributes to help with fraud detection. These values are pulled and passed into Stytch endpoints by your application.
-          - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-          - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - trusted_metadata: An arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
+          - untrusted_metadata: An arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
           - external_id: An identifier that can be used in API calls wherever a user_id is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters.
-          - roles: Roles to explicitly assign to this User.
-           See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
+          - roles: An array of [Role objects](https://stytch.com/docs/api/rbac-role-object).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -374,9 +370,9 @@ class Users:
         Use this endpoint with caution as it performs an admin level action.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - email_address: The email address to exchange to.
-          - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
+          - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -408,9 +404,9 @@ class Users:
         Use this endpoint with caution as it performs an admin level action.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - email_address: The email address to exchange to.
-          - phone_number: The phone number to exchange to. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
+          - phone_number: The phone number in E.164 format (i.e. +1XXXXXXXXXX).
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -432,7 +428,7 @@ class Users:
         """Delete a User from Stytch.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -450,7 +446,7 @@ class Users:
         """Delete a User from Stytch.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -468,7 +464,7 @@ class Users:
         """Delete an email from a User.
 
         Fields:
-          - email_id: The `email_id` to be deleted.
+          - email_id: The unique ID of a specific email address.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -486,7 +482,7 @@ class Users:
         """Delete an email from a User.
 
         Fields:
-          - email_id: The `email_id` to be deleted.
+          - email_id: The unique ID of a specific email address.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -504,7 +500,7 @@ class Users:
         """Delete a phone number from a User.
 
         Fields:
-          - phone_id: The `phone_id` to be deleted.
+          - phone_id: The unique ID for the phone number.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -522,7 +518,7 @@ class Users:
         """Delete a phone number from a User.
 
         Fields:
-          - phone_id: The `phone_id` to be deleted.
+          - phone_id: The unique ID for the phone number.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -540,7 +536,7 @@ class Users:
         """Delete a WebAuthn registration from a User.
 
         Fields:
-          - webauthn_registration_id: The `webauthn_registration_id` to be deleted.
+          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -562,7 +558,7 @@ class Users:
         """Delete a WebAuthn registration from a User.
 
         Fields:
-          - webauthn_registration_id: The `webauthn_registration_id` to be deleted.
+          - webauthn_registration_id: Globally unique UUID that identifies a Passkey or WebAuthn registration in the Stytch API. The `webauthn_registration_id` is used when you need to operate on a specific User's WebAuthn registration.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -628,7 +624,7 @@ class Users:
         """Delete a TOTP from a User.
 
         Fields:
-          - totp_id: The `totp_id` to be deleted.
+          - totp_id: The unique identifier for the TOTP (Time-based One-Time Password) registration.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -646,7 +642,7 @@ class Users:
         """Delete a TOTP from a User.
 
         Fields:
-          - totp_id: The `totp_id` to be deleted.
+          - totp_id: The unique identifier for the TOTP (Time-based One-Time Password) registration.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -664,7 +660,7 @@ class Users:
         """Delete a crypto wallet from a User.
 
         Fields:
-          - crypto_wallet_id: The `crypto_wallet_id` to be deleted.
+          - crypto_wallet_id: The unique identifier for a cryptocurrency wallet registration.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -682,7 +678,7 @@ class Users:
         """Delete a crypto wallet from a User.
 
         Fields:
-          - crypto_wallet_id: The `crypto_wallet_id` to be deleted.
+          - crypto_wallet_id: The unique identifier for a cryptocurrency wallet registration.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -700,7 +696,7 @@ class Users:
         """Delete a password from a User.
 
         Fields:
-          - password_id: The `password_id` to be deleted.
+          - password_id: The unique identifier for a password associated with a member or user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -718,7 +714,7 @@ class Users:
         """Delete a password from a User.
 
         Fields:
-          - password_id: The `password_id` to be deleted.
+          - password_id: The unique identifier for a password associated with a member or user.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -736,7 +732,7 @@ class Users:
         """Delete an OAuth registration from a User.
 
         Fields:
-          - oauth_user_registration_id: The `oauth_user_registration_id` to be deleted.
+          - oauth_user_registration_id: The unique identifier for the OAuth provider registration linking the user to their provider account.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -758,7 +754,7 @@ class Users:
         """Delete an OAuth registration from a User.
 
         Fields:
-          - oauth_user_registration_id: The `oauth_user_registration_id` to be deleted.
+          - oauth_user_registration_id: The unique identifier for the OAuth provider registration linking the user to their provider account.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -781,7 +777,7 @@ class Users:
         no longer be returned in the response.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -802,7 +798,7 @@ class Users:
         no longer be returned in the response.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -823,7 +819,7 @@ class Users:
         Connected App.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - connected_app_id: The ID of the Connected App.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -848,7 +844,7 @@ class Users:
         Connected App.
 
         Fields:
-          - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
+          - user_id: The unique ID for a User. When making API calls, you may use an `external_id` in place of the `user_id` if one is set for the User.
           - connected_app_id: The ID of the Connected App.
         """  # noqa
         headers: Dict[str, str] = {}

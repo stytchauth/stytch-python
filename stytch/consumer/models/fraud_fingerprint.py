@@ -17,11 +17,11 @@ class LookupResponse(ResponseBase):
     """Response type for `Fingerprint.lookup`.
     Fields:
       - telemetry_id: The telemetry ID associated with the fingerprint getting looked up.
-      - fingerprints: A Stytch fingerprint consists of the following identifiers:
-      - verdict: The metadata associated with each fingerprint
+      - fingerprints: Device fingerprints used to uniquely identify and track devices for fraud detection.
+      - verdict: The metadata associated with each fingerprint.
       - external_metadata: External identifiers that you wish to associate with the given telemetry ID. You will be able to search for fingerprint results by these identifiers in the DFP analytics dashboard. External metadata fields may not exceed 65 characters. They may only contain alphanumerics and the characters `_` `-` `+` `.` or `@`.
-      - created_at: The time when the fingerprint was taken. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
-      - expires_at: The timestamp when the fingerprint expires. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - created_at: The time when the fingerprint was taken.
+      - expires_at: The timestamp when the fingerprint expires.
       - properties: Additional information about the user's browser and network.
       - raw_signals: The raw device attributes, such as screen size, that were collected by the Device Fingerprinting product to generate the fingerprints and verdict. You must be specifically enabled for the raw signals feature to see this field. You can find documentation for the specific fields in the [guides](https://stytch.com/docs/fraud/guides/device-fingerprinting/reference/raw-signals).
     """  # noqa

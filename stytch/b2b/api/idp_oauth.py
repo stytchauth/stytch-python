@@ -55,14 +55,14 @@ class OAuth:
         One of these fields must be used if the Connected App intends to complete the [Exchange Access Token](https://stytch.com/docs/b2b/api/connected-app-access-token-exchange) flow.
 
         Fields:
-          - client_id: The ID of the Connected App client.
-          - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow.  This field is required when using the `authorization_code` grant.
+          - client_id: The ID of the client.
+          - redirect_uri: The callback URI used to redirect the member after authentication. This is the same URI provided at the start of the OAuth flow. This field is required when using the `authorization_code` grant.
           - response_type: The OAuth 2.0 response type. For authorization code flows this value is `code`.
           - scopes: An array of scopes requested by the client.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - session_token: A secret token for a given Stytch Session.
-          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - session_token: The `session_token` associated with a Member's existing Session.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
           - prompt: Space separated list that specifies how the Authorization Server should prompt the user for reauthentication and consent. Only `consent` is supported today.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -121,14 +121,14 @@ class OAuth:
         One of these fields must be used if the Connected App intends to complete the [Exchange Access Token](https://stytch.com/docs/b2b/api/connected-app-access-token-exchange) flow.
 
         Fields:
-          - client_id: The ID of the Connected App client.
-          - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow.  This field is required when using the `authorization_code` grant.
+          - client_id: The ID of the client.
+          - redirect_uri: The callback URI used to redirect the member after authentication. This is the same URI provided at the start of the OAuth flow. This field is required when using the `authorization_code` grant.
           - response_type: The OAuth 2.0 response type. For authorization code flows this value is `code`.
           - scopes: An array of scopes requested by the client.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - session_token: A secret token for a given Stytch Session.
-          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - session_token: The `session_token` associated with a Member's existing Session.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
           - prompt: Space separated list that specifies how the Authorization Server should prompt the user for reauthentication and consent. Only `consent` is supported today.
         """  # noqa
         headers: Dict[str, str] = {}
@@ -189,20 +189,20 @@ class OAuth:
         One of these fields must be used if the Connected App intends to complete the [Exchange Access Token](https://stytch.com/docs/b2b/api/connected-app-access-token-exchange) flow.
 
         Fields:
-          - consent_granted: Indicates whether the user granted the requested scopes.
+          - consent_granted: Indicates whether the member granted the requested scopes.
           - scopes: An array of scopes requested by the client.
-          - client_id: The ID of the Connected App client.
-          - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow.  This field is required when using the `authorization_code` grant.
+          - client_id: The ID of the client.
+          - redirect_uri: The callback URI used to redirect the member after authentication. This is the same URI provided at the start of the OAuth flow. This field is required when using the `authorization_code` grant.
           - response_type: The OAuth 2.0 response type. For authorization code flows this value is `code`.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - session_token: A secret token for a given Stytch Session.
-          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-          - prompt: Space separated list that specifies how the Authorization Server should prompt the user for reauthentication and consent. Only `consent` is supported today.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - session_token: The `session_token` associated with a Member's existing Session.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+          - prompt: Space separated list that specifies how the Authorization Server should prompt the member for reauthentication and consent. Only `consent` is supported today.
           - state: An opaque value used to maintain state between the request and callback.
           - nonce: A string used to associate a client session with an ID token to mitigate replay attacks.
-          - code_challenge: A base64url encoded challenge derived from the code verifier for PKCE flows.
-          - resources: (no documentation yet)
+          - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
+          - resources: A list of RBAC resources that define what entities can be accessed or modified, used in authorization policies.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -271,20 +271,20 @@ class OAuth:
         One of these fields must be used if the Connected App intends to complete the [Exchange Access Token](https://stytch.com/docs/b2b/api/connected-app-access-token-exchange) flow.
 
         Fields:
-          - consent_granted: Indicates whether the user granted the requested scopes.
+          - consent_granted: Indicates whether the member granted the requested scopes.
           - scopes: An array of scopes requested by the client.
-          - client_id: The ID of the Connected App client.
-          - redirect_uri: The callback URI used to redirect the user after authentication. This is the same URI provided at the start of the OAuth flow.  This field is required when using the `authorization_code` grant.
+          - client_id: The ID of the client.
+          - redirect_uri: The callback URI used to redirect the member after authentication. This is the same URI provided at the start of the OAuth flow. This field is required when using the `authorization_code` grant.
           - response_type: The OAuth 2.0 response type. For authorization code flows this value is `code`.
-          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
-          - member_id: Globally unique UUID that identifies a specific Member. The `member_id` is critical to perform operations on a Member, so be sure to preserve this value. You may use an external_id here if one is set for the member.
-          - session_token: A secret token for a given Stytch Session.
-          - session_jwt: The JSON Web Token (JWT) for a given Stytch Session.
-          - prompt: Space separated list that specifies how the Authorization Server should prompt the user for reauthentication and consent. Only `consent` is supported today.
+          - organization_id: Globally unique UUID that identifies a specific Organization. When making API calls, you may also use the organization_slug or organization_external_id as a convenience.
+          - member_id: Globally unique UUID that identifies a specific Member. When making API calls, you may use an `external_id` in place of the `member_id` if one is set for the member.
+          - session_token: The `session_token` associated with a Member's existing Session.
+          - session_jwt: The JSON Web Token (JWT) associated with a Member's existing Session.
+          - prompt: Space separated list that specifies how the Authorization Server should prompt the member for reauthentication and consent. Only `consent` is supported today.
           - state: An opaque value used to maintain state between the request and callback.
           - nonce: A string used to associate a client session with an ID token to mitigate replay attacks.
-          - code_challenge: A base64url encoded challenge derived from the code verifier for PKCE flows.
-          - resources: (no documentation yet)
+          - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
+          - resources: A list of RBAC resources that define what entities can be accessed or modified, used in authorization policies.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
