@@ -122,6 +122,15 @@ class PolicyRole(pydantic.BaseModel):
     permissions: List[PolicyRolePermission]
 
 
+class OrgPolicy(pydantic.BaseModel):
+    """
+    Fields:
+      - roles: An array of [Role objects](https://stytch.com/docs/b2b/api/rbac-role-object).
+    """  # noqa
+
+    roles: List[PolicyRole]
+
+
 class PolicyScopePermission(pydantic.BaseModel):
     resource_id: str
     actions: List[str]

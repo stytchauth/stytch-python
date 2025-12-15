@@ -19,7 +19,7 @@ from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
 
 
-class Whatsapp:
+class WhatsApp:
     def __init__(
         self, api_base: ApiBase, sync_client: SyncClient, async_client: AsyncClient
     ) -> None:

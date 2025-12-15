@@ -10,7 +10,7 @@ from typing import Any, Dict, Optional, Union
 
 from stytch.consumer.api.otp_email import Email
 from stytch.consumer.api.otp_sms import Sms
-from stytch.consumer.api.otp_whatsapp import Whatsapp
+from stytch.consumer.api.otp_whatsapp import WhatsApp
 from stytch.consumer.models.attribute import Attributes
 from stytch.consumer.models.magic_links import Options
 from stytch.consumer.models.otp import AuthenticateResponse
@@ -30,7 +30,7 @@ class OTPs:
             sync_client=self.sync_client,
             async_client=self.async_client,
         )
-        self.whatsapp = Whatsapp(
+        self.whatsapp = WhatsApp(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
