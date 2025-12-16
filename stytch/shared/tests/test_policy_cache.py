@@ -84,7 +84,9 @@ class TestMergePolicies(unittest.TestCase):
                     actions=["read", "write"],
                 )
             ],
-            scopes=[PolicyScope(scope="read:all", description="Read all", permissions=[])],
+            scopes=[
+                PolicyScope(scope="read:all", description="Read all", permissions=[])
+            ],
         )
         org_policy = OrgPolicy(
             roles=[
