@@ -138,7 +138,7 @@ class TestPolicyCacheOrgPolicy(unittest.TestCase):
 
     def test_get_with_org_returns_merged_policy(self) -> None:
         rbac = FakeRBAC(self.project_policy, {"org-123": self.org_policy})
-        cache = PolicyCache(rbac, refresh_interval_seconds=600)
+        cache = PolicyCache(rbac, refresh_interval_seconds=600)  # type: ignore[arg-type]
 
         result = cache.get_with_org("org-123")
 
@@ -149,7 +149,7 @@ class TestPolicyCacheOrgPolicy(unittest.TestCase):
 
     def test_org_policy_is_cached(self) -> None:
         rbac = FakeRBAC(self.project_policy, {"org-123": self.org_policy})
-        cache = PolicyCache(rbac, refresh_interval_seconds=600)
+        cache = PolicyCache(rbac, refresh_interval_seconds=600)  # type: ignore[arg-type]
 
         cache.get_with_org("org-123")
         cache.get_with_org("org-123")
@@ -182,7 +182,7 @@ class TestPolicyCacheOrgPolicy(unittest.TestCase):
         rbac = FakeRBAC(
             self.project_policy, {"org-123": org_123_policy, "org-456": org_456_policy}
         )
-        cache = PolicyCache(rbac, refresh_interval_seconds=600)
+        cache = PolicyCache(rbac, refresh_interval_seconds=600)  # type: ignore[arg-type]
 
         result_123 = cache.get_with_org("org-123")
         result_456 = cache.get_with_org("org-456")
@@ -194,7 +194,7 @@ class TestPolicyCacheOrgPolicy(unittest.TestCase):
 
     def test_none_org_policy_is_cached(self) -> None:
         rbac = FakeRBAC(self.project_policy, {})
-        cache = PolicyCache(rbac, refresh_interval_seconds=600)
+        cache = PolicyCache(rbac, refresh_interval_seconds=600)  # type: ignore[arg-type]
 
         cache.get_with_org("org-no-policy")
         cache.get_with_org("org-no-policy")
@@ -204,7 +204,7 @@ class TestPolicyCacheOrgPolicy(unittest.TestCase):
 
     def test_cache_respects_refresh_interval(self) -> None:
         rbac = FakeRBAC(self.project_policy, {"org-123": self.org_policy})
-        cache = PolicyCache(rbac, refresh_interval_seconds=1)
+        cache = PolicyCache(rbac, refresh_interval_seconds=1)  # type: ignore[arg-type]
 
         cache.get_with_org("org-123")
         self.assertEqual(rbac.organizations.call_count, 1)
