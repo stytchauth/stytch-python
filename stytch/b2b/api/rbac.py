@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from stytch.b2b.api.rbac_organizations import Organizations
 from stytch.b2b.models.rbac import PolicyResponse
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -20,6 +21,11 @@ class RBAC:
         self.api_base = api_base
         self.sync_client = sync_client
         self.async_client = async_client
+        self.organizations = Organizations(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
 
     def policy(
         self,

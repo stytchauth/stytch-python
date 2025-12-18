@@ -34,7 +34,7 @@ class SendRequestLocale(str, enum.Enum):
 
 
 class LoginOrCreateResponse(ResponseBase):
-    """Response type for `Whatsapp.login_or_create`.
+    """Response type for `WhatsApp.login_or_create`.
     Fields:
       - user_id: The unique ID of the affected User.
       - phone_id: The unique ID for the phone number.
@@ -47,7 +47,7 @@ class LoginOrCreateResponse(ResponseBase):
 
 
 class SendResponse(ResponseBase):
-    """Response type for `Whatsapp.send`.
+    """Response type for `WhatsApp.send`.
     Fields:
       - user_id: The unique ID of the affected User.
       - phone_id: The unique ID for the phone number.

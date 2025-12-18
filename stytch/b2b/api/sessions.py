@@ -990,7 +990,9 @@ class Sessions:
                 raise ValueError("Invalid roles claim. Expected a list of strings.")
 
             rbac_local.perform_authorization_check(
-                policy=self.policy_cache.get(),
+                policy=self.policy_cache.get_with_org(
+                    local_resp.member_session.organization_id
+                ),
                 subject_roles=local_resp.roles_claim,
                 subject_org_id=local_resp.member_session.organization_id,
                 authorization_check=authorization_check,
@@ -1019,7 +1021,9 @@ class Sessions:
                 raise ValueError("Invalid roles claim. Expected a list of strings.")
 
             rbac_local.perform_authorization_check(
-                policy=await self.policy_cache.get_async(),
+                policy=await self.policy_cache.get_with_org_async(
+                    local_resp.member_session.organization_id
+                ),
                 subject_roles=local_resp.roles_claim,
                 subject_org_id=local_resp.member_session.organization_id,
                 authorization_check=authorization_check,
