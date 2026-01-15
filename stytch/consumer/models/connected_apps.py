@@ -6,9 +6,33 @@
 
 from __future__ import annotations
 
+import enum
 from typing import List, Optional
 
 import pydantic
+
+
+class SearchConnectedAppsOperandClientTypes(str, enum.Enum):
+    FIRST_PARTY = "first_party"
+    FIRST_PARTY_PUBLIC = "first_party_public"
+    THIRD_PARTY = "third_party"
+    THIRD_PARTY_PUBLIC = "third_party_public"
+
+
+class SearchConnectedAppsOperandCreationMethods(str, enum.Enum):
+    DCR = "dcr"
+    CIMD = "cimd"
+    MANUAL = "manual"
+
+
+class SearchConnectedAppsOperandFilterTypeSearchConnectedAppsOperandFilterType(
+    str, enum.Enum
+):
+    UNKNOWN_OPERAND = "UNKNOWN_OPERAND"
+    CLIENT_IDS = "client_ids"
+    CLIENT_NAME_PREFIX = "client_name_prefix"
+    CLIENT_TYPES = "client_types"
+    CREATION_METHODS = "creation_methods"
 
 
 class ConnectedApp(pydantic.BaseModel):
@@ -30,6 +54,7 @@ class ConnectedApp(pydantic.BaseModel):
       - access_token_custom_audience: (no documentation yet)
       - logo_url: The logo URL of the Connected App, if any.
       - client_id_metadata_url: (no documentation yet)
+      - creation_method: (no documentation yet)
     """  # noqa
 
     client_id: str
@@ -48,6 +73,7 @@ class ConnectedApp(pydantic.BaseModel):
     access_token_custom_audience: Optional[str] = None
     logo_url: Optional[str] = None
     client_id_metadata_url: Optional[str] = None
+    creation_method: Optional[str] = None
 
 
 class ConnectedAppPublic(pydantic.BaseModel):
@@ -149,3 +175,21 @@ class ResultsMetadata(pydantic.BaseModel):
 
     total: int
     next_cursor: Optional[str] = None
+
+
+class SearchConnectedAppsOperand(pydantic.BaseModel):
+    client_ids: List[str]
+    client_types: List[SearchConnectedAppsOperandClientTypes]
+    creation_methods: List[SearchConnectedAppsOperandCreationMethods]
+    filter: Optional[
+        SearchConnectedAppsOperandFilterTypeSearchConnectedAppsOperandFilterType
+    ] = None
+    client_name_prefix: Optional[str] = None
+
+
+class SearchConnectedAppsOperandFilterType(pydantic.BaseModel):
+    pass
+
+
+class SearchConnectedAppsQuery(pydantic.BaseModel):
+    operands: List[SearchConnectedAppsOperand]

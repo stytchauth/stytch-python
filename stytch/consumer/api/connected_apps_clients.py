@@ -9,6 +9,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Union
 
 from stytch.consumer.api.connected_apps_clients_secrets import Secrets
+from stytch.consumer.models.connected_apps import SearchConnectedAppsQuery
 from stytch.consumer.models.connected_apps_clients import (
     CreateRequestClientType,
     CreateResponse,
@@ -230,12 +231,14 @@ class Clients:
         self,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
+        query: Optional[Union[SearchConnectedAppsQuery, Dict[str, Any]]] = None,
     ) -> SearchResponse:
         """Search for Connected Apps. Supports cursor-based pagination. Specific filters coming soon.
 
         Fields:
           - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - query: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -243,6 +246,8 @@ class Clients:
             data["cursor"] = cursor
         if limit is not None:
             data["limit"] = limit
+        if query is not None:
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/connected_apps/clients/search", data)
         res = self.sync_client.post(url, data, headers)
@@ -252,12 +257,14 @@ class Clients:
         self,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
+        query: Optional[SearchConnectedAppsQuery] = None,
     ) -> SearchResponse:
         """Search for Connected Apps. Supports cursor-based pagination. Specific filters coming soon.
 
         Fields:
           - cursor: The `cursor` field allows you to paginate through your results. Each result array is limited to 1000 results. If your query returns more than 1000 results, you will need to paginate the responses using the `cursor`. If you receive a response that includes a non-null `next_cursor` in the `results_metadata` object, repeat the search call with the `next_cursor` value set to the `cursor` field to retrieve the next page of results. Continue to make search calls until the `next_cursor` in the response is null.
           - limit: The number of search results to return per page. The default limit is 100. A maximum of 1000 results can be returned by a single search request. If the total size of your result set is greater than one page size, you must paginate the response. See the `cursor` field.
+          - query: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {}
@@ -265,6 +272,8 @@ class Clients:
             data["cursor"] = cursor
         if limit is not None:
             data["limit"] = limit
+        if query is not None:
+            data["query"] = query if isinstance(query, dict) else query.dict()
 
         url = self.api_base.url_for("/v1/connected_apps/clients/search", data)
         res = await self.async_client.post(url, data, headers)

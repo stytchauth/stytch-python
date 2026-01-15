@@ -22,4 +22,9 @@ class GetOrgPolicyResponse(ResponseBase):
 
 
 class SetOrgPolicyResponse(ResponseBase):
+    """Response type for `Organizations.set_org_policy`.
+    Fields:
+      - org_policy: The organization-specific RBAC Policy that contains roles defined for this organization. Organization policies supplement the project-level RBAC policy with additional roles that are specific to the organization.
+    """  # noqa
+
     org_policy: Optional[OrgPolicy] = None

@@ -50,6 +50,22 @@ class CreateRequestOptions(pydantic.BaseModel):
         return headers
 
 
+class DeleteExternalIdRequestOptions(pydantic.BaseModel):
+    """
+    Fields:
+      - authorization: Optional authorization object.
+    Pass in an active Stytch Member session token or session JWT and the request
+    will be run using that member's permissions.
+    """  # noqa
+
+    authorization: Optional[Authorization] = None
+
+    def add_headers(self, headers: Dict[str, str]) -> Dict[str, str]:
+        if self.authorization is not None:
+            headers = self.authorization.add_headers(headers)
+        return headers
+
+
 class DeleteMFAPhoneNumberRequestOptions(pydantic.BaseModel):
     """
     Fields:
@@ -218,6 +234,12 @@ class CreateResponse(ResponseBase):
       - organization: The [Organization object](https://stytch.com/docs/b2b/api/organization-object).
     """  # noqa
 
+    member_id: str
+    member: Member
+    organization: Organization
+
+
+class DeleteExternalIdResponse(ResponseBase):
     member_id: str
     member: Member
     organization: Organization
