@@ -6,10 +6,10 @@ from stytch.b2b.models.rbac import (
     OrgPolicy,
     Policy,
     PolicyResource,
+    PolicyResponse,
     PolicyRole,
     PolicyRolePermission,
     PolicyScope,
-    PolicyResponse,
 )
 from stytch.b2b.models.rbac_organizations import GetOrgPolicyResponse
 from stytch.shared.policy_cache import PolicyCache, _merge_policies

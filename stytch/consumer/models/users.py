@@ -293,6 +293,11 @@ class DeleteEmailResponse(ResponseBase):
     user: User
 
 
+class DeleteExternalIdResponse(ResponseBase):
+    user_id: str
+    user: User
+
+
 class DeleteOAuthRegistrationResponse(ResponseBase):
     """Response type for `Users.delete_oauth_registration`.
     Fields:

@@ -30,6 +30,7 @@ class ConnectedApp(pydantic.BaseModel):
       - access_token_custom_audience: (no documentation yet)
       - logo_url: The logo URL of the Connected App, if any.
       - client_id_metadata_url: (no documentation yet)
+      - creation_method: (no documentation yet)
     """  # noqa
 
     client_id: str
@@ -48,6 +49,7 @@ class ConnectedApp(pydantic.BaseModel):
     access_token_custom_audience: Optional[str] = None
     logo_url: Optional[str] = None
     client_id_metadata_url: Optional[str] = None
+    creation_method: Optional[str] = None
 
 
 class ConnectedAppPublic(pydantic.BaseModel):
