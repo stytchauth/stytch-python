@@ -15,6 +15,8 @@ from stytch.b2b.models.organizations import (
     CreateRequestFirstPartyConnectedAppsAllowedType,
     CreateRequestThirdPartyConnectedAppsAllowedType,
     CreateResponse,
+    DeleteExternalIdRequestOptions,
+    DeleteExternalIdResponse,
     DeleteRequestOptions,
     DeleteResponse,
     EmailImplicitRoleAssignment,
@@ -1171,3 +1173,39 @@ class Organizations:
         )
         res = await self.async_client.get(url, data, headers)
         return GetConnectedAppResponse.from_json(res.response.status, res.json)
+
+    def delete_external_id(
+        self,
+        organization_id: str,
+        method_options: Optional[DeleteExternalIdRequestOptions] = None,
+    ) -> DeleteExternalIdResponse:
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/external_id", data
+        )
+        res = self.sync_client.delete(url, headers)
+        return DeleteExternalIdResponse.from_json(res.response.status_code, res.json)
+
+    async def delete_external_id_async(
+        self,
+        organization_id: str,
+        method_options: Optional[DeleteExternalIdRequestOptions] = None,
+    ) -> DeleteExternalIdResponse:
+        headers: Dict[str, str] = {}
+        if method_options is not None:
+            headers = method_options.add_headers(headers)
+        data: Dict[str, Any] = {
+            "organization_id": organization_id,
+        }
+
+        url = self.api_base.url_for(
+            "/v1/b2b/organizations/{organization_id}/external_id", data
+        )
+        res = await self.async_client.delete(url, headers)
+        return DeleteExternalIdResponse.from_json(res.response.status, res.json)

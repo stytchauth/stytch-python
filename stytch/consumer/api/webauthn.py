@@ -255,6 +255,7 @@ class WebAuthn:
         domain: str,
         user_id: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
+        use_base64_url_encoding: Optional[bool] = None,
     ) -> AuthenticateStartResponse:
         """Initiate the authentication of a Passkey or WebAuthn registration.
 
@@ -269,6 +270,7 @@ class WebAuthn:
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
 
+          - use_base64_url_encoding: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -280,6 +282,8 @@ class WebAuthn:
             data["return_passkey_credential_options"] = (
                 return_passkey_credential_options
             )
+        if use_base64_url_encoding is not None:
+            data["use_base64_url_encoding"] = use_base64_url_encoding
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
         res = self.sync_client.post(url, data, headers)
@@ -290,6 +294,7 @@ class WebAuthn:
         domain: str,
         user_id: Optional[str] = None,
         return_passkey_credential_options: Optional[bool] = None,
+        use_base64_url_encoding: Optional[bool] = None,
     ) -> AuthenticateStartResponse:
         """Initiate the authentication of a Passkey or WebAuthn registration.
 
@@ -304,6 +309,7 @@ class WebAuthn:
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
 
+          - use_base64_url_encoding: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -315,6 +321,8 @@ class WebAuthn:
             data["return_passkey_credential_options"] = (
                 return_passkey_credential_options
             )
+        if use_base64_url_encoding is not None:
+            data["use_base64_url_encoding"] = use_base64_url_encoding
 
         url = self.api_base.url_for("/v1/webauthn/authenticate/start", data)
         res = await self.async_client.post(url, data, headers)
