@@ -15,6 +15,7 @@ from stytch.consumer.models.users import (
     DeleteBiometricRegistrationResponse,
     DeleteCryptoWalletResponse,
     DeleteEmailResponse,
+    DeleteExternalIdResponse,
     DeleteOAuthRegistrationResponse,
     DeletePasswordResponse,
     DeletePhoneNumberResponse,
@@ -770,6 +771,32 @@ class Users:
         )
         res = await self.async_client.delete(url, headers)
         return DeleteOAuthRegistrationResponse.from_json(res.response.status, res.json)
+
+    def delete_external_id(
+        self,
+        user_id: str,
+    ) -> DeleteExternalIdResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+
+        url = self.api_base.url_for("/v1/users/{user_id}/external_id", data)
+        res = self.sync_client.delete(url, headers)
+        return DeleteExternalIdResponse.from_json(res.response.status_code, res.json)
+
+    async def delete_external_id_async(
+        self,
+        user_id: str,
+    ) -> DeleteExternalIdResponse:
+        headers: Dict[str, str] = {}
+        data: Dict[str, Any] = {
+            "user_id": user_id,
+        }
+
+        url = self.api_base.url_for("/v1/users/{user_id}/external_id", data)
+        res = await self.async_client.delete(url, headers)
+        return DeleteExternalIdResponse.from_json(res.response.status, res.json)
 
     def connected_apps(
         self,

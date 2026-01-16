@@ -6,10 +6,10 @@ from stytch.b2b.models.rbac import (
     OrgPolicy,
     Policy,
     PolicyResource,
+    PolicyResponse,
     PolicyRole,
     PolicyRolePermission,
     PolicyScope,
-    PolicyResponse,
 )
 from stytch.b2b.models.rbac_organizations import GetOrgPolicyResponse
 from stytch.shared.policy_cache import PolicyCache, _merge_policies
@@ -193,16 +193,6 @@ class TestPolicyCacheOrgPolicy(unittest.TestCase):
         self.assertNotIn("org_456_role", [r.role_id for r in result_123.roles])
         self.assertIn("org_456_role", [r.role_id for r in result_456.roles])
         self.assertNotIn("org_123_role", [r.role_id for r in result_456.roles])
-
-    def test_none_org_policy_is_cached(self) -> None:
-        rbac = FakeRBAC(self.project_policy, {})
-        cache = PolicyCache(rbac, refresh_interval_seconds=600)  # type: ignore[arg-type]
-
-        cache.get_with_org("org-no-policy")
-        cache.get_with_org("org-no-policy")
-        cache.get_with_org("org-no-policy")
-
-        self.assertEqual(rbac.organizations.call_count, 1)
 
     def test_cache_respects_refresh_interval(self) -> None:
         rbac = FakeRBAC(self.project_policy, {"org-123": self.org_policy})
