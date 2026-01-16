@@ -6,8 +6,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from stytch.b2b.models.rbac import OrgPolicy
 from stytch.core.response_base import ResponseBase
 
@@ -18,8 +16,13 @@ class GetOrgPolicyResponse(ResponseBase):
       - org_policy: The organization-specific RBAC Policy that contains roles defined for this organization. Organization policies supplement the project-level RBAC policy with additional roles that are specific to the organization.
     """  # noqa
 
-    org_policy: Optional[OrgPolicy] = None
+    org_policy: OrgPolicy
 
 
 class SetOrgPolicyResponse(ResponseBase):
-    org_policy: Optional[OrgPolicy] = None
+    """Response type for `Organizations.set_org_policy`.
+    Fields:
+      - org_policy: The organization-specific RBAC Policy that contains roles defined for this organization. Organization policies supplement the project-level RBAC policy with additional roles that are specific to the organization.
+    """  # noqa
+
+    org_policy: OrgPolicy

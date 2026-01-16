@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Union
 
 from stytch.b2b.models.rbac import OrgPolicy
 from stytch.b2b.models.rbac_organizations import (
@@ -84,16 +84,37 @@ class Organizations:
     def set_org_policy(
         self,
         organization_id: str,
-        org_policy: Optional[Union[OrgPolicy, Dict[str, Any]]] = None,
+        org_policy: Union[OrgPolicy, Dict[str, Any]],
     ) -> SetOrgPolicyResponse:
+        """Set the RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy allows you to define roles that are specific to that organization, providing fine-grained control over permissions at the organization level.
+
+        This endpoint allows you to create, update, or replace the organization-scoped roles for a given organization. Organization policies supplement the project-level RBAC policy with additional roles that are only applicable within the context of that specific organization.
+
+        The organization policy consists of roles, where each role defines:
+        - A unique `role_id` to identify the role
+        - A human-readable `description` of the role's purpose
+        - A set of `permissions` that specify which actions can be performed on which resources
+
+        When you set an organization policy, it will replace any existing organization-specific roles for that organization. The project-level RBAC policy remains unchanged.
+
+        Organization-specific roles are useful for scenarios where different organizations within your project require different permission structures, such as:
+        - Multi-tenant applications with varying access levels per tenant
+        - Organizations with custom approval workflows
+        - Different organizational hierarchies requiring unique role definitions
+
+        Check out the [RBAC overview](https://stytch.com/docs/b2b/guides/rbac/overview) to learn more about Stytch's RBAC permissioning model and organization-scoped policies.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - org_policy: The organization-specific RBAC Policy that contains roles defined for this organization. Organization policies supplement the project-level RBAC policy with additional roles that are specific to the organization.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
-        }
-        if org_policy is not None:
-            data["org_policy"] = (
+            "org_policy": (
                 org_policy if isinstance(org_policy, dict) else org_policy.dict()
-            )
+            ),
+        }
 
         url = self.api_base.url_for(
             "/v1/b2b/rbac/organizations/{organization_id}", data
@@ -104,16 +125,37 @@ class Organizations:
     async def set_org_policy_async(
         self,
         organization_id: str,
-        org_policy: Optional[OrgPolicy] = None,
+        org_policy: OrgPolicy,
     ) -> SetOrgPolicyResponse:
+        """Set the RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy allows you to define roles that are specific to that organization, providing fine-grained control over permissions at the organization level.
+
+        This endpoint allows you to create, update, or replace the organization-scoped roles for a given organization. Organization policies supplement the project-level RBAC policy with additional roles that are only applicable within the context of that specific organization.
+
+        The organization policy consists of roles, where each role defines:
+        - A unique `role_id` to identify the role
+        - A human-readable `description` of the role's purpose
+        - A set of `permissions` that specify which actions can be performed on which resources
+
+        When you set an organization policy, it will replace any existing organization-specific roles for that organization. The project-level RBAC policy remains unchanged.
+
+        Organization-specific roles are useful for scenarios where different organizations within your project require different permission structures, such as:
+        - Multi-tenant applications with varying access levels per tenant
+        - Organizations with custom approval workflows
+        - Different organizational hierarchies requiring unique role definitions
+
+        Check out the [RBAC overview](https://stytch.com/docs/b2b/guides/rbac/overview) to learn more about Stytch's RBAC permissioning model and organization-scoped policies.
+
+        Fields:
+          - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+          - org_policy: The organization-specific RBAC Policy that contains roles defined for this organization. Organization policies supplement the project-level RBAC policy with additional roles that are specific to the organization.
+        """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
             "organization_id": organization_id,
-        }
-        if org_policy is not None:
-            data["org_policy"] = (
+            "org_policy": (
                 org_policy if isinstance(org_policy, dict) else org_policy.dict()
-            )
+            ),
+        }
 
         url = self.api_base.url_for(
             "/v1/b2b/rbac/organizations/{organization_id}", data
