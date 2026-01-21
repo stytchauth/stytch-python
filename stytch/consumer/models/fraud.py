@@ -63,6 +63,23 @@ class ASNProperties(pydantic.BaseModel):
     network: str
 
 
+class AddressInformation(pydantic.BaseModel):
+    """
+    Fields:
+      - has_known_bounces: Whether email sent to this address is known to have bounced previously.
+      - has_valid_syntax: Whether this email address is valid.
+      - is_suspected_role_address: Whether the local part of the email appears to be a role or group, rather than an individual end user.
+      - normalized_email: The normalized email address after removing '.' characters and any characters after a '+'.
+      - tumbling_character_count: The number of '.' and '+' characters in the email address. A higher tumbling count indicates a higher potential for fraud.
+    """  # noqa
+
+    has_known_bounces: bool
+    has_valid_syntax: bool
+    is_suspected_role_address: bool
+    normalized_email: str
+    tumbling_character_count: int
+
+
 class BrowserProperties(pydantic.BaseModel):
     """
     Fields:
@@ -70,6 +87,17 @@ class BrowserProperties(pydantic.BaseModel):
     """  # noqa
 
     user_agent: str
+
+
+class DomainInformation(pydantic.BaseModel):
+    """
+    Fields:
+      - has_mx_or_a_record: Whether the email has appropriate DNS records to deliver a message.
+      - is_disposable_domain: Whether the email domain is known to be disposable.
+    """  # noqa
+
+    has_mx_or_a_record: bool
+    is_disposable_domain: bool
 
 
 class Fingerprints(pydantic.BaseModel):
