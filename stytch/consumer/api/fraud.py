@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+from stytch.consumer.api.fraud_email import Email
 from stytch.consumer.api.fraud_fingerprint import Fingerprint
 from stytch.consumer.api.fraud_rules import Rules
 from stytch.consumer.api.fraud_verdict_reasons import VerdictReasons
@@ -31,6 +32,11 @@ class Fraud:
             async_client=self.async_client,
         )
         self.verdict_reasons = VerdictReasons(
+            api_base=self.api_base,
+            sync_client=self.sync_client,
+            async_client=self.async_client,
+        )
+        self.email = Email(
             api_base=self.api_base,
             sync_client=self.sync_client,
             async_client=self.async_client,
