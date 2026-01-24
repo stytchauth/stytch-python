@@ -1,7 +1,10 @@
 import unittest
 
+from stytch.b2b.api.rbac_organizations import Organizations
 from stytch.b2b.models.rbac import (
+    OrgPolicy,
     Policy,
+    PolicyResource,
     PolicyRole,
     PolicyRolePermission,
     PolicyScope,
@@ -376,3 +379,232 @@ class TestRbacLocalConsumer(unittest.TestCase):
             # Act
             perform_consumer_scope_authorization_check(self.policy, scopes, req)
             # Assertion is that no exception is raised
+
+
+class TestRbacOrgPolicyValidations(unittest.TestCase):
+    def setUp(self) -> None:
+        self.sample_project_policy = Policy(
+            resources=[
+                PolicyResource(
+                    resource_id="document",
+                    description="Documents",
+                    actions=["read", "write", "delete"],
+                ),
+                PolicyResource(
+                    resource_id="program",
+                    description="An executable program",
+                    actions=["read", "write", "execute"],
+                ),
+            ],
+            roles=[
+                PolicyRole(
+                    role_id="stytch_member",
+                    description="member",
+                    permissions=[
+                        PolicyRolePermission(
+                            resource_id="document",
+                            actions=["read", "write"],
+                        ),
+                        PolicyRolePermission(
+                            resource_id="program",
+                            actions=["read"],
+                        ),
+                    ],
+                ),
+                PolicyRole(
+                    role_id="stytch_editor",
+                    description="editor",
+                    permissions=[
+                        PolicyRolePermission(
+                            resource_id="document",
+                            actions=["read", "write"],
+                        ),
+                        PolicyRolePermission(
+                            resource_id="program",
+                            actions=["read", "execute"],
+                        ),
+                    ],
+                ),
+                PolicyRole(
+                    role_id="stytch_admin",
+                    description="admin",
+                    permissions=[
+                        PolicyRolePermission(
+                            resource_id="document",
+                            actions=["read", "write", "delete"],
+                        ),
+                        PolicyRolePermission(
+                            resource_id="program",
+                            actions=["*"],
+                        ),
+                    ],
+                ),
+            ],
+            scopes=[],  # No scopes in Org RBAC policies.
+        )
+
+    def test_validate_org_rbac_policies(self) -> None:
+        with self.subTest("exception if a role is already defined in Project policy"):
+            with self.assertRaisesRegex(Exception, r"Role \w+ already defined in Project RBAC policy"):
+                Organizations.validate_org_policy(
+                    project_policy=self.sample_project_policy,
+                    org_policy=OrgPolicy(
+                        roles=[
+                            PolicyRole(
+                                role_id="stytch_editor",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(actions=["*"], resource_id="resource")
+                                ],
+                            )
+                        ]
+                    ),
+                )
+
+        with self.subTest("exception if a role is already defined in Org policy"):
+            with self.assertRaisesRegex(Exception, r"Duplicate role \w+ in Organization RBAC policy"):
+                Organizations.validate_org_policy(
+                    project_policy=self.sample_project_policy,
+                    org_policy=OrgPolicy(
+                        roles=[
+                            PolicyRole(
+                                role_id="researcher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="document", actions=["*"])
+                                ],
+                            ),
+                            PolicyRole(
+                                role_id="researcher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="document", actions=["*"])
+                                ],
+                            )
+                        ]
+                    ),
+                )
+
+        with self.subTest("exception if a role uses an undefined resource"):
+            with self.assertRaisesRegex(Exception, r"Resource \w+ not defined in Project RBAC policy"):
+                Organizations.validate_org_policy(
+                    project_policy=self.sample_project_policy,
+                    org_policy=OrgPolicy(
+                        roles=[
+                            PolicyRole(
+                                role_id="researcher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="computer", actions=["boot"])
+                                ],
+                            ),
+                            PolicyRole(
+                                role_id="teacher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="document", actions=["*"])
+                                ],
+                            )
+                        ]
+                    ),
+                )
+
+        with self.subTest("exception if a role does not define actions for a permission"):
+            with self.assertRaisesRegex(Exception, r"No actions defined for role \w+, resource \w+"):
+                Organizations.validate_org_policy(
+                    project_policy=self.sample_project_policy,
+                    org_policy=OrgPolicy(
+                        roles=[
+                            PolicyRole(
+                                role_id="teacher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="document", actions=[])
+                                ],
+                            )
+                        ]
+                    ),
+                )
+
+        with self.subTest("exception if a role uses a wildcard with other actions"):
+            with self.assertRaisesRegex(Exception,
+                                        r"Wildcard actions must be the only action defined for a role and resource"):
+                Organizations.validate_org_policy(
+                    project_policy=self.sample_project_policy,
+                    org_policy=OrgPolicy(
+                        roles=[
+                            PolicyRole(
+                                role_id="teacher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="document", actions=["*", "read"])
+                                ],
+                            )
+                        ]
+                    ),
+                )
+
+        with self.subTest("exception an action is left empty"):
+            with self.assertRaisesRegex(Exception, r"Empty action on resource \w+ is not permitted"):
+                Organizations.validate_org_policy(
+                    project_policy=self.sample_project_policy,
+                    org_policy=OrgPolicy(
+                        roles=[
+                            PolicyRole(
+                                role_id="teacher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="document", actions=["", "read"])
+                                ],
+                            )
+                        ]
+                    ),
+                )
+
+        with self.subTest("exception if an unknown action is defined on a resource"):
+            with self.assertRaisesRegex(Exception, r"Unknown action \w+ defined on resource \w+"):
+                Organizations.validate_org_policy(
+                    project_policy=self.sample_project_policy,
+                    org_policy=OrgPolicy(
+                        roles=[
+                            PolicyRole(
+                                role_id="teacher",
+                                description="",
+                                permissions=[
+                                    PolicyRolePermission(resource_id="document", actions=["read", "shred"])
+                                ],
+                            )
+                        ]
+                    ),
+                )
+
+        with self.subTest("success with a valid Org policy"):
+            # Assert no exception is raised.
+            Organizations.validate_org_policy(
+                project_policy=self.sample_project_policy,
+                org_policy=OrgPolicy(
+                    roles=[
+                        PolicyRole(
+                            role_id="teacher",
+                            description="High school teacher",
+                            permissions=[
+                                PolicyRolePermission(resource_id="document", actions=["*"])
+                            ],
+                        ),
+                        PolicyRole(
+                            role_id="student",
+                            description="High school student",
+                            permissions=[
+                                PolicyRolePermission(resource_id="document", actions=["read"])
+                            ],
+                        ),
+                        PolicyRole(
+                            role_id="sys_admin",
+                            description="Network administrator",
+                            permissions=[
+                                PolicyRolePermission(resource_id="program", actions=["read", "write", "execute"])
+                            ],
+                        )
+                    ]
+                ),
+            )
