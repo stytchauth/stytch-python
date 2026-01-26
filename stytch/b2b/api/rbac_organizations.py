@@ -6,9 +6,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Union
+from typing import Any, Dict, Set, Union
 
-from stytch.b2b.models.rbac import OrgPolicy
+from stytch.b2b.models.rbac import (
+    OrgPolicy,
+    Policy as B2BPolicy,
+    PolicyResource,
+)
 from stytch.b2b.models.rbac_organizations import (
     GetOrgPolicyResponse,
     SetOrgPolicyResponse,
@@ -162,3 +166,45 @@ class Organizations:
         )
         res = await self.async_client.put(url, data, headers)
         return SetOrgPolicyResponse.from_json(res.response.status, res.json)
+
+    # MANUAL(validate_org_policy)(SERVICE_METHOD)
+    # ADDIMPORT: from stytch.b2b.models.rbac import Policy as B2BPolicy
+    # ADDIMPORT: from typing import Set
+    @staticmethod
+    def validate_org_policy(project_policy: B2BPolicy, org_policy: OrgPolicy) -> None:
+        project_roles = set({r.role_id for r in project_policy.roles})
+        project_resources = {r.resource_id: r for r in project_policy.resources}
+
+        org_roles: Set[str] = set()
+        for role in org_policy.roles:
+            org_role_id = role.role_id
+            if org_role_id in org_roles:
+                raise Exception(f"Duplicate role {org_role_id} in Organization RBAC policy")
+            org_roles.add(org_role_id)
+
+            if org_role_id in project_roles:
+                raise Exception(f"Role {org_role_id} already defined in Project RBAC policy")
+
+            for permission in role.permissions:
+                resource_id = permission.resource_id
+                if not resource_id in project_resources:
+                    raise Exception(f"Resource {resource_id} not defined in Project RBAC policy")
+
+                if len(permission.actions) == 0:
+                    raise Exception(f"No actions defined for role {org_role_id}, resource {resource_id}")
+                if len(permission.actions) == 1 and "*" == permission.actions[0]:
+                    continue
+                if len(permission.actions) > 1 and "*" in permission.actions:
+                    raise Exception("Wildcard actions must be the only action defined for a role and resource")
+
+                project_resource = project_resources[resource_id]
+                for action in permission.actions:
+                    if action.strip() == "":
+                        raise Exception(f"Empty action on resource {resource_id} is not permitted")
+
+                    if not action in project_resource.actions:
+                        raise Exception(f"Unknown action {action} defined on resource {resource_id}")
+
+        return
+
+    # ENDMANUAL(validate_org_policy)
