@@ -172,12 +172,8 @@ class Organizations:
     # ADDIMPORT: from typing import Set
     @staticmethod
     def validate_org_policy(project_policy: B2BPolicy, org_policy: OrgPolicy) -> None:
-        project_roles: Set[str] = set()
-        project_resources: Dict[str, PolicyResource] = {}
-        for role in project_policy.roles:
-            project_roles.add(role.role_id)
-        for resource in project_policy.resources:
-            project_resources[resource.resource_id] = resource
+        project_roles = set({r.role_id for r in project_policy.roles})
+        project_resources = {r.resource_id: r for r in project_policy.resources}
 
         org_roles: Set[str] = set()
         for role in org_policy.roles:
