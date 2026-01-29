@@ -8,11 +8,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Set, Union
 
-from stytch.b2b.models.rbac import (
-    OrgPolicy,
-    Policy as B2BPolicy,
-    PolicyResource,
-)
+from stytch.b2b.models.rbac import OrgPolicy
+from stytch.b2b.models.rbac import Policy as B2BPolicy
 from stytch.b2b.models.rbac_organizations import (
     GetOrgPolicyResponse,
     SetOrgPolicyResponse,
@@ -33,7 +30,10 @@ class Organizations:
         self,
         organization_id: str,
     ) -> GetOrgPolicyResponse:
-        """Get the active RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy contains the roles that have been defined specifically for that organization, allowing for organization-specific permissioning models.
+        """
+        The organization RBAC policy feature is currently in private beta and must be enabled for your Workspace. Please contact Stytch support at support@stytch.com to request access.
+
+        Get the active RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy contains the roles that have been defined specifically for that organization, allowing for organization-specific permissioning models.
 
         This endpoint returns the organization-scoped roles that supplement the project-level RBAC policy. Organization policies allow you to define custom roles that are specific to individual organizations within your project.
 
@@ -61,7 +61,10 @@ class Organizations:
         self,
         organization_id: str,
     ) -> GetOrgPolicyResponse:
-        """Get the active RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy contains the roles that have been defined specifically for that organization, allowing for organization-specific permissioning models.
+        """
+        The organization RBAC policy feature is currently in private beta and must be enabled for your Workspace. Please contact Stytch support at support@stytch.com to request access.
+
+        Get the active RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy contains the roles that have been defined specifically for that organization, allowing for organization-specific permissioning models.
 
         This endpoint returns the organization-scoped roles that supplement the project-level RBAC policy. Organization policies allow you to define custom roles that are specific to individual organizations within your project.
 
@@ -90,7 +93,10 @@ class Organizations:
         organization_id: str,
         org_policy: Union[OrgPolicy, Dict[str, Any]],
     ) -> SetOrgPolicyResponse:
-        """Set the RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy allows you to define roles that are specific to that organization, providing fine-grained control over permissions at the organization level.
+        """
+        The organization RBAC policy feature is currently in private beta and must be enabled for your Workspace. Please contact Stytch support at support@stytch.com to request access.
+
+        Set the RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy allows you to define roles that are specific to that organization, providing fine-grained control over permissions at the organization level.
 
         This endpoint allows you to create, update, or replace the organization-scoped roles for a given organization. Organization policies supplement the project-level RBAC policy with additional roles that are only applicable within the context of that specific organization.
 
@@ -131,7 +137,10 @@ class Organizations:
         organization_id: str,
         org_policy: OrgPolicy,
     ) -> SetOrgPolicyResponse:
-        """Set the RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy allows you to define roles that are specific to that organization, providing fine-grained control over permissions at the organization level.
+        """
+        The organization RBAC policy feature is currently in private beta and must be enabled for your Workspace. Please contact Stytch support at support@stytch.com to request access.
+
+        Set the RBAC Policy for a specific Organization within your Stytch Project. An Organization RBAC Policy allows you to define roles that are specific to that organization, providing fine-grained control over permissions at the organization level.
 
         This endpoint allows you to create, update, or replace the organization-scoped roles for a given organization. Organization policies supplement the project-level RBAC policy with additional roles that are only applicable within the context of that specific organization.
 
@@ -179,31 +188,45 @@ class Organizations:
         for role in org_policy.roles:
             org_role_id = role.role_id
             if org_role_id in org_roles:
-                raise Exception(f"Duplicate role {org_role_id} in Organization RBAC policy")
+                raise Exception(
+                    f"Duplicate role {org_role_id} in Organization RBAC policy"
+                )
             org_roles.add(org_role_id)
 
             if org_role_id in project_roles:
-                raise Exception(f"Role {org_role_id} already defined in Project RBAC policy")
+                raise Exception(
+                    f"Role {org_role_id} already defined in Project RBAC policy"
+                )
 
             for permission in role.permissions:
                 resource_id = permission.resource_id
                 if not resource_id in project_resources:
-                    raise Exception(f"Resource {resource_id} not defined in Project RBAC policy")
+                    raise Exception(
+                        f"Resource {resource_id} not defined in Project RBAC policy"
+                    )
 
                 if len(permission.actions) == 0:
-                    raise Exception(f"No actions defined for role {org_role_id}, resource {resource_id}")
+                    raise Exception(
+                        f"No actions defined for role {org_role_id}, resource {resource_id}"
+                    )
                 if len(permission.actions) == 1 and "*" == permission.actions[0]:
                     continue
                 if len(permission.actions) > 1 and "*" in permission.actions:
-                    raise Exception("Wildcard actions must be the only action defined for a role and resource")
+                    raise Exception(
+                        "Wildcard actions must be the only action defined for a role and resource"
+                    )
 
                 project_resource = project_resources[resource_id]
                 for action in permission.actions:
                     if action.strip() == "":
-                        raise Exception(f"Empty action on resource {resource_id} is not permitted")
+                        raise Exception(
+                            f"Empty action on resource {resource_id} is not permitted"
+                        )
 
                     if not action in project_resource.actions:
-                        raise Exception(f"Unknown action {action} defined on resource {resource_id}")
+                        raise Exception(
+                            f"Unknown action {action} defined on resource {resource_id}"
+                        )
 
         return
 
