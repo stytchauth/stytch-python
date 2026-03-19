@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import time
 from typing import Any, Dict, List, Optional
 
@@ -33,6 +34,46 @@ def authenticate_jwt_local(
     The value for leeway is the maximum allowable difference in seconds when
     comparing timestamps. It defaults to zero.
     """
+    signing_key = jwks_client.get_signing_key_from_jwt(jwt)
+    return _authenticate_jwt_local(
+        signing_key=signing_key,
+        project_id=project_id,
+        jwt=jwt,
+        base_url=base_url,
+        max_token_age_seconds=max_token_age_seconds,
+        leeway=leeway,
+    )
+
+
+async def authenticate_jwt_local_async(
+    *,
+    jwks_client: pyjwt.PyJWKClient,
+    project_id: str,
+    jwt: str,
+    base_url: str,
+    max_token_age_seconds: Optional[int] = None,
+    leeway: int = 0,
+) -> Optional[GenericClaims]:
+    signing_key = await asyncio.to_thread(jwks_client.get_signing_key_from_jwt, jwt)
+    return _authenticate_jwt_local(
+        signing_key=signing_key,
+        project_id=project_id,
+        jwt=jwt,
+        base_url=base_url,
+        max_token_age_seconds=max_token_age_seconds,
+        leeway=leeway,
+    )
+
+
+def _authenticate_jwt_local(
+    *,
+    signing_key: pyjwt.PyJWK,
+    project_id: str,
+    jwt: str,
+    base_url: str,
+    max_token_age_seconds: Optional[int] = None,
+    leeway: int = 0,
+) -> Optional[GenericClaims]:
     jwt_audience = project_id
     default_issuer = f"stytch.com/{project_id}"
     allowed_issuers: List[str] = [
@@ -43,8 +84,6 @@ def authenticate_jwt_local(
     ]
 
     now = time.time()
-
-    signing_key = jwks_client.get_signing_key_from_jwt(jwt)
 
     try:
         # NOTE: The max_token_age_seconds value is applied after decoding.
