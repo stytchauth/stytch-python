@@ -715,7 +715,7 @@ class Sessions:
         authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[Session]:
         _session_claim = "https://stytch.com/session"
-        generic_claims = jwt_helpers.authenticate_jwt_local(
+        generic_claims = await jwt_helpers.authenticate_jwt_local_async(
             project_id=self.project_id,
             jwks_client=self.jwks_client,
             jwt=session_jwt,

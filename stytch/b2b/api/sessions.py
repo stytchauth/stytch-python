@@ -970,6 +970,62 @@ class Sessions:
             roles_claim=roles_claim,
         )
 
+    async def _authenticate_jwt_local_common_async(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        leeway: int = 0,
+    ) -> Optional[LocalJWTResponse]:
+        _session_claim = "https://stytch.com/session"
+        _organization_claim = "https://stytch.com/organization"
+        generic_claims = await jwt_helpers.authenticate_jwt_local_async(
+            project_id=self.project_id,
+            jwks_client=self.jwks_client,
+            jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
+            leeway=leeway,
+            base_url=self.api_base.base_url,
+        )
+        if generic_claims is None:
+            return None
+
+        claim = generic_claims.untyped_claims[_session_claim]
+        custom_claims = {
+            k: v
+            for k, v in generic_claims.untyped_claims.items()
+            if k not in [_session_claim, _organization_claim]
+        }
+
+        # For JWTs that include it, prefer the inner expires_at claim.
+        expires_at = claim.get("expires_at", generic_claims.reserved_claims["exp"])
+
+        # Claim related to unpacking organization-specific fields
+        org_claim = generic_claims.untyped_claims[_organization_claim]
+
+        # Claim related to RBAC roles
+        roles_claim = claim.get("roles")
+        if roles_claim is not None:
+            if not isinstance(roles_claim, list) or not all(
+                isinstance(x, str) for x in roles_claim
+            ):
+                raise ValueError("Invalid roles claim. Expected a list of strings.")
+
+        return LocalJWTResponse(
+            member_session=MemberSession(
+                authentication_factors=claim["authentication_factors"],
+                expires_at=expires_at,
+                last_accessed_at=claim["last_accessed_at"],
+                member_session_id=claim["id"],
+                started_at=claim["started_at"],
+                organization_id=org_claim["organization_id"],
+                member_id=generic_claims.reserved_claims["sub"],
+                custom_claims=custom_claims,
+                roles=roles_claim or [],
+                organization_slug=org_claim["slug"],
+            ),
+            roles_claim=roles_claim,
+        )
+
     def authenticate_jwt_local(
         self,
         session_jwt: str,
@@ -1008,7 +1064,7 @@ class Sessions:
         leeway: int = 0,
         authorization_check: Optional[AuthorizationCheck] = None,
     ) -> Optional[MemberSession]:
-        local_resp = self._authenticate_jwt_local_common(
+        local_resp = await self._authenticate_jwt_local_common_async(
             session_jwt=session_jwt,
             max_token_age_seconds=max_token_age_seconds,
             leeway=leeway,
