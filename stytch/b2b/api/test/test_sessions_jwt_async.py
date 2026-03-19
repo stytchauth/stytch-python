@@ -3,6 +3,7 @@
 import asyncio
 import time
 import unittest
+from typing import cast
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from stytch.b2b.api.sessions import Sessions
@@ -61,20 +62,22 @@ class TestB2BAuthenticateJWTLocalAsync(unittest.IsolatedAsyncioTestCase):
         )
 
     @patch(
-        "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local",
-        return_value=None,
+        "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local_async",
+        new_callable=AsyncMock,
     )
-    async def test_returns_none_for_invalid_jwt(self, _mock_jwt) -> None:
+    async def test_returns_none_for_invalid_jwt(self, mock_jwt) -> None:
+        mock_jwt.return_value = None
         result = await self.sessions.authenticate_jwt_local_async(session_jwt=FAKE_JWT)
         self.assertIsNone(result)
 
     @patch(
-        "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local",
-        return_value=FAKE_GENERIC_CLAIMS,
+        "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local_async",
+        new_callable=AsyncMock,
     )
     async def test_returns_member_session_for_valid_jwt_without_auth_check(
-        self, _mock_jwt
+        self, mock_jwt
     ) -> None:
+        mock_jwt.return_value = FAKE_GENERIC_CLAIMS
         result = await self.sessions.authenticate_jwt_local_async(session_jwt=FAKE_JWT)
         self.assertIsNotNone(result)
         if result is not None:
@@ -84,57 +87,47 @@ class TestB2BAuthenticateJWTLocalAsync(unittest.IsolatedAsyncioTestCase):
 
     @patch("stytch.b2b.api.sessions.rbac_local.perform_authorization_check")
     @patch(
-        "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local",
-        return_value=FAKE_GENERIC_CLAIMS,
+        "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local_async",
+        new_callable=AsyncMock,
     )
     async def test_uses_get_with_org_async_not_sync_for_authorization_check(
-        self, _mock_jwt, _mock_rbac
+        self, mock_jwt, _mock_rbac
     ) -> None:
+        mock_jwt.return_value = FAKE_GENERIC_CLAIMS
         mock_policy = MagicMock()
-        self.sessions.policy_cache.get_with_org_async = AsyncMock(
-            return_value=mock_policy
-        )
+        mock_cache = cast(MagicMock, self.sessions.policy_cache)
+        mock_cache.get_with_org_async = AsyncMock(return_value=mock_policy)
 
         await self.sessions.authenticate_jwt_local_async(
             session_jwt=FAKE_JWT, authorization_check=self.auth_check
         )
 
-        self.sessions.policy_cache.get_with_org_async.assert_awaited_once_with(
-            "org-test-123"
-        )
-        self.sessions.policy_cache.get_with_org.assert_not_called()
+        mock_cache.get_with_org_async.assert_awaited_once_with("org-test-123")
+        mock_cache.get_with_org.assert_not_called()
 
-    @patch("stytch.b2b.api.sessions.rbac_local.perform_authorization_check")
-    @patch(
-        "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local",
-        return_value=FAKE_GENERIC_CLAIMS,
-    )
-    async def test_is_non_blocking_with_authorization_check(
-        self, _mock_jwt, _mock_rbac
-    ) -> None:
+    async def test_is_non_blocking_jwt_verification(self) -> None:
         DELAY = 0.1
         N = 5
 
-        async def slow_get_with_org_async(org_id: str) -> MagicMock:
+        async def slow_authenticate_jwt_local_async(**kwargs) -> GenericClaims:
             await asyncio.sleep(DELAY)
-            return MagicMock()
+            return FAKE_GENERIC_CLAIMS
 
-        self.sessions.policy_cache.get_with_org_async = slow_get_with_org_async
-
-        start = time.monotonic()
-        results = await asyncio.gather(
-            *[
-                self.sessions.authenticate_jwt_local_async(
-                    session_jwt=FAKE_JWT,
-                    authorization_check=self.auth_check,
-                )
-                for _ in range(N)
-            ]
-        )
-        elapsed = time.monotonic() - start
+        with patch(
+            "stytch.b2b.api.sessions.jwt_helpers.authenticate_jwt_local_async",
+            side_effect=slow_authenticate_jwt_local_async,
+        ):
+            start = time.monotonic()
+            results = await asyncio.gather(
+                *[
+                    self.sessions.authenticate_jwt_local_async(session_jwt=FAKE_JWT)
+                    for _ in range(N)
+                ]
+            )
+            elapsed = time.monotonic() - start
 
         # All N calls should interleave at the await point, completing in ~DELAY total
-        # (not N * DELAY as would happen with a blocking sync call)
+        # (not N * DELAY as would happen if get_signing_key_from_jwt blocked the event loop)
         self.assertLess(elapsed, DELAY * 2)
         self.assertEqual(len(results), N)
 
