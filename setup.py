@@ -40,10 +40,9 @@ setup(
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
     python_requires=">=3.8",
     packages=find_packages(
@@ -55,7 +54,7 @@ setup(
     install_requires=[
         "aiohttp>=3.8.3",
         "requests>=2.7.0",
-        "pydantic>=1.10.2",
+        "pydantic>=2.0",
         "pyjwt[crypto]>=2.9.0",
     ],
 )
