@@ -622,16 +622,16 @@ class Sessions:
         zero or use the authenticate method instead.
         """
         # Return the local_result if available, otherwise call the Stytch API
-        local_token = self.authenticate_jwt_local(
+        local_session = await self.authenticate_jwt_local_async(
             session_jwt=session_jwt,
             max_token_age_seconds=max_token_age_seconds,
             authorization_check=authorization_check,
         )
-        if local_token is not None:
+        if local_session is not None:
             return AuthenticateJWTLocalResponse.from_json(
                 status_code=200,
                 json={
-                    "session": local_token,
+                    "session": local_session,
                     "session_jwt": session_jwt,
                     "status_code": 200,
                     "request_id": "",
@@ -691,6 +691,55 @@ class Sessions:
             _session_claim = "https://stytch.com/session"
             rbac_local.perform_consumer_authorization_check(
                 policy=self.policy_cache.get(),
+                subject_roles=claim["roles"],
+                authorization_check=authorization_check,
+            )
+
+        return Session(
+            attributes=claim["attributes"],
+            authentication_factors=claim["authentication_factors"],
+            expires_at=expires_at,
+            last_accessed_at=claim["last_accessed_at"],
+            session_id=claim["id"],
+            started_at=claim["started_at"],
+            user_id=generic_claims.reserved_claims["sub"],
+            custom_claims=custom_claims,
+            roles=claim["roles"],
+        )
+
+    async def authenticate_jwt_local_async(
+        self,
+        session_jwt: str,
+        max_token_age_seconds: Optional[int] = None,
+        leeway: int = 0,
+        authorization_check: Optional[AuthorizationCheck] = None,
+    ) -> Optional[Session]:
+        _session_claim = "https://stytch.com/session"
+        generic_claims = jwt_helpers.authenticate_jwt_local(
+            project_id=self.project_id,
+            jwks_client=self.jwks_client,
+            jwt=session_jwt,
+            max_token_age_seconds=max_token_age_seconds,
+            leeway=leeway,
+            base_url=self.api_base.base_url,
+        )
+        if generic_claims is None:
+            return None
+
+        claim = generic_claims.untyped_claims[_session_claim]
+        custom_claims = {
+            k: v
+            for k, v in generic_claims.untyped_claims.items()
+            if k != _session_claim
+        }
+
+        # For JWTs that include it, prefer the inner expires_at claim.
+        expires_at = claim.get("expires_at", generic_claims.reserved_claims["exp"])
+
+        if authorization_check is not None:
+            _session_claim = "https://stytch.com/session"
+            rbac_local.perform_consumer_authorization_check(
+                policy=await self.policy_cache.get_async(),
                 subject_roles=claim["roles"],
                 authorization_check=authorization_check,
             )
