@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import unittest
+from typing import Any, Dict
 from unittest.mock import create_autospec
 
 from stytch.core.response_base import ResponseBase, StytchError, StytchErrorDetails
@@ -107,7 +108,7 @@ class TestModels(unittest.TestCase):
             mock_details.__str__.assert_called_once()
 
     def test_stytcherror_fields(self) -> None:
-        resp = {
+        resp: Dict[str, Any] = {
             "status_code": 418,
             "request_id": "request-id-test-fea11c44-5514-4aac-a76b-3ca685e3443a",
             "error_type": "is_a_teapot",

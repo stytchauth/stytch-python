@@ -179,31 +179,45 @@ class Organizations:
         for role in org_policy.roles:
             org_role_id = role.role_id
             if org_role_id in org_roles:
-                raise Exception(f"Duplicate role {org_role_id} in Organization RBAC policy")
+                raise Exception(
+                    f"Duplicate role {org_role_id} in Organization RBAC policy"
+                )
             org_roles.add(org_role_id)
 
             if org_role_id in project_roles:
-                raise Exception(f"Role {org_role_id} already defined in Project RBAC policy")
+                raise Exception(
+                    f"Role {org_role_id} already defined in Project RBAC policy"
+                )
 
             for permission in role.permissions:
                 resource_id = permission.resource_id
                 if not resource_id in project_resources:
-                    raise Exception(f"Resource {resource_id} not defined in Project RBAC policy")
+                    raise Exception(
+                        f"Resource {resource_id} not defined in Project RBAC policy"
+                    )
 
                 if len(permission.actions) == 0:
-                    raise Exception(f"No actions defined for role {org_role_id}, resource {resource_id}")
+                    raise Exception(
+                        f"No actions defined for role {org_role_id}, resource {resource_id}"
+                    )
                 if len(permission.actions) == 1 and "*" == permission.actions[0]:
                     continue
                 if len(permission.actions) > 1 and "*" in permission.actions:
-                    raise Exception("Wildcard actions must be the only action defined for a role and resource")
+                    raise Exception(
+                        "Wildcard actions must be the only action defined for a role and resource"
+                    )
 
                 project_resource = project_resources[resource_id]
                 for action in permission.actions:
                     if action.strip() == "":
-                        raise Exception(f"Empty action on resource {resource_id} is not permitted")
+                        raise Exception(
+                            f"Empty action on resource {resource_id} is not permitted"
+                        )
 
                     if not action in project_resource.actions:
-                        raise Exception(f"Unknown action {action} defined on resource {resource_id}")
+                        raise Exception(
+                            f"Unknown action {action} defined on resource {resource_id}"
+                        )
 
         return
 

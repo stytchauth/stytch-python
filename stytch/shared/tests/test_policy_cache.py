@@ -1,6 +1,6 @@
 import time
 import unittest
-from typing import Dict, Optional
+from typing import Dict, Optional, cast
 
 from stytch.b2b.models.rbac import (
     OrgPolicy,
@@ -25,7 +25,7 @@ class FakeOrganizations:
         return GetOrgPolicyResponse(
             status_code=200,
             request_id="test",
-            org_policy=self.org_policies.get(organization_id),
+            org_policy=cast(OrgPolicy, self.org_policies.get(organization_id)),
         )
 
     async def get_org_policy_async(self, organization_id: str) -> GetOrgPolicyResponse:

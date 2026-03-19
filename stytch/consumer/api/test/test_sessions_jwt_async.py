@@ -88,15 +88,15 @@ class TestConsumerAuthenticateJWTLocalAsync(unittest.IsolatedAsyncioTestCase):
     ) -> None:
         mock_jwt.return_value = FAKE_GENERIC_CLAIMS
         mock_policy = MagicMock()
-        mock_cache = cast(MagicMock, self.sessions.policy_cache)
-        mock_cache.get_async = AsyncMock(return_value=mock_policy)
+        policy_cache = cast(MagicMock, self.sessions.policy_cache)
+        policy_cache.get_async = AsyncMock(return_value=mock_policy)
 
         await self.sessions.authenticate_jwt_local_async(
             session_jwt=FAKE_JWT, authorization_check=self.auth_check
         )
 
-        mock_cache.get_async.assert_awaited_once()
-        mock_cache.get.assert_not_called()
+        policy_cache.get_async.assert_awaited_once()
+        policy_cache.get.assert_not_called()
 
     async def test_is_non_blocking_jwt_verification(self) -> None:
         DELAY = 0.1
