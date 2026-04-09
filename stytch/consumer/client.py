@@ -9,6 +9,7 @@ from typing import Optional
 
 import aiohttp
 import jwt
+import requests
 
 from stytch.consumer.api.connected_apps import ConnectedApp
 from stytch.consumer.api.crypto_wallets import CryptoWallets
@@ -45,6 +46,7 @@ class Client(ClientBase):
         environment: Optional[str] = None,
         suppress_warnings: bool = False,
         async_session: Optional[aiohttp.ClientSession] = None,
+        sync_session: Optional[requests.Session] = None,
         fraud_environment: Optional[str] = None,
         custom_base_url: Optional[str] = None,
     ):
@@ -54,6 +56,7 @@ class Client(ClientBase):
             environment=environment,
             suppress_warnings=suppress_warnings,
             async_session=async_session,
+            sync_session=sync_session,
             fraud_environment=fraud_environment,
             custom_base_url=custom_base_url,
         )

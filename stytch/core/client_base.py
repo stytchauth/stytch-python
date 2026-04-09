@@ -4,6 +4,7 @@ from typing import Optional
 
 import aiohttp
 import jwt
+import requests
 
 from stytch.core.api_base import ApiBase
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -17,6 +18,7 @@ class ClientBase(abc.ABC):
         environment: Optional[str] = None,
         suppress_warnings: bool = False,
         async_session: Optional[aiohttp.ClientSession] = None,
+        sync_session: Optional[requests.Session] = None,
         fraud_environment: Optional[str] = None,
         custom_base_url: Optional[str] = None,
     ):
@@ -29,7 +31,7 @@ class ClientBase(abc.ABC):
             fraud_base_url = fraud_environment
         self.api_base = ApiBase(base_url)
         self.fraud_api_base = ApiBase(fraud_base_url)
-        self.sync_client = SyncClient(project_id, secret)
+        self.sync_client = SyncClient(project_id, secret, session=sync_session)
         self.async_client = AsyncClient(project_id, secret, session=async_session)
         self.jwks_client = self.get_jwks_client(project_id)
 
