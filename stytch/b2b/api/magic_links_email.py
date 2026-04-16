@@ -60,11 +60,10 @@ class Email:
           the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default sign-up redirect URL
           that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - pkce_code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Login.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. Templates can be added in the [Stytch dashboard](https://stytch.com/dashboard/templates) using our built-in customization options or custom HTML templates with type “Magic Links - Login”.
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Signup.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        built-in customizations or a custom HTML email for “Magic Links - Signup”.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
@@ -126,11 +125,10 @@ class Email:
           the request by querying Stytch's authenticate endpoint and finishes the login. If this value is not passed, the default sign-up redirect URL
           that you set in your Dashboard is used. If you have not set a default sign-up redirect URL, an error is returned.
           - pkce_code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
-          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Login.
+          - login_template_id: Use a custom template for login emails. By default, it will use your default email template. Templates can be added in the [Stytch dashboard](https://stytch.com/dashboard/templates) using our built-in customization options or custom HTML templates with type “Magic Links - Login”.
           - signup_template_id: Use a custom template for signup emails. By default, it will use your default email template. The template must be from Stytch's
-        built-in customizations or a custom HTML email for Magic Links - Signup.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        built-in customizations or a custom HTML email for “Magic Links - Signup”.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
@@ -200,9 +198,8 @@ class Email:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
-          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template
-          using our built-in customizations or a custom HTML email for Magic Links - Invite.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. Templates can be added in the [Stytch dashboard](https://stytch.com/dashboard/templates) using our built-in customization options or custom HTML templates with type “Magic Links - Invite”.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
@@ -277,9 +274,8 @@ class Email:
           - untrusted_metadata: An arbitrary JSON object of application-specific data. These fields can be edited directly by the
           frontend SDK, and should not be used to store critical information. See the [Metadata resource](https://stytch.com/docs/b2b/api/metadata)
           for complete field behavior details.
-          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. The template must be a template
-          using our built-in customizations or a custom HTML email for Magic Links - Invite.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+          - invite_template_id: Use a custom template for invite emails. By default, it will use your default email template. Templates can be added in the [Stytch dashboard](https://stytch.com/dashboard/templates) using our built-in customization options or custom HTML templates with type “Magic Links - Invite”.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 

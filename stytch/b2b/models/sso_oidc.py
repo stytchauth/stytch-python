@@ -87,7 +87,7 @@ class UpdateConnectionRequestOptions(pydantic.BaseModel):
 class CreateConnectionResponse(ResponseBase):
     """Response type for `OIDC.create_connection`.
     Fields:
-      - connection: The `OIDC Connection` object affected by this API call. See the [OIDC Connection Object](https://stytch.com/docs/b2b/api/oidc-connection-object) for complete response field details.
+      - connection: The [OIDC Connection Object](https://stytch.com/docs/b2b/api/oidc-connection-object).
     """  # noqa
 
     connection: Optional[OIDCConnection] = None
@@ -96,7 +96,7 @@ class CreateConnectionResponse(ResponseBase):
 class UpdateConnectionResponse(ResponseBase):
     """Response type for `OIDC.update_connection`.
     Fields:
-      - connection: The `OIDC Connection` object affected by this API call. See the [OIDC Connection Object](https://stytch.com/docs/b2b/api/oidc-connection-object) for complete response field details.
+      - connection: The [OIDC Connection Object](https://stytch.com/docs/b2b/api/oidc-connection-object).
       - warning: If it is not possible to resolve the well-known metadata document from the OIDC issuer, this field will explain what went wrong if the request is successful otherwise. In other words, even if the overall request succeeds, there could be relevant warnings related to the connection update.
     """  # noqa
 

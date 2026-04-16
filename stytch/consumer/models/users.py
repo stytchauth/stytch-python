@@ -200,7 +200,7 @@ class User(pydantic.BaseModel):
       - totps: An array containing a list of all TOTP instances for a given User in the Stytch API.
       - crypto_wallets: An array contains a list of all crypto wallets for a given User in the Stytch API.
       - biometric_registrations: An array that contains a list of all biometric registrations for a given User in the Stytch API.
-      - is_locked: (no documentation yet)
+      - is_locked: Whether the User is temporarily locked due to too many failed authentication attempts. See the [User Locking Guide](https://stytch.com/docs/resources/platform/user-locks) for more information.
       - roles: Roles assigned to this User.
        See the [RBAC guide](https://stytch.com/docs/guides/rbac/role-assignment) for more information about role assignment.
       - name: The name of the User. Each field in the `name` object is optional.
@@ -208,9 +208,9 @@ class User(pydantic.BaseModel):
       - password: The password object is returned for users with a password.
       - trusted_metadata: The `trusted_metadata` field contains an arbitrary JSON object of application-specific data. See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
       - untrusted_metadata: The `untrusted_metadata` field contains an arbitrary JSON object of application-specific data. Untrusted metadata can be edited by end users directly via the SDK, and **cannot be used to store critical information.** See the [Metadata](https://stytch.com/docs/api/metadata) reference for complete field behavior details.
-      - external_id: (no documentation yet)
-      - lock_created_at: (no documentation yet)
-      - lock_expires_at: (no documentation yet)
+      - external_id: An identifier that can be used in most API calls where a `member_id` is expected. This is a string consisting of alphanumeric, `.`, `_`, `-`, or `|` characters with a maximum length of 128 characters. External IDs must be unique within the project.
+      - lock_created_at: When the user lock was created, if there is one. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - lock_expires_at: When the user lock expires, if there is one. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
     """  # noqa
 
     user_id: str

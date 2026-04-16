@@ -388,7 +388,12 @@ class Organization(pydantic.BaseModel):
       - allowed_auth_methods: An array of allowed authentication methods. This list is enforced when `auth_methods` is set to `RESTRICTED`.
       The list's accepted values are: `sso`, `magic_link`, `email_otp`, `password`, `google_oauth`, `microsoft_oauth`, `slack_oauth`, `github_oauth`, and `hubspot_oauth`.
 
-      - mfa_policy: (no documentation yet)
+      - mfa_policy: The setting that controls the MFA policy for all Members in the Organization. The accepted values are:
+
+      `REQUIRED_FOR_ALL` – All Members within the Organization will be required to complete MFA every time they wish to log in. However, any active Session that existed prior to this setting change will remain valid.
+
+      `OPTIONAL` – The default value. The Organization does not require MFA by default for all Members. Members will be required to complete MFA only if their `mfa_enrolled` status is set to true.
+
       - rbac_email_implicit_role_assignments: Implicit role assignments based off of email domains.
       For each domain-Role pair, all Members whose email addresses have the specified email domain will be granted the
       associated Role, regardless of their login method. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment)
@@ -408,7 +413,7 @@ class Organization(pydantic.BaseModel):
 
       `NOT_ALLOWED` – the default setting, disables JIT provisioning by OAuth Tenant.
 
-      - claimed_email_domains: (no documentation yet)
+      - claimed_email_domains: A list of email domains that are claimed by the Organization.
       - first_party_connected_apps_allowed_type: The authentication setting that sets the Organization's policy towards first party Connected Apps. The accepted values are:
 
       `ALL_ALLOWED` – the default setting, any first party Connected App in the Project is permitted for use by Members.
@@ -557,7 +562,7 @@ class Member(pydantic.BaseModel):
       - is_admin: Whether or not the Member has the `stytch_admin` Role. This Role is automatically granted to Members
       who create an Organization through the [discovery flow](https://stytch.com/docs/b2b/api/create-organization-via-discovery). See the
       [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for more details on this Role.
-      - totp_registration_id: (no documentation yet)
+      - totp_registration_id: Globally unique UUID that identifies a TOTP instance.
       - retired_email_addresses:
       A list of retired email addresses for this member.
       A previously active email address can be marked as retired in one of two ways:
@@ -569,10 +574,10 @@ class Member(pydantic.BaseModel):
       addresses allows them to be subsequently re-used by other Organization Members. Retired email addresses can be unlinked
       using the [Unlink Retired Email endpoint](https://stytch.com/docs/b2b/api/unlink-retired-member-email).
 
-      - is_locked: (no documentation yet)
+      - is_locked: Whether the Member is temporarily locked due to too many failed authentication attempts. See the [User Locking Guide](https://stytch.com/docs/resources/platform/user-locks) for more information.
       - mfa_enrolled: Sets whether the Member is enrolled in MFA. If true, the Member must complete an MFA step whenever they wish to log in to their Organization. If false, the Member only needs to complete an MFA step if the Organization's MFA policy is set to `REQUIRED_FOR_ALL`.
       - mfa_phone_number: The Member's phone number. A Member may only have one phone number. The phone number should be in E.164 format (i.e. +1XXXXXXXXXX).
-      - default_mfa_method: (no documentation yet)
+      - default_mfa_method: The Member's default MFA method. This value is used to determine which secondary MFA method to use in the case of multiple methods registered for a Member. The current possible values are `sms_otp` and `totp`.
       - roles: Explicit or implicit Roles assigned to this Member, along with details about the role assignment source.
        See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
       - trusted_metadata: An arbitrary JSON object for storing application-specific data or identity-provider-specific data.
@@ -583,8 +588,8 @@ class Member(pydantic.BaseModel):
       - updated_at: The timestamp of when the Member was last updated. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
       - scim_registration: A scim member registration, referencing a [SCIM Connection](https://stytch.com/docs/b2b/api/scim-connection-object) object in use for the Member creation.
       - external_id: The ID of the member given by the identity provider.
-      - lock_created_at: (no documentation yet)
-      - lock_expires_at: (no documentation yet)
+      - lock_created_at: When the member lock was created, if there is one. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
+      - lock_expires_at: When the member lock expires, if there is one. Values conform to the RFC 3339 standard and are expressed in UTC, e.g. `2021-12-29T12:33:09Z`.
     """  # noqa
 
     organization_id: str

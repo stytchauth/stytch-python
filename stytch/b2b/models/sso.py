@@ -32,6 +32,20 @@ class AuthenticateRequestLocale(str, enum.Enum):
 
 
 class ConnectionImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
+
+      Reserved `role_id`s that are predefined by Stytch include:
+
+      * `stytch_member`
+      * `stytch_admin`
+
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
+
+
+    """  # noqa
+
     role_id: str
 
 
@@ -79,6 +93,21 @@ class GroupImplicitRoleAssignment(pydantic.BaseModel):
 
 
 class Connection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+      - connection_id: Globally unique UUID that identifies a specific External SSO Connection.
+      - external_organization_id: Globally unique UUID that identifies a different Organization within your Project.
+      - external_connection_id: Globally unique UUID that identifies a specific SSO connection configured for a different Organization in your Project.
+      - display_name: A human-readable display name for the connection.
+      - status: The status of the connection. External connections are always active.
+      - external_connection_implicit_role_assignments: All Members who log in with this External connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment. Implicit role assignments are not supported for External connections if the underlying SSO connection is an OIDC connection.
+      - external_group_implicit_role_assignments: Defines the names of the groups
+     that grant specific role assignments. For each group-Role pair, if a Member logs in with this external connection and
+     belongs to the specified group, they will be granted the associated Role. See the
+     [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     external_organization_id: str
@@ -92,6 +121,27 @@ class Connection(pydantic.BaseModel):
 
 
 class OIDCConnection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+      - connection_id: Globally unique UUID that identifies a specific OIDC Connection.
+      - status: The status of the connection. The possible values are pending or active. See the [Update OIDC Connection endpoint](https://stytch.com/docs/b2b/api/update-oidc-connection) for more details.
+      - display_name: A human-readable display name for the connection.
+      - redirect_url: The callback URL for this OIDC connection. This value will be passed to the IdP to redirect the Member back to Stytch after a sign-in attempt.
+      - client_id: The OAuth2.0 client ID used to authenticate login attempts. This will be provided by the IdP.
+      - client_secret: The secret belonging to the OAuth2.0 client used to authenticate login attempts. This will be provided by the IdP.
+      - issuer: A case-sensitive `https://` URL that uniquely identifies the IdP. This will be provided by the IdP.
+      - authorization_url: The location of the URL that starts an OAuth login at the IdP. This will be provided by the IdP.
+      - token_url: The location of the URL that issues OAuth2.0 access tokens and OIDC ID tokens. This will be provided by the IdP.
+      - userinfo_url: The location of the IDP's [UserInfo Endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo). This will be provided by the IdP.
+      - jwks_url: The location of the IdP's JSON Web Key Set, used to verify credentials issued by the IdP. This will be provided by the IdP.
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
+      - custom_scopes: A space-separated list of custom scopes that will be requested on every SSOStart call. If set, this value will replace the default set of OIDC scopes requested: `openid email profile`. Additional scopes can be requested using the `custom_scopes` query parameter on individual SSOStart calls.
+      - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values, which will appear on the member's Trusted Metadata.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -110,6 +160,20 @@ class OIDCConnection(pydantic.BaseModel):
 
 
 class SAMLConnectionImplicitRoleAssignment(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The unique identifier of the RBAC Role, provided by the developer and intended to be human-readable.
+
+      Reserved `role_id`s that are predefined by Stytch include:
+
+      * `stytch_member`
+      * `stytch_admin`
+
+      Check out the [guide on Stytch default Roles](https://stytch.com/docs/b2b/guides/rbac/stytch-default) for a more detailed explanation.
+
+
+    """  # noqa
+
     role_id: str
 
 
@@ -119,6 +183,16 @@ class SAMLGroupImplicitRoleAssignment(pydantic.BaseModel):
 
 
 class X509Certificate(pydantic.BaseModel):
+    """
+    Fields:
+      - certificate_id: The ID of the certificate.
+      - certificate: The certificate, in [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) format.
+      - issuer: The issuer of the certificate. For signing certificates, this value will be "Stytch".
+      - created_at: A timestamp that indicates when the certificate was created.
+      - expires_at: A timestamp that indicates when the certificate will expire.
+      - updated_at: A timestamp that indicates when the certificate was updated.
+    """  # noqa
+
     certificate_id: str
     certificate: str
     issuer: str
@@ -128,6 +202,35 @@ class X509Certificate(pydantic.BaseModel):
 
 
 class SAMLConnection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+      - connection_id: Globally unique UUID that identifies a specific SAML Connection.
+      - status: The status of the connection. The possible values are pending or active. See the [Update SAML Connection endpoint](https://stytch.com/docs/b2b/api/update-saml-connection) for more details.
+      - idp_entity_id: A globally unique name for the IdP. This will be provided by the IdP.
+      - display_name: A human-readable display name for the connection.
+      - idp_sso_url: The URL for which assertions for login requests will be sent. This will be provided by the IdP.
+      - acs_url: The URL of the Assertion Consumer Service. This value will be passed to the IdP to redirect the Member back to Stytch after a sign-in attempt. Read our [SAML Overview](https://stytch.com/docs/b2b/api/saml-overview) for more info.
+      - audience_uri: The URL of the Audience Restriction. This value will indicate that Stytch is the intended audience of an assertion. Read our [SAML Overview](https://stytch.com/docs/b2b/api/saml-overview) for more info.
+      - signing_certificates: A list of X.509 certificates Stytch will use to sign its assertion requests. Certificates should be uploaded to the IdP.
+      - verification_certificates: A list of X.509 certificates Stytch will use to validate an assertion callback. Certificates should be populated from the IdP.
+      - encryption_private_keys: (no documentation yet)
+      - saml_connection_implicit_role_assignments: All Members who log in with this SAML connection will implicitly receive the specified Roles. See the [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+      - saml_group_implicit_role_assignments: Defines the names of the SAML groups
+     that grant specific role assignments. For each group-Role pair, if a Member logs in with this SAML connection and
+     belongs to the specified SAML group, they will be granted the associated Role. See the
+     [RBAC guide](https://stytch.com/docs/b2b/guides/rbac/role-assignment) for more information about role assignment.
+      - alternative_audience_uri: An alternative URL to use for the Audience Restriction. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
+      - identity_provider: Name of the IdP. Enum with possible values: `classlink`, `cyberark`, `duo`, `google-workspace`, `jumpcloud`, `keycloak`, `miniorange`, `microsoft-entra`, `okta`, `onelogin`, `pingfederate`, `rippling`, `salesforce`, `shibboleth`, or `generic`.
+
+    Specifying a known provider allows Stytch to handle any provider-specific logic.
+      - nameid_format: The NameID format the SAML Connection expects to use. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`.
+      - alternative_acs_url: An alternative URL to use for the `AssertionConsumerServiceURL` in SP initiated SAML AuthNRequests. This value can be used when you wish to migrate an existing SAML integration to Stytch with zero downtime. Note that you will be responsible for proxying requests sent to the Alternative ACS URL to Stytch. Read our [SSO migration guide](https://stytch.com/docs/b2b/guides/migrations/additional-migration-considerations) for more info.
+      - idp_initiated_auth_disabled: Determines whether IDP initiated auth is allowed for a given SAML connection. Defaults to false (IDP Initiated Auth is enabled).
+      - allow_gateway_callback: (no documentation yet)
+      - attribute_mapping: An object that represents the attributes used to identify a Member. This object will map the IdP-defined User attributes to Stytch-specific values. Required attributes: `email` and one of `full_name` or `first_name` and `last_name`.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str

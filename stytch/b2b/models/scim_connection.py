@@ -174,7 +174,7 @@ class UpdateRequestOptions(pydantic.BaseModel):
 class CreateResponse(ResponseBase):
     """Response type for `Connection.create`.
     Fields:
-      - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
+      - connection: The [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object).
     """  # noqa
 
     connection: Optional[SCIMConnectionWithToken] = None
@@ -203,7 +203,7 @@ class GetGroupsResponse(ResponseBase):
 class GetResponse(ResponseBase):
     """Response type for `Connection.get`.
     Fields:
-      - connection: A [SCIM Connection](https://stytch.com/docs/b2b/api/scim-connection-object) connection belonging to the organization (currently limited to one).
+      - connection: The [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object).
     """  # noqa
 
     connection: Optional[SCIMConnection] = None
@@ -212,7 +212,7 @@ class GetResponse(ResponseBase):
 class RotateCancelResponse(ResponseBase):
     """Response type for `Connection.rotate_cancel`.
     Fields:
-      - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
+      - connection: The [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object).
     """  # noqa
 
     connection: Optional[SCIMConnection] = None
@@ -221,7 +221,7 @@ class RotateCancelResponse(ResponseBase):
 class RotateCompleteResponse(ResponseBase):
     """Response type for `Connection.rotate_complete`.
     Fields:
-      - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
+      - connection: The [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object).
     """  # noqa
 
     connection: Optional[SCIMConnection] = None
@@ -230,7 +230,7 @@ class RotateCompleteResponse(ResponseBase):
 class RotateStartResponse(ResponseBase):
     """Response type for `Connection.rotate_start`.
     Fields:
-      - connection: The `SCIM Connection` object affected by this API call. See the [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object) for complete response field details.
+      - connection: The [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object).
     """  # noqa
 
     connection: Optional[SCIMConnectionWithNextToken] = None
@@ -239,7 +239,7 @@ class RotateStartResponse(ResponseBase):
 class UpdateResponse(ResponseBase):
     """Response type for `Connection.update`.
     Fields:
-      - connection: The `SAML Connection` object affected by this API call. See the [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object) for complete response field details.
+      - connection: The [SCIM Connection Object](https://stytch.com/docs/b2b/api/scim-connection-object).
     """  # noqa
 
     connection: Optional[SCIMConnection] = None

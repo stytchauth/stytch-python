@@ -42,11 +42,9 @@ class Email:
 
         Fields:
           - email: The email of the User that requested the password reset.
-          - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
-          This should be a url that your app receives and parses before showing your app's reset password page.
-          After the user submits a new password to your app, it should send an API request to complete the password reset process.
-          If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
-          If you have not set a default reset password redirect URL, an error is returned.
+          - reset_password_redirect_url: The URL that the User is redirected to from the reset password magic link. This URL should display your application's reset password page.
+          Before rendering the reset page, extract the `token` from the query parameters. On the reset page, collect the new password and complete the flow by calling the corresponding Password Reset by Email endpoint.
+          If this parameter is not specified, the default Reset Password redirect URL configured in the Dashboard will be used. If you have not set a default Reset Password redirect URL, an error is returned.
           - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
           The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
@@ -54,14 +52,14 @@ class Email:
           - login_redirect_url: The URL that Users are redirected to upon clicking the "Log in without password" button in password reset emails.
 
               After Users are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the User in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
-          The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
+          Templates can be added in the [Stytch dashboard](https://stytch.com/dashboard/templates) using our built-in customization options or custom HTML templates with type “Passwords - Password reset”.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -105,11 +103,9 @@ class Email:
 
         Fields:
           - email: The email of the User that requested the password reset.
-          - reset_password_redirect_url: The url that the user clicks from the password reset email to finish the reset password flow.
-          This should be a url that your app receives and parses before showing your app's reset password page.
-          After the user submits a new password to your app, it should send an API request to complete the password reset process.
-          If this value is not passed, the default reset password redirect URL that you set in your Dashboard is used.
-          If you have not set a default reset password redirect URL, an error is returned.
+          - reset_password_redirect_url: The URL that the User is redirected to from the reset password magic link. This URL should display your application's reset password page.
+          Before rendering the reset page, extract the `token` from the query parameters. On the reset page, collect the new password and complete the flow by calling the corresponding Password Reset by Email endpoint.
+          If this parameter is not specified, the default Reset Password redirect URL configured in the Dashboard will be used. If you have not set a default Reset Password redirect URL, an error is returned.
           - reset_password_expiration_minutes: Set the expiration for the password reset, in minutes. By default, it expires in 30 minutes.
           The minimum expiration is 5 minutes and the maximum is 7 days (10080 mins).
           - code_challenge: A base64url encoded SHA256 hash of a one time secret used to validate that the request starts and ends on the same device.
@@ -117,14 +113,14 @@ class Email:
           - login_redirect_url: The URL that Users are redirected to upon clicking the "Log in without password" button in password reset emails.
 
               After Users are redirected to the login redirect URL, your application should retrieve the `token` value from the URL parameters and call the [Magic Link Authenticate endpoint](https://stytch.com/docs/api/authenticate-magic-link) to log the User in without requiring a password reset. If this value is not provided, your project's default login redirect URL will be used. If you have not set a default login redirect URL, an error will be returned.
-          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+          - locale: Used to determine which language to use when sending the user this delivery method. Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), French (`"fr"`) and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
         Request support for additional languages [here](https://docs.google.com/forms/d/e/1FAIpQLScZSpAu_m2AmLXRT3F3kap-s_mcV6UTBitYn6CdyWP0-o7YjQ/viewform?usp=sf_link")!
 
           - reset_password_template_id: Use a custom template for password reset emails. By default, it will use your default email template.
-          The template must be a template using our built-in customizations or a custom HTML email for Passwords - Password reset.
+          Templates can be added in the [Stytch dashboard](https://stytch.com/dashboard/templates) using our built-in customization options or custom HTML templates with type “Passwords - Password reset”.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {

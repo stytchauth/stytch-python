@@ -44,9 +44,11 @@ class WebAuthn:
 
         To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
 
-        After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
+        After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument.
 
-        If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
+        When using built-in browser methods like `navigator.credentials.create()`, set the `use_base64_url_encoding` option to `true`.
+
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
@@ -58,7 +60,7 @@ class WebAuthn:
           - override_id: (no documentation yet)
           - override_name: (no documentation yet)
           - override_display_name: (no documentation yet)
-          - use_base64_url_encoding: (no documentation yet)
+          - use_base64_url_encoding: If true, values in the `public_key_credential_creation_options` will be base64 URL encoded. Set this option to true when using built-in browser methods like `navigator.credentials.create` and `navigator.credentials.get`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -102,9 +104,11 @@ class WebAuthn:
 
         To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
 
-        After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument. We recommend using the `create()` wrapper provided by the webauthn-json library.
+        After calling this endpoint, the browser will need to call [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) with the data from [public_key_credential_creation_options](https://w3c.github.io/webauthn/#dictionary-makecredentialoptions) passed to the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request via the public key argument.
 
-        If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, the `public_key_credential_creation_options` will need to be converted to a suitable public key by unmarshalling the JSON, base64 decoding the user ID field, and converting user ID and the challenge fields into an array buffer.
+        When using built-in browser methods like `navigator.credentials.create()`, set the `use_base64_url_encoding` option to `true`.
+
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
@@ -116,7 +120,7 @@ class WebAuthn:
           - override_id: (no documentation yet)
           - override_name: (no documentation yet)
           - override_display_name: (no documentation yet)
-          - use_base64_url_encoding: (no documentation yet)
+          - use_base64_url_encoding: If true, values in the `public_key_credential_creation_options` will be base64 URL encoded. Set this option to true when using built-in browser methods like `navigator.credentials.create` and `navigator.credentials.get`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -156,7 +160,7 @@ class WebAuthn:
     ) -> RegisterResponse:
         """Complete the creation of a WebAuthn registration by passing the response from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter.
 
-        If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
@@ -209,7 +213,7 @@ class WebAuthn:
     ) -> RegisterResponse:
         """Complete the creation of a WebAuthn registration by passing the response from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) request to this endpoint as the `public_key_credential` parameter.
 
-        If the [webauthn-json](https://github.com/github/webauthn-json) library's `create()` method was used, the response can be passed directly to the [register endpoint](https://stytch.com/docs/api/webauthn-register). If not, some fields (the client data and the attestation object) from the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential) response will need to be converted from array buffers to strings and marshalled into JSON.
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
@@ -261,16 +265,18 @@ class WebAuthn:
 
         To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
 
-        After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
+        After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument.
 
-        If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, `the public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
+        When using built-in browser methods like `navigator.credentials.get()`, set the `use_base64_url_encoding` option to `true`.
+
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
 
-          - use_base64_url_encoding: (no documentation yet)
+          - use_base64_url_encoding: If true, values in the `public_key_credential_creation_options` will be base64 URL encoded. Set this option to true when using built-in browser methods like `navigator.credentials.create` and `navigator.credentials.get`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -300,16 +306,18 @@ class WebAuthn:
 
         To optimize for Passkeys, set the `return_passkey_credential_options` field to `true`.
 
-        After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument. We recommend using the `get()` wrapper provided by the webauthn-json library.
+        After calling this endpoint, the browser will need to call [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) with the data from `public_key_credential_request_options` passed to the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request via the public key argument.
 
-        If you are not using the [webauthn-json](https://github.com/github/webauthn-json) library, `the public_key_credential_request_options` will need to be converted to a suitable public key by unmarshalling the JSON and converting some the fields to array buffers.
+        When using built-in browser methods like `navigator.credentials.get()`, set the `use_base64_url_encoding` option to `true`.
+
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - domain: The domain for Passkeys or WebAuthn. Defaults to `window.location.hostname`.
           - user_id: The `user_id` of an active user the Passkey or WebAuthn registration should be tied to. You may use an `external_id` here if one is set for the user.
           - return_passkey_credential_options: If true, the `public_key_credential_creation_options` returned will be optimized for Passkeys with `userVerification` set to `"preferred"`.
 
-          - use_base64_url_encoding: (no documentation yet)
+          - use_base64_url_encoding: If true, values in the `public_key_credential_creation_options` will be base64 URL encoded. Set this option to true when using built-in browser methods like `navigator.credentials.create` and `navigator.credentials.get`.
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -339,7 +347,7 @@ class WebAuthn:
     ) -> AuthenticateResponse:
         """Complete the authentication of a Passkey or WebAuthn registration by passing the response from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint.
 
-        If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).
@@ -389,7 +397,7 @@ class WebAuthn:
     ) -> AuthenticateResponse:
         """Complete the authentication of a Passkey or WebAuthn registration by passing the response from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) request to the authenticate endpoint.
 
-        If the [webauthn-json](https://github.com/github/webauthn-json) library's `get()` method was used, the response can be passed directly to the [authenticate endpoint](https://stytch.com/docs/api/webauthn-authenticate). If not some fields from the [navigator.credentials.get()](https://www.w3.org/TR/webauthn-2/#sctn-getAssertion) response will need to be converted from array buffers to strings and marshalled into JSON.
+        See our [WebAuthn setup guide](https://stytch.com/docs/guides/webauthn/api) for additional usage instructions and example code.
 
         Fields:
           - public_key_credential: The response of the [navigator.credentials.create()](https://www.w3.org/TR/webauthn-2/#sctn-createCredential).

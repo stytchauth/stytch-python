@@ -170,12 +170,22 @@ class MagicLinks:
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Union[Attributes, Dict[str, Any]]] = None,
     ) -> CreateResponse:
-        """Create an Embeddable Magic Link token for a User. Access to this endpoint is restricted. To enable it, please send us a note at support@stytch.com.
+        """Create an Embeddable Magic Link token for a User.
 
-        ### Next steps
-        Send the returned `token` value to the end user in a link which directs to your application. When the end user follows your link, collect the token, and call [Authenticate Magic Link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
+        ### Important usage notes
 
-        **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
+        Carefully review the following notes before using Embeddable Magic Links:
+
+        * Embeddable Magic Link tokens are **sensitive values**. You should handle and store them securely.
+        * Authenticating an Embeddable Magic Link token will not mark any of a user's delivery factors (email address or phone number) as verified, since we cannot confirm how the token was sent to the user.
+        * Embeddable Magic Links are only available in our Consumer API, and not our B2B API.
+
+        When sending Embeddable Magic Links via email:
+
+        * Deliverability is paramount. Carefully test your email copy to ensure it reaches your users' inboxes. Small changes can result in your emails being sent to spam.
+        * In some cases, email security bots may follow links within incoming emails before your users open them. This consumes the Embeddable Magic Link token, preventing the user from logging in when they later click the link. Our Email Magic Links product automatically prevents this (details [here](https://stytch.com/docs/consumer-auth/authentication/magic-links/redirect-routing)). However, when sending your own emails containing Embeddable Magic Links, you'll be responsible for detecting and stopping bot traffic using tools like CAPTCHA or [Device Fingerprinting](https://stytch.com/docs/fraud-risk/device-fingerprinting/overview).
+
+        We also recommend checking out our [Trusted Auth Tokens](https://stytch.com/docs/consumer-auth/authentication/trusted-auth-tokens/overview) product, which is available in both our Consumer and B2B APIs and can be a better fit for some use cases.
 
         Fields:
           - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.
@@ -203,12 +213,22 @@ class MagicLinks:
         expiration_minutes: Optional[int] = None,
         attributes: Optional[Attributes] = None,
     ) -> CreateResponse:
-        """Create an Embeddable Magic Link token for a User. Access to this endpoint is restricted. To enable it, please send us a note at support@stytch.com.
+        """Create an Embeddable Magic Link token for a User.
 
-        ### Next steps
-        Send the returned `token` value to the end user in a link which directs to your application. When the end user follows your link, collect the token, and call [Authenticate Magic Link](https://stytch.com/docs/api/authenticate-magic-link) to complete authentication.
+        ### Important usage notes
 
-        **Note:** Authenticating an Embeddable Magic Link token will **not** result in any of the Stytch User's factors (email address or phone number) being marked as verified, as Stytch cannot confirm where the user received the token.
+        Carefully review the following notes before using Embeddable Magic Links:
+
+        * Embeddable Magic Link tokens are **sensitive values**. You should handle and store them securely.
+        * Authenticating an Embeddable Magic Link token will not mark any of a user's delivery factors (email address or phone number) as verified, since we cannot confirm how the token was sent to the user.
+        * Embeddable Magic Links are only available in our Consumer API, and not our B2B API.
+
+        When sending Embeddable Magic Links via email:
+
+        * Deliverability is paramount. Carefully test your email copy to ensure it reaches your users' inboxes. Small changes can result in your emails being sent to spam.
+        * In some cases, email security bots may follow links within incoming emails before your users open them. This consumes the Embeddable Magic Link token, preventing the user from logging in when they later click the link. Our Email Magic Links product automatically prevents this (details [here](https://stytch.com/docs/consumer-auth/authentication/magic-links/redirect-routing)). However, when sending your own emails containing Embeddable Magic Links, you'll be responsible for detecting and stopping bot traffic using tools like CAPTCHA or [Device Fingerprinting](https://stytch.com/docs/fraud-risk/device-fingerprinting/overview).
+
+        We also recommend checking out our [Trusted Auth Tokens](https://stytch.com/docs/consumer-auth/authentication/trusted-auth-tokens/overview) product, which is available in both our Consumer and B2B APIs and can be a better fit for some use cases.
 
         Fields:
           - user_id: The unique ID of a specific User. You may use an `external_id` here if one is set for the user.

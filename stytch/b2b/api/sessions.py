@@ -346,7 +346,7 @@ class Sessions:
           Total custom claims size cannot exceed four kilobytes.
           - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
-        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
@@ -422,7 +422,7 @@ class Sessions:
           Total custom claims size cannot exceed four kilobytes.
           - locale: If the Member needs to complete an MFA step, and the Member has a phone number, this endpoint will pre-emptively send a one-time passcode (OTP) to the Member's phone number. The locale argument will be used to determine which language to use when sending the passcode.
 
-        Parameter is a [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
+        Parameter is an [IETF BCP 47 language tag](https://www.w3.org/International/articles/language-tags/), e.g. `"en"`.
 
         Currently supported languages are English (`"en"`), Spanish (`"es"`), and Brazilian Portuguese (`"pt-br"`); if no value is provided, the copy defaults to English.
 
@@ -462,8 +462,6 @@ class Sessions:
         This session can be used with the Stytch SDKs and APIs.
 
         The Access Token must contain the `full_access` scope (only available to First Party clients) and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
-
-        The Member Session returned will be the same Member Session that was active in your application (the authorizing party) during the initial authorization flow.
 
         Because the Member previously completed MFA and satisfied all Organization authentication requirements at the time of the original Access Token issuance, this endpoint will never return an `intermediate_session_token` or require MFA.
 
@@ -511,8 +509,6 @@ class Sessions:
         This session can be used with the Stytch SDKs and APIs.
 
         The Access Token must contain the `full_access` scope (only available to First Party clients) and must not be more than 5 minutes old. Access Tokens may only be exchanged a single time.
-
-        The Member Session returned will be the same Member Session that was active in your application (the authorizing party) during the initial authorization flow.
 
         Because the Member previously completed MFA and satisfied all Organization authentication requirements at the time of the original Access Token issuance, this endpoint will never return an `intermediate_session_token` or require MFA.
 

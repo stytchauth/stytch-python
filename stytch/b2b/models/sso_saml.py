@@ -135,7 +135,7 @@ class UpdateConnectionRequestOptions(pydantic.BaseModel):
 class CreateConnectionResponse(ResponseBase):
     """Response type for `SAML.create_connection`.
     Fields:
-      - connection: The `SAML Connection` object affected by this API call. See the [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object) for complete response field details.
+      - connection: The [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object)
     """  # noqa
 
     connection: Optional[SAMLConnection] = None
@@ -162,7 +162,7 @@ class DeleteVerificationCertificateResponse(ResponseBase):
 class UpdateByURLResponse(ResponseBase):
     """Response type for `SAML.update_by_url`.
     Fields:
-      - connection: The `SAML Connection` object affected by this API call. See the [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object) for complete response field details.
+      - connection: The [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object)
     """  # noqa
 
     connection: Optional[SAMLConnection] = None
@@ -171,7 +171,7 @@ class UpdateByURLResponse(ResponseBase):
 class UpdateConnectionResponse(ResponseBase):
     """Response type for `SAML.update_connection`.
     Fields:
-      - connection: The `SAML Connection` object affected by this API call. See the [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object) for complete response field details.
+      - connection: The [SAML Connection Object](https://stytch.com/docs/b2b/api/saml-connection-object)
     """  # noqa
 
     connection: Optional[SAMLConnection] = None

@@ -104,12 +104,36 @@ class SCIMGroup(pydantic.BaseModel):
 
 
 class SCIMGroupImplicitRoleAssignments(pydantic.BaseModel):
+    """
+    Fields:
+      - role_id: The ID of the role.
+      - group_id: The ID of the group.
+      - group_name: (no documentation yet)
+    """  # noqa
+
     role_id: str
     group_id: str
     group_name: str
 
 
 class SCIMConnection(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+      - connection_id: The ID of the SCIM connection.
+      - status: The status of the connection. The possible values are deleted or active.
+      - display_name: A human-readable display name for the connection.
+      - identity_provider: Name of the IdP. Enum with possible values: `okta`, `microsoft-entra`, `cyberark`, `jumpcloud`, `onelogin`, `pingfederate`, `rippling` or `generic`.
+
+    Specifying a known provider allows Stytch to handle any provider-specific logic, such as automatically appending `?aadOptscim062020` to the returned BaseURL for `microsoft-entra` SCIM Connections to [enable the SCIM 2.0 compliant flag](https://learn.microsoft.com/en-us/entra/identity/app-provisioning/application-provisioning-config-problem-scim-compatibility#scim-20-compliance-issues-and-status).
+      - base_url: The URL supplied to the Identity Provider (IdP) alongside the bearer token enabling access to Stytch's SCIM API endpoints
+      - bearer_token_last_four: The last four digits of the bearer token. If you've lost access to your `bearer_token` and need to generate a new one, use the [SCIM rotate token start endpoint](https://stytch.com/docs/b2b/api/scim-rotate-token-start).
+      - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
+      - next_bearer_token_last_four: (no documentation yet)
+      - bearer_token_expires_at: The bearer token expiry time.
+      - next_bearer_token_expires_at: This field is supplied only during [token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start). The next bearer token expiry time.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -124,6 +148,23 @@ class SCIMConnection(pydantic.BaseModel):
 
 
 class SCIMConnectionWithNextToken(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+      - connection_id: The ID of the SCIM connection.
+      - status: The status of the connection. The possible values are deleted or active.
+      - display_name: A human-readable display name for the connection.
+      - base_url: The URL supplied to the Identity Provider (IdP) alongside the bearer token enabling access to Stytch's SCIM API endpoints
+      - identity_provider: Name of the IdP. Enum with possible values: `okta`, `microsoft-entra`, `cyberark`, `jumpcloud`, `onelogin`, `pingfederate`, `rippling` or `generic`.
+
+    Specifying a known provider allows Stytch to handle any provider-specific logic, such as automatically appending `?aadOptscim062020` to the returned BaseURL for `microsoft-entra` SCIM Connections to [enable the SCIM 2.0 compliant flag](https://learn.microsoft.com/en-us/entra/identity/app-provisioning/application-provisioning-config-problem-scim-compatibility#scim-20-compliance-issues-and-status).
+      - bearer_token_last_four: The last four digits of the bearer token. If you've lost access to your `bearer_token` and need to generate a new one, use the [SCIM rotate token start endpoint](https://stytch.com/docs/b2b/api/scim-rotate-token-start).
+      - next_bearer_token: This field is supplied only during [token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start). This token should be used as the new bearer token for the SCIM connection after token rotation has been completed using the [SCIM rotate token complete endpoint](https://stytch.com/docs/b2b/api/scim-rotate-token-complete).
+      - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
+      - bearer_token_expires_at: The bearer token expiry time.
+      - next_bearer_token_expires_at: This field is supplied only during [token rotation](https://stytch.com/docs/b2b/api/scim-rotate-token-start). The next bearer token expiry time.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
@@ -138,6 +179,21 @@ class SCIMConnectionWithNextToken(pydantic.BaseModel):
 
 
 class SCIMConnectionWithToken(pydantic.BaseModel):
+    """
+    Fields:
+      - organization_id: Globally unique UUID that identifies a specific Organization. The `organization_id` is critical to perform operations on an Organization, so be sure to preserve this value. You may also use the organization_slug or organization_external_id here as a convenience.
+      - connection_id: The ID of the SCIM connection.
+      - status: The status of the connection. The possible values are deleted or active.
+      - display_name: A human-readable display name for the connection.
+      - identity_provider: Name of the IdP. Enum with possible values: `okta`, `microsoft-entra`, `cyberark`, `jumpcloud`, `onelogin`, `pingfederate`, `rippling` or `generic`.
+
+    Specifying a known provider allows Stytch to handle any provider-specific logic, such as automatically appending `?aadOptscim062020` to the returned BaseURL for `microsoft-entra` SCIM Connections to [enable the SCIM 2.0 compliant flag](https://learn.microsoft.com/en-us/entra/identity/app-provisioning/application-provisioning-config-problem-scim-compatibility#scim-20-compliance-issues-and-status).
+      - base_url: The URL supplied to the Identity Provider (IdP) alongside the bearer token enabling access to Stytch's SCIM API endpoints
+      - bearer_token: The token supplied to the Identity Provider (IdP) alongside the base URL that grants access to Stytch's SCIM API endpoints. It should be included in HTTP authorization headers. This field is supplied only on creation of the SCIM connection.
+      - scim_group_implicit_role_assignments: An array of SCIM group implicit role assignments. Each object in the array must contain a `group_id` and a `role_id`.
+      - bearer_token_expires_at: The bearer token expiry time.
+    """  # noqa
+
     organization_id: str
     connection_id: str
     status: str
