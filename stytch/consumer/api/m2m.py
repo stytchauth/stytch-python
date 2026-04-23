@@ -118,7 +118,6 @@ class M2M:
         ] = m2m_authorization.perform_authorization_check,
     ) -> Optional[M2MJWTClaims]:
         """Validates a M2M JWT locally.
-        Note: There is no async version of this since we make no network calls.
 
         Fields:
           - access_token: The ID of the client.
@@ -131,6 +130,62 @@ class M2M:
 
         _scope_claim = "scope"
         generic_claims = jwt_helpers.authenticate_jwt_local(
+            project_id=self.project_id,
+            jwks_client=self.jwks_client,
+            jwt=access_token,
+            max_token_age_seconds=max_token_age,
+            base_url=self.api_base.base_url,
+        )
+        if generic_claims is None:
+            return None
+
+        scope = generic_claims.untyped_claims[_scope_claim]
+        scopes = [s for s in scope.split(" ") if len(s) > 0]
+        required_scopes = required_scopes or []
+
+        is_authorized = scope_authorization_func(
+            m2m_authorization.AuthorizationCheckParams(
+                has_scopes=scopes,
+                required_scopes=required_scopes,
+            )
+        )
+        if not is_authorized:
+            return None
+
+        custom_claims = {
+            k: v for k, v in generic_claims.untyped_claims.items() if k != _scope_claim
+        }
+        return M2MJWTClaims(
+            client_id=generic_claims.reserved_claims["sub"],
+            scopes=scopes,
+            custom_claims=custom_claims,
+        )
+
+    async def authenticate_token_async(
+        self,
+        access_token: str,
+        required_scopes: Optional[List[str]] = None,
+        max_token_age: Optional[int] = None,
+        scope_authorization_func: Callable[
+            [m2m_authorization.AuthorizationCheckParams], bool
+        ] = m2m_authorization.perform_authorization_check,
+    ) -> Optional[M2MJWTClaims]:
+        """Validates a M2M JWT locally without blocking the event loop.
+
+        Uses asyncio.to_thread() for the JWKS fetch, which may make a network call
+        if the signing key is not cached.
+
+        Fields:
+          - access_token: The ID of the client.
+          - required_scopes: A list of scopes the token must have to be valid.
+          - max_token_age: The maximum possible lifetime in seconds for the token to be valid.
+          - scope_authorization_func: A function to check if the token has the required scopes. This defaults to
+            a function that assumes scopes are either direct string matches or written in the form "action:resource".
+            See the documentation for `m2m_authorization.perform_authorization_check` for more information.
+        """  # noqa
+
+        _scope_claim = "scope"
+        generic_claims = await jwt_helpers.authenticate_jwt_local_async(
             project_id=self.project_id,
             jwks_client=self.jwks_client,
             jwt=access_token,
