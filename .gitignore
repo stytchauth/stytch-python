@@ -6,3 +6,4 @@ stytch.egg-info/
 .coverage
 dist/
 .idea/
+.worktrees/

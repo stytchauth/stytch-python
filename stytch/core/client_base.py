@@ -35,6 +35,15 @@ class ClientBase(abc.ABC):
         self.async_client = AsyncClient(project_id, secret, session=async_session)
         self.jwks_client = self.get_jwks_client(project_id)
 
+    async def close(self) -> None:
+        await self.async_client.close()
+
+    async def __aenter__(self) -> "ClientBase":
+        return self
+
+    async def __aexit__(self, *_: object) -> Optional[bool]:
+        await self.close()
+
     @abc.abstractmethod
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
         pass

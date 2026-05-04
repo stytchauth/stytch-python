@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import unittest
 
+import aiohttp
 import requests
 
 from stytch.core.http.client import AsyncClient, SyncClient
@@ -31,3 +32,22 @@ class TestAsyncClient(unittest.TestCase):
         asyncio.set_event_loop_policy(NoEventLoopPolicy())
         client = AsyncClient("project_id", "secret")
         self.assertIsNotNone(client)
+
+
+class TestAsyncClientClose(unittest.IsolatedAsyncioTestCase):
+    async def test_close_owned_session(self):
+        client = AsyncClient("project_id", "secret")
+        session = client._session  # force session creation and capture reference
+        await client.close()
+        self.assertTrue(session.closed)
+
+    async def test_close_external_session_is_noop(self):
+        async with aiohttp.ClientSession() as external:
+            client = AsyncClient("project_id", "secret", session=external)
+            await client.close()
+            self.assertFalse(external.closed)
+
+    async def test_close_before_session_created_is_noop(self):
+        client = AsyncClient("project_id", "secret")
+        # no session accessed — should not raise
+        await client.close()

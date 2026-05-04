@@ -146,6 +146,12 @@ class AsyncClient(ClientBase):
         except Exception:
             pass
 
+    async def close(self) -> None:
+        if self._external_session or self.__session is None:
+            return
+        await self.__session.close()
+        self.__session = None
+
     @classmethod
     async def _response_from_request(
         cls, r: aiohttp.ClientResponse

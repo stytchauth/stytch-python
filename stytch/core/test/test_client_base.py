@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+import unittest
 import warnings
 from unittest import TestCase
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pydantic
 
@@ -155,3 +156,33 @@ class ResolveApiUrl(TestCase):
 
         # Verify the error message
         self.assertIn("HTTPS scheme", str(context.exception))
+
+
+class AsyncClientLifecycleTests(unittest.IsolatedAsyncioTestCase):
+    def _make_client(self):
+        return Client(
+            project_id="project-test-00000000-0000-0000-0000-000000000000",
+            secret="secret",
+            suppress_warnings=True,
+        )
+
+    async def test_close_delegates_to_async_client(self):
+        client = self._make_client()
+        client.async_client.close = AsyncMock()
+        await client.close()
+        client.async_client.close.assert_awaited_once()
+
+    async def test_context_manager_calls_close(self):
+        client = self._make_client()
+        client.async_client.close = AsyncMock()
+        async with client as c:
+            self.assertIs(c, client)
+        client.async_client.close.assert_awaited_once()
+
+    async def test_context_manager_calls_close_on_exception(self):
+        client = self._make_client()
+        client.async_client.close = AsyncMock()
+        with self.assertRaises(ValueError):
+            async with client:
+                raise ValueError("boom")
+        client.async_client.close.assert_awaited_once()
