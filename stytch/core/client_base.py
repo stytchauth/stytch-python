@@ -43,6 +43,7 @@ class ClientBase(abc.ABC):
 
     async def __aexit__(self, *_: object) -> Optional[bool]:
         await self.close()
+        return None
 
     @abc.abstractmethod
     def get_jwks_client(self, project_id: str) -> jwt.PyJWKClient:
