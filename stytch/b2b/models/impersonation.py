@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import datetime
 from typing import Optional
 
 from stytch.b2b.models.mfa import MfaRequired
@@ -27,6 +28,7 @@ class AuthenticateResponse(ResponseBase):
       - member_authenticated: The member will always be fully authenticated if an impersonation token is successfully authenticated.
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object) for the impersonated Member.
       - mfa_required: MFA will not be required when authenticating impersonation tokens.
+      - intermediate_session_token_expires_at: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -39,3 +41,4 @@ class AuthenticateResponse(ResponseBase):
     member_authenticated: bool
     member_session: Optional[MemberSession] = None
     mfa_required: Optional[MfaRequired] = None
+    intermediate_session_token_expires_at: Optional[datetime.datetime] = None

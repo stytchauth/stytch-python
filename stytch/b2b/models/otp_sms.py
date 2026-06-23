@@ -24,6 +24,14 @@ class SendRequestLocale(str, enum.Enum):
     DEDE = "de-DE"
     ZHHANS = "zh-Hans"
     CAES = "ca-ES"
+    JA = "ja"
+    RU = "ru"
+    NL = "nl"
+    PL = "pl"
+    TR = "tr"
+    FA = "fa"
+    VI = "vi"
+    CS = "cs"
 
 
 class AuthenticateResponse(ResponseBase):

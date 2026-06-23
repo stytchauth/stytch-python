@@ -6,7 +6,8 @@
 
 from __future__ import annotations
 
-from typing import List
+import datetime
+from typing import List, Optional
 
 from stytch.b2b.models.discovery import DiscoveredOrganization
 from stytch.core.response_base import ResponseBase
@@ -33,6 +34,7 @@ class AuthenticateResponse(ResponseBase):
       - provider_tenant_id: The tenant ID returned by the OAuth provider. This is typically used to identify an organization or group within the provider's domain. For example, in HubSpot this is a Hub ID, in Slack this is the Workspace ID, and in GitHub this is an organization ID. This field will only be populated if exactly one tenant ID is returned from a successful OAuth authentication and developers should prefer `provider_tenant_ids` over this since it accounts for the possibility of an OAuth provider yielding multiple tenant IDs.
       - provider_tenant_ids: All tenant IDs returned by the OAuth provider. These is typically used to identify organizations or groups within the provider's domain. For example, in HubSpot this is a Hub ID, in Slack this is the Workspace ID, and in GitHub this is an organization ID. Some OAuth providers do not return tenant IDs, some providers are guaranteed to return one, and some may return multiple. This field will always be populated if at least one tenant ID was returned from the OAuth provider and developers should prefer this field over `provider_tenant_id`.
       - full_name: The full name of the authenticated end user, if available.
+      - intermediate_session_token_expires_at: (no documentation yet)
     """  # noqa
 
     intermediate_session_token: str
@@ -42,3 +44,4 @@ class AuthenticateResponse(ResponseBase):
     provider_tenant_id: str
     provider_tenant_ids: List[str]
     full_name: str
+    intermediate_session_token_expires_at: Optional[datetime.datetime] = None

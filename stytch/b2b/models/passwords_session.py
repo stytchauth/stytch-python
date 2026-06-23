@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import datetime
 import enum
 from typing import Optional
 
@@ -36,6 +37,7 @@ class ResetResponse(ResponseBase):
       - member_session: The [Session object](https://stytch.com/docs/b2b/api/session-object).
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
       - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - intermediate_session_token_expires_at: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -48,3 +50,4 @@ class ResetResponse(ResponseBase):
     member_session: Optional[MemberSession] = None
     mfa_required: Optional[MfaRequired] = None
     member_device: Optional[DeviceInfo] = None
+    intermediate_session_token_expires_at: Optional[datetime.datetime] = None

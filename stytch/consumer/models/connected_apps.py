@@ -26,6 +26,7 @@ class ConnectedApp(pydantic.BaseModel):
       - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
       - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
       - creation_method: (no documentation yet)
+      - id_token_template_content: (no documentation yet)
       - client_secret_last_four: The last four characters of the client secret.
       - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
       - access_token_custom_audience: (no documentation yet)
@@ -45,6 +46,7 @@ class ConnectedApp(pydantic.BaseModel):
     post_logout_redirect_urls: List[str]
     bypass_consent_for_offline_access: bool
     creation_method: str
+    id_token_template_content: str
     client_secret_last_four: Optional[str] = None
     next_client_secret_last_four: Optional[str] = None
     access_token_custom_audience: Optional[str] = None
@@ -74,6 +76,7 @@ class ConnectedAppWithClientSecret(pydantic.BaseModel):
       - access_token_template_content: (no documentation yet)
       - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
       - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+      - id_token_template_content: (no documentation yet)
       - client_secret_last_four: The last four characters of the client secret.
       - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
       - client_secret: The secret of the Connected App client. **Required for confidential clients**
@@ -93,6 +96,7 @@ class ConnectedAppWithClientSecret(pydantic.BaseModel):
     access_token_template_content: str
     post_logout_redirect_urls: List[str]
     bypass_consent_for_offline_access: bool
+    id_token_template_content: str
     client_secret_last_four: Optional[str] = None
     next_client_secret_last_four: Optional[str] = None
     client_secret: Optional[str] = None
@@ -117,6 +121,7 @@ class ConnectedAppWithNextClientSecret(pydantic.BaseModel):
       - access_token_template_content: (no documentation yet)
       - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
       - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+      - id_token_template_content: (no documentation yet)
       - next_client_secret_last_four: The last four characters of the `next_client_secret`. Null if no `next_client_secret` exists.
       - access_token_custom_audience: (no documentation yet)
       - logo_url: The logo URL of the Connected App, if any.
@@ -136,6 +141,7 @@ class ConnectedAppWithNextClientSecret(pydantic.BaseModel):
     access_token_template_content: str
     post_logout_redirect_urls: List[str]
     bypass_consent_for_offline_access: bool
+    id_token_template_content: str
     next_client_secret_last_four: Optional[str] = None
     access_token_custom_audience: Optional[str] = None
     logo_url: Optional[str] = None
