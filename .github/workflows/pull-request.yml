@@ -6,7 +6,7 @@ on:
 
 jobs:
   test-stytch:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-public
 
     strategy:
       matrix:
