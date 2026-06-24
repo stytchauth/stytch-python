@@ -6,7 +6,8 @@
 
 from __future__ import annotations
 
-from typing import List
+import datetime
+from typing import List, Optional
 
 from stytch.b2b.models.discovery import DiscoveredOrganization
 from stytch.core.response_base import ResponseBase
@@ -29,8 +30,10 @@ class AuthenticateResponse(ResponseBase):
           b) The Organizations' allowed domains list contains the Member's email domain.
 
           c) The Organization has at least one other Member with a verified email address with the same domain as the end user (to prevent phishing attacks).
+      - intermediate_session_token_expires_at: (no documentation yet)
     """  # noqa
 
     intermediate_session_token: str
     email_address: str
     discovered_organizations: List[DiscoveredOrganization]
+    intermediate_session_token_expires_at: Optional[datetime.datetime] = None

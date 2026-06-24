@@ -83,6 +83,7 @@ class Clients:
         post_logout_redirect_urls: Optional[List[str]] = None,
         logo_url: Optional[str] = None,
         bypass_consent_for_offline_access: Optional[bool] = None,
+        id_token_template_content: Optional[str] = None,
     ) -> UpdateResponse:
         """Updates mutable fields of a Connected App. Cannot update Client Type, Client ID, or Secrets.
 
@@ -98,6 +99,7 @@ class Clients:
           - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - logo_url: The logo URL of the Connected App, if any.
           - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - id_token_template_content: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -125,6 +127,8 @@ class Clients:
             data["bypass_consent_for_offline_access"] = (
                 bypass_consent_for_offline_access
             )
+        if id_token_template_content is not None:
+            data["id_token_template_content"] = id_token_template_content
 
         url = self.api_base.url_for("/v1/connected_apps/clients/{client_id}", data)
         res = self.sync_client.put(url, data, headers)
@@ -143,6 +147,7 @@ class Clients:
         post_logout_redirect_urls: Optional[List[str]] = None,
         logo_url: Optional[str] = None,
         bypass_consent_for_offline_access: Optional[bool] = None,
+        id_token_template_content: Optional[str] = None,
     ) -> UpdateResponse:
         """Updates mutable fields of a Connected App. Cannot update Client Type, Client ID, or Secrets.
 
@@ -158,6 +163,7 @@ class Clients:
           - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - logo_url: The logo URL of the Connected App, if any.
           - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - id_token_template_content: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -185,6 +191,8 @@ class Clients:
             data["bypass_consent_for_offline_access"] = (
                 bypass_consent_for_offline_access
             )
+        if id_token_template_content is not None:
+            data["id_token_template_content"] = id_token_template_content
 
         url = self.api_base.url_for("/v1/connected_apps/clients/{client_id}", data)
         res = await self.async_client.put(url, data, headers)
@@ -283,6 +291,7 @@ class Clients:
         post_logout_redirect_urls: Optional[List[str]] = None,
         logo_url: Optional[str] = None,
         bypass_consent_for_offline_access: Optional[bool] = None,
+        id_token_template_content: Optional[str] = None,
     ) -> CreateResponse:
         """Creates a new Connected App. If the Connected App `client_type` is `first_party` or `third_party` a `client_secret` is returned.
 
@@ -300,6 +309,7 @@ class Clients:
           - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - logo_url: The logo URL of the Connected App, if any.
           - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - id_token_template_content: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -327,6 +337,8 @@ class Clients:
             data["bypass_consent_for_offline_access"] = (
                 bypass_consent_for_offline_access
             )
+        if id_token_template_content is not None:
+            data["id_token_template_content"] = id_token_template_content
 
         url = self.api_base.url_for("/v1/connected_apps/clients", data)
         res = self.sync_client.post(url, data, headers)
@@ -345,6 +357,7 @@ class Clients:
         post_logout_redirect_urls: Optional[List[str]] = None,
         logo_url: Optional[str] = None,
         bypass_consent_for_offline_access: Optional[bool] = None,
+        id_token_template_content: Optional[str] = None,
     ) -> CreateResponse:
         """Creates a new Connected App. If the Connected App `client_type` is `first_party` or `third_party` a `client_secret` is returned.
 
@@ -362,6 +375,7 @@ class Clients:
           - post_logout_redirect_urls: Array of redirect URI values for use in OIDC Logout flows.
           - logo_url: The logo URL of the Connected App, if any.
           - bypass_consent_for_offline_access: Valid for first party clients only. If true, the client does not need to request explicit user consent for the `offline_access` scope.
+          - id_token_template_content: (no documentation yet)
         """  # noqa
         headers: Dict[str, str] = {}
         data: Dict[str, Any] = {
@@ -389,6 +403,8 @@ class Clients:
             data["bypass_consent_for_offline_access"] = (
                 bypass_consent_for_offline_access
             )
+        if id_token_template_content is not None:
+            data["id_token_template_content"] = id_token_template_content
 
         url = self.api_base.url_for("/v1/connected_apps/clients", data)
         res = await self.async_client.post(url, data, headers)

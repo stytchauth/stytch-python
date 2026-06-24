@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import datetime
 import enum
 from typing import Optional
 
@@ -40,6 +41,7 @@ class AuthenticateResponse(ResponseBase):
       - mfa_required: Information about the MFA requirements of the Organization and the Member's options for fulfilling MFA.
       - primary_required: (no documentation yet)
       - member_device: If a valid `telemetry_id` was passed in the request and the [Fingerprint Lookup API](https://stytch.com/docs/fraud/api/fingerprint-lookup) returned results, the `member_device` response field will contain information about the member's device attributes.
+      - intermediate_session_token_expires_at: (no documentation yet)
     """  # noqa
 
     member_id: str
@@ -56,3 +58,4 @@ class AuthenticateResponse(ResponseBase):
     mfa_required: Optional[MfaRequired] = None
     primary_required: Optional[PrimaryRequired] = None
     member_device: Optional[DeviceInfo] = None
+    intermediate_session_token_expires_at: Optional[datetime.datetime] = None
