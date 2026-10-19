@@ -63,8 +63,24 @@ class SamlShieldAsyncClient(AsyncClient):
             "User-Agent": f"Stytch Python v{__version__}",
             "Authorization": f"Bearer {public_token}",
         }
-        # Keep auth but override with Bearer in headers
         self.timeout = timeout or 600
+
+    async def post_form(
+        self,
+        url: str,
+        form: Optional[Dict[str, Any]],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> ResponseWithJson[aiohttp.ClientResponse]:
+        """Send the Bearer-authenticated form with the SamlShield timeout."""
+        final_headers = self.headers.copy()
+        final_headers.update(headers or {})
+        response = await self._session.post(
+            url,
+            data=form,
+            headers=final_headers,
+            timeout=aiohttp.ClientTimeout(total=self.timeout),
+        )
+        return await self._response_from_post_form_request(response)
 
 
 class SamlShieldClient:
